@@ -21,56 +21,69 @@ const DATA = [
 const App = () => {
   const [selectedId, setSelectedId] = useState(null);
 
-  const renderItem = ({ item }) => {
+  const renderTile = ({ item }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
     const color = item.id === selectedId ? 'white' : 'black';
 
+    const handleTilePress = (item) => {
+      console.log("pressed on" + item.id);
+    };
+
     return (
-      <Tile
-        title={item.title}
-        onPress={() => console.log("pressed on" + item.id)}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
+      <TouchableOpacity
+        onPress={handleTilePress}
+        handleTilePress
+      >
+        <Tile
+          title={item.title}
+          backgroundColor={{ backgroundColor }}
+          textColor={{ color }}
+          />
+      </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.child}>
-          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+      <ScrollView style={styles.child}>
+          <Text 
+            style={styles.greeting}
+          >
+            Good evening 🌥,{"\n"}Ririmes
+          </Text>
           
           <Text style={styles.title}>Medication</Text>
           <FlatList
             style={styles.list}
             data={DATA}
-            renderItem={renderItem}
+            renderItem={renderTile}
             keyExtractor={(item) => item.id}
             extraData={selectedId}
             horizontal={true}
+            showsHorizontalScrollIndicator={false}
             />
           
           <Text style={styles.title}>Exercise</Text>
           <FlatList
             style={styles.list}
             data={DATA}
-            renderItem={renderItem}
+            renderItem={renderTile}
             keyExtractor={(item) => item.id}
             extraData={selectedId}
             horizontal={true}
+            showsHorizontalScrollIndicator={false}
             />
           
           <Text style={styles.title}>Appointment</Text>
           <FlatList
             style={styles.list}
             data={DATA}
-            renderItem={renderItem}
+            renderItem={renderTile}
             keyExtractor={(item) => item.id}
             extraData={selectedId}
             horizontal={true}
+            showsHorizontalScrollIndicator={false}
             />
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
