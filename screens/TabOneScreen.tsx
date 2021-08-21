@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, ScrollView, FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import Tile from "../components/Tile";
 
@@ -13,24 +13,10 @@ const DATA = [
     title: "Second Item",
   },
   {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
+    id: "58694a0f-3da1-471f-bd96-145571e26d72",
     title: "Third Item",
   },
-    {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Fourth Item",
-  },
-    {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Fifth Item",
-  },
 ];
-
-// const Item = ({ item, onPress, backgroundColor, textColor }) => (
-//   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-//     <Text style={[styles.title, textColor]}>{item.title}</Text>
-//   </TouchableOpacity>
-// );
 
 const App = () => {
   const [selectedId, setSelectedId] = useState(null);
@@ -51,16 +37,41 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Good evening  🌥,{"\n"}Ririmes</Text>
-      <Text>Medication</Text>
-
-      <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedId}
-        horizontal={true}
-      />
+      <ScrollView>
+        <View style={styles.child}>
+          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+          
+          <Text style={styles.title}>Medication</Text>
+          <FlatList
+            style={styles.list}
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            extraData={selectedId}
+            horizontal={true}
+            />
+          
+          <Text style={styles.title}>Exercise</Text>
+          <FlatList
+            style={styles.list}
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            extraData={selectedId}
+            horizontal={true}
+            />
+          
+          <Text style={styles.title}>Appointment</Text>
+          <FlatList
+            style={styles.list}
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            extraData={selectedId}
+            horizontal={true}
+            />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -70,17 +81,28 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
   },
+  child: {
+    paddingLeft: 25,
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: '600',
+    marginTop: 25,
+  },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 25,
+    marginBottom: 20,
   },
   item: {
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  title: {
-    fontSize: 32,
+  list: {
+    margin: 0,
+    padding: 0,
   },
 });
 

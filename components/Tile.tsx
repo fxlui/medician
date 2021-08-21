@@ -35,13 +35,14 @@ const styles = StyleSheet.create({
   container: {
     width: 140,
     height: 140,
-    borderRadius: 20,
+    borderRadius: 13,
     borderColor: 'black',
-    backgroundColor: '#FF7272',
+    backgroundColor: '#24AC29',
     padding: 20,
+    marginRight: 20,
   },
   content: {
-    backgroundColor: 'grey',
+    backgroundColor: '#24AC29',
     flexDirection: 'column',
     height: 100,
     alignItems: 'stretch',
