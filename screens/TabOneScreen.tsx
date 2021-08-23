@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, ScrollView, FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -18,21 +19,21 @@ const DATA = [
   },
 ];
 
-const App = () => {
+const App = ( navigation: ReturnType<typeof useNavigation> ) => {
   const [selectedId, setSelectedId] = useState(null);
 
   const renderTile = ({ item }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
     const color = item.id === selectedId ? 'white' : 'black';
 
-    const handleTilePress = (item) => {
-      console.log("pressed on" + item.id);
-    };
+    // const handleTilePress = ( ) => {
+    //   navigation.navigate('Notification', {item});
+    //   console.log(item.id)
+    // };
 
     return (
       <TouchableOpacity
-        onPress={handleTilePress}
-        handleTilePress
+        onPress={() => navigation.navigate('Notification', item)}
       >
         <Tile
           title={item.title}
