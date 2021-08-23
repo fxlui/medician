@@ -19,8 +19,10 @@ const DATA = [
   },
 ];
 
-const App = ( navigation: ReturnType<typeof useNavigation> ) => {
+const App = (  ) => {
   const [selectedId, setSelectedId] = useState(null);
+
+  const navigation = useNavigation();
 
   const renderTile = ({ item }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";

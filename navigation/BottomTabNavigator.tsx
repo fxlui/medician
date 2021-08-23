@@ -60,10 +60,6 @@ function TabOneNavigator() {
         component={TabOneScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
-      <TabOneStack.Screen 
-        name="Notification"
-        component={Notification}
-      />
     </TabOneStack.Navigator>
   );
 }
@@ -79,5 +75,19 @@ function TabTwoNavigator() {
         options={{ headerTitle: 'Tab Two Title' }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const NotificationStack = createStackNavigator<TabTwoParamList>();
+
+function NotificationNavigator() {
+  return (
+    <NotificationStack.Navigator>
+      <NotificationStack.Screen 
+        name="Notification"
+        component={Notification}
+        options={{ headerTitle: 'Notif' }}
+      />
+    </NotificationStack.Navigator>
   );
 }
