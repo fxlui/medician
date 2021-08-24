@@ -25,6 +25,10 @@ const DATA = [
     id: "58694a0f-3da1-471f-bd96-145571e26d72",
     title: "Third Item",
   },
+  {
+    id: "58694a0f-3da1-471f-bd96-145ee26d72",
+    title: "Fourth Item",
+  },
 ];
 
 const App = () => {
@@ -66,6 +70,9 @@ const App = () => {
           keyExtractor={(item) => item.id}
           extraData={selectedId}
           horizontal={true}
+          decelerationRate={0}
+          snapToInterval={150 - 5}
+          snapToAlignment={"center"}
           showsHorizontalScrollIndicator={false}
         />
 
