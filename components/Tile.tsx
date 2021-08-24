@@ -1,58 +1,67 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import * as React from "react";
+import {
+  Animated,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  ViewStyle,
+} from "react-native";
 
-import { Text, View } from '../components/Themed';
+import { Text, View } from "../components/Themed";
 
-import PillSVG from '../assets/images/PillSVG';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import PillSVG from "../assets/images/PillSVG";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import TileBase, { TileSize } from "./TileBase";
 
 interface TileDetails {
   title: string;
+  style?: StyleProp<ViewStyle>;
 }
 
-const Tile: React.FC<TileDetails> = ({
-  title,
-}) => {
+const Tile: React.FC<TileDetails> = ({ title, style }) => {
   return (
-    <View style={styles.container}>
+    <TileBase style={style}>
       <View style={styles.content}>
-        <MaterialCommunityIcons 
+        <MaterialCommunityIcons
           style={styles.icon}
-          name="pill" 
-          size={41} 
+          name="pill"
+          size={42}
           color="white"
         />
-        <Text style={styles.tileText}>
-          {title}
-        </Text>
-
+        <View style={styles.textContent}>
+          <Text style={styles.primaryText}>{title}</Text>
+          <Text style={styles.secondaryText}>{title}</Text>
+        </View>
       </View>
-    </View>
+    </TileBase>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: 140,
-    height: 140,
-    borderRadius: 13,
-    borderColor: 'black',
-    backgroundColor: '#24AC29',
-    padding: 20,
-    marginRight: 20,
-  },
   content: {
-    backgroundColor: '#24AC29',
-    flexDirection: 'column',
-    height: 100,
-    alignItems: 'stretch',
-    justifyContent: 'space-between',
+    backgroundColor: "#24AC29",
+    flexDirection: "column",
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "space-between",
+  },
+  textContent: {
+    backgroundColor: "#24AC29",
+    justifyContent: "flex-end",
   },
   icon: {
     // marginBottom: 35,
   },
-  tileText: {
-    color: 'white',
+  primaryText: {
+    fontSize: 16,
+    color: "white",
+  },
+  secondaryText: {
+    fontSize: 14,
+    color: "white",
+    opacity: 0.68,
   },
 });
 

@@ -1,7 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, ScrollView, FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity } from "react-native";
-
+import {
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { Text, View } from "../components/Themed";
+import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
 
 const DATA = [
@@ -19,14 +27,14 @@ const DATA = [
   },
 ];
 
-const App = (  ) => {
+const App = () => {
   const [selectedId, setSelectedId] = useState(null);
 
   const navigation = useNavigation();
 
   const renderTile = ({ item }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? 'white' : 'black';
+    const color = item.id === selectedId ? "white" : "black";
 
     // const handleTilePress = ( ) => {
     //   navigation.navigate('Notification', {item});
@@ -34,61 +42,56 @@ const App = (  ) => {
     // };
 
     return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Notification', item)}
-      >
-        <Tile
-          title={item.title}
-          backgroundColor={{ backgroundColor }}
-          textColor={{ color }}
-          />
-      </TouchableOpacity>
+      <Tile
+        title={item.title}
+        // backgroundColor={{ backgroundColor }}
+        // textColor={{ color }}
+        style={{
+          marginRight: 20,
+        }}
+      />
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeView style={styles.container}>
       <ScrollView style={styles.child}>
-          <Text 
-            style={styles.greeting}
-          >
-            Good evening 🌥,{"\n"}Ririmes
-          </Text>
-          
-          <Text style={styles.title}>Medication</Text>
-          <FlatList
-            style={styles.list}
-            data={DATA}
-            renderItem={renderTile}
-            keyExtractor={(item) => item.id}
-            extraData={selectedId}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            />
-          
-          <Text style={styles.title}>Exercise</Text>
-          <FlatList
-            style={styles.list}
-            data={DATA}
-            renderItem={renderTile}
-            keyExtractor={(item) => item.id}
-            extraData={selectedId}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            />
-          
-          <Text style={styles.title}>Appointment</Text>
-          <FlatList
-            style={styles.list}
-            data={DATA}
-            renderItem={renderTile}
-            keyExtractor={(item) => item.id}
-            extraData={selectedId}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            />
+        <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+
+        <Text style={styles.title}>Medication</Text>
+        <FlatList
+          style={styles.list}
+          data={DATA}
+          renderItem={renderTile}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        />
+
+        <Text style={styles.title}>Exercise</Text>
+        <FlatList
+          style={styles.list}
+          data={DATA}
+          renderItem={renderTile}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        />
+
+        <Text style={styles.title}>Appointment</Text>
+        <FlatList
+          style={styles.list}
+          data={DATA}
+          renderItem={renderTile}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        />
       </ScrollView>
-    </SafeAreaView>
+    </SafeView>
   );
 };
 
@@ -98,16 +101,16 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   child: {
-    paddingLeft: 25,
+    paddingLeft: 30,
   },
   greeting: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginTop: 25,
+    fontSize: 26,
+    fontWeight: "600",
+    marginTop: 65,
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginTop: 25,
     marginBottom: 20,
   },
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
   list: {
     margin: 0,
     padding: 0,
+    overflow: "visible",
   },
 });
 
