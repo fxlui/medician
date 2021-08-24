@@ -1,0 +1,103 @@
+import * as React from "react";
+import { Animated, Pressable, StyleSheet } from "react-native";
+import { Text, View } from "../components/Themed";
+import * as Haptics from "expo-haptics";
+
+export enum TileSize {
+  Default = "default",
+  Large = "large",
+  Long = "long",
+}
+
+interface BaseChildren {
+  children: React.ReactNode;
+  size?: TileSize;
+  onClick?: () => void;
+}
+
+const TileBase: React.FC<BaseChildren> = ({
+  children,
+  size = TileSize.Default,
+  onClick = () => {},
+}) => {
+  const animatedValue = React.useRef(new Animated.Value(1)).current;
+  const animatedStyle = {
+    transform: [{ scale: animatedValue }],
+  };
+
+  const handlePressIn = () => {
+    Animated.spring(animatedValue, {
+      toValue: 0.88,
+      friction: 20,
+      tension: 50,
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      //
+    });
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(animatedValue, {
+      toValue: 1,
+      friction: 10,
+      tension: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handleOnClick = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onClick();
+  };
+
+  return (
+    <Pressable
+      onPress={handleOnClick}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      onLongPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
+    >
+      <Animated.View
+        style={[
+          styles.container,
+          size == TileSize.Default && styles.default,
+          size == TileSize.Large && styles.large,
+          size == TileSize.Long && styles.long,
+          animatedStyle,
+        ]}
+      >
+        {children}
+      </Animated.View>
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 16,
+    borderColor: "#24AC29",
+    borderStyle: "solid",
+    backgroundColor: "#24AC29",
+    padding: 20,
+    marginRight: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    borderWidth: 2,
+    shadowOpacity: 0.1,
+    elevation: 5,
+  },
+  default: {
+    width: 140,
+    height: 140,
+  },
+  large: {
+    width: 302,
+    height: 140,
+  },
+  long: {
+    width: 242,
+    height: 58,
+  },
+});
+
+export default TileBase;
