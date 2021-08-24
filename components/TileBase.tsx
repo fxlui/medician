@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Animated, Pressable, StyleSheet } from "react-native";
+import {
+  Animated,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 import { Text, View } from "../components/Themed";
 import * as Haptics from "expo-haptics";
 
@@ -13,12 +19,14 @@ interface BaseChildren {
   children: React.ReactNode;
   size?: TileSize;
   onClick?: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 const TileBase: React.FC<BaseChildren> = ({
   children,
   size = TileSize.Default,
   onClick = () => {},
+  style = {},
 }) => {
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
@@ -64,6 +72,7 @@ const TileBase: React.FC<BaseChildren> = ({
           size == TileSize.Large && styles.large,
           size == TileSize.Long && styles.long,
           animatedStyle,
+          style,
         ]}
       >
         {children}
@@ -89,7 +98,6 @@ const styles = StyleSheet.create({
   default: {
     width: 150,
     height: 150,
-    marginRight: 20,
   },
   large: {
     width: 302,

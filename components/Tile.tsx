@@ -2,8 +2,10 @@ import * as React from "react";
 import {
   Animated,
   Pressable,
+  StyleProp,
   StyleSheet,
   TouchableOpacity,
+  ViewStyle,
 } from "react-native";
 
 import { Text, View } from "../components/Themed";
@@ -15,11 +17,12 @@ import TileBase, { TileSize } from "./TileBase";
 
 interface TileDetails {
   title: string;
+  style?: StyleProp<ViewStyle>;
 }
 
-const Tile: React.FC<TileDetails> = ({ title }) => {
+const Tile: React.FC<TileDetails> = ({ title, style }) => {
   return (
-    <TileBase>
+    <TileBase style={style}>
       <View style={styles.content}>
         <MaterialCommunityIcons
           style={styles.icon}

@@ -46,6 +46,9 @@ const App = () => {
         title={item.title}
         // backgroundColor={{ backgroundColor }}
         // textColor={{ color }}
+        style={{
+          marginRight: 20,
+        }}
       />
     );
   };
