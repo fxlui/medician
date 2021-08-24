@@ -101,18 +101,20 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   child: {
-    paddingLeft: 30,
+    paddingLeft: 25,
   },
   greeting: {
     fontSize: 26,
     fontWeight: "600",
     marginTop: 65,
+    paddingLeft: 5,
   },
   title: {
     fontSize: 18,
     fontWeight: "600",
     marginTop: 25,
     marginBottom: 20,
+    paddingLeft: 5,
   },
   item: {
     padding: 20,
