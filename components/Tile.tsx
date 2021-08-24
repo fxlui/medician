@@ -27,7 +27,10 @@ const Tile: React.FC<TileDetails> = ({ title }) => {
           size={42}
           color="white"
         />
-        <Text style={styles.tileText}>{title}</Text>
+        <View style={styles.textContent}>
+          <Text style={styles.primaryText}>{title}</Text>
+          <Text style={styles.secondaryText}>{title}</Text>
+        </View>
       </View>
     </TileBase>
   );
@@ -37,15 +40,25 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: "#24AC29",
     flexDirection: "column",
-    height: 100,
+    flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
+  },
+  textContent: {
+    backgroundColor: "#24AC29",
+    justifyContent: "flex-end",
   },
   icon: {
     // marginBottom: 35,
   },
-  tileText: {
+  primaryText: {
+    fontSize: 16,
     color: "white",
+  },
+  secondaryText: {
+    fontSize: 14,
+    color: "white",
+    opacity: 0.68,
   },
 });
 

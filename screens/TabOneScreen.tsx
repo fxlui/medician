@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import SafeViewAndroid from "../components/SafeViewAndroid";
+import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
 
 const DATA = [
@@ -51,7 +51,7 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={(styles.container, SafeViewAndroid.AndroidSafeArea)}>
+    <SafeView style={styles.container}>
       <ScrollView style={styles.child}>
         <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
@@ -88,7 +88,7 @@ const App = () => {
           showsHorizontalScrollIndicator={false}
         />
       </ScrollView>
-    </SafeAreaView>
+    </SafeView>
   );
 };
 
@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   child: {
-    paddingLeft: 25,
+    paddingLeft: 30,
   },
   greeting: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "600",
     marginTop: 65,
   },
