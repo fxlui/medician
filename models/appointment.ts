@@ -1,14 +1,18 @@
-import { types } from "mobx-state-tree";
+import { types, Instance, SnapshotOut } from "mobx-state-tree";
 
 /**
  * The Appointment model.
- * Need to convert time from Timestamp to Date when fetching from database.
  */
 export const AppointmentModel = types
-  .model("appointment", {
+  .model("Appointment", {
     id: types.identifierNumber,
     name: types.string,
     notes: types.optional(types.string, ""),
     time: types.Date,
     alert: types.integer
-  })
+  });
+
+type AppointmentType = Instance<typeof AppointmentModel>;
+export interface Appointment extends AppointmentType {};
+type AppointmentSnapshotType = SnapshotOut<typeof AppointmentModel>;
+export interface AppointmentSnapshot extends AppointmentSnapshotType {};

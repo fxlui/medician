@@ -1,15 +1,19 @@
-import { types } from "mobx-state-tree";
+import { types, Instance, SnapshotOut } from "mobx-state-tree";
 
 /**
  * The Treatment model.
- * Need to convert start time from Timestamp to Date when fetching from database.
  */
 export const TreatmentModel = types
-  .model("treatment", {
+  .model("Treatment", {
     id: types.identifierNumber,
     type: types.integer,
     title: types.string,
     notes: types.optional(types.string, ""),
     start: types.Date,
     duration: types.integer
-  })
+  });
+
+type TreatmentType = Instance<typeof TreatmentModel>;
+export interface Treatment extends TreatmentType {};
+type TreatmentSnapshotType = SnapshotOut<typeof TreatmentModel>;
+export interface TreatmentSnapshot extends TreatmentSnapshotType {};
