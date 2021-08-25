@@ -21,7 +21,12 @@ export default function TabTwoScreen() {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{
+            overflow: "visible",
+          }}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={styles.greeting}>
             Good evening 🌥,{"\n"}What would you like to do?
           </Text>

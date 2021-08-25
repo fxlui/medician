@@ -71,7 +71,7 @@ const App = () => {
         >
           <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
-          <Text style={styles.title}>Medication - Carousel Default</Text>
+          <Text style={styles.title}>Medication</Text>
           <Carousel
             data={DATA}
             renderItem={renderTile}
@@ -82,40 +82,39 @@ const App = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-          />
-
-          <Text style={styles.title}>Exercise - Carousel Same Sizes</Text>
-          <Carousel
-            data={DATA}
-            renderItem={renderTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={1}
-            itemWidth={165}
-          />
-
-          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
-          <Carousel
-            data={DATA}
-            renderItem={renderTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            inactiveSlideScale={0.92}
             inactiveSlideOpacity={0.9}
-            itemWidth={165}
           />
-          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
-          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
-          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
+
+          <Text style={styles.title}>Exercise</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+          />
+
+          <Text style={styles.title}>Appointment</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+          />
+          <Text style={styles.title}>Test</Text>
+          <Text style={styles.title}>Test</Text>
+          <Text style={styles.title}>Test</Text>
         </ScrollView>
       </View>
     </SafeView>
