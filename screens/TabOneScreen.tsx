@@ -7,10 +7,12 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
+import Carousel from "react-native-snap-carousel";
 
 const DATA = [
   {
@@ -51,7 +53,7 @@ const App = () => {
         // backgroundColor={{ backgroundColor }}
         // textColor={{ color }}
         style={{
-          marginRight: 20,
+          marginRight: 15,
         }}
       />
     );
@@ -62,7 +64,59 @@ const App = () => {
       <ScrollView style={styles.child}>
         <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
-        <Text style={styles.title}>Medication</Text>
+        <Text style={styles.title}>Medication - Carousel Default</Text>
+        <Carousel
+          data={DATA}
+          renderItem={renderTile}
+          vertical={false}
+          sliderWidth={Dimensions.get("window").width - 25}
+          activeSlideAlignment={"start"}
+          containerCustomStyle={{
+            overflow: "visible",
+          }}
+          itemWidth={165}
+        />
+
+        <Text style={styles.title}>Exercise - Carousel Custom</Text>
+        <Carousel
+          data={DATA}
+          renderItem={renderTile}
+          vertical={false}
+          sliderWidth={Dimensions.get("window").width - 25}
+          activeSlideAlignment={"start"}
+          containerCustomStyle={{
+            overflow: "visible",
+          }}
+          inactiveSlideScale={1}
+          inactiveSlideOpacity={1}
+          itemWidth={165}
+        />
+        {/*
+        <Carousel
+          data={DATA}
+          renderItem={renderTile}
+          vertical={false}
+          sliderWidth={Dimensions.get("window").width - 25}
+          activeSlideAlignment={"start"}
+          slideInterpolatedStyle={(index, animatedValue, carouselProps) => {
+            return {
+              opacity: animatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 1],
+              }),
+            };
+          }}
+          contentContainerCustomStyle={{
+            paddingRight: 10,
+          }}
+          containerCustomStyle={{
+            overflow: "visible",
+          }}
+          itemWidth={165}
+        />
+        */}
+
+        <Text style={styles.title}>Appointment - FlatList Snapping</Text>
         <FlatList
           style={styles.list}
           data={DATA}
@@ -73,28 +127,6 @@ const App = () => {
           decelerationRate={0}
           snapToInterval={150 - 5}
           snapToAlignment={"center"}
-          showsHorizontalScrollIndicator={false}
-        />
-
-        <Text style={styles.title}>Exercise</Text>
-        <FlatList
-          style={styles.list}
-          data={DATA}
-          renderItem={renderTile}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
-
-        <Text style={styles.title}>Appointment</Text>
-        <FlatList
-          style={styles.list}
-          data={DATA}
-          renderItem={renderTile}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-          horizontal={true}
           showsHorizontalScrollIndicator={false}
         />
       </ScrollView>
