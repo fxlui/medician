@@ -18,22 +18,24 @@ import TileBase, { TileSize } from "./TileBase";
 interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
+  size?: TileSize;
 }
 
-const Tile: React.FC<TileDetails> = ({ title, style }) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size }) => {
   return (
-    <TileBase style={style}>
+    <TileBase style={style} size={size}>
       <View style={styles.content}>
-        <MaterialCommunityIcons
-          style={styles.icon}
-          name="pill"
-          size={42}
-          color="white"
-        />
-        <View style={styles.textContent}>
-          <Text style={styles.primaryText}>{title}</Text>
-          <Text style={styles.secondaryText}>{title}</Text>
-        </View>
+        {/* <View style={styles.left}>   */}
+          <MaterialCommunityIcons
+            name="pill"
+            size={42}
+            color="white"
+            />
+          <View style={styles.textContent}>
+            <Text style={styles.primaryText}>{title}</Text>
+            <Text style={styles.secondaryText}>{title}</Text>
+          </View>
+        {/* </View> */}
       </View>
     </TileBase>
   );
@@ -51,9 +53,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#24AC29",
     justifyContent: "flex-end",
   },
-  icon: {
-    // marginBottom: 35,
-  },
   primaryText: {
     fontSize: 16,
     color: "white",
@@ -63,6 +62,9 @@ const styles = StyleSheet.create({
     color: "white",
     opacity: 0.68,
   },
+  left: {
+    backgroundColor: "red",
+  }
 });
 
 export default Tile;
