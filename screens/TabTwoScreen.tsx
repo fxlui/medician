@@ -65,10 +65,12 @@ export default function TabTwoScreen() {
     <SafeView style={styles.container}>
       <View style={styles.child}>
 
-      <Text style={styles.greeting}>I feel</Text>
+      <Text style={styles.greeting}>
+        Hello Ririames,{"\n"}how are you feeling today?
+      </Text>
 
       <ScrollView>
-    
+
       </ScrollView>
       </View>
     </SafeView>
