@@ -65,8 +65,7 @@ const App = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
       >
-
-      <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+        <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
         <Text style={styles.title}>Medication - Carousel Default</Text>
         <Carousel

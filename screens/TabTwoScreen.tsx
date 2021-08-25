@@ -64,13 +64,10 @@ export default function TabTwoScreen() {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>
-
-      <Text style={styles.greeting}>
-        Hello Ririames,{"\n"}how are you feeling today?
-      </Text>
-
-      <ScrollView>
-
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
       </ScrollView>
       </View>
     </SafeView>
