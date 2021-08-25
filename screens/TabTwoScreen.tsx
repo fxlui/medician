@@ -15,45 +15,34 @@ import Tile from "../components/Tile";
 import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 
-import SymptomsData from "../data/Symptoms.json";
+import SymptomsData from "../assets/Symptoms.json";
 
 export default function TabTwoScreen() {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>
-
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-        >
-
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.greeting}>
             Good evening 🌥,{"\n"}What would you like to do?
           </Text>
 
-          <Tile
-            title={"I feel"}
-            size={TileSize.Large}
-          >
-
-          </Tile>
+          <Tile title={"I feel"} size={TileSize.Large}></Tile>
           <Text>
-
-          {SymptomsData.slice(0, 4).map((symptom) => {
-            return (
-              <Text key={symptom.id}>
-                {symptom.description}{"\n"}
-              </Text>
-            )
-          })}
-          ...
+            {SymptomsData.slice(0, 4).map((symptom) => {
+              return (
+                <Text key={symptom.id}>
+                  {symptom.description}
+                  {"\n"}
+                </Text>
+              );
+            })}
+            ...
           </Text>
-
         </ScrollView>
       </View>
     </SafeView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
