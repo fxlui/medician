@@ -9,11 +9,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
+import { View } from "../components/Themed";
+import { CustomizedTabBar, tabBarStyles } from "../components/TabBar";
 import useColorScheme from "../hooks/useColorScheme";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import Notification from "../screens/Notification";
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
+import {
+  BottomTabParamList,
+  TabOneParamList,
+  TabTwoParamList,
+  NotificationParamList
+} from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -23,7 +30,26 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+      screenOptions={{
+        header: () => <View />,
+        tabBarIcon: () => <TabBarIcon name="ios-code" color={'yello'} />,
+        tabBarStyle: {
+          position: 'absolute',
+          height: 60,
+          bottom: 30,
+          borderRadius: 15,
+          marginLeft: 10,
+          marginRight: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 5,
+          // display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingBottom: 0
+        }
+      }}
     >
       <BottomTab.Screen
         name="TabOne"
@@ -86,7 +112,7 @@ function TabTwoNavigator() {
   );
 }
 
-const NotificationStack = createStackNavigator<TabTwoParamList>();
+const NotificationStack = createStackNavigator<NotificationParamList>();
 
 function NotificationNavigator() {
   return (

@@ -9,7 +9,7 @@ import { UserModel } from "./user";
  */
 export const RootStoreModel = types
   .model("RootStore", {
-    user: UserModel,
+    user: types.maybe(UserModel),
     homeScreenStore: types.optional(HomeScreenStoreModel, {}),
     addFlowStore: types.optional(AddFlowStoreModel, {})
   });

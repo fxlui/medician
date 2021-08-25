@@ -20,3 +20,7 @@ export type TabOneParamList = {
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
 };
+
+export type NotificationParamList = {
+  Notification: undefined;
+};
