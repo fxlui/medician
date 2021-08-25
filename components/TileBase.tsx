@@ -20,6 +20,7 @@ interface BaseChildren {
   size?: TileSize;
   onClick?: () => void;
   style?: StyleProp<ViewStyle>;
+  backgroundColour: string;
 }
 
 const TileBase: React.FC<BaseChildren> = ({
@@ -27,6 +28,7 @@ const TileBase: React.FC<BaseChildren> = ({
   size = TileSize.Default,
   onClick = () => {},
   style = {},
+  backgroundColour = "white",
 }) => {
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
@@ -73,6 +75,9 @@ const TileBase: React.FC<BaseChildren> = ({
           size == TileSize.Long && styles.long,
           animatedStyle,
           style,
+          {
+            backgroundColor: backgroundColour,
+          },
         ]}
       >
         {children}
@@ -80,15 +85,11 @@ const TileBase: React.FC<BaseChildren> = ({
     </Pressable>
   );
 };
-
+//#24AC29
 const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
-    borderColor: "#24AC29",
-    borderStyle: "solid",
-    backgroundColor: "#24AC29",
-    borderWidth: 2,
-    padding: 16,
+    padding: 18,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   },
   large: {
     width: 302,
-    height: 140,
+    height: 150,
   },
   long: {
     width: 242,

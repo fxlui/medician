@@ -38,7 +38,7 @@ const App = () => {
 
   const navigation = useNavigation();
 
-  const renderTile = ({ item }) => {
+  const renderTile = ({ item, index }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
     const color = item.id === selectedId ? "white" : "black";
 
@@ -55,6 +55,7 @@ const App = () => {
         style={{
           marginRight: 15,
         }}
+        index={index}
       />
     );
   };
@@ -62,7 +63,12 @@ const App = () => {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{
+            overflow: "visible",
+          }}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
           <Text style={styles.title}>Medication - Carousel Default</Text>
@@ -70,7 +76,7 @@ const App = () => {
             data={DATA}
             renderItem={renderTile}
             vertical={false}
-            sliderWidth={Dimensions.get("window").width - 25}
+            sliderWidth={Dimensions.get("window").width}
             activeSlideAlignment={"start"}
             containerCustomStyle={{
               overflow: "visible",
@@ -78,12 +84,12 @@ const App = () => {
             itemWidth={165}
           />
 
-          <Text style={styles.title}>Exercise - Carousel Custom</Text>
+          <Text style={styles.title}>Exercise - Carousel Same Sizes</Text>
           <Carousel
             data={DATA}
             renderItem={renderTile}
             vertical={false}
-            sliderWidth={Dimensions.get("window").width - 25}
+            sliderWidth={Dimensions.get("window").width}
             activeSlideAlignment={"start"}
             containerCustomStyle={{
               overflow: "visible",
@@ -92,43 +98,20 @@ const App = () => {
             inactiveSlideOpacity={1}
             itemWidth={165}
           />
-          {/*
-        <Carousel
-          data={DATA}
-          renderItem={renderTile}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width - 25}
-          activeSlideAlignment={"start"}
-          slideInterpolatedStyle={(index, animatedValue, carouselProps) => {
-            return {
-              opacity: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 1],
-              }),
-            };
-          }}
-          contentContainerCustomStyle={{
-            paddingRight: 10,
-          }}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          itemWidth={165}
-        />
-        */}
 
-          <Text style={styles.title}>Appointment - FlatList Snapping</Text>
-          <FlatList
-            style={styles.list}
+          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
+          <Carousel
             data={DATA}
             renderItem={renderTile}
-            keyExtractor={(item) => item.id}
-            extraData={selectedId}
-            horizontal={true}
-            decelerationRate={0}
-            snapToInterval={150 - 5}
-            snapToAlignment={"center"}
-            showsHorizontalScrollIndicator={false}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            inactiveSlideScale={0.92}
+            inactiveSlideOpacity={1}
+            itemWidth={165}
           />
         </ScrollView>
       </View>

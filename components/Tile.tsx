@@ -19,17 +19,34 @@ interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
+  index?: number;
 }
 
-const Tile: React.FC<TileDetails> = ({ title, style, size }) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
   return (
-    <TileBase style={style} size={size}>
-      <View style={styles.content}>
+    <TileBase
+      style={style}
+      size={size}
+      backgroundColour={index == 0 ? "#24AC29" : "white"}
+    >
+      <View style={index == 0 ? styles.content : styles.contentWhite}>
         <View style={styles.left}>
-          <MaterialCommunityIcons name="pill" size={42} color="white" />
+          <MaterialCommunityIcons
+            name="pill"
+            size={42}
+            color={index == 0 ? "white" : "#24AC29"}
+          />
           <View style={styles.textContent}>
-            <Text style={styles.primaryText}>{title}</Text>
-            <Text style={styles.secondaryText}>{title}</Text>
+            <Text
+              style={[styles.primaryText, index == 0 && { color: "white" }]}
+            >
+              {title}
+            </Text>
+            <Text
+              style={[styles.secondaryText, index == 0 && { color: "white" }]}
+            >
+              {title}
+            </Text>
           </View>
         </View>
         {size == TileSize.Large ? (
@@ -50,20 +67,29 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     justifyContent: "space-between",
   },
+  contentWhite: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "space-between",
+  },
   textContent: {
     backgroundColor: "transparent",
     justifyContent: "flex-end",
+    color: "#333333",
   },
   primaryText: {
     fontSize: 16,
-    color: "white",
   },
   secondaryText: {
     fontSize: 14,
-    color: "white",
     opacity: 0.68,
   },
   left: {
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "space-between",
     backgroundColor: "transparent",
   },
   right: {
