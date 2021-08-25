@@ -62,40 +62,37 @@ const App = () => {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
-      <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+          <Text style={styles.title}>Medication - Carousel Default</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width - 25}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+          />
 
-        <Text style={styles.title}>Medication - Carousel Default</Text>
-        <Carousel
-          data={DATA}
-          renderItem={renderTile}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width - 25}
-          activeSlideAlignment={"start"}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          itemWidth={165}
-        />
-
-        <Text style={styles.title}>Exercise - Carousel Custom</Text>
-        <Carousel
-          data={DATA}
-          renderItem={renderTile}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width - 25}
-          activeSlideAlignment={"start"}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          inactiveSlideScale={1}
-          inactiveSlideOpacity={1}
-          itemWidth={165}
-        />
-        {/*
+          <Text style={styles.title}>Exercise - Carousel Custom</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width - 25}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={1}
+            itemWidth={165}
+          />
+          {/*
         <Carousel
           data={DATA}
           renderItem={renderTile}
@@ -120,20 +117,20 @@ const App = () => {
         />
         */}
 
-        <Text style={styles.title}>Appointment - FlatList Snapping</Text>
-        <FlatList
-          style={styles.list}
-          data={DATA}
-          renderItem={renderTile}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-          horizontal={true}
-          decelerationRate={0}
-          snapToInterval={150 - 5}
-          snapToAlignment={"center"}
-          showsHorizontalScrollIndicator={false}
-        />
-      </ScrollView>
+          <Text style={styles.title}>Appointment - FlatList Snapping</Text>
+          <FlatList
+            style={styles.list}
+            data={DATA}
+            renderItem={renderTile}
+            keyExtractor={(item) => item.id}
+            extraData={selectedId}
+            horizontal={true}
+            decelerationRate={0}
+            snapToInterval={150 - 5}
+            snapToAlignment={"center"}
+            showsHorizontalScrollIndicator={false}
+          />
+        </ScrollView>
       </View>
     </SafeView>
   );
@@ -142,7 +139,6 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
   },
   child: {
     paddingLeft: 25,
