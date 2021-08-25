@@ -1,6 +1,7 @@
 import { types, Instance, SnapshotOut } from "mobx-state-tree";
-import { HomeScreenStoreModel } from "./home-store";
+import { HomeScreenStoreModel } from "./home-screen-store";
 import { AddFlowStoreModel } from "./add-flow-store";
+import { UserModel } from "./user";
 
 /**
  * The Root Store Model.
@@ -8,6 +9,7 @@ import { AddFlowStoreModel } from "./add-flow-store";
  */
 export const RootStoreModel = types
   .model("RootStore", {
+    user: UserModel,
     homeScreenStore: types.optional(HomeScreenStoreModel, {}),
     addFlowStore: types.optional(AddFlowStoreModel, {})
   });
