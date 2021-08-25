@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 9,
     elevation: 5,
+    overflow: "visible",
   },
   default: {
     width: 150,
