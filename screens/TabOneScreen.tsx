@@ -110,9 +110,12 @@ const App = () => {
               overflow: "visible",
             }}
             inactiveSlideScale={0.92}
-            inactiveSlideOpacity={1}
+            inactiveSlideOpacity={0.9}
             itemWidth={165}
           />
+          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
+          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
+          <Text style={styles.title}>Appointment - Carousel 0.92x</Text>
         </ScrollView>
       </View>
     </SafeView>
