@@ -39,7 +39,11 @@ export default function TabTwoScreen() {
           <Text>
 
           {SymptomsData.slice(0, 4).map((symptom) => {
-            return (<Text>{symptom.description}{"\n"}</Text>)
+            return (
+              <Text key={symptom.id}>
+                {symptom.description}{"\n"}
+              </Text>
+            )
           })}
           ...
           </Text>
