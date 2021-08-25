@@ -25,17 +25,18 @@ const Tile: React.FC<TileDetails> = ({ title, style, size }) => {
   return (
     <TileBase style={style} size={size}>
       <View style={styles.content}>
-        {/* <View style={styles.left}>   */}
-          <MaterialCommunityIcons
-            name="pill"
-            size={42}
-            color="white"
-            />
+        <View style={styles.left}>
+          <MaterialCommunityIcons name="pill" size={42} color="white" />
           <View style={styles.textContent}>
             <Text style={styles.primaryText}>{title}</Text>
             <Text style={styles.secondaryText}>{title}</Text>
           </View>
-        {/* </View> */}
+        </View>
+        {size == TileSize.Large ? (
+          <View style={styles.right}>
+            <Text>hi</Text>
+          </View>
+        ) : null}
       </View>
     </TileBase>
   );
@@ -44,13 +45,13 @@ const Tile: React.FC<TileDetails> = ({ title, style, size }) => {
 const styles = StyleSheet.create({
   content: {
     backgroundColor: "#24AC29",
-    flexDirection: "column",
+    flexDirection: "row",
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
   },
   textContent: {
-    backgroundColor: "#24AC29",
+    backgroundColor: "transparent",
     justifyContent: "flex-end",
   },
   primaryText: {
@@ -63,8 +64,11 @@ const styles = StyleSheet.create({
     opacity: 0.68,
   },
   left: {
-    backgroundColor: "red",
-  }
+    backgroundColor: "transparent",
+  },
+  right: {
+    backgroundColor: "transparent",
+  },
 });
 
 export default Tile;
