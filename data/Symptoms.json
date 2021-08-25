@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "description": "Pain"
+  },
+  {
+    "id": "2",
+    "description": "Itchy"
+  },
+  {
+    "id": "3",
+    "description": "Hot"
+  },
+  {
+    "id": "4",
+    "description": "Cold"
+  },
+  {
+    "id": "5",
+    "description": "Dizzy"
+  },
+  {
+    "id": "6",
+    "description": "Sleeping is difficult"
+  },
+  {
+    "id": "7",
+    "description": "Going to toilet is difficult"
+  },
+  {
+    "id": "8",
+    "description": "Sick"
+  },
+  {
+    "id": "9",
+    "description": "Breathing is difficult"
+  },
+  {
+    "id": "10",
+    "description": "Hearing is difficult"
+  },
+  {
+    "id": "11",
+    "description": "Seeing is difficult"
+  },
+  {
+    "id": "12",
+    "description": "Speaking is difficult"
+  },
+  {
+    "id": "13",
+    "description": "Walking is difficult"
+  },
+  {
+    "id": "14",
+    "description": "Not on list"
+  }
+]

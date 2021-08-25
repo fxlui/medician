@@ -13,65 +13,42 @@ import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
 import Carousel from "react-native-snap-carousel";
+import TileBase, { TileSize } from "../components/TileBase";
 
-const FEELINGS = [
-  {
-    description: "Pain"
-  },
-  {
-    description: "Itchy"
-  },
-  {
-    description: "Hot"
-  },
-  {
-    description: "Cold"
-  },
-  {
-    description: "Dizzy"
-  },
-  {
-    description: "Sleeping is difficult"
-  },
-  {
-    description: "Going to toilet is difficult"
-  },
-  {
-    description: "Sick"
-  },
-  {
-    description: "Breathing is difficult"
-  },
-  {
-    description: "Hearing is difficult"
-  },
-  {
-    description: "Seeing is difficult"
-  },
-  {
-    description: "Speaking is difficult"
-  },
-  {
-    description: "Walking is difficult"
-  },
-  {
-    description: "ADD MY OWN"
-  },
-
-]
+import SymptomsData from "../data/Symptoms.json";
 
 export default function TabTwoScreen() {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>
 
-      <Text style={styles.greeting}>
-        Hello Ririames,{"\n"}how are you feeling today?
-      </Text>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+        >
 
-      <ScrollView>
+          <Text style={styles.greeting}>
+            Good evening 🌥,{"\n"}What would you like to do?
+          </Text>
 
-      </ScrollView>
+          <Tile
+            title={"I feel"}
+            size={TileSize.Large}
+          >
+
+          </Tile>
+          <Text>
+
+          {SymptomsData.slice(0, 4).map((symptom) => {
+            return (
+              <Text key={symptom.id}>
+                {symptom.description}{"\n"}
+              </Text>
+            )
+          })}
+          ...
+          </Text>
+
+        </ScrollView>
       </View>
     </SafeView>
   );
