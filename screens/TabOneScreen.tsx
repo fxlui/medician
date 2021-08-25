@@ -61,9 +61,11 @@ const App = () => {
 
   return (
     <SafeView style={styles.container}>
-      <ScrollView style={styles.child}>
-        <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+      <View style={styles.child}>
 
+      <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+
+      <ScrollView>
         <Text style={styles.title}>Medication - Carousel Default</Text>
         <Carousel
           data={DATA}
@@ -130,6 +132,7 @@ const App = () => {
           showsHorizontalScrollIndicator={false}
         />
       </ScrollView>
+      </View>
     </SafeView>
   );
 };
