@@ -12,24 +12,33 @@ import { Text, View } from "../components/Themed";
 
 import PillSVG from "../assets/images/PillSVG";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import useColorScheme from "../hooks/useColorScheme";
 
 import TileBase, { TileSize } from "./TileBase";
 
-interface TileDetails {
+interface AreaTileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
+  selected: boolean;
 }
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
+const AreaTile: React.FC<AreaTileDetails> = ({
+  title,
+  style,
+  size,
+  index,
+  selected,
+}) => {
+  const colorScheme = useColorScheme();
+  const textColor =
+    index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
+  const tileColor =
+    index == 0 ? "#24AC29" : colorScheme === "light" ? "#fff" : "#252525";
   return (
-    <TileBase
-      style={style}
-      size={size}
-      backgroundColour={index == 0 ? "#24AC29" : "white"}
-    >
-      <View style={index == 0 ? styles.content : styles.contentWhite}>
+    <TileBase style={style} size={size} backgroundColor={tileColor}>
+      <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons
             name="pill"
@@ -37,13 +46,13 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
             color={index == 0 ? "white" : "#24AC29"}
           />
           <View style={styles.textContent}>
-            <Text
-              style={[styles.primaryText, index == 0 && { color: "white" }]}
-            >
+            <Text style={[styles.primaryText && { color: textColor }]}>
               {title}
             </Text>
             <Text
-              style={[styles.secondaryText, index == 0 && { color: "white" }]}
+              style={[
+                styles.secondaryText && { color: textColor, opacity: 0.68 },
+              ]}
             >
               {title}
             </Text>
@@ -97,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Tile;
+export default AreaTile;

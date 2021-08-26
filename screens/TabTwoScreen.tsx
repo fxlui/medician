@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
-import Tile from "../components/Tile";
+import Tile from "../components/HomeTile";
 import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 

@@ -11,9 +11,10 @@ import {
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
-import Tile from "../components/Tile";
 import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
+
+import Tile, { HomeTileTypes } from "../components/HomeTile";
 
 const DATA = [
   {
@@ -39,27 +40,16 @@ const App = () => {
 
   const navigation = useNavigation();
 
-  const renderTile = ({ item, index }) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? "white" : "black";
-
-    // const handleTilePress = ( ) => {
-    //   navigation.navigate('Notification', {item});
-    //   console.log(item.id)
-    // };
-
-    return (
-      <Tile
-        title={item.title}
-        // backgroundColor={{ backgroundColor }}
-        // textColor={{ color }}
-        style={{
-          marginRight: 15,
-        }}
-        index={index}
-      />
-    );
-  };
+  const renderTile = ({ item, index }) => (
+    <Tile
+      title={item.title}
+      style={{
+        marginRight: 15,
+      }}
+      index={index}
+      type={HomeTileTypes.Medication}
+    />
+  );
 
   return (
     <SafeView style={styles.container}>
@@ -83,7 +73,7 @@ const App = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -100,7 +90,7 @@ const App = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -117,7 +107,7 @@ const App = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}

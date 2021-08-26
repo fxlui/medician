@@ -9,12 +9,14 @@ import { TabBarButton } from "../components/TabBar";
 import useColorScheme from "../hooks/useColorScheme";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
+import AreaSelectScreen from "../screens/add-flow/AreaSelectScreen";
 import Notification from "../screens/Notification";
 import { TouchableOpacity, Pressable } from "react-native";
 import {
   BottomTabParamList,
   TabOneParamList,
   TabTwoParamList,
+  AddFlowParamList,
 } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -30,7 +32,7 @@ export default function BottomTabNavigator() {
         tabBarShowLabel: false,
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarStyle: {
-          position: 'absolute',
+          position: "absolute",
           height: 70,
           bottom: 30,
           borderRadius: 15,
@@ -43,29 +45,25 @@ export default function BottomTabNavigator() {
           paddingBottom: 0,
           paddingLeft: 30,
           paddingRight: 30,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center'
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
         },
-        tabBarButton: TabBarButton
+        tabBarButton: TabBarButton,
       }}
     >
       <BottomTab.Screen
         name="TabOne"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="home" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="AddFlow"
-        component={TabOneNavigator}
+        component={AddFlowStackNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="add" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="add" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -115,5 +113,19 @@ function TabTwoNavigator() {
         options={{ headerTitle: "Tab Two Title", headerShown: false }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const AddFlowStack = createStackNavigator<AddFlowParamList>();
+
+function AddFlowStackNavigator() {
+  return (
+    <AddFlowStack.Navigator>
+      <AddFlowStack.Screen
+        name="AreaSelectScreen"
+        component={AreaSelectScreen}
+        options={{ headerTitle: "Add Flow 1", headerShown: false }}
+      />
+    </AddFlowStack.Navigator>
   );
 }
