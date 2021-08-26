@@ -39,7 +39,7 @@ export const HomeScreenStoreModel = types
   // Asynchronous actions defined here
   .actions((self) => ({
     fetchAll: async () => {
-
+      return;
     }
   }));
 
