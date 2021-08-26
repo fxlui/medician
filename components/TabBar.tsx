@@ -1,28 +1,46 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { View, Text } from './Themed';
+import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+import {
+  StyleSheet,
+  Pressable,
+  Animated,
+} from 'react-native';
+import * as Haptics from "expo-haptics";
 
-export const CustomizedTabBar = () => {
+
+export const TabBarButton = (props: BottomTabBarButtonProps) => {
+  const animatedValue = React.useRef(new Animated.Value(1)).current;
+  const animatedStyle = {
+    transform: [{ scale: animatedValue }],
+  };
+
+  const handlePressIn = () => {
+    Animated.spring(animatedValue, {
+      toValue: 0.88,
+      friction: 20,
+      tension: 50,
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      //
+    });
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(animatedValue, {
+      toValue: 1,
+      friction: 10,
+      tension: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return(
-    <View>
-      <Text>
-        hello
-      </Text>
-    </View>
+    // <Animated.View style={animatedStyle}>
+      <Pressable
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        {...props}
+      />
+    // </Animated.View>
   );
 }
-
-export const tabBarStyles = StyleSheet.create({
-  tabBar: {
-    position: 'absolute',
-    height: 60,
-    bottom: 30,
-    borderRadius: 15,
-    marginLeft: 10,
-    marginRight: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-  }
-});

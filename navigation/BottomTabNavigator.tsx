@@ -1,25 +1,20 @@
-/**
- * Learn more about createBottomTabNavigator:
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
-
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
 import { View } from "../components/Themed";
-import { CustomizedTabBar, tabBarStyles } from "../components/TabBar";
+import { TabBarButton } from "../components/TabBar";
 import useColorScheme from "../hooks/useColorScheme";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import Notification from "../screens/Notification";
+import { TouchableOpacity, Pressable } from "react-native";
 import {
   BottomTabParamList,
   TabOneParamList,
   TabTwoParamList,
-  NotificationParamList
 } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -31,24 +26,28 @@ export default function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="TabOne"
       screenOptions={{
-        header: () => <View />,
-        tabBarIcon: () => <TabBarIcon name="ios-code" color={'yello'} />,
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarStyle: {
           position: 'absolute',
-          height: 60,
+          height: 70,
           bottom: 30,
           borderRadius: 15,
           marginLeft: 10,
           marginRight: 10,
           shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 5,
-          // display: 'flex',
+          shadowOffset: { width: 0, height: 5 },
+          shadowOpacity: 0.2,
+          shadowRadius: 10,
+          paddingBottom: 0,
+          paddingLeft: 30,
+          paddingRight: 30,
+          display: 'flex',
           flexDirection: 'row',
-          alignItems: 'center',
-          paddingBottom: 0
-        }
+          justifyContent: 'center'
+        },
+        tabBarButton: TabBarButton
       }}
     >
       <BottomTab.Screen
@@ -56,7 +55,16 @@ export default function BottomTabNavigator() {
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="home" color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="AddFlow"
+        component={TabOneNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="add" color={color} />
           ),
         }}
       />
@@ -65,7 +73,7 @@ export default function BottomTabNavigator() {
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="assignment" color={color} />
           ),
         }}
       />
@@ -73,13 +81,11 @@ export default function BottomTabNavigator() {
   );
 }
 
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof Ionicons>["name"];
+  name: React.ComponentProps<typeof MaterialIcons>["name"];
   color: string;
 }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <MaterialIcons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
@@ -109,19 +115,5 @@ function TabTwoNavigator() {
         options={{ headerTitle: "Tab Two Title" }}
       />
     </TabTwoStack.Navigator>
-  );
-}
-
-const NotificationStack = createStackNavigator<NotificationParamList>();
-
-function NotificationNavigator() {
-  return (
-    <NotificationStack.Navigator>
-      <NotificationStack.Screen
-        name="Notification"
-        component={Notification}
-        options={{ headerTitle: "Notif" }}
-      />
-    </NotificationStack.Navigator>
   );
 }
