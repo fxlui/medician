@@ -7,10 +7,12 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
+import Carousel from "react-native-snap-carousel";
 
 const DATA = [
   {
@@ -25,6 +27,10 @@ const DATA = [
     id: "58694a0f-3da1-471f-bd96-145571e26d72",
     title: "Third Item",
   },
+  {
+    id: "58694a0f-3da1-471f-bd96-145ee26d72",
+    title: "Fourth Item",
+  },
 ];
 
 const App = () => {
@@ -32,7 +38,7 @@ const App = () => {
 
   const navigation = useNavigation();
 
-  const renderTile = ({ item }) => {
+  const renderTile = ({ item, index }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
     const color = item.id === selectedId ? "white" : "black";
 
@@ -47,50 +53,70 @@ const App = () => {
         // backgroundColor={{ backgroundColor }}
         // textColor={{ color }}
         style={{
-          marginRight: 20,
+          marginRight: 15,
         }}
+        index={index}
       />
     );
   };
 
   return (
     <SafeView style={styles.container}>
-      <ScrollView style={styles.child}>
-        <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+      <View style={styles.child}>
+        <ScrollView
+          style={{
+            overflow: "visible",
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
 
-        <Text style={styles.title}>Medication</Text>
-        <FlatList
-          style={styles.list}
-          data={DATA}
-          renderItem={renderTile}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
+          <Text style={styles.title}>Medication</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+          />
 
-        <Text style={styles.title}>Exercise</Text>
-        <FlatList
-          style={styles.list}
-          data={DATA}
-          renderItem={renderTile}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
+          <Text style={styles.title}>Exercise</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+          />
 
-        <Text style={styles.title}>Appointment</Text>
-        <FlatList
-          style={styles.list}
-          data={DATA}
-          renderItem={renderTile}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
-      </ScrollView>
+          <Text style={styles.title}>Appointment</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+          />
+          <Text style={styles.title}>Test</Text>
+          <Text style={styles.title}>Test</Text>
+          <Text style={styles.title}>Test</Text>
+        </ScrollView>
+      </View>
     </SafeView>
   );
 };
@@ -98,7 +124,6 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
   },
   child: {
     paddingLeft: 25,
