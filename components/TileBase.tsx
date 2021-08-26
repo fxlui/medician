@@ -56,7 +56,7 @@ const TileBase: React.FC<BaseChildren> = ({
   };
 
   const handleOnClick = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     onClick();
   };
 

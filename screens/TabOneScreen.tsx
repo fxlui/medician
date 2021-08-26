@@ -13,6 +13,7 @@ import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
 import Carousel from "react-native-snap-carousel";
+import * as Haptics from "expo-haptics";
 
 const DATA = [
   {
@@ -83,6 +84,9 @@ const App = () => {
             }}
             itemWidth={165}
             inactiveSlideOpacity={0.9}
+            onScrollIndexChanged={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
           />
 
           <Text style={styles.title}>Exercise</Text>
@@ -97,6 +101,9 @@ const App = () => {
             }}
             itemWidth={165}
             inactiveSlideOpacity={0.9}
+            onScrollIndexChanged={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
           />
 
           <Text style={styles.title}>Appointment</Text>
@@ -111,6 +118,9 @@ const App = () => {
             }}
             itemWidth={165}
             inactiveSlideOpacity={0.9}
+            onScrollIndexChanged={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
           />
           <Text style={styles.title}>Test</Text>
           <Text style={styles.title}>Test</Text>
