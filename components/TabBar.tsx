@@ -1,11 +1,9 @@
 import React from 'react';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import {
-  StyleSheet,
   Pressable,
   Animated,
 } from 'react-native';
-import * as Haptics from "expo-haptics";
 
 
 export const TabBarButton = (props: BottomTabBarButtonProps) => {
@@ -16,13 +14,11 @@ export const TabBarButton = (props: BottomTabBarButtonProps) => {
 
   const handlePressIn = () => {
     Animated.spring(animatedValue, {
-      toValue: 0.88,
+      toValue: 0.8,
       friction: 20,
       tension: 50,
       useNativeDriver: true,
-    }).start(({ finished }) => {
-      //
-    });
+    }).start();
   };
 
   const handlePressOut = () => {
@@ -35,12 +31,14 @@ export const TabBarButton = (props: BottomTabBarButtonProps) => {
   };
 
   return(
-    // <Animated.View style={animatedStyle}>
-      <Pressable
+    <Pressable
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         {...props}
-      />
-    // </Animated.View>
+      >
+      <Animated.View style={animatedStyle}>
+        {props.children}
+      </Animated.View>
+    </Pressable>
   );
 }
