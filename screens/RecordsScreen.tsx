@@ -17,7 +17,7 @@ import TileBase, { TileSize } from "../components/TileBase";
 
 import SymptomsData from "../assets/Symptoms.json";
 
-export default function TabTwoScreen() {
+export default function RecordsScreen() {
   return (
     <SafeView style={styles.container}>
       <View style={styles.child}>

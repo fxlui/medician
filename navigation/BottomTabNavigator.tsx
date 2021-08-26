@@ -4,27 +4,25 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
-import { View } from "../components/Themed";
 import { TabBarButton } from "../components/TabBar";
 import useColorScheme from "../hooks/useColorScheme";
 import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import RecordsScreen from "../screens/RecordsScreen";
 import Notification from "../screens/Notification";
-import { TouchableOpacity, Pressable } from "react-native";
 import {
   BottomTabParamList,
-  TabOneParamList,
-  TabTwoParamList,
+  HomeParamList,
+  RecordsParamList,
 } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+export const BottomTabNavigator = () => {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -51,8 +49,8 @@ export default function BottomTabNavigator() {
       }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Home"
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="home" color={color} />
@@ -61,7 +59,7 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="AddFlow"
-        component={TabOneNavigator}
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="add" color={color} />
@@ -69,8 +67,8 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Records"
+        component={RecordsNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="assignment" color={color} />
@@ -81,39 +79,41 @@ export default function BottomTabNavigator() {
   );
 }
 
-function TabBarIcon(props: {
+const TabBarIcon = (props: {
   name: React.ComponentProps<typeof MaterialIcons>["name"];
   color: string;
-}) {
+}) => {
   return <MaterialIcons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const HomeStack = createStackNavigator<HomeParamList>();
 
-function TabOneNavigator() {
+const HomeNavigator = () =>{
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomeScreen"
         component={TabOneScreen}
-        options={{ headerTitle: "Tab One Title", headerShown: false }}
+        options={{ headerShown: false }}
       />
-    </TabOneStack.Navigator>
+    </HomeStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const RecordsStack = createStackNavigator<RecordsParamList>();
 
-function TabTwoNavigator() {
+const RecordsNavigator = () => {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: "Tab Two Title", headerShown: false }}
+    <RecordsStack.Navigator>
+      <RecordsStack.Screen
+        name="RecordsScreen"
+        component={RecordsScreen}
+        options={{ headerShown: false }}
       />
-    </TabTwoStack.Navigator>
+    </RecordsStack.Navigator>
   );
 }
+
+export default BottomTabNavigator;
