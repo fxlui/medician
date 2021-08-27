@@ -37,5 +37,116 @@
         ]
       }
     ] 
-  }
+  },
+  {
+    "id": 2,
+    "question": "How severe is it?",
+    "elaboration": null, 
+    "options": [
+      {
+        "text": "Minor discomfort",
+        "emoji": null,
+        "start": 1,
+        "end": 3
+      },
+      {
+        "text": "Moderate discomfort",
+        "emoji": null,
+        "start": 4,
+        "end": 6
+      },
+      {
+        "text": "Severe discomfort",
+        "emoji": null,
+        "start": 7,
+        "end": 9
+      },
+      {
+        "text": "Unbearable",
+        "emoji": null,
+        "start": 10,
+        "end": 10
+      }
+    ] 
+  },
+    {
+    "id": 3,
+    "question": "When did it occur?",
+    "elaboration": "You can tap on multiple dates.", 
+    "options": null 
+  },
+    {
+    "id": 4,
+    "question": "Please describe what you observe.",
+    "elaboration": null, 
+    "options": [
+      {
+        "question": "What makes it better?",
+        "placeholder": "List any remedies, exercises..."
+      },
+      {
+        "question": "What makes it worst?",
+        "placeholder": "List any foods, actions, temperature..."
+      },
+      {
+        "question": "Have you tried anything?",
+        "placeholder": "List any medication..."
+      },
+    ]
+  },
+    {
+    "id": 5,
+    "question": "Where is the area affected?",
+    "elaboration": "Attach any photos of your symptom", 
+    "options": null 
+  },
+    {
+    "id": 6,
+    "question": "Were you able to take your temperature?",
+    "elaboration": null, 
+    "options": ["Yes", "No"] 
+  },
+    {
+    "id": 7,
+    "question": "What was your temperature?",
+    "elaboration": null, 
+    "options": null 
+  },
+    {
+    "id": 8,
+    "question": "Please tell me more. Select all that applies.",
+    "elaboration": null, 
+    "options": ["Urination", "Defication"] 
+  },
+    {
+    "id": 9,
+    "question": "Does it hurt?",
+    "elaboration": null, 
+    "options": ["Yes", "No"] 
+  },
+  {
+    "id": 10,
+    "question": "What colour is it?",
+    "elaboration": null, 
+    "options": ["Brown", "Green", "Red", "Black"]
+  },
+  {
+    "id": 11,
+    "question": "Is your head spining or the room spinning?",
+    "elaboration": null, 
+    "options": ["Head", "Room"]
+  },
+  {
+    "id": 12,
+    "question": "Please tell me more. How long did you sleep?",
+    "elaboration": null, 
+    "options": null
+  },
+  {
+    "id": 11,
+    "question": "Please tell me more. How would you describe it?",
+    "elaboration": null, 
+    "options": null
+  },
+
 ]
