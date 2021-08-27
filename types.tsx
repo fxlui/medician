@@ -10,14 +10,14 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   Home: undefined;
-  Records: undefined;
   AddFlow: undefined;
+  Records: undefined;
 };
 
 export type HomeParamList = {
   HomeScreen: undefined;
 };
 
-export type RecordsParamList = {
-  RecordsScreen: undefined;
+export type AddFlowParamList = {
+  ActionScreen: undefined;
 };

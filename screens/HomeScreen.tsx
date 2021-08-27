@@ -34,7 +34,7 @@ const DATA = [
   },
 ];
 
-const App = () => {
+const HomeScreen = () => {
   const [selectedId, setSelectedId] = useState(null);
 
   const navigation = useNavigation();
@@ -171,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default HomeScreen;

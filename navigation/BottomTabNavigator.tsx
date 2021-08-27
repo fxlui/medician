@@ -4,15 +4,16 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
-import { TabBarButton } from "../components/TabBar";
+import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import useColorScheme from "../hooks/useColorScheme";
-import TabOneScreen from "../screens/TabOneScreen";
-import RecordsScreen from "../screens/RecordsScreen";
+import HomeScreen from "../screens/HomeScreen";
+import ActionScreen from "../screens/ActionScreen";
 import Notification from "../screens/Notification";
+import RecordsScreen from "../screens/RecordsScreen";
 import {
   BottomTabParamList,
   HomeParamList,
-  RecordsParamList,
+  AddFlowParamList,
 } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -27,24 +28,7 @@ export const BottomTabNavigator = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: Colors[colorScheme].tint,
-        tabBarStyle: {
-          position: 'absolute',
-          height: 70,
-          bottom: 30,
-          borderRadius: 15,
-          marginLeft: 10,
-          marginRight: 10,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 5 },
-          shadowOpacity: 0.2,
-          shadowRadius: 10,
-          paddingBottom: 0,
-          paddingLeft: 30,
-          paddingRight: 30,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center'
-        },
+        tabBarStyle: tabBarStyles.tabBar,
         tabBarButton: TabBarButton
       }}
     >
@@ -59,7 +43,7 @@ export const BottomTabNavigator = () => {
       />
       <BottomTab.Screen
         name="AddFlow"
-        component={HomeNavigator}
+        component={AddFlowNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="add" color={color} />
@@ -68,7 +52,7 @@ export const BottomTabNavigator = () => {
       />
       <BottomTab.Screen
         name="Records"
-        component={RecordsNavigator}
+        component={RecordsScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="assignment" color={color} />
@@ -95,24 +79,24 @@ const HomeNavigator = () =>{
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="HomeScreen"
-        component={TabOneScreen}
+        component={HomeScreen}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>
   );
 }
 
-const RecordsStack = createStackNavigator<RecordsParamList>();
+const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
-const RecordsNavigator = () => {
+const AddFlowNavigator = () => {
   return (
-    <RecordsStack.Navigator>
-      <RecordsStack.Screen
-        name="RecordsScreen"
-        component={RecordsScreen}
+    <AddFlowStack.Navigator>
+      <AddFlowStack.Screen
+        name="ActionScreen"
+        component={ActionScreen}
         options={{ headerShown: false }}
       />
-    </RecordsStack.Navigator>
+    </AddFlowStack.Navigator>
   );
 }
 
