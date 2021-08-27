@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "description": "area",
     "question": "Where is the area affected?",
     "elaboration": null, 
     "options": [
@@ -40,6 +41,7 @@
   },
   {
     "id": 2,
+    "description": "severity",
     "question": "How severe is it?",
     "elaboration": null, 
     "options": [
@@ -71,12 +73,14 @@
   },
     {
     "id": 3,
+    "description": "occurence",
     "question": "When did it occur?",
     "elaboration": "You can tap on multiple dates.", 
     "options": null 
   },
     {
     "id": 4,
+    "description": "observation",
     "question": "Please describe what you observe.",
     "elaboration": null, 
     "options": [
@@ -96,54 +100,63 @@
   },
     {
     "id": 5,
-    "question": "Where is the area affected?",
+    "description": "attachment",
+    "question": "Give photos.",
     "elaboration": "Attach any photos of your symptom", 
     "options": null 
   },
     {
     "id": 6,
+    "description": "able temperature",
     "question": "Were you able to take your temperature?",
     "elaboration": null, 
     "options": ["Yes", "No"] 
   },
     {
     "id": 7,
+    "description": "temperature",
     "question": "What was your temperature?",
     "elaboration": null, 
     "options": null 
   },
     {
     "id": 8,
+    "description": "which toilet",
     "question": "Please tell me more. Select all that applies.",
     "elaboration": null, 
     "options": ["Urination", "Defication"] 
   },
     {
     "id": 9,
+    "description": "hurt",
     "question": "Does it hurt?",
     "elaboration": null, 
     "options": ["Yes", "No"] 
   },
   {
     "id": 10,
-    "question": "What colour is it?",
+    "description": "color",
+    "question": "What color is it?",
     "elaboration": null, 
     "options": ["Brown", "Green", "Red", "Black"]
   },
   {
     "id": 11,
+    "description": "what spinning",
     "question": "Is your head spining or the room spinning?",
     "elaboration": null, 
     "options": ["Head", "Room"]
   },
   {
     "id": 12,
+    "description": "sleep",
     "question": "Please tell me more. How long did you sleep?",
     "elaboration": null, 
     "options": null
   },
   {
     "id": 11,
+    "description": "elaboration",
     "question": "Please tell me more. How would you describe it?",
     "elaboration": null, 
     "options": null
