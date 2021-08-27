@@ -10,7 +10,6 @@ import HomeScreen from "../screens/HomeScreen";
 import RecordsScreen from "../screens/RecordsScreen";
 import { View } from "../components/Themed";
 
-const AddFlowPlaceholder = () => <View />;
 import AreaSelectScreen from "../screens/add-flow/AreaSelectScreen";
 import Notification from "../screens/Notification";
 import { TouchableOpacity, Pressable } from "react-native";
@@ -40,19 +39,19 @@ export const BottomTabNavigator = () => {
         }}
       />
       <BottomTab.Screen
+        //name="DirectToAddFlow"
+        //component={AddFlowPlaceholder}
         name="DirectToAddFlow"
-        component={AddFlowPlaceholder}
-        //name="AddFlow"
-        //component={AddFlowStackNavigator}
+        component={AddFlowStackNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="add" color={color} />,
         }}
-        listeners={({ navigation }) => ({
+        /*listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
             navigation.navigate("AddFlow");
           },
-        })}
+        })}*/
       />
       <BottomTab.Screen
         name="Records"
@@ -91,8 +90,7 @@ const HomeNavigator = () => {
 };
 
 export default BottomTabNavigator;
-/*
-}
+
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
 function AddFlowStackNavigator() {
@@ -105,4 +103,4 @@ function AddFlowStackNavigator() {
       />
     </AddFlowStack.Navigator>
   );
-}*/
+}

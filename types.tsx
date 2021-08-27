@@ -21,8 +21,5 @@ export type HomeParamList = {
 
 export type AddFlowParamList = {
   ActionScreen: undefined;
-};
-
-export type AddFlowParamList = {
   AreaSelectScreen: undefined;
 };
