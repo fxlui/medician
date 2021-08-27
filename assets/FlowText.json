@@ -7,9 +7,9 @@
       {
         "optionId": 1,
         "emoji": "",
-        "text": "Head + Neck",
+        "text": "Head",
         "parts": [
-            "eyes", "ears", "nose", "mouth", "teeth", "face", "scalp", "brain"
+            "Eyes", "Ears", "Nose", "Mouth", "Teeth", "Face", "Scalp", "Brain"
         ]
       },
       {
@@ -17,7 +17,7 @@
         "emoji": "",
         "text": "Body",
         "parts": [
-            "chest", "abdomen", "pelvis", "genitals", "buttocks", "back" 
+            "Neck", "Throat", "Chest", "Abdomen", "Pelvis", "Genitals", "Buttocks", "Back" 
         ]
       },
       {
@@ -25,7 +25,7 @@
         "emoji": "",
         "text": "Arms",
         "parts": [
-            "L/R Shoulder", "L/R Armpit", "L/R Upper Arm", "L/R Elbow", "L/R Forearm", "L/R Wrist", "L/R Hand", "L/R Fingers"
+            "Shoulder", "Armpit", "Upper Arm", "Elbow", "Forearm", "Wrist", "Hand", "Fingers"
         ]
       },
       {
