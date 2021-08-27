@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   ScrollView,
   FlatList,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   TouchableOpacity,
@@ -70,12 +69,9 @@ const HomeScreen = () => {
   };
 
   return (
-    <SafeView style={styles.container}>
+    <SafeView>
       <View style={styles.child}>
         <ScrollView
-          style={{
-            overflow: "visible",
-          }}
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
@@ -144,6 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   child: {
+    flex: 1,
     paddingLeft: 25,
   },
   greeting: {

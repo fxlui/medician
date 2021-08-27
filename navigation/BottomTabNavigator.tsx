@@ -4,17 +4,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
-import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import useColorScheme from "../hooks/useColorScheme";
+import { BottomTabParamList, HomeParamList } from "../types";
+import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import HomeScreen from "../screens/HomeScreen";
-import ActionScreen from "../screens/ActionScreen";
 import Notification from "../screens/Notification";
 import RecordsScreen from "../screens/RecordsScreen";
-import {
-  BottomTabParamList,
-  HomeParamList,
-  AddFlowParamList,
-} from "../types";
+import { View } from "../components/Themed";
+
+const AddFlowPlaceholder = () => <View />;
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -42,13 +40,19 @@ export const BottomTabNavigator = () => {
         }}
       />
       <BottomTab.Screen
-        name="AddFlow"
-        component={AddFlowNavigator}
+        name="DirectToAddFlow"
+        component={AddFlowPlaceholder}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="add" color={color} />
           ),
         }}
+        listeners={({ navigation }) => ({
+          tabPress: event => {
+            event.preventDefault();
+            navigation.navigate("AddFlow");
+          }
+        })}
       />
       <BottomTab.Screen
         name="Records"
@@ -83,20 +87,6 @@ const HomeNavigator = () =>{
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>
-  );
-}
-
-const AddFlowStack = createStackNavigator<AddFlowParamList>();
-
-const AddFlowNavigator = () => {
-  return (
-    <AddFlowStack.Navigator>
-      <AddFlowStack.Screen
-        name="ActionScreen"
-        component={ActionScreen}
-        options={{ headerShown: false }}
-      />
-    </AddFlowStack.Navigator>
   );
 }
 

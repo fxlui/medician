@@ -19,7 +19,7 @@ import SymptomsData from "../assets/Symptoms.json";
 
 export default function ActionScreen() {
   return (
-    <SafeView style={styles.container}>
+    <SafeView>
       <View style={styles.child}>
         <ScrollView
           style={{
@@ -50,10 +50,8 @@ export default function ActionScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   child: {
+    flex: 1,
     paddingLeft: 25,
   },
   greeting: {

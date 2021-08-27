@@ -5,12 +5,13 @@
 
 export type RootStackParamList = {
   Root: undefined;
+  AddFlow: undefined;
   NotFound: undefined;
 };
 
 export type BottomTabParamList = {
   Home: undefined;
-  AddFlow: undefined;
+  DirectToAddFlow: undefined;
   Records: undefined;
 };
 

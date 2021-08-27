@@ -8,6 +8,7 @@ import { RootStore } from './models/root-store';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation/Navigation';
+import SafeView from './components/SafeView';
 
 export default function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);

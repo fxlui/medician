@@ -1,12 +1,13 @@
 import React from "react";
 import {
-  SafeAreaView,
   StyleSheet,
   Platform,
   StatusBar,
   StyleProp,
   ViewStyle,
 } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import useColorScheme from "../hooks/useColorScheme";
 interface ViewChildrenProps {
