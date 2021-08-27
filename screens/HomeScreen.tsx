@@ -65,67 +65,66 @@ const HomeScreen = () => {
   const colorScheme = useColorScheme();
 
   return (
-    <SafeView>
-      <View style={styles.child}>
-        <ScrollView
-          style={{ overflow: "visible" }}
-          showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+    <SafeView disableBottom>
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.overflowView}>
+            <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+            <Text style={styles.title}>Medication</Text>
+            <Carousel
+              style={{ overflow: "visible" }}
+              data={DATA}
+              renderItem={renderTile}
+              vertical={false}
+              sliderWidth={Dimensions.get("window").width}
+              activeSlideAlignment={"start"}
+              containerCustomStyle={{
+                overflow: "visible",
+              }}
+              itemWidth={165}
+              inactiveSlideOpacity={0.9}
+              onScrollIndexChanged={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+            />
 
-          <Text style={styles.title}>Medication</Text>
-          <Carousel
-            data={DATA}
-            renderItem={renderTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            itemWidth={165}
-            inactiveSlideOpacity={1}
-            onScrollIndexChanged={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          />
+            <Text style={styles.title}>Exercise</Text>
+            <Carousel
+              data={DATA}
+              renderItem={renderTile}
+              vertical={false}
+              sliderWidth={Dimensions.get("window").width}
+              activeSlideAlignment={"start"}
+              containerCustomStyle={{
+                overflow: "visible",
+              }}
+              itemWidth={165}
+              inactiveSlideOpacity={0.9}
+              onScrollIndexChanged={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+            />
 
-          <Text style={styles.title}>Exercise</Text>
-          <Carousel
-            data={DATA}
-            renderItem={renderTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            itemWidth={165}
-            inactiveSlideOpacity={1}
-            onScrollIndexChanged={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          />
-
-          <Text style={styles.title}>Appointment</Text>
-          <Carousel
-            data={DATA}
-            renderItem={renderTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            itemWidth={165}
-            inactiveSlideOpacity={1}
-            onScrollIndexChanged={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          />
-          <Text style={styles.title}>Test</Text>
-          <Text style={styles.title}>Test</Text>
-          <Text style={styles.title}>Test</Text>
+            <Text style={styles.title}>Appointment</Text>
+            <Carousel
+              data={DATA}
+              renderItem={renderTile}
+              vertical={false}
+              sliderWidth={Dimensions.get("window").width}
+              activeSlideAlignment={"start"}
+              containerCustomStyle={{
+                overflow: "visible",
+              }}
+              itemWidth={165}
+              inactiveSlideOpacity={0.9}
+              onScrollIndexChanged={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+            />
+            <Text style={styles.title}>Test</Text>
+            <Text style={styles.title}>Test</Text>
+            <Text style={styles.title}>Test</Text>
+          </View>
         </ScrollView>
       </View>
     </SafeView>
@@ -136,8 +135,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  child: {
-    flex: 1,
+  overflowView: {
+    overflow: "visible",
     paddingLeft: 25,
   },
   greeting: {
