@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "question": "Where is the area affected?",
+    "elaboration": null, 
+    "options": [
+      {
+        "optionId": 1,
+        "emoji": "",
+        "text": "Head + Neck",
+        "parts": [
+            "eyes", "ears", "nose", "mouth", "teeth", "face", "scalp", "brain"
+        ]
+      },
+      {
+        "optionId": 2,
+        "emoji": "",
+        "text": "Body",
+        "parts": [
+            "chest", "abdomen", "pelvis", "genitals", "buttocks", "back" 
+        ]
+      },
+      {
+        "optionId": 3,
+        "emoji": "",
+        "text": "Arms",
+        "parts": [
+            "L/R Shoulder", "L/R Armpit", "L/R Upper Arm", "L/R Elbow", "L/R Forearm", "L/R Wrist", "L/R Hand", "L/R Fingers"
+        ]
+      },
+      {
+        "optionId": 4,
+        "emoji": "",
+        "text": "Legs",
+        "parts": [
+            "Thigh", "Hamstring", "Knee", "Back of Knee", "Shin", "Calf", "Ankle", "Foot", "Toes"
+        ]
+      }
+    ] 
+  }
+]
