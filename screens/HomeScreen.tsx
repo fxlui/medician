@@ -69,7 +69,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <SafeView>
+    <SafeView disableBottom>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.overflowView}>
