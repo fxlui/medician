@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
-import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
@@ -67,17 +66,6 @@ const HomeScreen = () => {
 
   return (
     <SafeView>
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          height: getStatusBarHeight(),
-          width: Dimensions.get("window").width,
-          backgroundColor: colorScheme === "light" ? "#F9F9F9" : "#000",
-          opacity: 1,
-          zIndex: 100,
-        }}
-      />
       <View style={styles.child}>
         <ScrollView
           style={{ overflow: "visible" }}
