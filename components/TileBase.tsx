@@ -9,6 +9,9 @@ import {
 import { Text, View } from "../components/Themed";
 import * as Haptics from "expo-haptics";
 
+import { LinearGradient } from "expo-linear-gradient";
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+
 export enum TileSize {
   Default = "default",
   Large = "large",
@@ -20,7 +23,7 @@ interface BaseChildren {
   size?: TileSize;
   onClick?: () => void;
   style?: StyleProp<ViewStyle>;
-  backgroundColour: string;
+  gradient: Animated.WithAnimatedArray<string>;
 }
 
 const TileBase: React.FC<BaseChildren> = ({
@@ -28,7 +31,7 @@ const TileBase: React.FC<BaseChildren> = ({
   size = TileSize.Default,
   onClick = () => {},
   style = {},
-  backgroundColour = "white",
+  gradient = ["white", "white"],
 }) => {
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
@@ -67,20 +70,20 @@ const TileBase: React.FC<BaseChildren> = ({
       onPressOut={handlePressOut}
       onLongPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
     >
-      <Animated.View
-        style={[
-          styles.container,
-          size == TileSize.Default && styles.default,
-          size == TileSize.Large && styles.large,
-          size == TileSize.Long && styles.long,
-          animatedStyle,
-          style,
-          {
-            backgroundColor: backgroundColour,
-          },
-        ]}
-      >
-        {children}
+      <Animated.View style={styles.shadow}>
+        <AnimatedLinearGradient
+          colors={gradient}
+          style={[
+            styles.container,
+            size == TileSize.Default && styles.default,
+            size == TileSize.Large && styles.large,
+            size == TileSize.Long && styles.long,
+            animatedStyle,
+            style,
+          ]}
+        >
+          {children}
+        </AnimatedLinearGradient>
       </Animated.View>
     </Pressable>
   );
@@ -90,12 +93,14 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
     padding: 18,
+    overflow: "hidden",
+  },
+  shadow: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 9,
     elevation: 5,
-    overflow: "visible",
   },
   default: {
     width: 150,

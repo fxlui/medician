@@ -15,8 +15,9 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
-import Tile from "../components/Tile";
 import useColorScheme from "../hooks/useColorScheme";
+
+import Tile, { HomeTileTypes } from "../components/HomeTile";
 
 const DATA = [
   {
@@ -58,6 +59,7 @@ const HomeScreen = () => {
           marginRight: 15,
         }}
         index={index}
+        type={HomeTileTypes.Medication}
       />
     );
   };
@@ -94,7 +96,7 @@ const HomeScreen = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -111,7 +113,7 @@ const HomeScreen = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -128,7 +130,7 @@ const HomeScreen = () => {
               overflow: "visible",
             }}
             itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}

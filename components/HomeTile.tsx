@@ -8,28 +8,61 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { Text, View } from "./Themed";
 
 import PillSVG from "../assets/images/PillSVG";
+import useColorScheme from "../hooks/useColorScheme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import {
+  medicationGradient,
+  exerciseGradient,
+  appointmentGradient,
+} from "../constants/Colors";
 import TileBase, { TileSize } from "./TileBase";
+
+export enum HomeTileTypes {
+  Medication = "med",
+  Exercise = "exe",
+  Appointment = "app",
+}
 
 interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
+  type: HomeTileTypes;
 }
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
+const getGradient = (type: HomeTileTypes) => {
+  switch (type) {
+    case HomeTileTypes.Medication:
+      return medicationGradient;
+    case HomeTileTypes.Exercise:
+      return exerciseGradient;
+    case HomeTileTypes.Appointment:
+      return appointmentGradient;
+    default:
+      return ["fff", "fff"];
+  }
+};
+
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
+  const colorScheme = useColorScheme();
+  const textColor =
+    index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
+
+  const tileGradient =
+    index == 0
+      ? getGradient(type)
+      : colorScheme === "light"
+      ? ["#fff", "#fff"]
+      : ["#252525", "#252525"];
+
   return (
-    <TileBase
-      style={style}
-      size={size}
-      backgroundColour={index == 0 ? "#24AC29" : "white"}
-    >
-      <View style={index == 0 ? styles.content : styles.contentWhite}>
+    <TileBase style={style} size={size} gradient={tileGradient}>
+      <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons
             name="pill"
@@ -37,14 +70,8 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
             color={index == 0 ? "white" : "#24AC29"}
           />
           <View style={styles.textContent}>
-            <Text
-              style={[styles.primaryText, index == 0 && { color: "white" }]}
-            >
-              {title}
-            </Text>
-            <Text
-              style={[styles.secondaryText, index == 0 && { color: "white" }]}
-            >
+            <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
+            <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
               {title}
             </Text>
           </View>
@@ -61,14 +88,7 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: "#24AC29",
-    flexDirection: "row",
-    flex: 1,
-    alignItems: "stretch",
-    justifyContent: "space-between",
-  },
-  contentWhite: {
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     flexDirection: "row",
     flex: 1,
     alignItems: "stretch",
@@ -77,14 +97,6 @@ const styles = StyleSheet.create({
   textContent: {
     backgroundColor: "transparent",
     justifyContent: "flex-end",
-    color: "#333333",
-  },
-  primaryText: {
-    fontSize: 16,
-  },
-  secondaryText: {
-    fontSize: 14,
-    opacity: 0.68,
   },
   left: {
     flex: 1,

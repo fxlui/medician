@@ -1,0 +1,164 @@
+[
+  {
+    "id": 1,
+    "description": "area",
+    "question": "Where is the area affected?",
+    "elaboration": null, 
+    "options": [
+      {
+        "optionId": 1,
+        "emoji": "",
+        "text": "Head",
+        "parts": [
+            "Eyes", "Ears", "Nose", "Mouth", "Teeth", "Face", "Scalp", "Brain"
+        ]
+      },
+      {
+        "optionId": 2,
+        "emoji": "",
+        "text": "Body",
+        "parts": [
+            "Neck", "Throat", "Chest", "Abdomen", "Pelvis", "Genitals", "Buttocks", "Back" 
+        ]
+      },
+      {
+        "optionId": 3,
+        "emoji": "",
+        "text": "Arms",
+        "parts": [
+            "Shoulder", "Armpit", "Upper Arm", "Elbow", "Forearm", "Wrist", "Hand", "Fingers"
+        ]
+      },
+      {
+        "optionId": 4,
+        "emoji": "",
+        "text": "Legs",
+        "parts": [
+            "Thigh", "Hamstring", "Knee", "Back of Knee", "Shin", "Calf", "Ankle", "Foot", "Toes"
+        ]
+      }
+    ] 
+  },
+  {
+    "id": 2,
+    "description": "severity",
+    "question": "How severe is it?",
+    "elaboration": null, 
+    "options": [
+      {
+        "text": "Minor discomfort",
+        "emoji": null,
+        "start": 1,
+        "end": 3
+      },
+      {
+        "text": "Moderate discomfort",
+        "emoji": null,
+        "start": 4,
+        "end": 6
+      },
+      {
+        "text": "Severe discomfort",
+        "emoji": null,
+        "start": 7,
+        "end": 9
+      },
+      {
+        "text": "Unbearable",
+        "emoji": null,
+        "start": 10,
+        "end": 10
+      }
+    ] 
+  },
+    {
+    "id": 3,
+    "description": "occurence",
+    "question": "When did it occur?",
+    "elaboration": "You can tap on multiple dates.", 
+    "options": null 
+  },
+    {
+    "id": 4,
+    "description": "observation",
+    "question": "Please describe what you observe.",
+    "elaboration": null, 
+    "options": [
+      {
+        "question": "What makes it better?",
+        "placeholder": "List any remedies, exercises..."
+      },
+      {
+        "question": "What makes it worst?",
+        "placeholder": "List any foods, actions, temperature..."
+      },
+      {
+        "question": "Have you tried anything?",
+        "placeholder": "List any medication..."
+      }
+    ]
+  },
+    {
+    "id": 5,
+    "description": "photo",
+    "question": "Give photos.",
+    "elaboration": "Attach any photos of your symptom", 
+    "options": null 
+  },
+    {
+    "id": 6,
+    "description": "able temperature",
+    "question": "Were you able to take your temperature?",
+    "elaboration": null, 
+    "options": ["Yes", "No"] 
+  },
+    {
+    "id": 7,
+    "description": "temperature",
+    "question": "What was your temperature?",
+    "elaboration": null, 
+    "options": null 
+  },
+    {
+    "id": 8,
+    "description": "which toilet",
+    "question": "Please tell me more. Select all that applies.",
+    "elaboration": null, 
+    "options": ["Urination", "Defication"] 
+  },
+    {
+    "id": 9,
+    "description": "hurt",
+    "question": "Does it hurt?",
+    "elaboration": null, 
+    "options": ["Yes", "No"] 
+  },
+  {
+    "id": 10,
+    "description": "color",
+    "question": "What color is it?",
+    "elaboration": null, 
+    "options": ["Brown", "Green", "Red", "Black"]
+  },
+  {
+    "id": 11,
+    "description": "what spinning",
+    "question": "Is your head spining or the room spinning?",
+    "elaboration": null, 
+    "options": ["Head", "Room"]
+  },
+  {
+    "id": 12,
+    "description": "sleep",
+    "question": "Please tell me more. How long did you sleep?",
+    "elaboration": null, 
+    "options": null
+  },
+  {
+    "id": 11,
+    "description": "describe",
+    "question": "Please tell me more. How would you describe it?",
+    "elaboration": null, 
+    "options": null
+  }
+]
