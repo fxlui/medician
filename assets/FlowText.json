@@ -91,7 +91,7 @@
       {
         "question": "Have you tried anything?",
         "placeholder": "List any medication..."
-      },
+      }
     ]
   },
     {
@@ -147,6 +147,5 @@
     "question": "Please tell me more. How would you describe it?",
     "elaboration": null, 
     "options": null
-  },
-
+  }
 ]
