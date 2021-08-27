@@ -11,9 +11,10 @@ import {
 } from "react-native";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
-import AreaTile from "../../components/AreaTile";
 import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
+
+import { TopTile, BottomTile } from "../../components/AreaTile";
 
 const DATA = [
   {
@@ -38,27 +39,40 @@ const App = () => {
   const [selectedId, setSelectedId] = useState(null);
 
   const navigation = useNavigation();
-  const [selected, setSelected] = useState(0);
+  const [selectedTop, setSelectedTop] = useState(0);
+  const [selectedBottom, setSelectedBottom] = useState(0);
 
-  const renderTile = ({ item, index }) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? "white" : "black";
+  const topRef = React.createRef<Carousel<{ id: string; title: string }>>();
+  const bottomRef = React.createRef<Carousel<{ id: string; title: string }>>();
 
-    // const handleTilePress = ( ) => {
-    //   navigation.navigate('Notification', {item});
-    //   console.log(item.id)
-    // };
-
+  const renderTopTile = ({ item, index }) => {
     return (
-      <AreaTile
+      <TopTile
         title={item.title}
-        // backgroundColor={{ backgroundColor }}
-        // textColor={{ color }}
         style={{
           marginRight: 15,
         }}
         index={index}
-        selected={selected === index}
+        selected={selectedTop === index}
+        updater={() => {
+          topRef.current?.snapToItem(index);
+        }}
+      />
+    );
+  };
+
+  const renderBottomTile = ({ item, index }) => {
+    return (
+      <BottomTile
+        title={item.title}
+        style={{
+          marginRight: 15,
+        }}
+        index={index}
+        selected={selectedBottom === index}
+        updater={() => {
+          bottomRef.current?.snapToItem(index);
+        }}
       />
     );
   };
@@ -75,7 +89,7 @@ const App = () => {
           <View style={{}}>
             <Carousel
               data={DATA}
-              renderItem={renderTile}
+              renderItem={renderTopTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
               containerCustomStyle={{
@@ -85,20 +99,19 @@ const App = () => {
                 justifyContent: "center",
                 alignItems: "flex-end",
                 overflow: "visible",
-                marginBottom: 60,
               }}
               itemWidth={150}
               inactiveSlideOpacity={0.8}
-              onScrollIndexChanged={() => {
+              onScrollIndexChanged={(index) => {
+                setSelectedTop(index);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
-              onSnapToItem={(index) => {
-                setSelected(index);
-              }}
+              onSnapToItem={(index) => {}}
+              ref={topRef}
             />
             <Carousel
               data={DATA}
-              renderItem={renderTile}
+              renderItem={renderBottomTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
               containerCustomStyle={{
@@ -108,14 +121,17 @@ const App = () => {
                 justifyContent: "center",
                 alignItems: "flex-start",
                 overflow: "visible",
+                marginTop: 50,
+                marginBottom: 60,
               }}
               itemWidth={150}
               inactiveSlideOpacity={0.8}
-              onScrollIndexChanged={() => {
+              onScrollIndexChanged={(index) => {
+                setSelectedBottom(index);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
+              ref={bottomRef}
             />
-            <Text>hihihihi</Text>
           </View>
         </View>
       </View>
@@ -126,18 +142,15 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    borderWidth: 1,
     flex: 1,
   },
   child: {
     flex: 10,
-    borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   greeting: {
     flex: 1,
-    borderWidth: 1,
     fontSize: 26,
     fontWeight: "600",
     marginTop: 65,

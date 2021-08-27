@@ -8,76 +8,142 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { Text, View } from "./Themed";
 
-import PillSVG from "../assets/images/PillSVG";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useColorScheme from "../hooks/useColorScheme";
 
 import TileBase, { TileSize } from "./TileBase";
-
-interface AreaTileDetails {
+import Carousel from "react-native-snap-carousel";
+interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
   selected: boolean;
+  updater: () => void;
 }
 
-const AreaTile: React.FC<AreaTileDetails> = ({
+export const TopTile: React.FC<TileDetails> = ({
   title,
   style,
   size,
-  index,
   selected,
+  index,
+  updater,
 }) => {
   const colorScheme = useColorScheme();
-  const textColor =
-    index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor =
-    index == 0 ? "#24AC29" : colorScheme === "light" ? "#fff" : "#252525";
+  const animatedValue = React.useRef(new Animated.Value(0)).current;
+
+  const textColor = colorScheme === "light" ? "#333333" : "#fff";
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const animatedTileColor = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [tileColor, "#FF7272"],
+  });
+  const animatedTextColor = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [textColor, "#fff"],
+  });
+
+  React.useEffect(() => {
+    Animated.spring(animatedValue, {
+      toValue: selected ? 1 : 0,
+      useNativeDriver: false,
+    }).start();
+  }, [selected]);
+
   return (
-    <TileBase style={style} size={size} backgroundColor={tileColor}>
+    <TileBase
+      style={style}
+      size={size}
+      gradient={[tileColor, tileColor]}
+      onClick={updater}
+    >
       <View style={styles.content}>
         <View style={styles.left}>
-          <MaterialCommunityIcons
-            name="pill"
-            size={42}
-            color={index == 0 ? "white" : "#24AC29"}
-          />
+          <Text style={{ fontSize: 40 }}>🤯</Text>
           <View style={styles.textContent}>
-            <Text style={[styles.primaryText && { color: textColor }]}>
+            <Animated.Text style={{ color: animatedTextColor, fontSize: 16 }}>
               {title}
-            </Text>
-            <Text
-              style={[
-                styles.secondaryText && { color: textColor, opacity: 0.68 },
-              ]}
-            >
-              {title}
-            </Text>
+            </Animated.Text>
           </View>
         </View>
-        {size == TileSize.Large ? (
-          <View style={styles.right}>
-            <Text>hi</Text>
-          </View>
-        ) : null}
       </View>
+      <Animated.View
+        style={{
+          backgroundColor: animatedTileColor,
+          flex: 1,
+          position: "absolute",
+          width: 150,
+          height: 150,
+          zIndex: -50,
+        }}
+      />
+    </TileBase>
+  );
+};
+
+export const BottomTile: React.FC<TileDetails> = ({
+  title,
+  style,
+  size,
+  selected,
+  index,
+  updater,
+}) => {
+  const colorScheme = useColorScheme();
+  const animatedValue = React.useRef(new Animated.Value(0)).current;
+
+  const textColor = colorScheme === "light" ? "#333333" : "#fff";
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const animatedTileColor = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [tileColor, "#FF7272"],
+  });
+
+  React.useEffect(() => {
+    Animated.spring(animatedValue, {
+      toValue: selected ? 1 : 0,
+      useNativeDriver: false,
+    }).start();
+  }, [selected]);
+
+  return (
+    <TileBase
+      style={style}
+      size={size}
+      gradient={[tileColor, tileColor]}
+      onClick={updater}
+    >
+      <View style={styles.content}>
+        <View style={styles.leftBottom}>
+          <View style={styles.textContent}>
+            <Animated.Text style={{ color: textColor, fontSize: 16 }}>
+              {title}
+            </Animated.Text>
+          </View>
+        </View>
+      </View>
+      <Animated.View
+        style={{
+          backgroundColor: "transparent",
+          flex: 1,
+          position: "absolute",
+          width: 150,
+          height: 150,
+          zIndex: -50,
+          borderWidth: 2,
+          borderRadius: 16,
+          borderColor: animatedTileColor,
+        }}
+      />
     </TileBase>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: "#24AC29",
-    flexDirection: "row",
-    flex: 1,
-    alignItems: "stretch",
-    justifyContent: "space-between",
-  },
-  contentWhite: {
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     flexDirection: "row",
     flex: 1,
     alignItems: "stretch",
@@ -86,14 +152,6 @@ const styles = StyleSheet.create({
   textContent: {
     backgroundColor: "transparent",
     justifyContent: "flex-end",
-    color: "#333333",
-  },
-  primaryText: {
-    fontSize: 16,
-  },
-  secondaryText: {
-    fontSize: 14,
-    opacity: 0.68,
   },
   left: {
     flex: 1,
@@ -101,9 +159,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "transparent",
   },
+  leftBottom: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
   right: {
     backgroundColor: "transparent",
   },
 });
-
-export default AreaTile;
