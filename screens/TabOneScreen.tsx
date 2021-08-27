@@ -39,7 +39,15 @@ const App = () => {
 
   const navigation = useNavigation();
 
-  const renderTile = ({ item, index }) => {
+  interface baseData {
+    index: number;
+    dataIndex: number;
+    item: {
+        id: string;
+        title: string;
+    };
+  }
+  const renderTile = ({ item, index }: baseData) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
     const color = item.id === selectedId ? "white" : "black";
 
