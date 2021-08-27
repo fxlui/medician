@@ -100,7 +100,7 @@
   },
     {
     "id": 5,
-    "description": "attachment",
+    "description": "photo",
     "question": "Give photos.",
     "elaboration": "Attach any photos of your symptom", 
     "options": null 
@@ -156,7 +156,7 @@
   },
   {
     "id": 11,
-    "description": "elaboration",
+    "description": "describe",
     "question": "Please tell me more. How would you describe it?",
     "elaboration": null, 
     "options": null
