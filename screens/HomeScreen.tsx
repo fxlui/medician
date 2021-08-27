@@ -2,17 +2,21 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   ScrollView,
+  Platform,
   FlatList,
   StatusBar,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import Carousel from "react-native-snap-carousel";
+import * as Haptics from "expo-haptics";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/Tile";
-import Carousel from "react-native-snap-carousel";
-import * as Haptics from "expo-haptics";
+import useColorScheme from "../hooks/useColorScheme";
 
 const DATA = [
   {
@@ -42,24 +46,14 @@ const HomeScreen = () => {
     index: number;
     dataIndex: number;
     item: {
-        id: string;
-        title: string;
+      id: string;
+      title: string;
     };
   }
   const renderTile = ({ item, index }: baseData) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? "white" : "black";
-
-    // const handleTilePress = ( ) => {
-    //   navigation.navigate('Notification', {item});
-    //   console.log(item.id)
-    // };
-
     return (
       <Tile
         title={item.title}
-        // backgroundColor={{ backgroundColor }}
-        // textColor={{ color }}
         style={{
           marginRight: 15,
         }}
@@ -67,11 +61,24 @@ const HomeScreen = () => {
       />
     );
   };
+  const colorScheme = useColorScheme();
 
   return (
     <SafeView>
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          height: getStatusBarHeight(),
+          width: Dimensions.get("window").width,
+          backgroundColor: colorScheme === "light" ? "#F9F9F9" : "#000",
+          opacity: 1,
+          zIndex: 100,
+        }}
+      />
       <View style={styles.child}>
         <ScrollView
+          style={{ overflow: "visible" }}
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
