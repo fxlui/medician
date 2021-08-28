@@ -2,7 +2,9 @@ export type RootStackParamList = {
   Root: undefined;
   AddFlow: undefined;
   Notification: {
-    itemId: string;
+    id: string;
+    name: string;
+    notes: string;
     type: HomeTileTypes;
   }
   NotFound: undefined;

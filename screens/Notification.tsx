@@ -1,5 +1,10 @@
-import React from "react";
-import { StyleSheet, Button, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  StatusBar,
+  TouchableOpacity
+} from "react-native";
+import React, { FC } from "react";
+import { Entypo } from '@expo/vector-icons';
 import { StackScreenProps } from "@react-navigation/stack";
 
 import {
@@ -7,14 +12,19 @@ import {
   exerciseGradient,
   appointmentGradient
 } from "../constants/Colors";
-import SafeView from "../components/SafeView";
 import { View, Text } from "react-native";
+// import { Text } from "../components/Themed";
+import SafeView from "../components/SafeView";
+import { PressableBase } from "../components/PressableBase";
 import { RootStackParamList, HomeTileTypes } from "../types";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
 
-const NotificationScreen = ({ navigation,
-  route : { params : { itemId, type } }
+const NotificationScreen = ({
+  navigation,
+  route: {
+    params: { id, type, name, notes}
+  }
 } : ScreenProps) => {
 
   return (
@@ -23,28 +33,58 @@ const NotificationScreen = ({ navigation,
       ? styles.exerciseBg
       : type === HomeTileTypes.Medication
       ? styles.medicationBg
-      : styles.exerciseBg
+      : styles.appointmentBg
     ]}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <View />
-      <View>
-        <Text style={styles.text}>
-          Notification
+      <View style={styles.centerView}>
+        <Text style={[styles.text, styles.name]}>
+          {name}
         </Text>
-        <Text>
-          {itemId}
-          {type}
+        <Text style={[styles.text, styles.notes]}>
+          {notes}
         </Text>
       </View>
-      <View>
-        <Button
-          title="back"
+      <View style={styles.buttonGroup}>
+        <ActionButton
+          label="SNOOZE"
+          onPress={() => navigation.pop()}
+        />
+        <ActionButton
+          label="DONE"
+          onPress={() => navigation.pop()}
+        />
+        <ActionButton
+          label="IGNORE"
           onPress={() => navigation.pop()}
         />
       </View>
+      <PressableBase
+        onPress={() => navigation.pop()}
+      >
+        <Entypo name="chevron-down" size={35} color="black" />
+      </PressableBase>
     </SafeView>
   );
 };
+
+const ActionButton: FC<{
+  onPress : () => void,
+  label: string
+}> = ({ onPress, label }) => {
+  return(
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.4}
+        style={styles.actionButton}
+      />
+      <Text style={[styles.text, styles.buttonLabel]}>
+        {label}
+      </Text>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -55,6 +95,17 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff"
   },
+  centerView: {
+    alignItems: "center"
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: "500"
+  },
+  notes: {
+    fontSize: 18,
+    opacity: 0.6
+  },
   appointmentBg: {
     backgroundColor: appointmentGradient[0]
   },
@@ -63,6 +114,30 @@ const styles = StyleSheet.create({
   },
   exerciseBg: {
     backgroundColor: exerciseGradient[0]
+  },
+  buttonContainer: {
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  buttonLabel: {
+    opacity: 0.7,
+    fontSize: 14,
+    fontWeight: "500"
+  },
+  actionButton: {
+    width: 60,
+    height: 60,
+    marginBottom: 15,
+    opacity: 0.45,
+    borderRadius: 30,
+    backgroundColor: "#fff"
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    alignSelf: "stretch",
+    justifyContent: "space-around",
+    paddingLeft: 70,
+    paddingRight: 70
   }
 });
 

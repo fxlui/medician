@@ -18,7 +18,9 @@ import { BottomTabParamList, RootStackParamList } from "../types";
 
 interface tileItemData {
   id: string;
-  title: string;
+  name: string;
+  notes: string;
+  time: string;
   type: HomeTileTypes;
 }
 
@@ -31,23 +33,31 @@ interface tileItemProps {
 const DATA : tileItemData[] = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-    type: HomeTileTypes.Appointment
+    name: "First Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Exercise
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-    type: HomeTileTypes.Appointment
+    name: "Second Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Medication
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e26d72",
-    title: "Third Item",
+    name: "Third Item",
+    notes: "aaa",
+    time: "",
     type: HomeTileTypes.Appointment
   },
   {
     id: "58694a0f-3da1-471f-bd96-145ee26d72",
-    title: "Fourth Item",
-    type: HomeTileTypes.Appointment
+    name: "Fourth Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Medication
   },
 ];
 
@@ -62,7 +72,7 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
   const renderTile = ({ item, index } : tileItemProps) => {
     return (
       <HomeTile
-        title={item.title}
+        title={item.name}
         style={{
           marginRight: 15,
         }}
@@ -70,7 +80,9 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
         type={HomeTileTypes.Medication}
         onPress={() => {
           navigation.push("Notification", {
-            itemId: item.id,
+            id: item.id,
+            name: item.name,
+            notes: item.notes,
             type: item.type
           });
         }}
@@ -83,7 +95,7 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.overflowView}>
           <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
-          <Text style={styles.title}>Medication</Text>
+          <Text style={styles.name}>Medication</Text>
           <Carousel
             style={{ overflow: "visible" }}
             data={DATA}
@@ -100,7 +112,7 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
           />
-          <Text style={styles.title}>Exercise</Text>
+          <Text style={styles.name}>Exercise</Text>
           <Carousel
             data={DATA}
             renderItem={renderTile}
@@ -116,7 +128,7 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
           />
-          <Text style={styles.title}>Appointment</Text>
+          <Text style={styles.name}>Appointment</Text>
           <Carousel
             data={DATA}
             renderItem={renderTile}
@@ -152,7 +164,7 @@ const styles = StyleSheet.create({
     marginTop: 65,
     paddingLeft: 5,
   },
-  title: {
+  name: {
     fontSize: 18,
     fontWeight: "600",
     marginTop: 25,
