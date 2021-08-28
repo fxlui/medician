@@ -78,7 +78,7 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) 
         </View>
         {list == "symptoms" ? (
           <View style={styles.right}>
-            <Text>
+            <Text style={styles.list}>
               pain{"\n"}
               itchy{"\n"}
               hot {"\n"}
@@ -88,7 +88,7 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) 
           </View>
         ) : 
           <View style={styles.right}>
-            <Text>
+            <Text style={styles.list}>
               sleep{"\n"}
               breathe{"\n"}
               see{"\n"}
@@ -123,6 +123,9 @@ const styles = StyleSheet.create({
   right: {
     backgroundColor: "transparent",
   },
+  list: {
+    textAlign: "right",
+  }
 });
 
 export default Tile;
