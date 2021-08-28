@@ -78,35 +78,19 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) 
         </View>
         {list == "symptoms" ? (
           <View style={styles.right}>
-                      <Text>
-            {/* {SymptomsData.slice(0, 4).map((symptom) => {
-              return (
-                <Text key={symptom.id}>
-                  {symptom.description}
-                  {"\n"}
-                </Text>
-              );
-            })} */}
-            pain{"\n"}
-            itchy{"\n"}
-            hot {"\n"}
-            cold{"\n"}
-            ...
-          </Text>
+            <Text>
+              pain{"\n"}
+              itchy{"\n"}
+              hot {"\n"}
+              cold{"\n"}
+              ...
+            </Text>
           </View>
         ) : 
           <View style={styles.right}>
             <Text>
-              {/* {SymptomsData.slice(0, 4).map((symptom) => {
-                return (
-                  <Text key={symptom.id}>
-                    {symptom.description}
-                    {"\n"}
-                  </Text>
-                );
-              })} */}
               sleep{"\n"}
-              breath{"\n"}
+              breathe{"\n"}
               see{"\n"}
               hear{"\n"}
               ...
