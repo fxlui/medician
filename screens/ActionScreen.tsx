@@ -44,8 +44,14 @@ export default function ActionScreen() {
               />
 
             <View style={styles.addTiles}>
-              <AddTile/>
-              <AddTile/>
+              <AddTile
+                title={"Add"}
+                subtitle={"Appointment"}
+              />
+              <AddTile
+                title={"Add"}
+                subtitle={"Treatment"}
+              />
             </View>
           </View>
 

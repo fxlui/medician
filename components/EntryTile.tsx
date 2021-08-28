@@ -73,7 +73,7 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) 
             color={index == 0 ? "white" : "#24AC29"}
           />
           <View style={styles.textContent}>
-            <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
+            <Text style={{ color: textColor, fontSize: 18 }}>{title}</Text>
           </View>
         </View>
         {list == "symptoms" ? (
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
   },
   list: {
     textAlign: "right",
+    fontSize: 18,
   }
 });
 

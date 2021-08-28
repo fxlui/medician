@@ -33,6 +33,7 @@ interface TileDetails {
   size?: TileSize;
   index?: number;
   type: HomeTileTypes;
+  subtitle: string;
 }
 
 const getGradient = (type: HomeTileTypes) => {
@@ -48,7 +49,7 @@ const getGradient = (type: HomeTileTypes) => {
   }
 };
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, subtitle }) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
@@ -70,10 +71,10 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
             color={index == 0 ? "white" : "#24AC29"}
           />
           <View style={styles.textContent}>
-            <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
             <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
               {title}
             </Text>
+            <Text style={{ color: textColor, fontSize: 16 }}>{subtitle}</Text>
           </View>
         </View>
         {size == TileSize.Large ? (
