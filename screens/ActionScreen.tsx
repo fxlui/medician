@@ -14,8 +14,8 @@ import SafeView from "../components/SafeView";
 import Tile from "../components/HomeTile";
 import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
-
-import SymptomsData from "../assets/Symptoms.json";
+import EntryTile from "../components/EntryTile";
+import AddTile from "../components/AddTile";
 
 export default function ActionScreen() {
   return (
@@ -28,21 +28,27 @@ export default function ActionScreen() {
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.greeting}>
-            Good evening 🌥,{"\n"}What would you like to do?
+            Good evening 🌥,{"\n"}How are you today?
           </Text>
 
-          <Tile title={"I feel"} size={TileSize.Large}></Tile>
-          <Text>
-            {SymptomsData.slice(0, 4).map((symptom) => {
-              return (
-                <Text key={symptom.id}>
-                  {symptom.description}
-                  {"\n"}
-                </Text>
-              );
-            })}
-            ...
-          </Text>
+          <View style={styles.tiles}>
+            <EntryTile 
+              title={"I feel..."}
+              size={TileSize.Large}
+              list={"symptoms"}
+              />
+            <EntryTile 
+              title={"I can't..."}
+              size={TileSize.Large}
+              list={"inabilities"}
+              />
+
+            <View style={styles.addTiles}>
+              <AddTile/>
+              <AddTile/>
+            </View>
+          </View>
+
         </ScrollView>
       </View>
     </SafeView>
@@ -77,4 +83,10 @@ const styles = StyleSheet.create({
     padding: 0,
     overflow: "visible",
   },
+  tiles: {
+    flexDirection: "column",
+  },
+  addTiles: {
+    flexDirection: 'row'
+  }
 });

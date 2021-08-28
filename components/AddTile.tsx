@@ -13,8 +13,6 @@ import { Text, View } from "./Themed";
 import PillSVG from "../assets/images/PillSVG";
 import useColorScheme from "../hooks/useColorScheme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import SymptomsData from "../assets/Symptoms.json";
-
 
 import {
   medicationGradient,
@@ -23,35 +21,34 @@ import {
 } from "../constants/Colors";
 import TileBase, { TileSize } from "./TileBase";
 
-export enum EntryTileTypes {
+export enum HomeTileTypes {
   Medication = "med",
   Exercise = "exe",
   Appointment = "app",
 }
 
 interface TileDetails {
-  title: string ;
+  title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
-  type: EntryTileTypes;
-  list: string;
+  type: HomeTileTypes;
 }
 
-const getGradient = (type: EntryTileTypes) => {
+const getGradient = (type: HomeTileTypes) => {
   switch (type) {
-    case EntryTileTypes.Medication:
+    case HomeTileTypes.Medication:
       return medicationGradient;
-    case EntryTileTypes.Exercise:
+    case HomeTileTypes.Exercise:
       return exerciseGradient;
-    case EntryTileTypes.Appointment:
+    case HomeTileTypes.Appointment:
       return appointmentGradient;
     default:
       return ["fff", "fff"];
   }
 };
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
@@ -74,45 +71,16 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) 
           />
           <View style={styles.textContent}>
             <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
-          </View>
-        </View>
-        {list == "symptoms" ? (
-          <View style={styles.right}>
-                      <Text>
-            {/* {SymptomsData.slice(0, 4).map((symptom) => {
-              return (
-                <Text key={symptom.id}>
-                  {symptom.description}
-                  {"\n"}
-                </Text>
-              );
-            })} */}
-            pain{"\n"}
-            itchy{"\n"}
-            hot {"\n"}
-            cold{"\n"}
-            ...
-          </Text>
-          </View>
-        ) : 
-          <View style={styles.right}>
-            <Text>
-              {/* {SymptomsData.slice(0, 4).map((symptom) => {
-                return (
-                  <Text key={symptom.id}>
-                    {symptom.description}
-                    {"\n"}
-                  </Text>
-                );
-              })} */}
-              sleep{"\n"}
-              breath{"\n"}
-              see{"\n"}
-              hear{"\n"}
-              ...
+            <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
+              {title}
             </Text>
           </View>
-        }
+        </View>
+        {size == TileSize.Large ? (
+          <View style={styles.right}>
+            <Text>hi</Text>
+          </View>
+        ) : null}
       </View>
     </TileBase>
   );
