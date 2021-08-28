@@ -19,20 +19,16 @@ import {
   exerciseGradient,
   appointmentGradient,
 } from "../constants/Colors";
+import { HomeTileTypes } from "../types";
 import TileBase, { TileSize } from "./TileBase";
 
-export enum HomeTileTypes {
-  Medication = "med",
-  Exercise = "exe",
-  Appointment = "app",
-}
-
-interface TileDetails {
+interface HomeTileProps {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
   type: HomeTileTypes;
+  onPress: () => void;
 }
 
 const getGradient = (type: HomeTileTypes) => {
@@ -48,7 +44,9 @@ const getGradient = (type: HomeTileTypes) => {
   }
 };
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
+const Tile: React.FC<HomeTileProps> = ({
+  title, style, size, index, type, onPress
+}) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
@@ -61,7 +59,12 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
       : ["#252525", "#252525"];
 
   return (
-    <TileBase style={style} size={size} gradient={tileGradient}>
+    <TileBase
+      onClick={onPress}
+      style={style}
+      size={size}
+      gradient={tileGradient}
+    >
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons

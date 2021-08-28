@@ -12,6 +12,7 @@ import {
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/HomeTile";
+import { HomeTileTypes } from "../types";
 import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 
@@ -31,7 +32,7 @@ export default function ActionScreen() {
             Good evening 🌥,{"\n"}What would you like to do?
           </Text>
 
-          <Tile title={"I feel"} size={TileSize.Large}></Tile>
+          <Tile type={HomeTileTypes.Appointment} title={"I feel"} size={TileSize.Large}></Tile>
           <Text>
             {SymptomsData.slice(0, 4).map((symptom) => {
               return (
