@@ -71,9 +71,6 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
           />
           <View style={styles.textContent}>
             <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
-            <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
-              {title}
-            </Text>
           </View>
         </View>
         {size == TileSize.Large ? (
