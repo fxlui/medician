@@ -1,132 +1,151 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React from "react";
 import {
   ScrollView,
-  Platform,
-  FlatList,
-  StatusBar,
   StyleSheet,
-  TouchableOpacity,
   Dimensions,
 } from "react-native";
-import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
+import Carousel from "react-native-snap-carousel";
+import { StackScreenProps } from "@react-navigation/stack";
+import { CompositeScreenProps } from "@react-navigation/core";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
-import useColorScheme from "../hooks/useColorScheme";
+import { Text, View } from "../components/Themed";
+import HomeTile from "../components/HomeTile";
+import { HomeTileTypes } from "../types";
+import { BottomTabParamList, RootStackParamList } from "../types";
 
-import Tile, { HomeTileTypes } from "../components/HomeTile";
+interface tileItemData {
+  id: string;
+  name: string;
+  notes: string;
+  time: string;
+  type: HomeTileTypes;
+}
 
-const DATA = [
+interface tileItemProps {
+  index: number;
+  dataIndex: number;
+  item: tileItemData;
+}
+
+const DATA : tileItemData[] = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
+    name: "First Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Exercise
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
+    name: "Second Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Medication
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e26d72",
-    title: "Third Item",
+    name: "Third Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Appointment
   },
   {
     id: "58694a0f-3da1-471f-bd96-145ee26d72",
-    title: "Fourth Item",
+    name: "Fourth Item",
+    notes: "aaa",
+    time: "",
+    type: HomeTileTypes.Medication
   },
 ];
 
-const HomeScreen = () => {
-  const [selectedId, setSelectedId] = useState(null);
 
-  const navigation = useNavigation();
+type ScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<BottomTabParamList ,"HomeScreen">,
+  StackScreenProps<RootStackParamList>
+>;
 
-  interface baseData {
-    index: number;
-    dataIndex: number;
-    item: {
-      id: string;
-      title: string;
-    };
-  }
-  const renderTile = ({ item, index }: baseData) => {
+const HomeScreen = ({ navigation } : ScreenProps) => {
+  
+  const renderTile = ({ item, index } : tileItemProps) => {
     return (
-      <Tile
-        title={item.title}
+      <HomeTile
+        title={item.name}
         style={{
           marginRight: 15,
         }}
         index={index}
         type={HomeTileTypes.Medication}
+        onPress={() => {
+          navigation.push("Notification", {
+            id: item.id,
+            name: item.name,
+            notes: item.notes,
+            type: item.type
+          });
+        }}
       />
     );
   };
-  const colorScheme = useColorScheme();
 
   return (
-    <SafeView disableBottom>
-      <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.overflowView}>
-            <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
-            <Text style={styles.title}>Medication</Text>
-            <Carousel
-              style={{ overflow: "visible" }}
-              data={DATA}
-              renderItem={renderTile}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={165}
-              inactiveSlideOpacity={0.9}
-              onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            />
-
-            <Text style={styles.title}>Exercise</Text>
-            <Carousel
-              data={DATA}
-              renderItem={renderTile}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={165}
-              inactiveSlideOpacity={0.9}
-              onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            />
-
-            <Text style={styles.title}>Appointment</Text>
-            <Carousel
-              data={DATA}
-              renderItem={renderTile}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={165}
-              inactiveSlideOpacity={0.9}
-              onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            />
-            <Text style={styles.title}>Test</Text>
-            <Text style={styles.title}>Test</Text>
-            <Text style={styles.title}>Test</Text>
-          </View>
-        </ScrollView>
-      </View>
+    <SafeView disableBottom style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.overflowView}>
+          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+          <Text style={styles.name}>Medication</Text>
+          <Carousel
+            style={{ overflow: "visible" }}
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+            onScrollIndexChanged={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          />
+          <Text style={styles.name}>Exercise</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+            onScrollIndexChanged={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          />
+          <Text style={styles.name}>Appointment</Text>
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            activeSlideAlignment={"start"}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={165}
+            inactiveSlideOpacity={0.9}
+            onScrollIndexChanged={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          />
+        </View>
+      </ScrollView>
     </SafeView>
   );
 };
@@ -145,7 +164,7 @@ const styles = StyleSheet.create({
     marginTop: 65,
     paddingLeft: 5,
   },
-  title: {
+  name: {
     fontSize: 18,
     fontWeight: "600",
     marginTop: 25,

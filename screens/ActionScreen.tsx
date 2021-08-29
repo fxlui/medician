@@ -12,6 +12,7 @@ import {
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/HomeTile";
+import { HomeTileTypes } from "../types";
 import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 import EntryTile from "../components/EntryTile";
