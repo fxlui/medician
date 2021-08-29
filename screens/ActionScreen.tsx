@@ -34,11 +34,13 @@ export default function ActionScreen() {
           <View style={styles.tiles}>
             <EntryTile 
               title={"I feel..."}
+              style={{marginBottom: 30}}
               size={TileSize.Large}
               list={"symptoms"}
               />
             <EntryTile 
               title={"I can't..."}
+              style={{marginBottom: 30}}
               size={TileSize.Large}
               list={"inabilities"}
               />
@@ -90,6 +92,7 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   tiles: {
+    marginTop: 40,
     flexDirection: "column",
   },
   addTiles: {
