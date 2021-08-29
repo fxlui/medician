@@ -38,7 +38,7 @@ export default function ActionScreen() {
           <View style={styles.list}>
             {Symptoms.map((symptom) => {
               return(
-                <SymptomTile title={symptom.description}/>
+                <SymptomTile title={symptom.description} key={symptom.id}/>
               )
             })}
           </View>
