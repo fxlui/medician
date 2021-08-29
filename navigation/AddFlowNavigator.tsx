@@ -14,16 +14,6 @@ const AddFlowNavigator = () => {
   return (
     <AddFlowStack.Navigator>
       <AddFlowStack.Screen
-        name="SeverityScreen"
-        component={SeverityScreen}
-        options={{ headerShown: false }}
-      />
-      <AddFlowStack.Screen
-        name="TimeSelectScreen"
-        component={TimeSelectScreen}
-        options={{ headerShown: false }}
-      />
-      <AddFlowStack.Screen
         name="ActionScreen"
         component={ActionScreen}
         options={{ headerShown: false }}
@@ -31,6 +21,16 @@ const AddFlowNavigator = () => {
       <AddFlowStack.Screen
         name="SymptomsScreen"
         component={SymptomsScreen}
+        options={{ headerShown: false }}
+      />
+      <AddFlowStack.Screen
+        name="SeverityScreen"
+        component={SeverityScreen}
+        options={{ headerShown: false }}
+      />
+      <AddFlowStack.Screen
+        name="TimeSelectScreen"
+        component={TimeSelectScreen}
         options={{ headerShown: false }}
       />
     </AddFlowStack.Navigator>

@@ -22,50 +22,26 @@ import {
 import TileBase, { TileSize } from "./TileBase";
 import Navigation from "../navigation/Navigation";
 
-export enum HomeTileTypes {
-  Medication = "med",
-  Exercise = "exe",
-  Appointment = "app",
-}
-
 interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
-  type: HomeTileTypes;
 }
 
-const getGradient = (type: HomeTileTypes) => {
-  switch (type) {
-    case HomeTileTypes.Medication:
-      return medicationGradient;
-    case HomeTileTypes.Exercise:
-      return exerciseGradient;
-    case HomeTileTypes.Appointment:
-      return appointmentGradient;
-    default:
-      return ["fff", "fff"];
-  }
-};
-
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index }) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
 
-  const tileGradient =
-    index == 0
-      ? getGradient(type)
-      : colorScheme === "light"
-      ? ["#fff", "#fff"]
-      : ["#252525", "#252525"];
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+    
 
   const handleClick = () => {
   }
 
   return (
-    <TileBase style={style} size={size} gradient={tileGradient} onClick={handleClick}>
+    <TileBase style={style} size={size} gradient={[tileColor, tileColor]} onClick={handleClick}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons

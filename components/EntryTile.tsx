@@ -35,38 +35,19 @@ interface TileDetails {
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
-  type: EntryTileTypes;
   list: string;
   onClick: () => void;
 }
 
-const getGradient = (type: EntryTileTypes) => {
-  switch (type) {
-    case EntryTileTypes.Medication:
-      return medicationGradient;
-    case EntryTileTypes.Exercise:
-      return exerciseGradient;
-    case EntryTileTypes.Appointment:
-      return appointmentGradient;
-    default:
-      return ["fff", "fff"];
-  }
-};
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list, onClick}) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, list, onClick}) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
-
-  const tileGradient =
-    index == 0
-      ? getGradient(type)
-      : colorScheme === "light"
-      ? ["#fff", "#fff"]
-      : ["#252525", "#252525"];
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase style={style} size={size} gradient={tileGradient} onClick={onClick}>
+    <TileBase style={style} size={size} gradient={[tileColor]} onClick={onClick}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons

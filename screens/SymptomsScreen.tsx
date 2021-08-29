@@ -18,6 +18,7 @@ import EntryTile from "../components/EntryTile";
 import AddTile from "../components/AddTile";
 import SymptomTile from "../components/SymptomTile";
 import Symptoms from "../assets/Symptoms.json";
+import { HomeTileTypes } from "../types";
 
 export default function ActionScreen() {
 

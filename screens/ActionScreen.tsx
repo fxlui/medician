@@ -54,6 +54,7 @@ export default function ActionScreen({navigation}: ScreenProps) {
               style={{marginBottom: 30}}
               size={TileSize.Large}
               list={"inabilities"}
+              onClick={handleSymptom}
               />
 
             <View style={styles.addTiles}>
