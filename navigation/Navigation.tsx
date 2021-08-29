@@ -8,6 +8,7 @@ import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import AddFlowNavigator from './AddFlowNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import Symptoms from '../screens/SymptomsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (

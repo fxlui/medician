@@ -22,6 +22,7 @@ import {
   appointmentGradient,
 } from "../constants/Colors";
 import TileBase, { TileSize } from "./TileBase";
+import Navigation from "../navigation/Navigation";
 
 export enum EntryTileTypes {
   Medication = "med",
@@ -36,6 +37,7 @@ interface TileDetails {
   index?: number;
   type: EntryTileTypes;
   list: string;
+  onClick: () => void;
 }
 
 const getGradient = (type: EntryTileTypes) => {
@@ -51,7 +53,7 @@ const getGradient = (type: EntryTileTypes) => {
   }
 };
 
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list, onClick}) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
@@ -64,7 +66,7 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type, list }) 
       : ["#252525", "#252525"];
 
   return (
-    <TileBase style={style} size={size} gradient={tileGradient}>
+    <TileBase style={style} size={size} gradient={tileGradient} onClick={onClick}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons

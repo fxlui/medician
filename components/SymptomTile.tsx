@@ -20,6 +20,7 @@ import {
   appointmentGradient,
 } from "../constants/Colors";
 import TileBase, { TileSize } from "./TileBase";
+import Navigation from "../navigation/Navigation";
 
 export enum HomeTileTypes {
   Medication = "med",
@@ -60,8 +61,11 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, type }) => {
       ? ["#fff", "#fff"]
       : ["#252525", "#252525"];
 
+  const handleClick = () => {
+  }
+
   return (
-    <TileBase style={style} size={size} gradient={tileGradient}>
+    <TileBase style={style} size={size} gradient={tileGradient} onClick={handleClick}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons

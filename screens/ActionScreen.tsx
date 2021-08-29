@@ -16,8 +16,17 @@ import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 import EntryTile from "../components/EntryTile";
 import AddTile from "../components/AddTile";
+import { AddFlowParamList } from "../types";
+import { StackScreenProps } from "@react-navigation/stack";
 
-export default function ActionScreen() {
+type ScreenProps = StackScreenProps<AddFlowParamList, "ActionScreen">
+
+export default function ActionScreen({navigation}: ScreenProps) {
+
+  const handleSymptom = () => {
+    navigation.navigate('SymptomsScreen');
+  }
+
   return (
     <SafeView>
       <View style={styles.child}>
@@ -37,6 +46,7 @@ export default function ActionScreen() {
               style={{marginBottom: 30}}
               size={TileSize.Large}
               list={"symptoms"}
+              onClick={handleSymptom}
               />
             <EntryTile 
               title={"I can't..."}
