@@ -19,6 +19,8 @@ export type BottomTabParamList = {
 export type AddFlowParamList = {
   ActionScreen: undefined;
   AreaSelectScreen: undefined;
+  SeverityScreen: undefined;
+  TimeSelectScreen: undefined;
 };
 
 
