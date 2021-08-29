@@ -47,7 +47,7 @@ const Tile: React.FC<TileDetails> = ({ title, style, size, index, list, onClick}
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase style={style} size={size} gradient={[tileColor]} onClick={onClick}>
+    <TileBase style={style} size={size} gradient={[tileColor, tileColor]} onClick={onClick}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons
