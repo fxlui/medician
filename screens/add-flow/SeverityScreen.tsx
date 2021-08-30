@@ -20,8 +20,32 @@ import { StackScreenProps } from "@react-navigation/stack";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
+const getDiscomfortEmoji = (severity: number) => {
+  if (severity < 4) {
+    return "😐";
+  } else if (severity < 7) {
+    return "😕";
+  } else if (severity < 10) {
+    return "😖";
+  } else {
+    return "😡";
+  }
+};
+
+const getDiscomfortText = (severity: number) => {
+  if (severity < 4) {
+    return "Minor discomfort";
+  } else if (severity < 7) {
+    return "Moderate discomfort";
+  } else if (severity < 10) {
+    return "Severe discomfort";
+  } else {
+    return "Unbearable";
+  }
+};
+
 const Severity = ({ navigation }: ScreenProps) => {
-  const [severity, setSeverity] = useState(0);
+  const [severity, setSeverity] = useState(1);
   const colorScheme = useColorScheme();
 
   return (
@@ -30,8 +54,8 @@ const Severity = ({ navigation }: ScreenProps) => {
         <ProgressBar percentage={0.5} />
         <Text style={styles.greeting}>How severe is it?</Text>
         <View style={styles.child}>
-          <Text style={styles.emoji}>😄</Text>
-          <Text style={styles.desc}>Discomfort</Text>
+          <Text style={styles.emoji}>{getDiscomfortEmoji(severity)}</Text>
+          <Text style={styles.desc}>{getDiscomfortText(severity)}</Text>
         </View>
         <View style={styles.childtwo}>
           <View style={styles.numberView}>
@@ -77,23 +101,26 @@ const Severity = ({ navigation }: ScreenProps) => {
           </View>
         </View>
       </View>
+      <View>
+        <Text>navi</Text>
+      </View>
     </SafeView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     flex: 1,
-    paddingBottom: 120,
+    paddingBottom: 100,
   },
   child: {
-    flex: 7,
+    marginTop: 50,
+    flex: 6,
     justifyContent: "center",
     alignItems: "center",
   },
   childtwo: {
-    flex: 2,
+    flex: 3,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -124,11 +151,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 15,
     paddingLeft: 30,
-  },
-  list: {
-    margin: 0,
-    padding: 0,
-    overflow: "visible",
   },
 });
 
