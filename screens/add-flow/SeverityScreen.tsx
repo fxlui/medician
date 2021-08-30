@@ -35,10 +35,10 @@ const Severity = () => {
               style={[
                 styles.numbers,
                 {
+                  fontSize: 20,
                   opacity: 1,
-                  marginBottom: 10,
-                  marginLeft:
-                    severity === 10 ? severity * 21 - 25 : severity * 21 - 21,
+                  marginBottom: 15,
+                  marginLeft: severity * 21 - (severity === 10 ? 25 : 21),
                 },
               ]}
             >
