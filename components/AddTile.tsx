@@ -19,52 +19,30 @@ import {
   exerciseGradient,
   appointmentGradient,
 } from "../constants/Colors";
-import { HomeTileTypes } from "../types";
 import TileBase, { TileSize } from "./TileBase";
 
-interface HomeTileProps {
+export enum HomeTileTypes {
+  Medication = "med",
+  Exercise = "exe",
+  Appointment = "app",
+}
+
+interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
-  type: HomeTileTypes;
-  onPress: () => void;
+  subtitle: string;
 }
 
-const getGradient = (type: HomeTileTypes) => {
-  switch (type) {
-    case HomeTileTypes.Medication:
-      return medicationGradient;
-    case HomeTileTypes.Exercise:
-      return exerciseGradient;
-    case HomeTileTypes.Appointment:
-      return appointmentGradient;
-    default:
-      return ["fff", "fff"];
-  }
-};
-
-const Tile: React.FC<HomeTileProps> = ({
-  title, style, size, index, type, onPress
-}) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, subtitle }) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
-
-  const tileGradient =
-    index == 0
-      ? getGradient(type)
-      : colorScheme === "light"
-      ? ["#fff", "#fff"]
-      : ["#252525", "#252525"];
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase
-      onClick={onPress}
-      style={style}
-      size={size}
-      gradient={tileGradient}
-    >
+    <TileBase style={style} size={size} gradient={[tileColor, tileColor]}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons
@@ -73,10 +51,10 @@ const Tile: React.FC<HomeTileProps> = ({
             color={index == 0 ? "white" : "#24AC29"}
           />
           <View style={styles.textContent}>
-            <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
             <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
               {title}
             </Text>
+            <Text style={{ color: textColor, fontSize: 16 }}>{subtitle}</Text>
           </View>
         </View>
         {size == TileSize.Large ? (

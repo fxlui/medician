@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import * as Haptics from "expo-haptics";
+import Navigation from "../navigation/Navigation";
+
 
 import { LinearGradient } from "expo-linear-gradient";
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   },
   large: {
     width: 302,
-    height: 150,
+    height: 145,
   },
   long: {
     width: 242,

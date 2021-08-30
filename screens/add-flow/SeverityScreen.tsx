@@ -9,14 +9,18 @@ import {
   Dimensions,
 } from "react-native";
 import useColorScheme from "../../hooks/useColorScheme";
+import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import ProgressBar from "./ProgressBar";
 
 import * as Haptics from "expo-haptics";
 import Slider from "@react-native-community/slider";
+import { StackScreenProps } from "@react-navigation/stack";
 
-const Severity = () => {
+type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
+
+const Severity = ({ navigation }: ScreenProps) => {
   const [severity, setSeverity] = useState(0);
   const colorScheme = useColorScheme();
 

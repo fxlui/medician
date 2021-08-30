@@ -1,25 +1,32 @@
-/**
- * Learn more about using TypeScript with React Navigation:
- * https://reactnavigation.org/docs/typescript/
- */
-
 export type RootStackParamList = {
   Root: undefined;
   AddFlow: undefined;
+  Notification: {
+    id: string;
+    name: string;
+    notes: string;
+    type: HomeTileTypes;
+  }
   NotFound: undefined;
 };
 
 export type BottomTabParamList = {
-  Home: undefined;
+  HomeScreen: undefined;
   DirectToAddFlow: undefined;
   Records: undefined;
 };
 
-export type HomeParamList = {
-  HomeScreen: undefined;
-};
-
 export type AddFlowParamList = {
   ActionScreen: undefined;
+  SymptomsScreen: undefined;
   AreaSelectScreen: undefined;
+  SeverityScreen: undefined;
+  TimeSelectScreen: undefined;
 };
+
+
+export enum HomeTileTypes {
+  Medication = "med",
+  Exercise = "exe",
+  Appointment = "app",
+}

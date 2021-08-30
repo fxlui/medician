@@ -13,58 +13,41 @@ import { Text, View } from "./Themed";
 import PillSVG from "../assets/images/PillSVG";
 import useColorScheme from "../hooks/useColorScheme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import SymptomsData from "../assets/Symptoms.json";
+
 
 import {
   medicationGradient,
   exerciseGradient,
   appointmentGradient,
 } from "../constants/Colors";
-import { HomeTileTypes } from "../types";
 import TileBase, { TileSize } from "./TileBase";
+import Navigation from "../navigation/Navigation";
 
-interface HomeTileProps {
-  title: string;
+export enum EntryTileTypes {
+  Medication = "med",
+  Exercise = "exe",
+  Appointment = "app",
+}
+
+interface TileDetails {
+  title: string ;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
-  type: HomeTileTypes;
-  onPress: () => void;
+  list: string;
+  onClick: () => void;
 }
 
-const getGradient = (type: HomeTileTypes) => {
-  switch (type) {
-    case HomeTileTypes.Medication:
-      return medicationGradient;
-    case HomeTileTypes.Exercise:
-      return exerciseGradient;
-    case HomeTileTypes.Appointment:
-      return appointmentGradient;
-    default:
-      return ["fff", "fff"];
-  }
-};
 
-const Tile: React.FC<HomeTileProps> = ({
-  title, style, size, index, type, onPress
-}) => {
+const Tile: React.FC<TileDetails> = ({ title, style, size, index, list, onClick}) => {
   const colorScheme = useColorScheme();
   const textColor =
     index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
-
-  const tileGradient =
-    index == 0
-      ? getGradient(type)
-      : colorScheme === "light"
-      ? ["#fff", "#fff"]
-      : ["#252525", "#252525"];
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase
-      onClick={onPress}
-      style={style}
-      size={size}
-      gradient={tileGradient}
-    >
+    <TileBase style={style} size={size} gradient={[tileColor, tileColor]} onClick={onClick}>
       <View style={styles.content}>
         <View style={styles.left}>
           <MaterialCommunityIcons
@@ -73,17 +56,30 @@ const Tile: React.FC<HomeTileProps> = ({
             color={index == 0 ? "white" : "#24AC29"}
           />
           <View style={styles.textContent}>
-            <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
-            <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
-              {title}
-            </Text>
+            <Text style={{ color: textColor, fontSize: 18 }}>{title}</Text>
           </View>
         </View>
-        {size == TileSize.Large ? (
+        {list == "symptoms" ? (
           <View style={styles.right}>
-            <Text>hi</Text>
+            <Text style={styles.list}>
+              pain{"\n"}
+              itchy{"\n"}
+              hot {"\n"}
+              cold{"\n"}
+              ...
+            </Text>
           </View>
-        ) : null}
+        ) : 
+          <View style={styles.right}>
+            <Text style={styles.list}>
+              sleep{"\n"}
+              breathe{"\n"}
+              see{"\n"}
+              hear{"\n"}
+              ...
+            </Text>
+          </View>
+        }
       </View>
     </TileBase>
   );
@@ -110,6 +106,10 @@ const styles = StyleSheet.create({
   right: {
     backgroundColor: "transparent",
   },
+  list: {
+    textAlign: "right",
+    fontSize: 18,
+  }
 });
 
 export default Tile;

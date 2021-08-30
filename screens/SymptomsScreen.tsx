@@ -12,21 +12,15 @@ import {
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/HomeTile";
-import { HomeTileTypes } from "../types";
 import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 import EntryTile from "../components/EntryTile";
 import AddTile from "../components/AddTile";
-import { AddFlowParamList } from "../types";
-import { StackScreenProps } from "@react-navigation/stack";
+import SymptomTile from "../components/SymptomTile";
+import Symptoms from "../assets/Symptoms.json";
+import { HomeTileTypes } from "../types";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "ActionScreen">
-
-export default function ActionScreen({navigation}: ScreenProps) {
-
-  const handleSymptom = () => {
-    navigation.navigate('SymptomsScreen');
-  }
+export default function ActionScreen() {
 
   return (
     <SafeView>
@@ -38,35 +32,15 @@ export default function ActionScreen({navigation}: ScreenProps) {
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.greeting}>
-            Good evening 🌥,{"\n"}How are you today?
+            I feel...
           </Text>
-
-          <View style={styles.tiles}>
-            <EntryTile 
-              title={"I feel..."}
-              style={{marginBottom: 30}}
-              size={TileSize.Large}
-              list={"symptoms"}
-              onClick={handleSymptom}
-              />
-            <EntryTile 
-              title={"I can't..."}
-              style={{marginBottom: 30}}
-              size={TileSize.Large}
-              list={"inabilities"}
-              onClick={handleSymptom}
-              />
-
-            <View style={styles.addTiles}>
-              <AddTile
-                title={"Add"}
-                subtitle={"Appointment"}
-              />
-              <AddTile
-                title={"Add"}
-                subtitle={"Treatment"}
-              />
-            </View>
+          
+          <View style={styles.list}>
+            {Symptoms.map((symptom) => {
+              return(
+                <SymptomTile title={symptom.description} key={symptom.id}/>
+              )
+            })}
           </View>
 
         </ScrollView>
@@ -102,6 +76,8 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     overflow: "visible",
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
   tiles: {
     marginTop: 40,
