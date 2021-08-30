@@ -13,27 +13,18 @@ const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
 const AddFlowNavigator = () => {
   return (
-    <AddFlowStack.Navigator>
-      <AddFlowStack.Screen
-        name="ProgressFlow"
-        component={ProgressFlowNavigator}
-        options={{
-          header: () => {
-            return(
-              <ProgressBar progress={0} />
-            );
-          }
-        }}
-      />
-      <AddFlowStack.Screen
-        name="ActionScreen"
-        component={ActionScreen}
-        options={{ headerShown: false }}
-      />
+    <AddFlowStack.Navigator initialRouteName="SymptomsScreen">
       <AddFlowStack.Screen
         name="SymptomsScreen"
         component={SymptomsScreen}
         options={{ headerShown: false }}
+      />
+      <AddFlowStack.Screen
+        name="ProgressFlow"
+        component={ProgressFlowNavigator}
+        options={{
+          header: () => <ProgressBar progress={0} />
+        }}
       />
     </AddFlowStack.Navigator>
   );

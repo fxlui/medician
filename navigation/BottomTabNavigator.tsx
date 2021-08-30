@@ -45,7 +45,7 @@ export const BottomTabNavigator = () => {
         listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
-            navigation.navigate("AddFlow");
+            navigation.navigate("ActionScreen");
           },
         })}
       />

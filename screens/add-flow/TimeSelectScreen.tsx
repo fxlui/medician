@@ -4,12 +4,15 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList, ProgressFlowParamList } from "../../types";
+import { AddFlowParamList, ProgressFlowParamList, RootStackParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<ProgressFlowParamList, "TimeSelectScreen">,
-  StackScreenProps<AddFlowParamList>
+  CompositeScreenProps<
+    StackScreenProps<AddFlowParamList>,
+    StackScreenProps<RootStackParamList>
+  >
 >;
 
 export default function TimeSelectScreen({ navigation } : ScreenProps) {
@@ -19,7 +22,7 @@ export default function TimeSelectScreen({ navigation } : ScreenProps) {
         <Text>TimeSelect Screen</Text>
         <Button
           title="Go to next screen"
-          onPress={() => navigation.navigate("ActionScreen")}
+          onPress={() => navigation.navigate("Root")}
         />
         <Button
           title="Go to previous screen"

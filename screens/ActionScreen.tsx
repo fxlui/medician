@@ -17,15 +17,15 @@ import Carousel from "react-native-snap-carousel";
 import TileBase, { TileSize } from "../components/TileBase";
 import EntryTile from "../components/EntryTile";
 import AddTile from "../components/AddTile";
-import { AddFlowParamList } from "../types";
+import { RootStackParamList } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "ActionScreen">
+type ScreenProps = StackScreenProps<RootStackParamList, "ActionScreen">
 
 export default function ActionScreen({navigation}: ScreenProps) {
 
   const handleSymptom = () => {
-    navigation.navigate('SymptomsScreen');
+    navigation.navigate("AddFlow");
   }
 
   return (

@@ -7,6 +7,7 @@ import AddFlowNavigator from './AddFlowNavigator';
 import BottomTabNavigator from './BottomTabNavigator';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import NotificationScreen from '../screens/Notification';
+import ActionScreen from '../screens/ActionScreen';
 import LinkingConfiguration from './LinkingConfiguration';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -24,20 +25,28 @@ const RootStack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }} >
-      <RootStack.Screen name="Root" component={BottomTabNavigator} />
+      <RootStack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+      />
       <RootStack.Screen
         name="Notification"
         component={NotificationScreen}
         options={{ ...TransitionPresets.ModalSlideFromBottomIOS }}
       />
-      <RootStack.Group screenOptions={{
-        ...TransitionPresets.ModalSlideFromBottomIOS
-      }}>
-        <RootStack.Screen name="AddFlow"
-          options={{ headerShown: false }}
-          component={AddFlowNavigator}
-        />
-      </RootStack.Group>
+      <RootStack.Screen
+        name="ActionScreen"
+        component={ActionScreen}
+        options={{
+          headerShown: false,
+          ...TransitionPresets.ModalSlideFromBottomIOS
+        }}
+      />
+      <RootStack.Screen
+        name="AddFlow"
+        component={AddFlowNavigator}
+        options={{ headerShown: false }}
+      />
       <RootStack.Screen
         name="NotFound"
         component={NotFoundScreen}
