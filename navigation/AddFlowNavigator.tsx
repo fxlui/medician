@@ -5,7 +5,8 @@ import ActionScreen from "../screens/ActionScreen";
 import SymptomsScreen from "../screens/SymptomsScreen";
 import SeverityScreen from "../screens/add-flow/SeverityScreen";
 import TimeSelectScreen from "../screens/add-flow/TimeSelectScreen";
-import { AddFlowParamList } from "../types";
+import ProgressBar from "../components/ProgressBar";
+import { AddFlowParamList, ProgressFlowParamList } from "../types";
 
 
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
@@ -13,6 +14,17 @@ const AddFlowStack = createStackNavigator<AddFlowParamList>();
 const AddFlowNavigator = () => {
   return (
     <AddFlowStack.Navigator>
+      <AddFlowStack.Screen
+        name="ProgressFlow"
+        component={ProgressFlowNavigator}
+        options={{
+          header: () => {
+            return(
+              <ProgressBar progress={0} />
+            );
+          }
+        }}
+      />
       <AddFlowStack.Screen
         name="ActionScreen"
         component={ActionScreen}
@@ -23,17 +35,26 @@ const AddFlowNavigator = () => {
         component={SymptomsScreen}
         options={{ headerShown: false }}
       />
-      <AddFlowStack.Screen
+    </AddFlowStack.Navigator>
+  );
+}
+
+const ProgressFlowStack = createStackNavigator<ProgressFlowParamList>();
+
+const ProgressFlowNavigator = () => {
+  return (
+    <ProgressFlowStack.Navigator>
+      <ProgressFlowStack.Screen
         name="SeverityScreen"
         component={SeverityScreen}
         options={{ headerShown: false }}
       />
-      <AddFlowStack.Screen
+      <ProgressFlowStack.Screen
         name="TimeSelectScreen"
         component={TimeSelectScreen}
         options={{ headerShown: false }}
       />
-    </AddFlowStack.Navigator>
+    </ProgressFlowStack.Navigator>
   );
 }
 

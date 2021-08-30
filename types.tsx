@@ -20,10 +20,13 @@ export type AddFlowParamList = {
   ActionScreen: undefined;
   SymptomsScreen: undefined;
   AreaSelectScreen: undefined;
-  SeverityScreen: undefined;
-  TimeSelectScreen: undefined;
+  ProgressFlow: undefined;
 };
 
+export type ProgressFlowParamList = {
+  SeverityScreen: undefined;
+  TimeSelectScreen: undefined;
+}
 
 export enum HomeTileTypes {
   Medication = "med",

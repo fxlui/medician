@@ -1,18 +1,18 @@
 import React from "react";
-import { StyleSheet, Button, TextInput } from "react-native";
+import { StyleSheet, Button, TextInput, Share } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList } from "../../types";
+import { ProgressFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">
+type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">
 
-export default function SeverityScreen({ navigation } : ScreenProps) {
+export default function SeverityScreen({ navigation, route } : ScreenProps) {
   return (
     <SafeView>
       <View style={styles.container}>
-        <Text>Severity Screen</Text>
+        <Text>{route.name}</Text>
         <TextInput style={styles.textInput} />
         <Button
           title="Go to next screen"

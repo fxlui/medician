@@ -2,14 +2,12 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
-
 import { RootStackParamList } from '../types';
 import AddFlowNavigator from './AddFlowNavigator';
 import BottomTabNavigator from './BottomTabNavigator';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import NotificationScreen from '../screens/Notification';
 import LinkingConfiguration from './LinkingConfiguration';
-import Symptoms from '../screens/SymptomsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -35,7 +33,10 @@ function RootNavigator() {
       <RootStack.Group screenOptions={{
         ...TransitionPresets.ModalSlideFromBottomIOS
       }}>
-        <RootStack.Screen name="AddFlow" component={AddFlowNavigator} />
+        <RootStack.Screen name="AddFlow"
+          options={{ headerShown: false }}
+          component={AddFlowNavigator}
+        />
       </RootStack.Group>
       <RootStack.Screen
         name="NotFound"
