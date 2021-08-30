@@ -11,6 +11,7 @@ import RecordsScreen from "../screens/RecordsScreen";
 import { View } from "../components/Themed";
 
 import AreaSelectScreen from "../screens/add-flow/AreaSelectScreen";
+import SeverityScreen from "../screens/add-flow/SeverityScreen";
 import Notification from "../screens/Notification";
 import { TouchableOpacity, Pressable } from "react-native";
 import { BottomTabParamList, HomeParamList, AddFlowParamList } from "../types";
@@ -98,7 +99,7 @@ function AddFlowStackNavigator() {
     <AddFlowStack.Navigator>
       <AddFlowStack.Screen
         name="AreaSelectScreen"
-        component={AreaSelectScreen}
+        component={SeverityScreen}
         options={{ headerTitle: "Add Flow 1", headerShown: false }}
       />
     </AddFlowStack.Navigator>

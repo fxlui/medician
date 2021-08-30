@@ -15,6 +15,7 @@ import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
 
 import { TopTile, BottomTile } from "../../components/AreaTile";
+import ProgressBar from "./ProgressBar";
 
 const DATA = [
   {
@@ -35,10 +36,7 @@ const DATA = [
   },
 ];
 
-const App = () => {
-  const [selectedId, setSelectedId] = useState(null);
-
-  const navigation = useNavigation();
+const AreaSelect = () => {
   const [selectedTop, setSelectedTop] = useState(0);
   const [selectedBottom, setSelectedBottom] = useState(0);
 
@@ -79,11 +77,8 @@ const App = () => {
 
   return (
     <SafeView style={styles.container}>
-      <View
-        style={{
-          overflow: "visible",
-        }}
-      >
+      <View>
+        <ProgressBar percentage={0.2} />
         <Text style={styles.greeting}>Where is the area affected?</Text>
         <View style={styles.child}>
           <View style={{}}>
@@ -153,7 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 65,
+    marginTop: 15,
     paddingLeft: 30,
   },
   list: {
@@ -163,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default AreaSelect;
