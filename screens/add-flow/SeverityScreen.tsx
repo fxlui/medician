@@ -13,6 +13,7 @@ import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import ProgressBar from "./ProgressBar";
+import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import * as Haptics from "expo-haptics";
 import Slider from "@react-native-community/slider";
@@ -101,9 +102,10 @@ const Severity = ({ navigation }: ScreenProps) => {
           </View>
         </View>
       </View>
-      <View>
-        <Text>navi</Text>
-      </View>
+      <AddFlowNavBar
+        left={() => navigation.pop()}
+        right={() => navigation.navigate("AreaSelectScreen")}
+      />
     </SafeView>
   );
 };

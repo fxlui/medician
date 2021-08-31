@@ -1,14 +1,10 @@
-import React, { FC } from 'react';
-import {
-  Pressable,
-  Animated,
-} from 'react-native';
+import React, { FC } from "react";
+import { Pressable, Animated } from "react-native";
 
 export const PressableBase: FC<{
-  onPress?: () => void
-  extraProps?: any,
+  onPress?: () => void;
+  extraProps?: any;
 }> = ({ children, extraProps, onPress }) => {
-  
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
     transform: [{ scale: animatedValue }],
@@ -32,16 +28,14 @@ export const PressableBase: FC<{
     }).start();
   };
 
-  return(
+  return (
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       onPress={onPress}
       {...extraProps}
     >
-      <Animated.View style={animatedStyle}>
-        {children}
-      </Animated.View>
+      <Animated.View style={animatedStyle}>{children}</Animated.View>
     </Pressable>
   );
-}
+};
