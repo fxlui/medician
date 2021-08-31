@@ -1,7 +1,7 @@
 import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
-function CancelSvg(props: SvgProps) {
+function CancelSVG(props: SvgProps) {
   return (
     <Svg
       viewBox="0 0 30 30"
@@ -14,4 +14,4 @@ function CancelSvg(props: SvgProps) {
   );
 }
 
-export default CancelSvg;
+export default CancelSVG;

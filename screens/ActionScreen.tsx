@@ -8,7 +8,7 @@ import { TileSize } from "../components/TileBase";
 import EntryTile from "../components/EntryTile";
 import AddTile from "../components/AddTile";
 import { PressableBase } from "../components/PressableBase";
-import CancelSvg from "../components/CancelSvg";
+import CancelSVG from "../assets/icons/CancelSVG";
 import { RootStackParamList } from "../types";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "ActionScreen">
@@ -57,7 +57,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             extraProps={{ style: styles.cancelButton }}
             onPress={() => navigation.pop()}
           >
-            <CancelSvg fill="#F8583B" width={35} height={35} />
+            <CancelSVG fill="#F8583B" width={30} height={30} />
           </PressableBase>
         </View>
       </View>
