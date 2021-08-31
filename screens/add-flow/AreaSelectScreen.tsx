@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
-import { ProgressFlowParamList } from "../../types";
+import { AddFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
@@ -10,7 +10,7 @@ import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
 
-type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">;
+type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
 const DATA = [
   {
