@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Text, View } from "../../components/Themed";
-import { AddFlowParamList } from "../../types";
+import { ProgressFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import ProgressBar from "./ProgressBar";
@@ -19,7 +19,8 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
-type ScreenProps = StackScreenProps<AddFlowParamList, "AreaSelectScreen">;
+
+type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">;
 
 const DATA = [
   {
@@ -136,7 +137,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        right={() => navigation.navigate("SeverityScreen")}
       />
     </SafeView>
   );

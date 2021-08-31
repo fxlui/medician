@@ -8,7 +8,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Button
 } from "react-native";
+import { StackScreenProps } from "@react-navigation/stack";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import Tile from "../components/HomeTile";
@@ -19,8 +21,11 @@ import AddTile from "../components/AddTile";
 import SymptomTile from "../components/SymptomTile";
 import Symptoms from "../assets/Symptoms.json";
 import { HomeTileTypes } from "../types";
+import { AddFlowParamList } from "../types";
 
-export default function ActionScreen() {
+type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
+
+export default function ActionScreen({ navigation }: ScreenProps) {
 
   return (
     <SafeView>
@@ -31,6 +36,7 @@ export default function ActionScreen() {
           }}
           showsVerticalScrollIndicator={false}
         >
+          <Button title="Go to Progress flow" onPress={() => navigation.navigate("ProgressFlow")} />
           <Text style={styles.greeting}>
             I feel...
           </Text>

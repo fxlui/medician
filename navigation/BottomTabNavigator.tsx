@@ -10,10 +10,6 @@ import RecordsScreen from "../screens/RecordsScreen";
 import { View } from "../components/Themed";
 
 import { BottomTabParamList } from "../types";
-import AreaSelectScreen from "../screens/add-flow/AreaSelectScreen";
-import SeverityScreen from "../screens/add-flow/SeverityScreen";
-import ActionScreen from "../screens/ActionScreen";
-import Notification from "../screens/Notification";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 const AddFlowPlaceholder = () => <View />;
@@ -49,7 +45,7 @@ export const BottomTabNavigator = () => {
         listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
-            navigation.navigate("AddFlow");
+            navigation.navigate("ActionScreen");
           },
         })}
       />

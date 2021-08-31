@@ -7,6 +7,7 @@ export type RootStackParamList = {
     notes: string;
     type: HomeTileTypes;
   }
+  ActionScreen: undefined;
   NotFound: undefined;
 };
 
@@ -17,13 +18,15 @@ export type BottomTabParamList = {
 };
 
 export type AddFlowParamList = {
-  ActionScreen: undefined;
   SymptomsScreen: undefined;
+  ProgressFlow: undefined;
+};
+
+export type ProgressFlowParamList = {
   AreaSelectScreen: undefined;
   SeverityScreen: undefined;
   TimeSelectScreen: undefined;
-};
-
+}
 
 export enum HomeTileTypes {
   Medication = "med",

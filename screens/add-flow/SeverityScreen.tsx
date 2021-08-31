@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import useColorScheme from "../../hooks/useColorScheme";
-import { AddFlowParamList } from "../../types";
+import { ProgressFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import ProgressBar from "./ProgressBar";
@@ -19,7 +19,7 @@ import * as Haptics from "expo-haptics";
 import Slider from "@react-native-community/slider";
 import { StackScreenProps } from "@react-navigation/stack";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
+type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">;
 
 const getDiscomfortEmoji = (severity: number) => {
   if (severity < 4) {
