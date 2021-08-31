@@ -30,10 +30,10 @@ const NotificationScreen = ({
   return (
     <SafeView style={[styles.container,
       type === HomeTileTypes.Appointment
-      ? styles.exerciseBg
+      ? styles.appointmentBg
       : type === HomeTileTypes.Medication
       ? styles.medicationBg
-      : styles.appointmentBg
+      : styles.exerciseBg
     ]}>
       <StatusBar barStyle="dark-content" />
       <View />

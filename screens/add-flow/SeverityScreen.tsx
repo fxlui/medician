@@ -1,18 +1,9 @@
 import React, { useState } from "react";
-import {
-  ScrollView,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import useColorScheme from "../../hooks/useColorScheme";
 import { ProgressFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
-import ProgressBar from "./ProgressBar";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import * as Haptics from "expo-haptics";
@@ -52,7 +43,6 @@ const Severity = ({ navigation }: ScreenProps) => {
   return (
     <SafeView style={styles.container}>
       <View style={{ flex: 1 }}>
-        <ProgressBar percentage={0.5} />
         <Text style={styles.greeting}>How severe is it?</Text>
         <View style={styles.child}>
           <Text style={styles.emoji}>{getDiscomfortEmoji(severity)}</Text>

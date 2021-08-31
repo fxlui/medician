@@ -23,7 +23,7 @@ const AddFlowNavigator = () => {
         name="ProgressFlow"
         component={ProgressFlowNavigator}
         options={{
-          header: () => <ProgressBar progress={0} />,
+          header: () => <ProgressBar percentage={50} />,
         }}
       />
     </AddFlowStack.Navigator>

@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
           marginRight: 15,
         }}
         index={index}
-        type={HomeTileTypes.Medication}
+        type={item.type}
         onPress={() => {
           navigation.push("Notification", {
             id: item.id,

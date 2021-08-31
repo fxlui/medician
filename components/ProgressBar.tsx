@@ -1,20 +1,23 @@
 import React, { FC } from "react";
 import { View } from "./Themed";
+import useColorScheme from "../hooks/useColorScheme";
 import { StyleSheet } from "react-native";
 
 interface ProgressProps {
-  progress: 0 | 25 | 50 | 75 | 100;
+  percentage: number;
 }
 
-export const ProgressBar:FC<ProgressProps> = ({ progress }) => {
+export const ProgressBar:FC<ProgressProps> = ({ percentage }) => {
+  const colorScheme = useColorScheme();
   return (
     <View style={styles.container}>
-      <View style={styles.progressContainer}>
-        <View style={[styles.progress,
-          progress === 0
-          ? styles.noProgess
-          : styles.someProgress
-        ]}/>
+      <View
+        style={[
+          styles.progressBarBackDrop,
+          { backgroundColor: colorScheme === "light" ? "#EDEDED" : "#323232" },
+        ]}
+      >
+        <View style={[styles.progressBar, { width: percentage * 0.9 }]} />
       </View>
     </View>
   );
@@ -29,23 +32,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end"
   },
-  progressContainer: {
-    width: 100,
-    height: 10,
-    borderRadius: 5,
+  progressBarBackDrop: {
     backgroundColor: "#EDEDED",
-    flexDirection: "row",
-    alignItems: "stretch"
+    borderRadius: 10,
+    height: 10,
+    width: 95,
   },
-  progress: {
-    borderRadius: 5,
-    backgroundColor: "#45B649"
-  },
-  noProgess: {
-    width: 15
-  },
-  someProgress: {
-    width: 25
+  progressBar: {
+    backgroundColor: "#45B649",
+    borderRadius: 10,
+    height: 10,
   }
 });
 
