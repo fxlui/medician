@@ -10,12 +10,16 @@ import {
   Dimensions,
 } from "react-native";
 import { Text, View } from "../../components/Themed";
+import { AddFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
-import Carousel from "react-native-snap-carousel";
-import * as Haptics from "expo-haptics";
-
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import ProgressBar from "./ProgressBar";
+import AddFlowNavBar from "../../components/AddFlowNavBar";
+
+import Carousel from "react-native-snap-carousel";
+import { StackScreenProps } from "@react-navigation/stack";
+import * as Haptics from "expo-haptics";
+type ScreenProps = StackScreenProps<AddFlowParamList, "AreaSelectScreen">;
 
 const DATA = [
   {
@@ -36,7 +40,7 @@ const DATA = [
   },
 ];
 
-const AreaSelect = () => {
+const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   const [selectedTop, setSelectedTop] = useState(0);
   const [selectedBottom, setSelectedBottom] = useState(0);
 
@@ -130,6 +134,10 @@ const AreaSelect = () => {
           </View>
         </View>
       </View>
+      <AddFlowNavBar
+        left={() => navigation.pop()}
+        right={() => navigation.navigate("AreaSelectScreen")}
+      />
     </SafeView>
   );
 };
