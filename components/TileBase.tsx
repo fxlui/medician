@@ -6,9 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from "react-native";
-import { Text, View } from "../components/Themed";
 import * as Haptics from "expo-haptics";
-import Navigation from "../navigation/Navigation";
 
 import { LinearGradient } from "expo-linear-gradient";
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -16,6 +14,8 @@ const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 export enum TileSize {
   Default = "default",
   Large = "large",
+  XL = "XL",
+  ActionAdd = "ActionAdd",
   Long = "long",
 }
 
@@ -79,6 +79,8 @@ const TileBase: React.FC<BaseChildren> = ({
             size == TileSize.Default && styles.default,
             size == TileSize.Large && styles.large,
             size == TileSize.Long && styles.long,
+            size == TileSize.XL && styles.extraLong,
+            size == TileSize.ActionAdd && styles.actionAdd,
             animatedStyle,
             style,
           ]}
@@ -115,6 +117,14 @@ const styles = StyleSheet.create({
     width: 242,
     height: 58,
   },
+  extraLong: {
+    width: 355,
+    height: 150
+  },
+  actionAdd: {
+    width: 160,
+    height: 160
+  }
 });
 
 export default TileBase;

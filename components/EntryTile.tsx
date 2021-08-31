@@ -1,34 +1,13 @@
-import * as React from "react";
+import React from "react";
 import {
-  Animated,
-  Pressable,
   StyleProp,
   StyleSheet,
-  TouchableOpacity,
   ViewStyle,
 } from "react-native";
 
 import { Text, View } from "./Themed";
-
-import PillSVG from "../assets/images/PillSVG";
-import useColorScheme from "../hooks/useColorScheme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import SymptomsData from "../assets/Symptoms.json";
-
-
-import {
-  medicationGradient,
-  exerciseGradient,
-  appointmentGradient,
-} from "../constants/Colors";
 import TileBase, { TileSize } from "./TileBase";
-import Navigation from "../navigation/Navigation";
-
-export enum EntryTileTypes {
-  Medication = "med",
-  Exercise = "exe",
-  Appointment = "app",
-}
+import useColorScheme from "../hooks/useColorScheme";
 
 interface TileDetails {
   title: string ;
@@ -36,27 +15,23 @@ interface TileDetails {
   size?: TileSize;
   index?: number;
   list: string;
+  emoji: string;
   onClick: () => void;
 }
 
-
-const Tile: React.FC<TileDetails> = ({ title, style, size, index, list, onClick}) => {
+const Tile: React.FC<TileDetails> = ({
+  title, style, size, list, onClick, emoji
+}) => {
   const colorScheme = useColorScheme();
-  const textColor =
-    index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
     <TileBase style={style} size={size} gradient={[tileColor, tileColor]} onClick={onClick}>
       <View style={styles.content}>
         <View style={styles.left}>
-          <MaterialCommunityIcons
-            name="pill"
-            size={42}
-            color={index == 0 ? "white" : "#24AC29"}
-          />
+          <Text style={{ fontSize: 42 }}>{emoji}</Text>
           <View style={styles.textContent}>
-            <Text style={{ color: textColor, fontSize: 18 }}>{title}</Text>
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>{title}</Text>
           </View>
         </View>
         {list == "symptoms" ? (
@@ -109,6 +84,7 @@ const styles = StyleSheet.create({
   list: {
     textAlign: "right",
     fontSize: 18,
+    fontWeight: "500"
   }
 });
 

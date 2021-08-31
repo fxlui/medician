@@ -36,7 +36,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <Button title="Go to Progress flow" onPress={() => navigation.navigate("AreaSelectScreen")} />
+          <Button title="Go to Progress flow" onPress={() => navigation.pop()} />
           <Text style={styles.greeting}>
             I feel...
           </Text>
