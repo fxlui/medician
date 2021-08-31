@@ -65,7 +65,7 @@ const Severity = ({ navigation }: ScreenProps) => {
                 styles.numbers,
                 {
                   fontSize: 20,
-                  opacity: 1,
+                  opacity: 0.8,
                   marginBottom: 15,
                   marginLeft: severity * 21 - (severity === 10 ? 25 : 21),
                 },

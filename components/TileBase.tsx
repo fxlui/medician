@@ -10,7 +10,6 @@ import { Text, View } from "../components/Themed";
 import * as Haptics from "expo-haptics";
 import Navigation from "../navigation/Navigation";
 
-
 import { LinearGradient } from "expo-linear-gradient";
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 

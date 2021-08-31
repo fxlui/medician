@@ -19,6 +19,10 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
   left,
   right,
 }) => {
+  const funcWithHaptics = (func: () => void) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    func();
+  };
   const colorScheme = useColorScheme();
   return (
     <View
@@ -42,7 +46,7 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
           },
           ariaLabel: "Navigate to previous screen",
         }}
-        onPress={left}
+        onPress={() => funcWithHaptics(left)}
       >
         <Entypo
           name="chevron-left"
@@ -59,7 +63,7 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
           },
           ariaLabel: "Navigate to next screen",
         }}
-        onPress={right}
+        onPress={() => funcWithHaptics(right)}
       >
         <Entypo
           name="chevron-right"

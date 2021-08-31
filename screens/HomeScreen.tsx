@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { ScrollView, StyleSheet, Dimensions } from "react-native";
 import * as Haptics from "expo-haptics";
 import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -30,46 +26,44 @@ interface tileItemProps {
   item: tileItemData;
 }
 
-const DATA : tileItemData[] = [
+const DATA: tileItemData[] = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
     name: "First Item",
     notes: "aaa",
     time: "",
-    type: HomeTileTypes.Exercise
+    type: HomeTileTypes.Exercise,
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
     name: "Second Item",
     notes: "aaa",
     time: "",
-    type: HomeTileTypes.Medication
+    type: HomeTileTypes.Medication,
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e26d72",
     name: "Third Item",
     notes: "aaa",
     time: "",
-    type: HomeTileTypes.Appointment
+    type: HomeTileTypes.Appointment,
   },
   {
     id: "58694a0f-3da1-471f-bd96-145ee26d72",
     name: "Fourth Item",
     notes: "aaa",
     time: "",
-    type: HomeTileTypes.Medication
+    type: HomeTileTypes.Medication,
   },
 ];
 
-
 type ScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<BottomTabParamList ,"HomeScreen">,
+  BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
   StackScreenProps<RootStackParamList>
 >;
 
-const HomeScreen = ({ navigation } : ScreenProps) => {
-  
-  const renderTile = ({ item, index } : tileItemProps) => {
+const HomeScreen = ({ navigation }: ScreenProps) => {
+  const renderTile = ({ item, index }: tileItemProps) => {
     return (
       <HomeTile
         title={item.name}
@@ -83,7 +77,7 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
             id: item.id,
             name: item.name,
             notes: item.notes,
-            type: item.type
+            type: item.type,
           });
         }}
       />
@@ -106,8 +100,8 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            itemWidth={160}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -122,8 +116,8 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            itemWidth={160}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -138,8 +132,8 @@ const HomeScreen = ({ navigation } : ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
-            inactiveSlideOpacity={0.9}
+            itemWidth={160}
+            inactiveSlideOpacity={1}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -157,6 +151,7 @@ const styles = StyleSheet.create({
   overflowView: {
     overflow: "visible",
     paddingLeft: 25,
+    paddingBottom: 125,
   },
   greeting: {
     fontSize: 26,
