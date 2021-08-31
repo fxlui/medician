@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import useColorScheme from "../../hooks/useColorScheme";
-import { ProgressFlowParamList } from "../../types";
+import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
@@ -10,7 +10,7 @@ import * as Haptics from "expo-haptics";
 import Slider from "@react-native-community/slider";
 import { StackScreenProps } from "@react-navigation/stack";
 
-type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">;
+type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
 const getDiscomfortEmoji = (severity: number) => {
   if (severity < 4) {
