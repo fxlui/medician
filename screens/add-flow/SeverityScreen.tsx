@@ -15,9 +15,9 @@ import SafeView from "../../components/SafeView";
 import ProgressBar from "./ProgressBar";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
+import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
 import Slider from "@react-native-community/slider";
-import { StackScreenProps } from "@react-navigation/stack";
 
 type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">;
 
@@ -104,7 +104,7 @@ const Severity = ({ navigation }: ScreenProps) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        right={() => navigation.navigate("TimeSelectScreen")}
       />
     </SafeView>
   );

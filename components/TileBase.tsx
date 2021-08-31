@@ -69,7 +69,10 @@ const TileBase: React.FC<BaseChildren> = ({
       onPress={handleOnClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onLongPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
+      onLongPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        handleOnClick();
+      }}
     >
       <Animated.View style={styles.shadow}>
         <AnimatedLinearGradient
