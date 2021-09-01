@@ -24,6 +24,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { Calendar, DateObject } from "react-native-calendars";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
 
 type ScreenProps = CompositeScreenProps<
@@ -67,30 +68,35 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
-  const [editingDateStr, setEditingDateStr] = React.useState<string>();
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
 
   const hideDatePicker = () => {
+    setEditingDate(undefined);
     setDatePickerVisibility(false);
   };
 
   const handleConfirm = (newDate: Date) => {
     setSelection((prev) =>
       prev.map((d) => {
-        if (d.dateobj.dateString === editingDateStr) {
+        if (d.date === editingDate) {
           d.date = newDate;
         }
         return d;
       })
     );
+    setEditingDate(undefined);
     hideDatePicker();
   };
 
   return (
     <SafeView style={styles.container}>
+      <Text style={styles.greeting}>When did it occur?</Text>
+      <Text style={styles.greetingSub}>
+        You can select multiple dates and times.
+      </Text>
       <ScrollView
         contentContainerStyle={{
           justifyContent: "center",
@@ -104,6 +110,8 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           style={{
             marginLeft: 25,
             marginRight: 25,
+            marginTop: 10,
+            marginBottom: 10,
             width: Dimensions.get("window").width - 50,
           }}
           markedDates={selection.reduce(
@@ -117,21 +125,15 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             {}
           )}
           onDayPress={(day) =>
-            dateInSelection(day, selection)
-              ? setSelection((prev) =>
-                  prev.filter(
-                    (item) => item.dateobj.dateString !== day.dateString
-                  )
-                )
-              : setSelection((prev) => [
-                  ...prev,
-                  {
-                    dateobj: day,
-                    date: new Date(
-                      day.dateString + `${moment().format("THH:mm:ss")}`
-                    ),
-                  },
-                ])
+            setSelection((prev) => [
+              ...prev,
+              {
+                dateobj: day,
+                date: new Date(
+                  day.dateString + `T${new Date().toISOString().split("T")[1]}`
+                ),
+              },
+            ])
           }
           theme={{
             backgroundColor: "transparent",
@@ -150,34 +152,58 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         <View>
           {selection.sort((a, b) => (a.date < b.date ? 1 : -1)) &&
             selection.map((item) => (
-              <TileBase
-                key={item.dateobj.dateString}
-                gradient={
-                  colorScheme === "light"
-                    ? ["#fff", "#fff"]
-                    : ["#252525", "#252525"]
-                }
-                style={{
-                  width: Dimensions.get("window").width - 80,
-                  height: 100,
-                  marginTop: 30,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                onClick={() => {
-                  setEditingDate(item.date);
-                  setEditingDateStr(item.dateobj.dateString);
-                  showDatePicker();
+              <SwipeBar
+                key={item.date.getTime()}
+                onPress={() => {
+                  Alert.alert(
+                    "Delete occurance?",
+                    `Are you sure you want to remove the occurance at ${item.date.toLocaleString()}?`,
+                    [
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                      },
+                      {
+                        text: "OK",
+                        onPress: () => {
+                          setSelection((prev) =>
+                            prev.filter((d) => d.date !== item.date)
+                          );
+                        },
+                      },
+                    ],
+                    { cancelable: false }
+                  );
                 }}
               >
-                <Text style={{ fontSize: 16 }}>
-                  {moment(item.date).format("MMM DD")}
-                </Text>
-                <Text style={{ fontSize: 34 }}>
-                  {moment(item.date).format("HH:mm")}
-                </Text>
-              </TileBase>
+                <TileBase
+                  gradient={
+                    colorScheme === "light"
+                      ? ["#fff", "#fff"]
+                      : ["#252525", "#252525"]
+                  }
+                  style={{
+                    width: Dimensions.get("window").width - 80,
+                    height: 100,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    borderWidth: editingDate === item.date ? 2 : 0,
+                    borderColor: "#45B649",
+                  }}
+                  onClick={() => {
+                    setEditingDate(item.date);
+                    showDatePicker();
+                  }}
+                >
+                  <Text style={{ fontSize: 16 }}>
+                    {moment(item.date).format("MMM DD")}
+                  </Text>
+                  <Text style={{ fontSize: 34 }}>
+                    {moment(item.date).format("HH:mm")}
+                  </Text>
+                </TileBase>
+              </SwipeBar>
             ))}
         </View>
       </ScrollView>
@@ -187,6 +213,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         mode="time"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        headerTextIOS="Select Time"
       />
       <AddFlowNavBar
         left={() => navigation.pop()}
@@ -208,43 +235,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  child: {
-    marginTop: 50,
-    flex: 6,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  childtwo: {
-    flex: 3,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  numberView: {
-    width: 210,
-  },
-  sliderView: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  numbers: {
-    opacity: 0.5,
-    fontWeight: "600",
-    fontSize: 16,
-  },
-  emoji: {
-    fontSize: 135,
-  },
-  desc: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginTop: 20,
-  },
   greeting: {
-    flex: 1,
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 15,
     paddingLeft: 30,
+  },
+  greetingSub: {
+    marginTop: 5,
+    marginBottom: 20,
+    fontSize: 18,
+    fontWeight: "400",
+    paddingLeft: 30,
+    opacity: 0.5,
   },
 });
