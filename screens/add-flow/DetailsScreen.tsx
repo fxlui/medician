@@ -21,7 +21,14 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { Calendar, DateObject } from "react-native-calendars";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { GiftedChat, IMessage } from "react-native-gifted-chat";
+import {
+  GiftedChat,
+  InputToolbar,
+  IMessage,
+  Composer,
+  Bubble,
+  MessageText,
+} from "react-native-gifted-chat";
 
 import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
@@ -33,6 +40,8 @@ type ScreenProps = CompositeScreenProps<
 
 export default function TimeSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
+  const textColor = colorScheme === "light" ? "#333333" : "#fff";
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
   const [messages, setMessages] = React.useState<IMessage[]>([]);
 
   React.useEffect(() => {
@@ -57,8 +66,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   return (
     <SafeView style={styles.container} disableTop>
-      <KeyboardAvoidingView style={{ flex: 1, marginBottom: 80 }}>
-        <Text style={styles.greeting}>Please describe what you observe.</Text>
+      <Text style={styles.greeting}>Please describe what you observe.</Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1, marginBottom: 85, marginLeft: 30, marginRight: 30 }}
+      >
         <GiftedChat
           messages={messages}
           onSend={(messages) => onSend(messages)}
@@ -67,14 +78,50 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           }}
           // @ts-ignore - recommened usage in docs
           renderAvatar={null}
-          renderBubble={(props) => <TileBase>{props.children}</TileBase>}
-          textInputStyle={{
-            backgroundColor: "transparent",
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: "lightgrey",
-            padding: 10,
-            marginBottom: 10,
+          renderBubble={(props) => (
+            <Bubble
+              {...props}
+              renderTime={() => null}
+              wrapperStyle={{
+                left: {
+                  borderRadius: 16,
+                  padding: 9,
+                  backgroundColor: tileColor,
+                },
+                right: {
+                  borderRadius: 16,
+                  padding: 9,
+                },
+              }}
+              // @ts-ignore - recommened usage in docs
+              renderMessageText={(props) => (
+                <MessageText
+                  {...props}
+                  customTextStyle={{ color: textColor }}
+                />
+              )}
+            />
+          )}
+          renderInputToolbar={(props) => (
+            <InputToolbar
+              {...props}
+              containerStyle={{
+                backgroundColor: tileColor,
+                borderRadius: 16,
+                borderTopWidth: 0,
+                padding: 8,
+                marginLeft: 8,
+                marginRight: 8,
+              }}
+            />
+          )}
+          renderComposer={(props) => (
+            <Composer {...props} textInputStyle={{ color: textColor }} />
+          )}
+          listViewProps={{
+            style: {
+              marginBottom: 30,
+            },
           }}
         />
       </KeyboardAvoidingView>

@@ -85,7 +85,13 @@ const Severity = ({ navigation }: ScreenProps) => {
               step={1}
               onValueChange={(value) => {
                 setSeverity(value);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (value > 4) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                } else if (value > 7) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                } else {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }
               }}
             />
             <Text style={styles.numbers}>10</Text>

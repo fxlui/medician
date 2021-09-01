@@ -49,17 +49,20 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   React.useEffect(() => {
     const now = new Date();
+    const nowOffset = new Date(
+      Date.now() - new Date().getTimezoneOffset() * 60000
+    );
     if (selection.length === 0) {
       setSelection([
         {
           dateobj: {
-            dateString: now.toISOString().split("T")[0],
-            day: now.getDay(),
-            month: now.getMonth(),
-            year: now.getFullYear(),
+            dateString: nowOffset.toISOString().split("T")[0],
+            day: nowOffset.getDay(),
+            month: nowOffset.getMonth(),
+            year: nowOffset.getFullYear(),
             timestamp: now.getTime(),
           },
-          date: new Date(now),
+          date: now,
         },
       ]);
     }
@@ -78,6 +81,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
   };
 
   const handleConfirm = (newDate: Date) => {
+    if (newDate > new Date()) {
+      Alert.alert("Invalid Time", "Please select a time in the past");
+      return;
+    }
     setSelection((prev) =>
       prev.map((d) => {
         if (d.date === editingDate) {
@@ -123,17 +130,18 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             },
             {}
           )}
-          onDayPress={(day) =>
+          onDayPress={(day) => {
+            const now = moment();
             setSelection((prev) => [
               ...prev,
               {
                 dateobj: day,
-                date: new Date(
-                  day.dateString + `T${new Date().toISOString().split("T")[1]}`
-                ),
+                date: moment(
+                  `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
+                ).toDate(),
               },
-            ])
-          }
+            ]);
+          }}
           theme={{
             backgroundColor: "transparent",
             calendarBackground: "transparent",
