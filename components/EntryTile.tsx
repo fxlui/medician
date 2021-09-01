@@ -84,7 +84,8 @@ const styles = StyleSheet.create({
   list: {
     textAlign: "right",
     fontSize: 18,
-    fontWeight: "500"
+    fontWeight: "500",
+    opacity: 0.68
   }
 });
 

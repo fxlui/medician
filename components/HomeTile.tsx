@@ -1,16 +1,11 @@
 import * as React from "react";
 import {
-  Animated,
-  Pressable,
   StyleProp,
   StyleSheet,
-  TouchableOpacity,
   ViewStyle,
 } from "react-native";
 
 import { Text, View } from "./Themed";
-
-import PillSVG from "../assets/images/PillSVG";
 import useColorScheme from "../hooks/useColorScheme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 

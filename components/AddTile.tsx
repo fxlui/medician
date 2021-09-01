@@ -44,14 +44,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
     justifyContent: "space-between",
+    backgroundColor: "transparent"
   },
   textContent: {
     justifyContent: "flex-end",
+    backgroundColor: "transparent"
   },
   left: {
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
+    backgroundColor: "transparent"
   }
 });
 
