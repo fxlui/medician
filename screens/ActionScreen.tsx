@@ -104,6 +104,6 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     position: "absolute",
-    bottom: -120
+    marginTop: "160%",
   }
 });
