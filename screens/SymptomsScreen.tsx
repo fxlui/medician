@@ -26,6 +26,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
                 return(
                   <SymptomTile
                     key={symptom.id}
+                    iconName={symptom.name}
                     title={symptom.description}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
                     onPress={() => navigation.pop()}
