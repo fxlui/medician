@@ -11,11 +11,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 
 import SafeView from "../../components/SafeView";
-import {
-  AddFlowParamList,
-  ProgressFlowParamList,
-  RootStackParamList,
-} from "../../types";
+import { AddFlowParamList, RootStackParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
 import ProgressBar from "./ProgressBar";
@@ -28,11 +24,8 @@ import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
 
 type ScreenProps = CompositeScreenProps<
-  StackScreenProps<ProgressFlowParamList, "TimeSelectScreen">,
-  CompositeScreenProps<
-    StackScreenProps<AddFlowParamList>,
-    StackScreenProps<RootStackParamList>
-  >
+  StackScreenProps<AddFlowParamList, "TimeSelectScreen">,
+  StackScreenProps<RootStackParamList>
 >;
 
 interface DateSelection {

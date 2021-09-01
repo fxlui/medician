@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
           marginRight: 15,
         }}
         index={index}
-        type={HomeTileTypes.Medication}
+        type={item.type}
         onPress={() => {
           navigation.push("Notification", {
             id: item.id,
@@ -157,25 +157,15 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "600",
     marginTop: 65,
-    paddingLeft: 5,
+    marginLeft: 5,
   },
   name: {
     fontSize: 18,
     fontWeight: "600",
     marginTop: 25,
     marginBottom: 20,
-    paddingLeft: 5,
-  },
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  list: {
-    margin: 0,
-    padding: 0,
-    overflow: "visible",
-  },
+    marginLeft: 5,
+  }
 });
 
 export default HomeScreen;

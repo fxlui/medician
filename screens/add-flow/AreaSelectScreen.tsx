@@ -1,26 +1,16 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import {
-  ScrollView,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
-import { ProgressFlowParamList } from "../../types";
+import { AddFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { TopTile, BottomTile } from "../../components/AreaTile";
-import ProgressBar from "./ProgressBar";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
 
-type ScreenProps = StackScreenProps<ProgressFlowParamList, "SeverityScreen">;
+type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
 const DATA = [
   {
@@ -41,6 +31,15 @@ const DATA = [
   },
 ];
 
+interface baseData {
+  index: number;
+  dataIndex: number;
+  item: {
+      id: string;
+      title: string;
+  }
+}
+
 const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   const [selectedTop, setSelectedTop] = useState(0);
   const [selectedBottom, setSelectedBottom] = useState(0);
@@ -48,7 +47,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   const topRef = React.createRef<Carousel<{ id: string; title: string }>>();
   const bottomRef = React.createRef<Carousel<{ id: string; title: string }>>();
 
-  const renderTopTile = ({ item, index }) => {
+  const renderTopTile = ({ item, index }: baseData) => {
     return (
       <TopTile
         title={item.title}
@@ -64,7 +63,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
     );
   };
 
-  const renderBottomTile = ({ item, index }) => {
+  const renderBottomTile = ({ item, index }: baseData) => {
     return (
       <BottomTile
         title={item.title}
@@ -83,7 +82,6 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   return (
     <SafeView style={styles.container}>
       <View>
-        <ProgressBar percentage={0.2} />
         <Text style={styles.greeting}>Where is the area affected?</Text>
         <View style={styles.child}>
           <View style={{}}>
