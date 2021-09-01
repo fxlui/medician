@@ -43,12 +43,13 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
   const [messages, setMessages] = React.useState<IMessage[]>([]);
+  const [editing, setEditing] = React.useState(false);
 
   React.useEffect(() => {
     setMessages([
       {
         _id: 1,
-        text: "Hello developer",
+        text: "What makes it better?",
         createdAt: new Date(),
         user: {
           _id: 2,
@@ -68,7 +69,12 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
     <SafeView style={styles.container} disableTop>
       <Text style={styles.greeting}>Please describe what you observe.</Text>
       <KeyboardAvoidingView
-        style={{ flex: 1, marginBottom: 85, marginLeft: 30, marginRight: 30 }}
+        style={{
+          flex: 1,
+          marginBottom: editing ? 30 : 85,
+          marginLeft: 30,
+          marginRight: 30,
+        }}
       >
         <GiftedChat
           messages={messages}
@@ -116,13 +122,21 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             />
           )}
           renderComposer={(props) => (
-            <Composer {...props} textInputStyle={{ color: textColor }} />
+            <Composer
+              {...props}
+              textInputStyle={{ color: textColor }}
+              textInputProps={{
+                onFocus: () => setEditing(true),
+                onBlur: () => setEditing(false),
+              }}
+            />
           )}
           listViewProps={{
             style: {
-              marginBottom: 30,
+              marginBottom: 20,
             },
           }}
+          renderDay={() => null}
         />
       </KeyboardAvoidingView>
       <AddFlowNavBar
