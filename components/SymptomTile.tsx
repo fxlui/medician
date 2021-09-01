@@ -12,15 +12,26 @@ interface TileDetails {
   index?: number;
   onPress: () => void;
   iconName: string;
+  selected: boolean;
   extraStyles?: StyleProp<ViewStyle>;
 }
 
 const SymptomTile: React.FC<TileDetails> = ({
-  title, onPress, extraStyles, iconName
+  title, onPress, extraStyles, iconName, selected
 }) => {
   const colorScheme = useColorScheme();
 
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const tileColor = selected
+    ? "#FF7272"
+    : colorScheme === "light"
+    ? "#fff"
+    : "#252525";
+
+  const iconColor = colorScheme === "dark"
+  ? "#fff"
+  : selected
+  ? "fff"
+  : "#000"
 
   return (
     <TileBase

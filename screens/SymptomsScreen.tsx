@@ -25,6 +25,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               {Symptoms.map((symptom) => {
                 return(
                   <SymptomTile
+                    selected={false}
                     key={symptom.id}
                     iconName={symptom.name}
                     title={symptom.description}
@@ -37,7 +38,10 @@ export default function ActionScreen({ navigation }: ScreenProps) {
           </View>
         </ScrollView>
       </View>
-      <AddFlowNavBar left={() => navigation.pop()} right={() => {}} />
+      <AddFlowNavBar
+        left={() => navigation.pop()}
+        right={() => navigation.navigate("AreaSelectScreen")}
+      />
     </SafeView>
   );
 }
