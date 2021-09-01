@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import SymptomTile from "../components/SymptomTile";
-import Symptoms from "../assets/Symptoms.json";
+import SymptomsOne from "../assets/SymptomsOne.json";
+import SymptomsTwo from "../assets/SymptomsTwo.json";
 import AddFlowNavBar from "../components/AddFlowNavBar";
 import { AddFlowParamList } from "../types";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 
-export default function ActionScreen({ navigation }: ScreenProps) {
+export default function ActionScreen({ navigation, route }: ScreenProps) {
+
+  const [selectedId, setSelectedId] = useState("");
+  const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
 
   return (
     <SafeView disableBottom>
@@ -19,18 +23,18 @@ export default function ActionScreen({ navigation }: ScreenProps) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ overflow: "visible", paddingBottom: 100 }}>
             <Text style={styles.greeting}>
-              I feel...
+              I {route.params.type}...
             </Text>
             <View style={styles.list}>
-              {Symptoms.map((symptom) => {
+              {symptomArray.map((symptom) => {
                 return(
                   <SymptomTile
-                    selected={false}
+                    selected={symptom.id === selectedId}
                     key={symptom.id}
                     iconName={symptom.name}
                     title={symptom.description}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
-                    onPress={() => navigation.pop()}
+                    onPress={() => {setSelectedId(symptom.id)}}
                   />
                 );
               })}
@@ -60,8 +64,7 @@ const styles = StyleSheet.create({
   list: {
     overflow: "visible",
     flexDirection: "row",
-    justifyContent: "center",
     flexWrap: "wrap",
-    paddingLeft: 30
+    paddingLeft: 40
   },
 });

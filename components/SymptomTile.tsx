@@ -1,10 +1,9 @@
 import * as React from "react";
-import { StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { StyleSheet, StyleProp, ViewStyle, View} from "react-native";
 
-import { Text, View } from "./Themed";
-import useColorScheme from "../hooks/useColorScheme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Icon } from "./Icon";
+import { Text, } from "./Themed";
+import useColorScheme from "../hooks/useColorScheme";
 import TileBase, { TileSize } from "./TileBase";
 
 interface TileDetails {
@@ -27,10 +26,10 @@ const SymptomTile: React.FC<TileDetails> = ({
     ? "#fff"
     : "#252525";
 
-  const iconColor = colorScheme === "dark"
+  const contentColor = colorScheme === "dark"
   ? "#fff"
   : selected
-  ? "fff"
+  ? "#fff"
   : "#000"
 
   return (
@@ -46,10 +45,16 @@ const SymptomTile: React.FC<TileDetails> = ({
           props={{
             width: 42,
             height: 42,
-            fill: "#000"
+            fill: contentColor
           }}
         />
-        <Text style={{ fontSize: 16, fontWeight: "500" }}>{title}</Text>
+        <Text style={{
+          fontSize: 16,
+          fontWeight: "500",
+          color: contentColor
+        }}>
+          {title}
+        </Text>
       </View>
     </TileBase>
   );
@@ -59,8 +64,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: "stretch",
-    justifyContent: "space-between",
-    backgroundColor: "transparent"
+    justifyContent: "space-between"
   }
 });
 

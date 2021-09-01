@@ -1,11 +1,12 @@
 import React from "react";
 import {
+  View,
   StyleProp,
   StyleSheet,
   ViewStyle,
 } from "react-native";
 
-import { Text, View } from "./Themed";
+import { Text } from "./Themed";
 import TileBase, { TileSize } from "./TileBase";
 import useColorScheme from "../hooks/useColorScheme";
 
@@ -26,34 +27,33 @@ const Tile: React.FC<TileDetails> = ({
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase style={style} size={size} gradient={[tileColor, tileColor]} onClick={onClick}>
+    <TileBase
+      style={style}
+      size={size}
+      gradient={[tileColor, tileColor]}
+      onClick={onClick}
+    >
       <View style={styles.content}>
         <View style={styles.left}>
           <Text style={{ fontSize: 42 }}>{emoji}</Text>
-          <View style={styles.textContent}>
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>{title}</Text>
-          </View>
+          <Text style={{ fontSize: 18, fontWeight: "600" }}>{title}</Text>
         </View>
         {list == "symptoms" ? (
-          <View style={styles.right}>
-            <Text style={styles.list}>
-              pain{"\n"}
-              itchy{"\n"}
-              hot {"\n"}
-              cold{"\n"}
-              ...
-            </Text>
-          </View>
+          <Text style={styles.list}>
+            pain{"\n"}
+            itchy{"\n"}
+            hot {"\n"}
+            cold{"\n"}
+            ...
+          </Text>
         ) : 
-          <View style={styles.right}>
-            <Text style={styles.list}>
-              sleep{"\n"}
-              breathe{"\n"}
-              see{"\n"}
-              hear{"\n"}
-              ...
-            </Text>
-          </View>
+          <Text style={styles.list}>
+            sleep{"\n"}
+            breathe{"\n"}
+            see{"\n"}
+            hear{"\n"}
+            ...
+          </Text>
         }
       </View>
     </TileBase>
@@ -62,30 +62,19 @@ const Tile: React.FC<TileDetails> = ({
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: "transparent",
-    flexDirection: "row",
     flex: 1,
-    alignItems: "stretch",
+    flexDirection: "row",
     justifyContent: "space-between",
-  },
-  textContent: {
-    backgroundColor: "transparent",
-    justifyContent: "flex-end",
   },
   left: {
     flex: 1,
-    alignItems: "stretch",
     justifyContent: "space-between",
-    backgroundColor: "transparent",
-  },
-  right: {
-    backgroundColor: "transparent",
   },
   list: {
-    textAlign: "right",
     fontSize: 18,
+    opacity: 0.68,
     fontWeight: "500",
-    opacity: 0.68
+    textAlign: "right",
   }
 });
 

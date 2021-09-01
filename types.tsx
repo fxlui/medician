@@ -1,6 +1,8 @@
+import { NavigatorScreenParams } from "@react-navigation/core";
+
 export type RootStackParamList = {
   Root: undefined;
-  AddFlow: undefined;
+  AddFlow: NavigatorScreenParams<AddFlowParamList>;
   Notification: {
     id: string;
     name: string;
@@ -18,7 +20,9 @@ export type BottomTabParamList = {
 };
 
 export type AddFlowParamList = {
-  SymptomsScreen: undefined;
+  SymptomsScreen: {
+    type: "feel" | "cant"
+  }
   AreaSelectScreen: undefined;
   SeverityScreen: undefined;
   TimeSelectScreen: undefined;

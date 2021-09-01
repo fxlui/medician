@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { SvgProps, Color } from "react-native-svg";
+import { SvgProps } from "react-native-svg";
 
 import AppointmentsSVG from "../assets/icons/appointmentsSVG";
 import BrainSVG from "../assets/icons/brainSVG";
@@ -19,6 +19,8 @@ import SleepSVG from "../assets/icons/sleepSVG";
 import SpeakSVG from "../assets/icons/speakSVG";
 import ToiletSVG from "../assets/icons/toiletSVG";
 import NotFoundSVG from "../assets/icons/notFoundSVG";
+import AddSVG from "../assets/icons/AddSVG";
+import SmellSVG from "../assets/icons/SmellSVG";
 import WalkSVG from "../assets/icons/walkSVG";
 
 interface IconProps {
@@ -64,7 +66,15 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <ToiletSVG {...props} />;
     case "Walk":
       return <WalkSVG {...props} />;
+    case "Add":
+      return <AddSVG {...props} />;
+    case "Cancel":
+      return <CancelSVG {...props} />;
+    case "Smell":
+      return <SmellSVG {...props} />;
     default:
       return <NotFoundSVG {...props} />;
   }
 }
+
+export default Icon;
