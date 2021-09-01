@@ -41,7 +41,7 @@ const Severity = ({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
 
   return (
-    <SafeView style={styles.container}>
+    <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
         <Text style={styles.greeting}>How severe is it?</Text>
         <View style={styles.child}>

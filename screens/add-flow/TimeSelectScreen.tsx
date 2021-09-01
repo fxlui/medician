@@ -44,20 +44,26 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
 };
 
 export default function TimeSelectScreen({ navigation }: ScreenProps) {
-  const now = new Date();
   const colorScheme = useColorScheme();
-  const [selection, setSelection] = React.useState<DateSelection[]>([
-    {
-      dateobj: {
-        dateString: now.toISOString().split("T")[0],
-        day: now.getDay(),
-        month: now.getMonth(),
-        year: now.getFullYear(),
-        timestamp: now.getTime(),
-      },
-      date: new Date(now),
-    },
-  ]);
+  const [selection, setSelection] = React.useState<DateSelection[]>([]);
+
+  React.useEffect(() => {
+    const now = new Date();
+    if (selection.length === 0) {
+      setSelection([
+        {
+          dateobj: {
+            dateString: now.toISOString().split("T")[0],
+            day: now.getDay(),
+            month: now.getMonth(),
+            year: now.getFullYear(),
+            timestamp: now.getTime(),
+          },
+          date: new Date(now),
+        },
+      ]);
+    }
+  }, []);
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
@@ -85,7 +91,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
   };
 
   return (
-    <SafeView style={styles.container}>
+    <SafeView style={styles.container} disableTop>
       <Text style={styles.greeting}>When did it occur?</Text>
       <Text style={styles.greetingSub}>
         You can select multiple dates and times.
@@ -212,7 +218,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => navigation.navigate("AreaSelectScreen")
+            ? () => navigation.navigate("DetailsScreen")
             : () =>
                 Alert.alert(
                   "No selection yet",
@@ -232,6 +238,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "600",
     paddingLeft: 30,
+    marginTop: 15,
   },
   greetingSub: {
     marginTop: 5,
