@@ -17,6 +17,7 @@ import { BottomTabParamList, RootStackParamList } from "../types";
 import TopBar from "../components/TopBar";
 import HomeScreen from "./HomeScreen";
 import SymptomTile from "../components/SymptomTile";
+import Icon from "../components/Icon";
 
 type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
@@ -80,6 +81,15 @@ const AREA_DATA = [
   },
 ];
 
+const symptoms = [
+  {
+    title: "Pain"
+  },
+  {
+    title: "Brain"
+  }
+];
+
 interface baseData {
   index: number;
   dataIndex: number;
@@ -138,6 +148,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
         style={{
           marginRight: 15
         }}
+        iconName={item.title}
       />
     );
   };
@@ -151,7 +162,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
           />
           <View style={styles.header}>
             <Carousel
-              data={DATA}
+              data={symptoms}
               renderItem={renderSymptomTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
