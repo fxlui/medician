@@ -19,23 +19,23 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
   return (
     <>
       <LinearGradient
-          colors={[
-            colorScheme==="light"
-            ? "rgba(249,249,249,0)"
-            : "transparent",
-            colorScheme==="light"
-            ? "#F9F9F9"
-            : "#000"
-          ]}
-          style={{
-            position: 'absolute',
-            bottom:0,
-            left: 0,
-            right: 0,
-            height: 150,
-          }}
-          locations={[0.1, 0.5]}
-        />
+        colors={[
+          colorScheme==="light"
+          ? "rgba(249,249,249,0)"
+          : "transparent",
+          colorScheme==="light"
+          ? "#F9F9F9"
+          : "#000"
+        ]}
+        style={{
+          position: 'absolute',
+          bottom:0,
+          left: 0,
+          right: 0,
+          height: 150,
+        }}
+        locations={[0.1, 0.5]}
+      />
       <View
         style={{
           position: "absolute",
@@ -56,7 +56,7 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
               paddingLeft: 80,
               paddingRight: 55,
             },
-            ariaLabel: "Navigate to previous screen",
+            accessibilityLabel: "Navigate to previous screen"
           }}
           onPress={() => funcWithHaptics(left)}
         >
@@ -73,7 +73,7 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
               paddingLeft: 55,
               paddingRight: 80,
             },
-            ariaLabel: "Navigate to next screen",
+            accessibilityLabel: "Navigate to next screen",
           }}
           onPress={() => funcWithHaptics(right)}
         >

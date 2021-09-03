@@ -21,6 +21,9 @@ import ToiletSVG from "../assets/icons/toiletSVG";
 import NotFoundSVG from "../assets/icons/notFoundSVG";
 import AddSVG from "../assets/icons/AddSVG";
 import SmellSVG from "../assets/icons/SmellSVG";
+import TimeSVG from "../assets/icons/timeSVG";
+import CheckmarkSVG from "../assets/icons/checkmarkSVG";
+import IgnoreSVG from "../assets/icons/ignoreSVG";
 import WalkSVG from "../assets/icons/walkSVG";
 
 interface IconProps {
@@ -72,6 +75,12 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <CancelSVG {...props} />;
     case "Smell":
       return <SmellSVG {...props} />;
+    case "Time":
+      return <TimeSVG {...props} />
+    case "Checkmark":
+      return <CheckmarkSVG {...props} />;
+    case "Ignore":
+      return <IgnoreSVG {...props} />;
     default:
       return <NotFoundSVG {...props} />;
   }

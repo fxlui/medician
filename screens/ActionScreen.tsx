@@ -59,11 +59,14 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             />
             <AddTile
               title={"Add"}
-              subtitle={"Treatment"}
+              subtitle={"Routine"}
             />
           </View>
           <PressableBase
-            extraProps={{ style: styles.cancelButton }}
+            extraProps={{
+              style: styles.cancelButton,
+              accessibilityLabel: "Cancel Add Action"
+            }}
             onPress={() => navigation.pop()}
           >
             <Icon name="Cancel" props={{
