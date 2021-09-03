@@ -24,6 +24,7 @@ export type AddFlowParamList = {
   TimeSelectScreen: undefined;
   DetailsScreen: undefined;
   MediaScreen: undefined;
+  TemperatureSelectionScreen: undefined;
 };
 
 export enum HomeTileTypes {

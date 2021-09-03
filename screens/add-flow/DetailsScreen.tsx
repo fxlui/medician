@@ -116,6 +116,14 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
     }
   };
 
+  const handleNavigation = () => {
+    if (currentQuestion >= 3) {
+      navigation.navigate("MediaScreen");
+    } else {
+      nextQuestion();
+    }
+  };
+
   return (
     <SafeView style={styles.container} disableTop>
       <View
@@ -233,7 +241,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
                   alignItems: "center",
                 },
               }}
-              onPress={() => nextQuestion()}
+              onPress={handleNavigation}
             >
               <Ionicons name="ios-send" size={20} color={textColor} />
             </PressableBase>
@@ -301,13 +309,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             navigation.pop();
           }
         }}
-        right={() => {
-          if (currentQuestion >= 3) {
-            navigation.navigate("MediaScreen");
-          } else {
-            nextQuestion();
-          }
-        }}
+        right={handleNavigation}
       ></AddFlowNavBar>
     </SafeView>
   );
