@@ -35,9 +35,9 @@ interface baseData {
   index: number;
   dataIndex: number;
   item: {
-      id: string;
-      title: string;
-  }
+    id: string;
+    title: string;
+  };
 }
 
 const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
@@ -80,7 +80,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <SafeView style={styles.container}>
+    <SafeView style={styles.container} disableTop>
       <View>
         <Text style={styles.greeting}>Where is the area affected?</Text>
         <View style={styles.child}>
