@@ -18,16 +18,16 @@ const Tile: React.FC<TileDetails> = ({ title, subtitle }) => {
   return (
     <TileBase size={TileSize.ActionAdd} gradient={[tileColor, tileColor]}>
       <View style={styles.content}>
-        {subtitle === "Treatment"
+        {subtitle === "Routine"
           ?
           <View style={{ flexDirection: "row" }}>
-            <Icon name="Medication" props={{
-              fill: "#24AC29",
+            <Icon name="Exercise" props={{
+              fill: "#4E54C8",
               width: 42,
               height: 42
             }}/>
-            <Icon name="Exercise" props={{
-              fill: "#4E54C8",
+            <Icon name="Medication" props={{
+              fill: "#24AC29",
               width: 42,
               height: 42
             }}/>

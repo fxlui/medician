@@ -4,7 +4,7 @@ import { SvgProps } from "react-native-svg";
 import AppointmentsSVG from "../assets/icons/appointmentsSVG";
 import BrainSVG from "../assets/icons/brainSVG";
 import BreatheSVG from "../assets/icons/breatheSVG";
-import CancelSVG from "../assets/icons/CancelSVG";
+import CancelSVG from "../assets/icons/cancelSVG";
 import ColdSVG from "../assets/icons/coldSVG";
 import DizzySVG from "../assets/icons/dizzySVG";
 import ExerciseSVG from "../assets/icons/exerciseSVG";
@@ -19,8 +19,11 @@ import SleepSVG from "../assets/icons/sleepSVG";
 import SpeakSVG from "../assets/icons/speakSVG";
 import ToiletSVG from "../assets/icons/toiletSVG";
 import NotFoundSVG from "../assets/icons/notFoundSVG";
-import AddSVG from "../assets/icons/AddSVG";
+import AddSVG from "../assets/icons/addSVG";
 import SmellSVG from "../assets/icons/SmellSVG";
+import TimeSVG from "../assets/icons/timeSVG";
+import CheckmarkSVG from "../assets/icons/checkmarkSVG";
+import IgnoreSVG from "../assets/icons/ignoreSVG";
 import WalkSVG from "../assets/icons/walkSVG";
 
 interface IconProps {
@@ -72,6 +75,12 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <CancelSVG {...props} />;
     case "Smell":
       return <SmellSVG {...props} />;
+    case "Time":
+      return <TimeSVG {...props} />
+    case "Checkmark":
+      return <CheckmarkSVG {...props} />;
+    case "Ignore":
+      return <IgnoreSVG {...props} />;
     default:
       return <NotFoundSVG {...props} />;
   }
