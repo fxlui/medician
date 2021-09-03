@@ -131,6 +131,17 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
     );
   };
 
+  const renderSymptomTile = ({ item, index }: baseData) => {
+    return (
+      <SymptomTile
+        title={item.title}
+        style={{
+          marginRight: 15
+        }}
+      />
+    );
+  };
+
   return (
     <SafeView disableBottom style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -141,7 +152,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
           <View style={styles.header}>
             <Carousel
               data={DATA}
-              renderItem={renderHomeTile}
+              renderItem={renderSymptomTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
               containerCustomStyle={{
