@@ -58,6 +58,25 @@ const DATA: tileItemData[] = [
   },
 ];
 
+const AREA_DATA = [
+  {
+    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+    title: "First Item",
+  },
+  {
+    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+    title: "Second Item",
+  },
+  {
+    id: "58694a0f-3da1-471f-bd96-145571e26d72",
+    title: "Third Item",
+  },
+  {
+    id: "58694a0f-3da1-471f-bd96-145ee26d72",
+    title: "Fourth Item",
+  },
+];
+
 interface baseData {
   index: number;
   dataIndex: number;
@@ -93,41 +112,58 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
     );
   };
 
-  return (
-    <SafeView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.header}>
-              <Text style={styles.title}>Symptoms</Text>
-              <Carousel
-                data={DATA}
-                renderItem={renderTile}
-                vertical={false}
-                sliderWidth={Dimensions.get("window").width}
-                containerCustomStyle={{
-                  overflow: "visible",
-                }}
-                contentContainerCustomStyle={{
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                  overflow: "visible",
-                }}
-                itemWidth={150}
-                inactiveSlideOpacity={0.8}
-                onScrollIndexChanged={(index) => {
-                  setSelectedTop(index);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-                onSnapToItem={(index) => {}}
-                ref={topRef}
-              />
-            </View>
+  const renderTopTile = ({ item, index }: baseData) => {
+    return (
+      <TopTile
+        title={item.title}
+        style={{
+          marginRight: 15,
+        }}
+        index={index}
+        selected={selectedTop === index}
+        updater={() => {
+          topRef.current?.snapToItem(index);
+        }}
+      />
+    );
+  };
 
+
+  return (
+    <SafeView disableBottom style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Symptoms</Text>
+            <Carousel
+              data={DATA}
+              renderItem={renderTile}
+              vertical={false}
+              sliderWidth={Dimensions.get("window").width}
+              containerCustomStyle={{
+                overflow: "visible",
+              }}
+              contentContainerCustomStyle={{
+                justifyContent: "center",
+                alignItems: "flex-start",
+                overflow: "visible",
+              }}
+              itemWidth={150}
+              inactiveSlideOpacity={0.8}
+              onScrollIndexChanged={(index) => {
+                setSelectedTop(index);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+              onSnapToItem={(index) => {}}
+              ref={topRef}
+            />
+          </View>
           <View style={styles.overflowView}>
+
             <Text style={styles.name}>Area</Text>
             <Carousel
               style={{ overflow: "visible" }}
-              data={DATA}
-              renderItem={renderTile}
+              data={AREA_DATA}
+              renderItem={renderTopTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
               activeSlideAlignment={"start"}
@@ -197,7 +233,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: 26,
+    fontSize: 18,
     fontWeight: "600",
     marginTop: 15,
     alignSelf: "center"
