@@ -15,7 +15,6 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
 import ImageView from "react-native-image-viewing";
-import { Video, AVPlaybackStatus } from "expo-av";
 import * as VideoThumbnails from "expo-video-thumbnails";
 
 import { StackScreenProps } from "@react-navigation/stack";
@@ -86,8 +85,17 @@ const checkCameraPermission = async () => {
   return true;
 };
 
+const generateThumbnail = async (source: string) => {
+  try {
+    const { uri } = await VideoThumbnails.getThumbnailAsync(source);
+    return uri;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
 interface Media {
-  uri: string;
+  uri: string | undefined;
   type: string | undefined;
 }
 
@@ -97,19 +105,8 @@ export default function MediaScreen({ navigation }: ScreenProps) {
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   const [images, setImages] = React.useState<Media[]>([]);
-  const [onlyImages, setOnlyImages] = React.useState<ImageURISource[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [visible, setIsVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    setOnlyImages(
-      images.map((i) => {
-        if (i.type === "image") {
-          return { uri: i.uri! };
-        } else return {};
-      })
-    );
-  }, [images]);
 
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
@@ -123,7 +120,12 @@ export default function MediaScreen({ navigation }: ScreenProps) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
       const type = result.type;
-      setImages((prev) => [...prev, { uri: uri, type: type }]);
+      if (type === "video") {
+        const thumbnail = await generateThumbnail(uri);
+        setImages((prev) => [...prev, { uri: thumbnail, type: type }]);
+      } else {
+        setImages((prev) => [...prev, { uri: uri, type: type }]);
+      }
     }
   };
 
@@ -140,7 +142,12 @@ export default function MediaScreen({ navigation }: ScreenProps) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
       const type = result.type;
-      setImages((prev) => [...prev, { uri: uri, type: type }]);
+      if (type === "video") {
+        const thumbnail = await generateThumbnail(uri);
+        setImages((prev) => [...prev, { uri: thumbnail, type: type }]);
+      } else {
+        setImages((prev) => [...prev, { uri: uri, type: type }]);
+      }
     }
   };
 
@@ -214,7 +221,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
                       padding: 0,
                     }}
                     onClick={
-                      isVideo(img.uri!)
+                      img.type === "video"
                         ? () => {}
                         : () => {
                             setCurrentIndex(index);
@@ -223,7 +230,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
                     }
                   >
                     <Image
-                      source={img.uriimg}
+                      source={{ uri: img.uri! }}
                       style={{
                         width: Dimensions.get("window").width - 100,
                         height: 130,
