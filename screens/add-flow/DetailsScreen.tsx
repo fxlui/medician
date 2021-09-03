@@ -86,6 +86,56 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   const inputRef = React.useRef<TextInput>(null);
 
+  const getQuestion = (question: Number) => {
+    switch (question) {
+      case 0:
+        return "What makes it better?";
+      case 1:
+        return "What makes it worse?";
+      case 2:
+        return "What do you think its related to?";
+      case 3:
+        return "Have you tried anything?";
+      default:
+        return "";
+    }
+  };
+
+  const nextQuestion = () => {
+    switch (currentQuestion) {
+      case 0:
+        Animated.timing(animatedOpacityQ2, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        setCurrentQuestion(1);
+        break;
+      case 1:
+        Animated.timing(animatedOpacityQ3, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        setCurrentQuestion(2);
+        break;
+      case 2:
+        Animated.timing(animatedOpacityQ4, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        setCurrentQuestion(3);
+        break;
+      case 3:
+        setCurrentQuestion(4);
+        break;
+      default:
+        break;
+    }
+    inputRef.current?.clear();
+  };
+
   return (
     <SafeView style={styles.container} disableTop>
       <ScrollView
@@ -96,32 +146,74 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           style={{
             flex: 1,
             paddingLeft: 30,
+            paddingBottom: 200,
           }}
         >
           <Text style={styles.greeting}>Please describe what you observe.</Text>
           <Animated.View style={[styles.qna]}>
-            <Text style={styles.question}>What makes it better?</Text>
+            <Text style={styles.question}>{getQuestion(0)}</Text>
             <Text style={styles.answer}>{currentAnswers.better}</Text>
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
-            <Text style={styles.question}>What makes it worse?</Text>
+            <Text style={styles.question}>{getQuestion(1)}</Text>
             <Text style={styles.answer}>{currentAnswers.worse}</Text>
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ3 }]}>
-            <Text style={styles.question}>
-              What do you think its related to?
-            </Text>
+            <Text style={styles.question}>{getQuestion(2)}</Text>
             <Text style={styles.answer}>{currentAnswers.related}</Text>
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ4 }]}>
-            <Text style={styles.question}>Have you tried anything?</Text>
+            <Text style={styles.question}>{getQuestion(3)}</Text>
             <Text style={styles.answer}>{currentAnswers.attempt}</Text>
           </Animated.View>
         </KeyboardAvoidingView>
       </ScrollView>
       <AddFlowNavBar
-        left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        left={() => {
+          if (
+            (currentQuestion === 0 && currentAnswers.better !== "") ||
+            currentQuestion > 0
+          ) {
+            const qNow = currentQuestion - 1;
+            setCurrentQuestion(currentQuestion - 1);
+            switch (qNow) {
+              case 0:
+                Animated.timing(animatedOpacityQ2, {
+                  toValue: 0,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
+                break;
+              case 1:
+                Animated.timing(animatedOpacityQ3, {
+                  toValue: 0,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
+                break;
+              case 2:
+                Animated.timing(animatedOpacityQ4, {
+                  toValue: 0,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
+                break;
+              case 3:
+                break;
+              default:
+                break;
+            }
+          } else {
+            navigation.pop();
+          }
+        }}
+        right={() => {
+          if (currentQuestion >= 3) {
+            navigation.navigate("AreaSelectScreen");
+          } else {
+            nextQuestion();
+          }
+        }}
       >
         <Animated.View
           style={{
@@ -142,11 +234,14 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         >
           <AnimatedTextInput
             ref={inputRef}
-            placeholder="Enter Name here"
+            placeholder={getQuestion(currentQuestion)}
             style={{
               padding: 20,
               flex: 8,
+              fontSize: 16,
+              marginTop: 20,
             }}
+            multiline={true}
             onChangeText={(text) => {
               switch (currentQuestion) {
                 case 0:
@@ -186,40 +281,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
                 alignItems: "center",
               },
             }}
-            onPress={() => {
-              switch (currentQuestion) {
-                case 0:
-                  Animated.timing(animatedOpacityQ2, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: false,
-                  }).start();
-                  setCurrentQuestion(1);
-                  break;
-                case 1:
-                  Animated.timing(animatedOpacityQ3, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: false,
-                  }).start();
-                  setCurrentQuestion(2);
-                  break;
-                case 2:
-                  Animated.timing(animatedOpacityQ4, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: false,
-                  }).start();
-                  setCurrentQuestion(3);
-                  break;
-                case 3:
-                  break;
-                default:
-                  break;
-              }
-              Keyboard.dismiss();
-              inputRef.current?.clear();
-            }}
+            onPress={() => nextQuestion()}
           >
             <Ionicons name="ios-send" size={20} color="black" />
           </PressableBase>
@@ -250,6 +312,6 @@ const styles = StyleSheet.create({
     opacity: 0.85,
   },
   qna: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
 });
