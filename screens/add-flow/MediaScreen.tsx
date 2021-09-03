@@ -16,6 +16,8 @@ import * as FileSystem from "expo-file-system";
 
 import ImageView from "react-native-image-viewing";
 import { Video, AVPlaybackStatus } from "expo-av";
+import * as VideoThumbnails from "expo-video-thumbnails";
+
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 import SafeView from "../../components/SafeView";
@@ -36,25 +38,6 @@ type ScreenProps = CompositeScreenProps<
 >;
 
 const imgDir = FileSystem.documentDirectory + "images/";
-
-const isVideo = (uri: string) => {
-  if (uri.endsWith(".mp4")) {
-    return true;
-  } else if (uri.endsWith(".mov")) {
-    return true;
-  } else if (uri.endsWith(".m4v")) {
-    return true;
-  } else if (uri.endsWith(".avi")) {
-    return true;
-  } else if (uri.endsWith(".wmv")) {
-    return true;
-  } else if (uri.endsWith(".mpg")) {
-    return true;
-  } else if (uri.endsWith(".mpeg")) {
-    return true;
-  }
-  return false;
-};
 
 // Checks if gif directory exists. If not, creates it
 async function ensureDirExists() {
@@ -103,14 +86,30 @@ const checkCameraPermission = async () => {
   return true;
 };
 
+interface Media {
+  uri: string;
+  type: string | undefined;
+}
+
 export default function MediaScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
-  const [images, setImages] = React.useState<ImageURISource[]>([]);
+  const [images, setImages] = React.useState<Media[]>([]);
+  const [onlyImages, setOnlyImages] = React.useState<ImageURISource[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [visible, setIsVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    setOnlyImages(
+      images.map((i) => {
+        if (i.type === "image") {
+          return { uri: i.uri! };
+        } else return {};
+      })
+    );
+  }, [images]);
 
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
@@ -123,7 +122,8 @@ export default function MediaScreen({ navigation }: ScreenProps) {
     if (!result.cancelled) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
-      setImages((prev) => [...prev, { uri: uri }]);
+      const type = result.type;
+      setImages((prev) => [...prev, { uri: uri, type: type }]);
     }
   };
 
@@ -139,7 +139,8 @@ export default function MediaScreen({ navigation }: ScreenProps) {
     if (!result.cancelled) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
-      setImages((prev) => [...prev, { uri: uri }]);
+      const type = result.type;
+      setImages((prev) => [...prev, { uri: uri, type: type }]);
     }
   };
 
@@ -221,26 +222,14 @@ export default function MediaScreen({ navigation }: ScreenProps) {
                           }
                     }
                   >
-                    {isVideo(img.uri!) ? (
-                      <Video
-                        source={{
-                          uri: img.uri!,
-                        }}
-                        useNativeControls
-                        resizeMode="contain"
-                        isLooping
-                        shouldPlay
-                      />
-                    ) : (
-                      <Image
-                        source={img}
-                        style={{
-                          width: Dimensions.get("window").width - 100,
-                          height: 130,
-                          borderRadius: 10,
-                        }}
-                      />
-                    )}
+                    <Image
+                      source={img.uriimg}
+                      style={{
+                        width: Dimensions.get("window").width - 100,
+                        height: 130,
+                        borderRadius: 10,
+                      }}
+                    />
                   </TileBase>
                 </SwipeBar>
               ))}
@@ -308,7 +297,11 @@ export default function MediaScreen({ navigation }: ScreenProps) {
         </View>
       </View>
       <ImageView
-        images={images}
+        images={images.map((i) => {
+          if (i.type === "image") {
+            return { uri: i.uri! };
+          } else return {};
+        })}
         imageIndex={currentIndex}
         visible={visible}
         onRequestClose={() => setIsVisible(false)}
