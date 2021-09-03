@@ -6,12 +6,13 @@ import * as Haptics from "expo-haptics";
 import { PressableBase } from "./PressableBase";
 import { View } from "./Themed";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
-  left,
-  right,
-  children,
-}) => {
+const AddFlowNavBar: React.FC<{
+  left: () => void;
+  right: () => void;
+  last?: boolean;
+}> = ({ left, right, children, last = false }) => {
   const funcWithHaptics = (func: () => void) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     func();
@@ -116,11 +117,19 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
             }}
             onPress={() => funcWithHaptics(right)}
           >
-            <Entypo
-              name="chevron-right"
-              size={28}
-              color={colorScheme === "light" ? "#333" : "#fff"}
-            />
+            {last ? (
+              <MaterialIcons
+                name="done"
+                size={28}
+                color={colorScheme === "light" ? "#333" : "#fff"}
+              />
+            ) : (
+              <Entypo
+                name="chevron-right"
+                size={28}
+                color={colorScheme === "light" ? "#333" : "#fff"}
+              />
+            )}
           </PressableBase>
         </View>
       </View>

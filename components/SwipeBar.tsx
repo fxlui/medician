@@ -15,6 +15,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 interface SwipeBarProps {
   onPress: () => void;
+  inMedia?: boolean;
 }
 
 export default class AppleStyleSwipeableRow extends Component<SwipeBarProps> {
@@ -60,10 +61,7 @@ export default class AppleStyleSwipeableRow extends Component<SwipeBarProps> {
     return (
       <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
         <RectButton
-          style={[
-            styles.rightAction,
-            { backgroundColor: color, paddingRight: 15 },
-          ]}
+          style={[styles.rightAction, { backgroundColor: color }]}
           onPress={pressHandler}
         >
           <MaterialIcons name="delete" size={24} color="#dd2c00" />
@@ -100,7 +98,8 @@ export default class AppleStyleSwipeableRow extends Component<SwipeBarProps> {
     return (
       <Swipeable
         containerStyle={{
-          marginTop: 30,
+          marginTop: this.props.inMedia ? 0 : 30,
+          marginBottom: this.props.inMedia ? 20 : 0,
           overflow: "visible",
         }}
         ref={this.updateRef}
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
   rightAction: {
     backgroundColor: "transparent",
     borderRadius: 16,
-    alignItems: "flex-end",
+    alignItems: "center",
     flex: 1,
     justifyContent: "center",
   },
