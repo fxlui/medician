@@ -6,7 +6,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import HomeScreen from "../screens/HomeScreen";
-import RecordsScreen from "../screens/RecordsScreen";
+import SymptomOverview from "../screens/SymptomOverview";
 import { View } from "../components/Themed";
 import Icon from "../components/Icon";
 
@@ -60,7 +60,7 @@ export const BottomTabNavigator = () => {
       />
       <BottomTab.Screen
         name="Records"
-        component={RecordsScreen}
+        component={SymptomOverview}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="assignment" color={color} />
