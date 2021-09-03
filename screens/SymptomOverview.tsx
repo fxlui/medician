@@ -14,6 +14,9 @@ import * as Haptics from "expo-haptics";
 import { ScrollView } from "react-native";
 import HomeTile from "../components/HomeTile";
 import { BottomTabParamList, RootStackParamList } from "../types";
+import TopBar from "../components/TopBar";
+import HomeScreen from "./HomeScreen";
+import SymptomTile from "../components/SymptomTile";
 
 type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
@@ -87,11 +90,11 @@ interface baseData {
 }
 
 const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
-  const [selectedTop, setSelectedTop] = useState(0);
+  const [symptomSelected, setSymptomSelected] = useState(0);
 
   const topRef = React.createRef<Carousel<{ id: string; title: string }>>();
 
-  const renderTile = ({ item, index }: tileItemProps) => {
+  const renderHomeTile = ({ item, index }: tileItemProps) => {
     return (
       <HomeTile
         title={item.name}
@@ -112,7 +115,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
     );
   };
 
-  const renderTopTile = ({ item, index }: baseData) => {
+  const renderAreaTile = ({ item, index }: baseData) => {
     return (
       <TopTile
         title={item.title}
@@ -120,7 +123,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
           marginRight: 15,
         }}
         index={index}
-        selected={selectedTop === index}
+        selected={1}
         updater={() => {
           topRef.current?.snapToItem(index);
         }}
@@ -128,15 +131,17 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
     );
   };
 
-
   return (
     <SafeView disableBottom style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
+          <TopBar 
+            left={() => navigation.navigate('HomeScreen')}
+            title={"Symptom Overview"}
+          />
           <View style={styles.header}>
-            <Text style={styles.title}>Symptoms</Text>
             <Carousel
               data={DATA}
-              renderItem={renderTile}
+              renderItem={renderHomeTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
               containerCustomStyle={{
@@ -150,7 +155,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
               itemWidth={150}
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
-                setSelectedTop(index);
+                setSymptomSelected(index);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
               onSnapToItem={(index) => {}}
@@ -163,7 +168,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
             <Carousel
               style={{ overflow: "visible" }}
               data={AREA_DATA}
-              renderItem={renderTopTile}
+              renderItem={renderAreaTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
               activeSlideAlignment={"start"}
@@ -177,14 +182,11 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
               }}
             />
 
-          <Text style={styles.name}>Trends</Text>
-          {/* insert trends graph component here */}
-
           <Text style={styles.name}>Routines</Text>
           <Carousel
             style={{ overflow: "visible" }}
             data={DATA}
-            renderItem={renderTile}
+            renderItem={renderHomeTile}
             vertical={false}
             sliderWidth={Dimensions.get("window").width}
             activeSlideAlignment={"start"}
@@ -200,7 +202,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
           <Text style={styles.name}>Appointments</Text>
           <Carousel
             data={DATA}
-            renderItem={renderTile}
+            renderItem={renderHomeTile}
             vertical={false}
             sliderWidth={Dimensions.get("window").width}
             activeSlideAlignment={"start"}
@@ -240,7 +242,12 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "white",
-    height: 275,
+    height: 200,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    // shadowRadius: 9,
+    elevation: 5,
   },
   list: {
     margin: 0,
