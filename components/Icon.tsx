@@ -25,6 +25,7 @@ import TimeSVG from "../assets/icons/timeSVG";
 import CheckmarkSVG from "../assets/icons/checkmarkSVG";
 import IgnoreSVG from "../assets/icons/ignoreSVG";
 import WalkSVG from "../assets/icons/walkSVG";
+import EditSVG from "../assets/icons/editSVG";
 
 interface IconProps {
   name: string;
@@ -81,6 +82,8 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <CheckmarkSVG {...props} />;
     case "Ignore":
       return <IgnoreSVG {...props} />;
+    case "Edit":
+      return <EditSVG {...props} />
     default:
       return <NotFoundSVG {...props} />;
   }

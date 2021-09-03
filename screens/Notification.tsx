@@ -44,7 +44,17 @@ const NotificationScreen = ({
       { backgroundColor: colorTheme }
     ]}>
       <StatusBar barStyle="light-content" />
-      <View />
+      <View style={styles.top}>
+        <PressableBase
+          onPress={() => navigation.pop()}
+          extraProps={{ style: { alignSelf: 'center' } }}
+        >
+          <Icon
+            name="Edit"
+            props={{ fill: "#fff", width: 30, height: 30 }}
+          />
+        </PressableBase>
+      </View>
       <View style={styles.centerView}>
         <Icon
           name={iconType}
@@ -119,6 +129,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center"
+  },
+  top: {
+    alignSelf: "stretch",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingRight: 20,
+    marginTop: 20
   },
   centerView: {
     alignItems: "center"
