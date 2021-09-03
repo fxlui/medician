@@ -3,13 +3,9 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
-  TextInput,
-  KeyboardAvoidingView,
-  Animated,
   Platform,
   Image,
   Alert,
-  ImageURISource,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
