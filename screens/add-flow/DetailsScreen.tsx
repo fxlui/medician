@@ -181,6 +181,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             <AnimatedTextInput
               ref={inputRef}
               placeholder={"Type in your response here..."}
+              placeholderTextColor="lightgrey"
               style={{
                 padding: 20,
                 flex: 8,
@@ -234,7 +235,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
               }}
               onPress={() => nextQuestion()}
             >
-              <Ionicons name="ios-send" size={20} color="black" />
+              <Ionicons name="ios-send" size={20} color={textColor} />
             </PressableBase>
           </View>
         </KeyboardAvoidingView>
@@ -302,7 +303,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         }}
         right={() => {
           if (currentQuestion >= 3) {
-            navigation.navigate("AreaSelectScreen");
+            navigation.navigate("MediaScreen");
           } else {
             nextQuestion();
           }

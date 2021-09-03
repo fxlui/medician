@@ -23,6 +23,7 @@ export type AddFlowParamList = {
   SeverityScreen: undefined;
   TimeSelectScreen: undefined;
   DetailsScreen: undefined;
+  MediaScreen: undefined;
 };
 
 export enum HomeTileTypes {
