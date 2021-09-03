@@ -99,119 +99,125 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   return (
     <SafeView style={styles.container} disableTop>
-      <Text style={styles.greeting}>When did it occur?</Text>
-      <Text style={styles.greetingSub}>
-        You can select multiple dates and times.
-      </Text>
       <ScrollView
         contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
           paddingBottom: 125,
         }}
       >
-        <Calendar
-          maxDate={new Date()}
-          hideExtraDays={true}
+        <Text style={styles.greeting}>When did it occur?</Text>
+        <Text style={styles.greetingSub}>
+          You can select multiple dates and times.
+        </Text>
+        <View
           style={{
-            marginLeft: 25,
-            marginRight: 25,
-            marginTop: 10,
-            marginBottom: 10,
-            width: Dimensions.get("window").width - 50,
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          markedDates={selection.reduce(
-            (obj: { [date: string]: any }, v: DateSelection) => {
-              obj[v.dateobj?.dateString] = {
-                selected: true,
-                selectedColor: "#F6312A",
-              };
-              return obj;
-            },
-            {}
-          )}
-          onDayPress={(day) => {
-            const now = moment();
-            setSelection((prev) => [
-              ...prev,
-              {
-                dateobj: day,
-                date: moment(
-                  `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
-                ).toDate(),
+        >
+          <Calendar
+            maxDate={new Date()}
+            hideExtraDays={true}
+            style={{
+              marginLeft: 25,
+              marginRight: 25,
+              marginTop: 10,
+              marginBottom: 10,
+              width: Dimensions.get("window").width - 50,
+            }}
+            markedDates={selection.reduce(
+              (obj: { [date: string]: any }, v: DateSelection) => {
+                obj[v.dateobj?.dateString] = {
+                  selected: true,
+                  selectedColor: "#F6312A",
+                };
+                return obj;
               },
-            ]);
-          }}
-          theme={{
-            backgroundColor: "transparent",
-            calendarBackground: "transparent",
-            todayTextColor: "#45B649",
-            arrowColor: colorScheme === "light" ? "#333" : "#fff",
-            monthTextColor: colorScheme === "light" ? "#333" : "#fff",
-            dayTextColor: colorScheme === "light" ? "#333" : "#fff",
-            textDisabledColor: colorScheme === "light" ? "#cbcbcb" : "#6f6f6f",
-            textMonthFontWeight: "500",
-            textDayFontWeight: "500",
-            textDayFontSize: 16,
-            textMonthFontSize: 18,
-          }}
-        />
-        <View>
-          {selection.sort((a, b) => (a.date < b.date ? 1 : -1)) &&
-            selection.map((item) => (
-              <SwipeBar
-                key={item.date.getTime()}
-                onPress={() => {
-                  Alert.alert(
-                    "Delete occurance?",
-                    `Are you sure you want to remove the occurance at ${item.date.toLocaleString()}?`,
-                    [
-                      {
-                        text: "Cancel",
-                        style: "cancel",
-                      },
-                      {
-                        text: "OK",
-                        onPress: () => {
-                          setSelection((prev) =>
-                            prev.filter((d) => d.date !== item.date)
-                          );
+              {}
+            )}
+            onDayPress={(day) => {
+              const now = moment();
+              setSelection((prev) => [
+                ...prev,
+                {
+                  dateobj: day,
+                  date: moment(
+                    `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
+                  ).toDate(),
+                },
+              ]);
+            }}
+            theme={{
+              backgroundColor: "transparent",
+              calendarBackground: "transparent",
+              todayTextColor: "#45B649",
+              arrowColor: colorScheme === "light" ? "#333" : "#fff",
+              monthTextColor: colorScheme === "light" ? "#333" : "#fff",
+              dayTextColor: colorScheme === "light" ? "#333" : "#fff",
+              textDisabledColor:
+                colorScheme === "light" ? "#cbcbcb" : "#6f6f6f",
+              textMonthFontWeight: "500",
+              textDayFontWeight: "500",
+              textDayFontSize: 16,
+              textMonthFontSize: 18,
+            }}
+          />
+          <View>
+            {selection.sort((a, b) => (a.date < b.date ? 1 : -1)) &&
+              selection.map((item) => (
+                <SwipeBar
+                  key={item.date.getTime()}
+                  onPress={() => {
+                    Alert.alert(
+                      "Delete occurance?",
+                      `Are you sure you want to remove the occurance at ${item.date.toLocaleString()}?`,
+                      [
+                        {
+                          text: "Cancel",
+                          style: "cancel",
                         },
-                      },
-                    ],
-                    { cancelable: false }
-                  );
-                }}
-              >
-                <TileBase
-                  gradient={
-                    colorScheme === "light"
-                      ? ["#fff", "#fff"]
-                      : ["#252525", "#252525"]
-                  }
-                  style={{
-                    width: Dimensions.get("window").width - 80,
-                    height: 100,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderWidth: editingDate === item.date ? 2 : 0,
-                    borderColor: "#45B649",
-                  }}
-                  onClick={() => {
-                    setEditingDate(item.date);
-                    showDatePicker();
+                        {
+                          text: "OK",
+                          onPress: () => {
+                            setSelection((prev) =>
+                              prev.filter((d) => d.date !== item.date)
+                            );
+                          },
+                        },
+                      ],
+                      { cancelable: false }
+                    );
                   }}
                 >
-                  <Text style={{ fontSize: 16 }}>
-                    {moment(item.date).format("MMM DD")}
-                  </Text>
-                  <Text style={{ fontSize: 34 }}>
-                    {moment(item.date).format("HH:mm")}
-                  </Text>
-                </TileBase>
-              </SwipeBar>
-            ))}
+                  <TileBase
+                    gradient={
+                      colorScheme === "light"
+                        ? ["#fff", "#fff"]
+                        : ["#252525", "#252525"]
+                    }
+                    style={{
+                      width: Dimensions.get("window").width - 80,
+                      height: 100,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      borderWidth: editingDate === item.date ? 2 : 0,
+                      borderColor: "#45B649",
+                    }}
+                    onClick={() => {
+                      setEditingDate(item.date);
+                      showDatePicker();
+                    }}
+                  >
+                    <Text style={{ fontSize: 16 }}>
+                      {moment(item.date).format("MMM DD")}
+                    </Text>
+                    <Text style={{ fontSize: 34 }}>
+                      {moment(item.date).format("HH:mm")}
+                    </Text>
+                  </TileBase>
+                </SwipeBar>
+              ))}
+          </View>
         </View>
       </ScrollView>
       <DateTimePickerModal

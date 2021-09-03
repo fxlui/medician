@@ -10,6 +10,7 @@ import { Entypo } from "@expo/vector-icons";
 const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
   left,
   right,
+  children,
 }) => {
   const funcWithHaptics = (func: () => void) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -38,47 +39,55 @@ const AddFlowNavBar: React.FC<{ left: () => void; right: () => void }> = ({
           bottom: 0,
           paddingBottom: 10,
           alignSelf: "center",
-          flexDirection: "row",
-          justifyContent: "center",
           alignItems: "center",
           width: "100%",
           backgroundColor: "rgba(255,255,255,0)",
         }}
       >
-        <PressableBase
-          extraProps={{
-            style: {
-              padding: 30,
-              paddingLeft: 80,
-              paddingRight: 55,
-            },
-            ariaLabel: "Navigate to previous screen",
+        <View>{children}</View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(255,255,255,0)",
           }}
-          onPress={() => funcWithHaptics(left)}
         >
-          <Entypo
-            name="chevron-left"
-            size={28}
-            color={colorScheme === "light" ? "#333" : "#fff"}
-          />
-        </PressableBase>
-        <PressableBase
-          extraProps={{
-            style: {
-              padding: 30,
-              paddingLeft: 55,
-              paddingRight: 80,
-            },
-            ariaLabel: "Navigate to next screen",
-          }}
-          onPress={() => funcWithHaptics(right)}
-        >
-          <Entypo
-            name="chevron-right"
-            size={28}
-            color={colorScheme === "light" ? "#333" : "#fff"}
-          />
-        </PressableBase>
+          <PressableBase
+            extraProps={{
+              style: {
+                padding: 30,
+                paddingLeft: 80,
+                paddingRight: 55,
+              },
+              ariaLabel: "Navigate to previous screen",
+            }}
+            onPress={() => funcWithHaptics(left)}
+          >
+            <Entypo
+              name="chevron-left"
+              size={28}
+              color={colorScheme === "light" ? "#333" : "#fff"}
+            />
+          </PressableBase>
+          <PressableBase
+            extraProps={{
+              style: {
+                padding: 30,
+                paddingLeft: 55,
+                paddingRight: 80,
+              },
+              ariaLabel: "Navigate to next screen",
+            }}
+            onPress={() => funcWithHaptics(right)}
+          >
+            <Entypo
+              name="chevron-right"
+              size={28}
+              color={colorScheme === "light" ? "#333" : "#fff"}
+            />
+          </PressableBase>
+        </View>
       </View>
     </>
   );

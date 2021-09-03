@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 120,
     paddingLeft: 30,
+    paddingBottom: 15,
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-end",
