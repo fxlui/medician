@@ -8,13 +8,11 @@ import {
   Dimensions,
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { CompositeScreenProps } from "@react-navigation/core";
 
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList, RootStackParamList } from "../../types";
+import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
-import ProgressBar from "./ProgressBar";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { Calendar, DateObject } from "react-native-calendars";
@@ -23,10 +21,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
 
-type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "TimeSelectScreen">,
-  StackScreenProps<RootStackParamList>
->;
+type ScreenProps = StackScreenProps<AddFlowParamList, "TimeSelectScreen">;
 
 interface DateSelection {
   dateobj: DateObject;

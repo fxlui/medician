@@ -311,7 +311,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
       />
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        right={() => navigation.navigate("Root")}
         last
       ></AddFlowNavBar>
     </SafeView>

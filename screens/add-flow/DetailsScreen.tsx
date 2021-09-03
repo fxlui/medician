@@ -9,9 +9,8 @@ import {
 } from "react-native";
 
 import { StackScreenProps } from "@react-navigation/stack";
-import { CompositeScreenProps } from "@react-navigation/core";
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList, RootStackParamList } from "../../types";
+import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
 
@@ -20,10 +19,7 @@ import { PressableBase } from "../../components/PressableBase";
 
 import { Ionicons } from "@expo/vector-icons";
 
-type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "DetailsScreen">,
-  StackScreenProps<RootStackParamList>
->;
+type ScreenProps = StackScreenProps<AddFlowParamList, "DetailsScreen">;
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
