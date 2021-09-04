@@ -22,14 +22,18 @@ interface TileDetails {
   selected: boolean;
   updater: () => void;
 }
+interface topTileDetails extends TileDetails {
+  emoji: string
+}
 
-export const TopTile: React.FC<TileDetails> = ({
+export const TopTile: React.FC<topTileDetails> = ({
   title,
   style,
   size,
   selected,
   index,
   updater,
+  emoji
 }) => {
   const colorScheme = useColorScheme();
   const animatedValue = React.useRef(new Animated.Value(0)).current;
@@ -61,7 +65,7 @@ export const TopTile: React.FC<TileDetails> = ({
     >
       <View style={styles.content}>
         <View style={styles.left}>
-          <Text style={{ fontSize: 40 }}>🤯</Text>
+          <Text style={{ fontSize: 40 }}>{emoji}</Text>
           <View style={styles.textContent}>
             <Animated.Text style={{ color: animatedTextColor, fontSize: 16 }}>
               {title}

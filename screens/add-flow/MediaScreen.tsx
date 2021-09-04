@@ -316,7 +316,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
       />
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("TemperatureSelectionScreen")}
+        right={() => navigation.navigate("Root")}
         last
       ></AddFlowNavBar>
     </SafeView>

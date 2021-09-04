@@ -8,6 +8,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
+import { useStores } from "../../models/root-store-provider";
 import Slider from "@react-native-community/slider";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
@@ -39,6 +40,7 @@ const getDiscomfortText = (severity: number) => {
 const Severity = ({ navigation }: ScreenProps) => {
   const [severity, setSeverity] = useState(1);
   const colorScheme = useColorScheme();
+  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -100,7 +102,10 @@ const Severity = ({ navigation }: ScreenProps) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("TimeSelectScreen")}
+        right={() => {
+          addFlowStore.setRecordSeverity(severity);
+          navigation.navigate("TimeSelectScreen");
+        }}
       />
     </SafeView>
   );

@@ -6,18 +6,23 @@ import * as Haptics from "expo-haptics";
 import { PressableBase } from "./PressableBase";
 import { View } from "./Themed";
 import { Entypo } from "@expo/vector-icons";
+import { useStores } from "../models/root-store-provider";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const AddFlowNavBar: React.FC<{
   left: () => void;
   right: () => void;
   last?: boolean;
-}> = ({ left, right, children, last = false }) => {
+  first?: boolean;
+  second?: boolean;
+}> = ({ left, right, children, last = false, first = false, second = false }) => {
   const funcWithHaptics = (func: () => void) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     func();
   };
   const colorScheme = useColorScheme();
+  const { addFlowStore } = useStores();
+
   return (
     <>
       <LinearGradient
@@ -61,9 +66,14 @@ const AddFlowNavBar: React.FC<{
                 paddingLeft: 80,
                 paddingRight: 55,
               },
-              ariaLabel: "Navigate to previous screen",
+              accessibilityLabel: "Navigate to previous screen",
             }}
-            onPress={() => funcWithHaptics(left)}
+            onPress={() => {
+              if (!first && !second) {
+                addFlowStore.goBack();
+              }
+              funcWithHaptics(left);
+            }}
           >
             <Entypo
               name="chevron-left"
@@ -78,9 +88,14 @@ const AddFlowNavBar: React.FC<{
                 paddingLeft: 55,
                 paddingRight: 80,
               },
-              ariaLabel: "Navigate to next screen",
+              accessibilityLabel: "Navigate to next screen",
             }}
-            onPress={() => funcWithHaptics(right)}
+            onPress={() => {
+              if (!first && !last) {
+                addFlowStore.goForward();
+              }
+              funcWithHaptics(right);
+            }}
           >
             {last ? (
               <MaterialIcons
@@ -100,6 +115,8 @@ const AddFlowNavBar: React.FC<{
       </View>
     </>
   );
-};
+}
+
+
 
 export default AddFlowNavBar;

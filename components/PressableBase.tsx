@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { Pressable, Animated } from "react-native";
+import { Pressable, Animated, PressableProps } from "react-native";
 import * as Haptics from "expo-haptics";
 
 export const PressableBase: FC<{
   onPress?: () => void;
-  extraProps?: any;
+  extraProps?: PressableProps;
 }> = ({ children, extraProps, onPress }) => {
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {

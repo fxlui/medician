@@ -1,27 +1,32 @@
 import React, { FC } from "react";
 import { View } from "./Themed";
 import useColorScheme from "../hooks/useColorScheme";
+import { observer } from "mobx-react-lite";
+import { useStores } from "../models/root-store-provider";
 import { StyleSheet } from "react-native";
 
-interface ProgressProps {
-  percentage: number;
-}
+export const ProgressBar = observer(
+  () => {
+    const colorScheme = useColorScheme();
+    const { addFlowStore } = useStores();
 
-export const ProgressBar: FC<ProgressProps> = ({ percentage }) => {
-  const colorScheme = useColorScheme();
-  return (
-    <View style={styles.container}>
-      <View
-        style={[
-          styles.progressBarBackDrop,
-          { backgroundColor: colorScheme === "light" ? "#EDEDED" : "#323232" },
-        ]}
-      >
-        <View style={[styles.progressBar, { width: percentage * 0.9 }]} />
+    return (
+      <View style={styles.container}>
+        <View
+          style={[
+            styles.progressBarBackDrop,
+            { backgroundColor: colorScheme === "light" ? "#EDEDED" : "#323232" },
+          ]}
+        >
+          <View style={[
+            styles.progressBar,
+            { width: (addFlowStore.currentProgress / addFlowStore.progressLength) * 95 }
+          ]} />
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

@@ -8,13 +8,12 @@ import {
   Dimensions,
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { CompositeScreenProps } from "@react-navigation/core";
 
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList, RootStackParamList } from "../../types";
+import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
-import ProgressBar from "./ProgressBar";
+import { useStores } from "../../models/root-store-provider";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { Calendar, DateObject } from "react-native-calendars";
@@ -23,10 +22,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
 
-type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "TimeSelectScreen">,
-  StackScreenProps<RootStackParamList>
->;
+type ScreenProps = StackScreenProps<AddFlowParamList, "TimeSelectScreen">;
 
 interface DateSelection {
   dateobj: DateObject;
@@ -46,6 +42,7 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
 export default function TimeSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
+  const { addFlowStore } = useStores();
 
   React.useEffect(() => {
     const now = new Date();
@@ -232,7 +229,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => navigation.navigate("DetailsScreen")
+            ? () => {
+              // addFlowStore.setRecordTime(selection.map(item => item.date));
+              navigation.navigate("DetailsScreen");
+            }
             : () =>
                 Alert.alert(
                   "No selection yet",

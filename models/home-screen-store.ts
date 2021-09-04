@@ -8,6 +8,7 @@ import {
 } from "mobx-state-tree";
 import { TreatmentModel } from "./treatment";
 import { AppointmentModel } from "./appointment";
+import { number } from "mobx-state-tree/dist/internal";
 
 /**
  * The Home Screen Store model.
@@ -16,7 +17,8 @@ import { AppointmentModel } from "./appointment";
 export const HomeScreenStoreModel = types
   .model("HomeScreenStore", {
     recentTreatments: types.optional(types.array(TreatmentModel), []),
-    recentAppointments: types.optional(types.array(AppointmentModel), [])
+    recentAppointments: types.optional(types.array(AppointmentModel), []),
+    collectionIds: types.optional(types.array(types.integer), [])
   })
   // Calls to get derived data
   .views((self) => ({

@@ -8,7 +8,7 @@ import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import HomeScreen from "../screens/HomeScreen";
 import RecordsScreen from "../screens/RecordsScreen";
 import { View } from "../components/Themed";
-import AddSVG from "../assets/icons/AddSVG";
+import Icon from "../components/Icon";
 
 import { BottomTabParamList } from "../types";
 
@@ -41,7 +41,15 @@ export const BottomTabNavigator = () => {
         name="DirectToAddFlow"
         component={AddFlowPlaceholder}
         options={{
-          tabBarIcon: () => <AddSVG fill="#F8583B" width={30} height={30} />,
+          tabBarIcon: () => {
+            return (
+              <Icon name="Add" props={{
+                  fill: "#F8583B",
+                  width: 30,
+                  height: 30
+                }}
+              />
+            )},
         }}
         listeners={({ navigation }) => ({
           tabPress: (event) => {

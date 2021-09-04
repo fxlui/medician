@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import SymptomTile from "../components/SymptomTile";
-import Symptoms from "../assets/Symptoms.json";
+import SymptomsOne from "../assets/SymptomsOne.json";
+import SymptomsTwo from "../assets/SymptomsTwo.json";
 import AddFlowNavBar from "../components/AddFlowNavBar";
+import { useStores } from "../models/root-store-provider";
 import { AddFlowParamList } from "../types";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 
-export default function ActionScreen({ navigation }: ScreenProps) {
+export default function SymptomsScreen({ navigation, route }: ScreenProps) {
+
+  const { addFlowStore } = useStores();
+  const [selectedId, setSelectedId] = useState(1);
+  const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
 
   return (
     <SafeView disableBottom>
@@ -19,18 +25,18 @@ export default function ActionScreen({ navigation }: ScreenProps) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ overflow: "visible", paddingBottom: 100 }}>
             <Text style={styles.greeting}>
-              I feel...
+              I {route.params.type}...
             </Text>
             <View style={styles.list}>
-              {Symptoms.map((symptom) => {
+              {symptomArray.map((symptom) => {
                 return(
                   <SymptomTile
-                    selected={false}
+                    selected={symptom.id === selectedId}
                     key={symptom.id}
                     iconName={symptom.name}
                     title={symptom.description}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
-                    onPress={() => navigation.pop()}
+                    onPress={() => {setSelectedId(symptom.id)}}
                   />
                 );
               })}
@@ -39,8 +45,16 @@ export default function ActionScreen({ navigation }: ScreenProps) {
         </ScrollView>
       </View>
       <AddFlowNavBar
-        left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        first
+        left={() => {
+          navigation.pop();
+        }}
+        right={() => {
+          addFlowStore.setRecordType(selectedId);
+          addFlowStore.resetProgress();
+          addFlowStore.setProgressBarLength(8);
+          navigation.navigate("AreaSelectScreen");
+        }}
       />
     </SafeView>
   );
@@ -60,8 +74,7 @@ const styles = StyleSheet.create({
   list: {
     overflow: "visible",
     flexDirection: "row",
-    justifyContent: "center",
     flexWrap: "wrap",
-    paddingLeft: 30
+    paddingLeft: 40
   },
 });

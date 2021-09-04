@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { SvgProps, Color } from "react-native-svg";
+import { SvgProps } from "react-native-svg";
 
 import AppointmentsSVG from "../assets/icons/appointmentsSVG";
 import BrainSVG from "../assets/icons/brainSVG";
@@ -19,7 +19,13 @@ import SleepSVG from "../assets/icons/sleepSVG";
 import SpeakSVG from "../assets/icons/speakSVG";
 import ToiletSVG from "../assets/icons/toiletSVG";
 import NotFoundSVG from "../assets/icons/notFoundSVG";
+import AddSVG from "../assets/icons/AddSVG";
+import SmellSVG from "../assets/icons/SmellSVG";
+import TimeSVG from "../assets/icons/timeSVG";
+import CheckmarkSVG from "../assets/icons/checkmarkSVG";
+import IgnoreSVG from "../assets/icons/ignoreSVG";
 import WalkSVG from "../assets/icons/walkSVG";
+import EditSVG from "../assets/icons/editSVG";
 
 interface IconProps {
   name: string;
@@ -64,7 +70,23 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <ToiletSVG {...props} />;
     case "Walk":
       return <WalkSVG {...props} />;
+    case "Add":
+      return <AddSVG {...props} />;
+    case "Cancel":
+      return <CancelSVG {...props} />;
+    case "Smell":
+      return <SmellSVG {...props} />;
+    case "Time":
+      return <TimeSVG {...props} />
+    case "Checkmark":
+      return <CheckmarkSVG {...props} />;
+    case "Ignore":
+      return <IgnoreSVG {...props} />;
+    case "Edit":
+      return <EditSVG {...props} />
     default:
       return <NotFoundSVG {...props} />;
   }
 }
+
+export default Icon;

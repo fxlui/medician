@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "postinstall": "patch-package"
   },
   "jest": {
     "preset": "jest-expo"
@@ -30,6 +31,7 @@
     "expo-linear-gradient": "~9.2.0",
     "expo-linking": "~2.3.1",
     "expo-splash-screen": "~0.11.2",
+    "expo-sqlite": "~9.2.1",
     "expo-status-bar": "~1.0.4",
     "expo-video-thumbnails": "~5.2.1",
     "expo-web-browser": "~9.2.0",

@@ -1,23 +1,23 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
+import { CompositeScreenProps } from "@react-navigation/core";
 
-import { Text, View } from "../components/Themed";
-import SafeView from "../components/SafeView";
-import { TileSize } from "../components/TileBase";
-import EntryTile from "../components/EntryTile";
+import Icon from "../components/Icon";
 import AddTile from "../components/AddTile";
+import SafeView from "../components/SafeView";
+import { RootStackParamList, AddFlowParamList } from "../types";
+import EntryTile from "../components/EntryTile";
+import { Text, View } from "../components/Themed";
+import { TileSize } from "../components/TileBase";
 import { PressableBase } from "../components/PressableBase";
-import CancelSVG from "../assets/icons/CancelSVG";
-import { RootStackParamList } from "../types";
 
-type ScreenProps = StackScreenProps<RootStackParamList, "ActionScreen">
+type ScreenProps = CompositeScreenProps<
+  StackScreenProps<RootStackParamList, "ActionScreen">,
+  StackScreenProps<AddFlowParamList>
+>;
 
 export default function ActionScreen({ navigation }: ScreenProps) {
-
-  const handleSymptom = () => {
-    navigation.navigate("AddFlow");
-  }
 
   return (
     <SafeView>
@@ -29,10 +29,15 @@ export default function ActionScreen({ navigation }: ScreenProps) {
           <EntryTile 
             title={"I feel..."}
             emoji="😔"
-            style={{marginBottom: 30}}
+            style={{ marginBottom: 30 }}
             size={TileSize.XL}
             list={"symptoms"}
-            onClick={handleSymptom}
+            onClick={() => 
+              navigation.navigate("AddFlow", {
+                screen: "SymptomsScreen",
+                params: { type: "feel" }
+              })
+            }
           />
           <EntryTile 
             title={"I can't..."}
@@ -40,8 +45,12 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             style={{marginBottom: 30}}
             size={TileSize.XL}
             list={"inabilities"}
-
-            onClick={handleSymptom}
+            onClick={() => 
+              navigation.navigate("AddFlow", {
+                screen: "SymptomsScreen",
+                params: { type: "cant" }
+              })
+            }
           />
           <View style={styles.addTiles}>
             <AddTile
@@ -50,14 +59,21 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             />
             <AddTile
               title={"Add"}
-              subtitle={"Treatment"}
+              subtitle={"Routine"}
             />
           </View>
           <PressableBase
-            extraProps={{ style: styles.cancelButton }}
+            extraProps={{
+              style: styles.cancelButton,
+              accessibilityLabel: "Cancel Add Action"
+            }}
             onPress={() => navigation.pop()}
           >
-            <CancelSVG fill="#F8583B" width={30} height={30} />
+            <Icon name="Cancel" props={{
+              fill: "#F8583B",
+              width: 30,
+              height: 30
+            }}/>
           </PressableBase>
         </View>
       </View>
@@ -85,12 +101,12 @@ const styles = StyleSheet.create({
   addTiles: {
     alignSelf: "stretch",
     flexDirection: 'row',
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
     justifyContent: "space-between"
   },
   cancelButton: {
     position: "absolute",
-    bottom: -120
+    marginTop: "160%",
   }
 });
