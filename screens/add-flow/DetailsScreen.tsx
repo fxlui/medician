@@ -196,6 +196,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
                 fontSize: 16,
                 marginTop: 20,
                 maxHeight: 125,
+                color: textColor,
               }}
               multiline={true}
               value={currentText}

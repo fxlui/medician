@@ -38,7 +38,7 @@ const ToiletPainScreen = ({ navigation }: ScreenProps) => {
         left={() => navigation.pop()}
         right={() => {
           if (pain === null) {
-            Alert.alert("No Selection", "You need to select an option first!");
+            Alert.alert("No Selection", "You need to select an option first.");
           } else {
             navigation.navigate("ToiletColorScreen");
           }

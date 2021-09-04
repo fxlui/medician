@@ -43,7 +43,7 @@ const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
         left={() => navigation.pop()}
         right={() => {
           if (measured === null) {
-            Alert.alert("No Selection", "You need to select an option first!");
+            Alert.alert("No Selection", "You need to select an option first.");
           } else if (measured === true) {
             navigation.navigate("TemperatureScreen");
           } else {
