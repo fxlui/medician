@@ -17,7 +17,11 @@ interface TileDetails {
 }
 
 const SymptomTile: React.FC<TileDetails> = ({
-  title, onPress, extraStyles, iconName, selected
+  title,
+  onPress,
+  extraStyles,
+  iconName,
+  selected,
 }) => {
   const colorScheme = useColorScheme();
 
@@ -27,11 +31,8 @@ const SymptomTile: React.FC<TileDetails> = ({
     ? "#fff"
     : "#252525";
 
-  const iconColor = colorScheme === "dark"
-  ? "#fff"
-  : selected
-  ? "fff"
-  : "#000"
+  const iconColor =
+    colorScheme === "dark" ? "#fff" : selected ? "#fff" : "#000";
 
   return (
     <TileBase
@@ -46,7 +47,7 @@ const SymptomTile: React.FC<TileDetails> = ({
           props={{
             width: 42,
             height: 42,
-            fill: "#000"
+            fill: "#000",
           }}
         />
         <Text style={{ fontSize: 16, fontWeight: "500" }}>{title}</Text>
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
-    backgroundColor: "transparent"
-  }
+    backgroundColor: "transparent",
+  },
 });
 
 export default SymptomTile;

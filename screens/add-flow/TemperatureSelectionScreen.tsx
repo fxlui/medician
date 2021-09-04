@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import useColorScheme from "../../hooks/useColorScheme";
 import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
@@ -15,8 +15,7 @@ type ScreenProps = StackScreenProps<
 >;
 
 const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
-  const colorScheme = useColorScheme();
-  const [measured, setMeasured] = useState(false);
+  const [measured, setMeasured] = useState<boolean | null>(null);
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -35,15 +34,22 @@ const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
           />
           <SelectionTile
             title="No"
-            selected={!measured}
+            selected={measured === null ? null : !measured}
             onPress={() => setMeasured(false)}
           />
         </View>
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        // some logic here
-        right={() => navigation.navigate("TimeSelectScreen")}
+        right={() => {
+          if (measured === null) {
+            Alert.alert("No Selection", "You need to select an option first!");
+          } else if (measured === true) {
+            navigation.navigate("TemperatureScreen");
+          } else {
+            navigation.navigate("SymptomsScreen"); // end
+          }
+        }}
       />
     </SafeView>
   );

@@ -9,7 +9,7 @@ interface TileDetails {
   title: string;
   index?: number;
   onPress: () => void;
-  selected: boolean;
+  selected: boolean | null;
   extraStyles?: StyleProp<ViewStyle>;
 }
 
@@ -27,7 +27,7 @@ const SelectionTile: React.FC<TileDetails> = ({
     ? "#fff"
     : "#252525";
 
-  const iconColor = colorScheme === "dark" ? "#fff" : selected ? "fff" : "#000";
+  const iconColor = colorScheme === "dark" ? "#fff" : "#333";
 
   return (
     <TileBase
@@ -37,7 +37,15 @@ const SelectionTile: React.FC<TileDetails> = ({
       style={extraStyles}
     >
       <View style={styles.content}>
-        <Text style={{ fontSize: 20, fontWeight: "500" }}>{title}</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "500",
+            color: selected ? "#fff" : iconColor,
+          }}
+        >
+          {title}
+        </Text>
       </View>
     </TileBase>
   );
