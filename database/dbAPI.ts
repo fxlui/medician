@@ -5,7 +5,8 @@ import {
   createAppointmentTable,
   createTreatmentTable,
   createAlertTable,
-  createAttachmentTable
+  createAttachmentTable,
+  createCollectionTable
 } from "./queries";
 
 function openDatabase() {
@@ -21,6 +22,7 @@ export async function initDatabase() {
       tx => {
         tx.executeSql(createUserTable);
         tx.executeSql(createRecordTable);
+        tx.executeSql(createCollectionTable);
         tx.executeSql(createAppointmentTable);
         tx.executeSql(createTreatmentTable);
         tx.executeSql(createAlertTable);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -16,12 +16,8 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 export default function SymptomsScreen({ navigation, route }: ScreenProps) {
 
   const { addFlowStore } = useStores();
-  const [selectedId, setSelectedId] = useState("1");
+  const [selectedId, setSelectedId] = useState(1);
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
-
-  useEffect(() => {
-    addFlowStore.resetProgress();
-  }, []);
 
   return (
     <SafeView disableBottom>
@@ -54,6 +50,8 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
           navigation.pop();
         }}
         right={() => {
+          addFlowStore.setRecordType(selectedId);
+          addFlowStore.resetProgress();
           addFlowStore.setProgressBarLength(8);
           navigation.navigate("AreaSelectScreen");
         }}

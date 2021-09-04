@@ -1,0 +1,34 @@
+[
+  {
+    "id": 0,
+    "emoji": "🤯",
+    "text": "Head",
+    "parts": [
+        "Eyes", "Ears", "Nose", "Mouth", "Teeth", "Face", "Scalp", "Brain"
+    ]
+  },
+  {
+    "id": 1,
+    "emoji": "👕",
+    "text": "Body",
+    "parts": [
+        "Neck", "Throat", "Chest", "Abdomen", "Pelvis", "Genitals", "Buttocks", "Back" 
+    ]
+  },
+  {
+    "id": 2,
+    "emoji": "💪",
+    "text": "Arms",
+    "parts": [
+        "Shoulder", "Armpit", "Upper Arm", "Elbow", "Forearm", "Wrist", "Hand", "Fingers"
+    ]
+  },
+  {
+    "id": 3,
+    "emoji": "🦵",
+    "text": "Legs",
+    "parts": [
+        "Thigh", "Hamstring", "Knee", "Back of Knee", "Shin", "Calf", "Ankle", "Foot", "Toes"
+    ]
+  }
+]

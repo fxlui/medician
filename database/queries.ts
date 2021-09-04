@@ -8,6 +8,17 @@ export const createUserTable = `
   );
 `;
 
+export const createCollectionTable = `
+CREATE TABLE if not exists "collection" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"userId"	INTEGER NOT NULL,
+	"date"	INTEGER NOT NULL,
+	"type"	INTEGER NOT NULL,
+	FOREIGN KEY("userId") REFERENCES "user"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+`;
+
 export const createRecordTable = `
   CREATE TABLE if not exists "entry" (
     "id"	INTEGER NOT NULL UNIQUE,
@@ -79,4 +90,4 @@ export const createAttachmentTable = `
     FOREIGN KEY("entryId") REFERENCES "entry"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)
   )
-`
+`;

@@ -23,11 +23,15 @@ export const AddFlowStoreModel = types
     setProgressBarLength: (length: number) => {
       self.progressLength = length;
     },
+    setRecordType: (typeId: number) => {
+      self.currentNewRecord.type = typeId;
+    },
     setRecordTime: (times: SnapshotOrInstance<typeof self.currentNewRecord.time>) => {
       self.currentNewRecord.time = cast(times);
     },
-    setRecordArea: (area: string) => {
+    setRecordAreas: (area: string, subArea: string) => {
       self.currentNewRecord.area = area;
+      self.currentNewRecord.subArea = subArea;
     },
     setRecordSeverity: (severity: number) => {
       self.currentNewRecord.severity = severity;

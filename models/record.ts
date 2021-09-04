@@ -6,9 +6,11 @@ import { types, Instance, SnapshotOut } from "mobx-state-tree";
  */
 export const RecordModel = types
   .model("Record", {
+    type: types.optional(types.integer, 1),
     time: types.optional(types.array(types.Date), []),
     severity: types.optional(types.integer, 0),
     area: types.optional(types.string, ""),
+    subArea: types.optional(types.string, ""),
     better: types.optional(types.string, ""),
     worse: types.optional(types.string, ""),
     related: types.optional(types.string, ""),

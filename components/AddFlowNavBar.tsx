@@ -13,8 +13,9 @@ const AddFlowNavBar: React.FC<{
   left: () => void;
   right: () => void;
   last?: boolean;
-  first?: boolean
-}> = ({ left, right, children, last = false, first = false }) => {
+  first?: boolean;
+  second?: boolean;
+}> = ({ left, right, children, last = false, first = false, second = false }) => {
   const funcWithHaptics = (func: () => void) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     func();
@@ -68,7 +69,7 @@ const AddFlowNavBar: React.FC<{
               accessibilityLabel: "Navigate to previous screen",
             }}
             onPress={() => {
-              if (!first) {
+              if (!first && !second) {
                 addFlowStore.goBack();
               }
               funcWithHaptics(left);

@@ -26,7 +26,11 @@ const AddFlowNavigator = () => {
         component={SymptomsScreen}
         options={{ headerShown: false }}
       />
-      <AddFlowStack.Screen name="AreaSelectScreen" component={AreaSelect} />
+      <AddFlowStack.Screen
+        name="AreaSelectScreen"
+        component={AreaSelect}
+        options={{ headerMode: "screen" }}
+      />
       <AddFlowStack.Screen name="SeverityScreen" component={SeverityScreen} />
       <AddFlowStack.Screen
         name="TimeSelectScreen"
