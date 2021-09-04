@@ -10,6 +10,8 @@ export const RecordModel = types
     severity: types.optional(types.integer, 0),
     area: types.optional(types.string, ""),
     better: types.optional(types.string, ""),
+    worse: types.optional(types.string, ""),
+    related: types.optional(types.string, ""),
     attempt: types.optional(types.string, ""),
     temperature: types.optional(types.number, 0),
     toiletPain: types.optional(types.integer, 0),

@@ -1,4 +1,10 @@
-import { types, cast, Instance, SnapshotOut } from "mobx-state-tree";
+import {
+  types,
+  cast,
+  Instance,
+  SnapshotOut,
+  SnapshotOrInstance
+} from "mobx-state-tree";
 import { RecordModel } from "./record";
 
 /**
@@ -9,12 +15,16 @@ import { RecordModel } from "./record";
 export const AddFlowStoreModel = types
   .model("AddFlowStore", {
     currentNewRecord: types.optional(RecordModel, {}),
-    progress: types.optional(types.integer, 0)
+    progressLength: types.optional(types.integer, 1),
+    currentProgress: types.optional(types.integer, 1),
   })
   // Synchronous actions defined here
   .actions((self) => ({
     setProgressBarLength: (length: number) => {
-      self.progress = length;
+      self.progressLength = length;
+    },
+    setRecordTime: (times: SnapshotOrInstance<typeof self.currentNewRecord.time>) => {
+      self.currentNewRecord.time = cast(times);
     },
     setRecordArea: (area: string) => {
       self.currentNewRecord.area = area;
@@ -22,6 +32,21 @@ export const AddFlowStoreModel = types
     setRecordSeverity: (severity: number) => {
       self.currentNewRecord.severity = severity;
     },
+    setRecordDetails: (better: string, worse: string, related: string, attempt: string) => {
+      self.currentNewRecord.better = better;
+      self.currentNewRecord.worse = worse;
+      self.currentNewRecord.related = related;
+      self.currentNewRecord.attempt = attempt;
+    },
+    goBack: () => {
+      self.currentProgress -= 1;
+    },
+    goForward: () => {
+      self.currentProgress += 1;
+    },
+    resetProgress: () => {
+      self.currentProgress = 1;
+    }
   }))
   // Asynchronous actions defined here
   .actions((self) => ({

@@ -17,7 +17,8 @@ const AddFlowNavigator = () => {
     <AddFlowStack.Navigator
       initialRouteName="SymptomsScreen"
       screenOptions={{
-        header: () => <ProgressBar percentage={50} />,
+        header: () => <ProgressBar />,
+        headerMode: "float"
       }}
     >
       <AddFlowStack.Screen

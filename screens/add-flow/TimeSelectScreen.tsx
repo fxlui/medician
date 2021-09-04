@@ -13,6 +13,7 @@ import SafeView from "../../components/SafeView";
 import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
+import { useStores } from "../../models/root-store-provider";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { Calendar, DateObject } from "react-native-calendars";
@@ -41,6 +42,7 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
 export default function TimeSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
+  const { addFlowStore } = useStores();
 
   React.useEffect(() => {
     const now = new Date();
@@ -227,7 +229,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => navigation.navigate("DetailsScreen")
+            ? () => {
+              // addFlowStore.setRecordTime(selection.map(item => item.date));
+              navigation.navigate("DetailsScreen");
+            }
             : () =>
                 Alert.alert(
                   "No selection yet",

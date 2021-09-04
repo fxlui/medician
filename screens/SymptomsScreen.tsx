@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -8,14 +8,20 @@ import SymptomTile from "../components/SymptomTile";
 import SymptomsOne from "../assets/SymptomsOne.json";
 import SymptomsTwo from "../assets/SymptomsTwo.json";
 import AddFlowNavBar from "../components/AddFlowNavBar";
+import { useStores } from "../models/root-store-provider";
 import { AddFlowParamList } from "../types";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 
-export default function ActionScreen({ navigation, route }: ScreenProps) {
+export default function SymptomsScreen({ navigation, route }: ScreenProps) {
 
+  const { addFlowStore } = useStores();
   const [selectedId, setSelectedId] = useState("1");
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
+
+  useEffect(() => {
+    addFlowStore.resetProgress();
+  }, []);
 
   return (
     <SafeView disableBottom>
@@ -43,8 +49,14 @@ export default function ActionScreen({ navigation, route }: ScreenProps) {
         </ScrollView>
       </View>
       <AddFlowNavBar
-        left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        first
+        left={() => {
+          navigation.pop();
+        }}
+        right={() => {
+          addFlowStore.setProgressBarLength(8);
+          navigation.navigate("AreaSelectScreen");
+        }}
       />
     </SafeView>
   );
