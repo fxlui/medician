@@ -26,6 +26,9 @@ export type AddFlowParamList = {
   MediaScreen: undefined;
   TemperatureSelectionScreen: undefined;
   TemperatureScreen: undefined;
+  ToiletScreen: undefined;
+  ToiletPainScreen: undefined;
+  ToiletColorScreen: undefined;
 };
 
 export enum HomeTileTypes {
