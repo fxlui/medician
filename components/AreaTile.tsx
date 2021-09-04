@@ -1,19 +1,12 @@
 import * as React from "react";
-import {
-  Animated,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
 
 import useColorScheme from "../hooks/useColorScheme";
 
 import TileBase, { TileSize } from "./TileBase";
-import Carousel from "react-native-snap-carousel";
+
 interface TileDetails {
   title: string;
   style?: StyleProp<ViewStyle>;
@@ -23,7 +16,8 @@ interface TileDetails {
   updater: () => void;
 }
 interface topTileDetails extends TileDetails {
-  emoji: string
+  emoji: string;
+  colorTile?: boolean;
 }
 
 export const TopTile: React.FC<topTileDetails> = ({
@@ -33,7 +27,8 @@ export const TopTile: React.FC<topTileDetails> = ({
   selected,
   index,
   updater,
-  emoji
+  emoji,
+  colorTile = false,
 }) => {
   const colorScheme = useColorScheme();
   const animatedValue = React.useRef(new Animated.Value(0)).current;
@@ -67,22 +62,43 @@ export const TopTile: React.FC<topTileDetails> = ({
         <View style={styles.left}>
           <Text style={{ fontSize: 40 }}>{emoji}</Text>
           <View style={styles.textContent}>
-            <Animated.Text style={{ color: animatedTextColor, fontSize: 16 }}>
+            <Animated.Text
+              style={{
+                color: colorTile ? textColor : animatedTextColor,
+                fontSize: 16,
+              }}
+            >
               {title}
             </Animated.Text>
           </View>
         </View>
       </View>
-      <Animated.View
-        style={{
-          backgroundColor: animatedTileColor,
-          flex: 1,
-          position: "absolute",
-          width: 150,
-          height: 150,
-          zIndex: -50,
-        }}
-      />
+      {colorTile ? (
+        <Animated.View
+          style={{
+            backgroundColor: "transparent",
+            flex: 1,
+            position: "absolute",
+            width: 150,
+            height: 150,
+            zIndex: -50,
+            borderWidth: 2,
+            borderRadius: 16,
+            borderColor: animatedTileColor,
+          }}
+        />
+      ) : (
+        <Animated.View
+          style={{
+            backgroundColor: animatedTileColor,
+            flex: 1,
+            position: "absolute",
+            width: 150,
+            height: 150,
+            zIndex: -50,
+          }}
+        />
+      )}
     </TileBase>
   );
 };

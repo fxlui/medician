@@ -4,26 +4,24 @@ import useColorScheme from "../../hooks/useColorScheme";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
-
 import TileBase from "../../components/TileBase";
-import { PressableBase } from "../../components/PressableBase";
-import { Entypo } from "@expo/vector-icons";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
+import { Entypo } from "@expo/vector-icons";
+
 type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "TemperatureScreen">,
+  StackScreenProps<AddFlowParamList, "SleepHoursScreen">,
   StackScreenProps<RootStackParamList>
 >;
 
-const TemperatureScreen = ({ navigation }: ScreenProps) => {
+const SleepHoursScreen = ({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
-  const [temperature, setTemperature] = useState(36.5);
-  const [unit, setUnit] = useState("C");
+  const [hours, setHours] = useState(8.5);
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
@@ -32,31 +30,20 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
             flex: 2,
           }}
         >
-          <Text style={styles.greeting}>What was your temperature?</Text>
+          <Text style={styles.greeting}>How long did you sleep?</Text>
           <Text style={styles.greetingSub}>
-            Tap on the number to change the unit.
+            Put in an estimate if you're not sure.
           </Text>
         </View>
         <View style={styles.child}>
-          <PressableBase
-            onPress={() => {
-              if (unit === "C") {
-                setTemperature((prev) => (prev * 9) / 5 + 32);
-              } else {
-                setTemperature((prev) => ((prev - 32) * 5) / 9);
-              }
-              setUnit(unit === "C" ? "F" : "C");
+          <Text
+            style={{
+              fontSize: 60,
+              padding: 20,
             }}
           >
-            <Text
-              style={{
-                fontSize: 60,
-                padding: 20,
-              }}
-            >
-              {Math.round(temperature * 10) / 10}°{unit}
-            </Text>
-          </PressableBase>
+            {Math.round(hours * 10) / 10} hr{hours === 1 ? "" : "s"}
+          </Text>
         </View>
       </View>
       <View
@@ -73,7 +60,7 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
         }}
       >
         <TileBase
-          onClick={() => setTemperature((prev) => prev - 0.1)}
+          onClick={() => setHours((prev) => (prev >= 0.5 ? prev - 0.5 : prev))}
           style={{ marginRight: 40, height: 100, width: 100 }}
           gradient={[tileColor, tileColor]}
         >
@@ -89,7 +76,7 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
           </View>
         </TileBase>
         <TileBase
-          onClick={() => setTemperature((prev) => prev + 0.1)}
+          onClick={() => setHours((prev) => prev + 0.5)}
           style={{ height: 100, width: 100 }}
           gradient={[tileColor, tileColor]}
         >
@@ -108,7 +95,7 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         // some logic here
-        right={() => navigation.navigate("ToiletScreen")}
+        right={() => navigation.navigate("Root")}
       />
     </SafeView>
   );
@@ -138,7 +125,8 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     paddingLeft: 30,
     opacity: 0.5,
+    maxWidth: "80%",
   },
 });
 
-export default TemperatureScreen;
+export default SleepHoursScreen;

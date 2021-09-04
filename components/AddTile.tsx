@@ -9,45 +9,46 @@ import useColorScheme from "../hooks/useColorScheme";
 interface TileDetails {
   title: string;
   subtitle: string;
+  onPress?: () => void;
+  style?: object;
 }
 
-const Tile: React.FC<TileDetails> = ({ title, subtitle }) => {
+const Tile: React.FC<TileDetails> = ({
+  title,
+  subtitle,
+  onPress,
+  style = {},
+}) => {
   const colorScheme = useColorScheme();
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase size={TileSize.ActionAdd} gradient={[tileColor, tileColor]}>
+    <TileBase
+      size={TileSize.ActionAdd}
+      gradient={[tileColor, tileColor]}
+      onClick={onPress}
+      style={style}
+    >
       <View style={styles.content}>
-        {subtitle === "Routine"
-          ?
-          <View style={{ flexDirection: "row" }}>
-            <Icon name="Exercise" props={{
-              fill: "#4E54C8",
-              width: 42,
-              height: 42
-            }}/>
-            <Icon name="Medication" props={{
-              fill: "#24AC29",
-              width: 42,
-              height: 42
-            }}/>
+        {subtitle === "Routine" ? (
+          <View
+            style={{ flexDirection: "row", alignItems: "center", padding: 5 }}
+          >
+            <View style={{ marginRight: 10 }}>
+              <Icon name="Exercise" props={{}} />
+            </View>
+            <Icon name="Medication" props={{}} />
           </View>
-          : 
-          <View>
-            <Icon name="Appointment" props={{
-              fill: "#18BDF1",
-              width: 42,
-              height: 42
-            }}/>
+        ) : (
+          <View style={{ paddingTop: 5, paddingLeft: 3 }}>
+            <Icon name="Appointment" props={{}} />
           </View>
-        }
+        )}
         <View>
           <Text style={{ fontSize: 14, opacity: 0.68, fontWeight: "600" }}>
             {title}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "600" }}>
-            {subtitle}
-          </Text>
+          <Text style={{ fontSize: 16, fontWeight: "600" }}>{subtitle}</Text>
         </View>
       </View>
     </TileBase>
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
-  }
+  },
 });
 
 export default Tile;

@@ -38,7 +38,8 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   const [selectedBottom, setSelectedBottom] = useState(0);
   const { addFlowStore } = useStores();
 
-  const topRef = React.createRef<Carousel<{ id: number; emoji: string; text: string }>>();
+  const topRef =
+    React.createRef<Carousel<{ id: number; emoji: string; text: string }>>();
   const bottomRef = React.createRef<Carousel<{ id: number; text: string }>>();
 
   const bodyAreaArr = BodyAreas;
@@ -83,9 +84,11 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
         <View style={styles.child}>
           <View style={{}}>
             <Carousel
-              data={bodyAreaArr.map(item => (
-                { id: item.id, emoji: item.emoji, text: item.text }
-              ))}
+              data={bodyAreaArr.map((item) => ({
+                id: item.id,
+                emoji: item.emoji,
+                text: item.text,
+              }))}
               renderItem={renderTopTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
@@ -101,17 +104,17 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
                 setSelectedTop(index);
+                setSelectedBottom(0);
+                bottomRef.current?.snapToItem(0);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
-              onSnapToItem={(index) => {}}
               ref={topRef}
             />
             <Carousel
-              data={
-                bodyAreaArr[selectedTop]
-                  .parts
-                  .map((item, index) => ({ id: index, text: item}))
-              }
+              data={bodyAreaArr[selectedTop].parts.map((item, index) => ({
+                id: index,
+                text: item,
+              }))}
               renderItem={renderBottomTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
@@ -144,7 +147,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
             bodyAreaArr[selectedTop].text,
             bodyAreaArr[selectedTop].parts[selectedBottom]
           );
-          navigation.navigate("SeverityScreen")
+          navigation.navigate("CustomScreen");
         }}
       />
     </SafeView>

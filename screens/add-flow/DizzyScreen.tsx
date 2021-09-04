@@ -3,51 +3,49 @@ import { Alert, StyleSheet } from "react-native";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
+import SelectionTile from "../../components/SelectionTile";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
-import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "TemperatureSelectionScreen">,
+  StackScreenProps<AddFlowParamList, "DizzyScreen">,
   StackScreenProps<RootStackParamList>
 >;
 
-const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
-  const [measured, setMeasured] = useState<boolean | null>(null);
+const DizzyScreen = ({ navigation }: ScreenProps) => {
+  const [value, setValue] = useState<boolean | null>(null);
 
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
         <Text style={styles.greeting}>
-          Were you able to take your temperature?
+          Is your head spinning or the room spinning?
         </Text>
         <View style={styles.child}>
           <SelectionTile
-            title="Yes"
-            selected={measured}
-            onPress={() => setMeasured(true)}
+            title="Head"
+            selected={value}
+            onPress={() => setValue(true)}
             extraStyles={{
               marginBottom: 40,
             }}
           />
           <SelectionTile
-            title="No"
-            selected={measured === null ? null : !measured}
-            onPress={() => setMeasured(false)}
+            title="Room"
+            selected={value === null ? null : !value}
+            onPress={() => setValue(false)}
           />
         </View>
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          if (measured === null) {
+          if (value === null) {
             Alert.alert("No Selection", "You need to select an option first.");
-          } else if (measured === true) {
-            navigation.navigate("TemperatureScreen");
           } else {
-            navigation.navigate("Root"); // end
+            navigation.navigate("Root");
           }
         }}
       />
@@ -98,7 +96,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 15,
     paddingLeft: 30,
+    maxWidth: "80%",
   },
 });
 
-export default TemperatureSelectionScreen;
+export default DizzyScreen;

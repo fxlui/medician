@@ -18,6 +18,12 @@ import ToiletScreen from "../screens/add-flow/ToiletScreen";
 import ToiletPainScreen from "../screens/add-flow/ToiletPainScreen";
 import ToiletColorScreen from "../screens/add-flow/ToiletColorScreen";
 
+import DizzyScreen from "../screens/add-flow/DizzyScreen";
+
+import SleepHoursScreen from "../screens/add-flow/SleepHoursScreen";
+
+import CustomScreen from "../screens/add-flow/CustomScreen";
+
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
 const AddFlowNavigator = () => {
@@ -26,7 +32,7 @@ const AddFlowNavigator = () => {
       initialRouteName="SymptomsScreen"
       screenOptions={{
         header: () => <ProgressBar />,
-        headerMode: "float"
+        headerMode: "float",
       }}
     >
       <AddFlowStack.Screen
@@ -63,6 +69,12 @@ const AddFlowNavigator = () => {
         name="ToiletColorScreen"
         component={ToiletColorScreen}
       />
+      <AddFlowStack.Screen name="DizzyScreen" component={DizzyScreen} />
+      <AddFlowStack.Screen
+        name="SleepHoursScreen"
+        component={SleepHoursScreen}
+      />
+      <AddFlowStack.Screen name="CustomScreen" component={CustomScreen} />
     </AddFlowStack.Navigator>
   );
 };

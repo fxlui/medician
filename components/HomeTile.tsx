@@ -1,13 +1,9 @@
 import * as React from "react";
-import {
-  StyleProp,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
 import useColorScheme from "../hooks/useColorScheme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Icon from "./Icon";
 
 import {
   medicationGradient,
@@ -39,15 +35,60 @@ const getGradient = (type: HomeTileTypes) => {
   }
 };
 
+const getIcon = (type: HomeTileTypes, index: Number | undefined) => {
+  switch (type) {
+    case HomeTileTypes.Medication:
+      return index === 0 ? (
+        <Icon
+          name="Medication"
+          props={{
+            fill: "white",
+          }}
+        />
+      ) : (
+        <Icon name="Medication" />
+      );
+    case HomeTileTypes.Exercise:
+      return index === 0 ? (
+        <Icon
+          name="Exercise"
+          props={{
+            fill: "white",
+          }}
+        />
+      ) : (
+        <Icon name="Exercise" />
+      );
+    case HomeTileTypes.Appointment:
+      return index === 0 ? (
+        <Icon
+          name="Appointment"
+          props={{
+            fill: "white",
+          }}
+        />
+      ) : (
+        <Icon name="Appointment" />
+      );
+    default:
+      return null;
+  }
+};
+
 const Tile: React.FC<HomeTileProps> = ({
-  title, style, size, index, type, onPress
+  title,
+  style,
+  size,
+  index,
+  type,
+  onPress,
 }) => {
   const colorScheme = useColorScheme();
   const textColor =
-    index == 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
+    index === 0 ? "#fff" : colorScheme === "light" ? "#333333" : "#fff";
 
   const tileGradient =
-    index == 0
+    index === 0
       ? getGradient(type)
       : colorScheme === "light"
       ? ["#fff", "#fff"]
@@ -62,11 +103,9 @@ const Tile: React.FC<HomeTileProps> = ({
     >
       <View style={styles.content}>
         <View style={styles.left}>
-          <MaterialCommunityIcons
-            name="pill"
-            size={42}
-            color={index == 0 ? "white" : "#24AC29"}
-          />
+          <View style={{ padding: 5, backgroundColor: "transparent" }}>
+            {getIcon(type, index)}
+          </View>
           <View style={styles.textContent}>
             <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
             <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>

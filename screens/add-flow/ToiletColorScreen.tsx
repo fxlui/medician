@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
-import { AddFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
-import { TopTile, BottomTile } from "../../components/AreaTile";
+import { TopTile } from "../../components/AreaTile";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
-import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { AddFlowParamList, RootStackParamList } from "../../types";
+
+import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletColorScreen">;
-
+type ScreenProps = CompositeScreenProps<
+  StackScreenProps<AddFlowParamList, "ToiletColorScreen">,
+  StackScreenProps<RootStackParamList>
+>;
 const DATA = [
   {
     emoji: "🟤",
@@ -35,7 +39,7 @@ interface baseData {
   index: number;
   dataIndex: number;
   item: {
-    id: string;
+    emoji: string;
     title: string;
   };
 }
@@ -43,11 +47,12 @@ interface baseData {
 const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
   const [selected, setSelected] = useState(0);
 
-  const tileRef = React.createRef<Carousel<{ id: string; title: string }>>();
+  const tileRef = React.createRef<Carousel<{ emoji: string; title: string }>>();
 
   const renderTile = ({ item, index }: baseData) => {
     return (
-      <BottomTile
+      <TopTile
+        emoji={item.emoji}
         title={item.title}
         style={{
           marginRight: 15,
@@ -57,6 +62,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
         updater={() => {
           tileRef.current?.snapToItem(index);
         }}
+        colorTile
       />
     );
   };
@@ -64,14 +70,20 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
   return (
     <SafeView style={styles.container} disableTop>
       <Text style={styles.greeting}>What colour is it?</Text>
-      <View>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 9,
+        }}
+      >
         <Carousel
           data={DATA}
           renderItem={renderTile}
           vertical={false}
           sliderWidth={Dimensions.get("window").width}
           containerCustomStyle={{
-            marginTop: Dimensions.get("window").height * 0.25,
+            paddingVertical: 150,
             overflow: "visible",
           }}
           contentContainerCustomStyle={{
@@ -90,7 +102,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("SeverityScreen")}
+        right={() => navigation.navigate("Root")}
       />
     </SafeView>
   );
@@ -99,8 +111,10 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 100,
   },
   greeting: {
+    flex: 2,
     fontSize: 26,
     fontWeight: "600",
     marginTop: 15,

@@ -21,8 +21,8 @@ export type BottomTabParamList = {
 
 export type AddFlowParamList = {
   SymptomsScreen: {
-    type: "feel" | "cant"
-  }
+    type: "feel" | "cant";
+  };
   AreaSelectScreen: undefined;
   SeverityScreen: undefined;
   TimeSelectScreen: undefined;
@@ -33,6 +33,9 @@ export type AddFlowParamList = {
   ToiletScreen: undefined;
   ToiletPainScreen: undefined;
   ToiletColorScreen: undefined;
+  DizzyScreen: undefined;
+  SleepHoursScreen: undefined;
+  CustomScreen: undefined;
 };
 
 export enum HomeTileTypes {

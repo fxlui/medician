@@ -18,7 +18,6 @@ type ScreenProps = CompositeScreenProps<
 >;
 
 export default function ActionScreen({ navigation }: ScreenProps) {
-
   return (
     <SafeView>
       <View style={styles.container}>
@@ -26,29 +25,29 @@ export default function ActionScreen({ navigation }: ScreenProps) {
           Good evening 🌥,{"\n"}How are you today?
         </Text>
         <View style={styles.tiles}>
-          <EntryTile 
+          <EntryTile
             title={"I feel..."}
             emoji="😔"
             style={{ marginBottom: 30 }}
             size={TileSize.XL}
             list={"symptoms"}
-            onClick={() => 
+            onClick={() =>
               navigation.navigate("AddFlow", {
                 screen: "SymptomsScreen",
-                params: { type: "feel" }
+                params: { type: "feel" },
               })
             }
           />
-          <EntryTile 
+          <EntryTile
             title={"I can't..."}
             emoji="😣"
-            style={{marginBottom: 30}}
+            style={{ marginBottom: 30 }}
             size={TileSize.XL}
             list={"inabilities"}
-            onClick={() => 
+            onClick={() =>
               navigation.navigate("AddFlow", {
                 screen: "SymptomsScreen",
-                params: { type: "cant" }
+                params: { type: "cant" },
               })
             }
           />
@@ -56,24 +55,26 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             <AddTile
               title={"Add"}
               subtitle={"Appointment"}
+              style={{ marginRight: 30 }}
+              onPress={() => {}}
             />
-            <AddTile
-              title={"Add"}
-              subtitle={"Routine"}
-            />
+            <AddTile title={"Add"} subtitle={"Routine"} />
           </View>
           <PressableBase
             extraProps={{
               style: styles.cancelButton,
-              accessibilityLabel: "Cancel Add Action"
+              accessibilityLabel: "Cancel Add Action",
             }}
             onPress={() => navigation.pop()}
           >
-            <Icon name="Cancel" props={{
-              fill: "#F8583B",
-              width: 30,
-              height: 30
-            }}/>
+            <Icon
+              name="Cancel"
+              props={{
+                fill: "#F8583B",
+                width: 30,
+                height: 30,
+              }}
+            />
           </PressableBase>
         </View>
       </View>
@@ -85,28 +86,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 25,
-    paddingRight: 25
+    paddingRight: 25,
   },
   greeting: {
     fontSize: 26,
     fontWeight: "600",
     marginTop: 65,
-    marginLeft: 5
+    marginLeft: 5,
   },
   tiles: {
     marginTop: 40,
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   addTiles: {
-    alignSelf: "stretch",
-    flexDirection: 'row',
-    paddingLeft: 5,
-    paddingRight: 5,
-    justifyContent: "space-between"
+    flexDirection: "row",
+    justifyContent: "center",
   },
   cancelButton: {
     position: "absolute",
     marginTop: "160%",
-  }
+  },
 });
