@@ -8,7 +8,7 @@ import { RootStore } from './models/root-store';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation/Navigation';
-import SafeView from './components/SafeView';
+import { initDatabase } from './database/dbAPI';
 
 export default function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
@@ -17,6 +17,7 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
+      await initDatabase();
       const store = await setupRootStore();
       setRootStore(store);
     })();

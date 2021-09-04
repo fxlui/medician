@@ -13,12 +13,15 @@ export const AddFlowStoreModel = types
   })
   // Synchronous actions defined here
   .actions((self) => ({
+    setProgressBarLength: (length: number) => {
+      self.progress = length;
+    },
+    setRecordArea: (area: string) => {
+      self.currentNewRecord.area = area;
+    },
     setRecordSeverity: (severity: number) => {
       self.currentNewRecord.severity = severity;
     },
-    resetCurrentNewRecord: () => {
-      self.currentNewRecord = cast({});
-    }
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
