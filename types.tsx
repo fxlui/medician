@@ -8,7 +8,7 @@ export type RootStackParamList = {
     name: string;
     notes: string;
     type: HomeTileTypes;
-  }
+  };
   ActionScreen: undefined;
   NotFound: undefined;
 };
@@ -26,6 +26,8 @@ export type AddFlowParamList = {
   AreaSelectScreen: undefined;
   SeverityScreen: undefined;
   TimeSelectScreen: undefined;
+  DetailsScreen: undefined;
+  MediaScreen: undefined;
 };
 
 export enum HomeTileTypes {

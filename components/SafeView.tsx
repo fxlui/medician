@@ -7,18 +7,24 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { SafeAreaView, Edge} from "react-native-safe-area-context";
+import { SafeAreaView, Edge } from "react-native-safe-area-context";
 
 import useColorScheme from "../hooks/useColorScheme";
 interface ViewChildrenProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-  disableBottom?: boolean
+  disableTop?: boolean;
+  disableBottom?: boolean;
 }
 
-const defaultEdges: Edge[] = ["bottom", 'left', 'right', 'top'];
+const defaultEdges: Edge[] = ["bottom", "left", "right", "top"];
 
-const SafeView: React.FC<ViewChildrenProps> = ({ children, style, disableBottom }) => {
+const SafeView: React.FC<ViewChildrenProps> = ({
+  children,
+  style,
+  disableTop,
+  disableBottom,
+}) => {
   const colorScheme = useColorScheme();
 
   const styles = StyleSheet.create({
@@ -32,7 +38,15 @@ const SafeView: React.FC<ViewChildrenProps> = ({ children, style, disableBottom 
   return (
     <SafeAreaView
       style={[styles.AndroidSafeArea, style]}
-      edges={disableBottom ? ['left', 'right', 'top'] : defaultEdges}
+      edges={
+        disableBottom
+          ? disableTop
+            ? ["left", "right"]
+            : ["left", "right", "top"]
+          : disableTop
+          ? ["left", "right", "bottom"]
+          : defaultEdges
+      }
     >
       {children}
     </SafeAreaView>

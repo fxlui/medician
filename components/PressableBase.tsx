@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Pressable, Animated, PressableProps } from "react-native";
+import * as Haptics from "expo-haptics";
 
 export const PressableBase: FC<{
   onPress?: () => void;
@@ -28,11 +29,16 @@ export const PressableBase: FC<{
     }).start();
   };
 
+  const handleOnPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (onPress) onPress();
+  };
+
   return (
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onPress={onPress}
+      onPress={handleOnPress}
       {...extraProps}
     >
       <Animated.View style={animatedStyle}>{children}</Animated.View>

@@ -6,9 +6,9 @@ import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
+import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
 import Slider from "@react-native-community/slider";
-import { StackScreenProps } from "@react-navigation/stack";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
@@ -41,7 +41,7 @@ const Severity = ({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
 
   return (
-    <SafeView style={styles.container}>
+    <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
         <Text style={styles.greeting}>How severe is it?</Text>
         <View style={styles.child}>
@@ -85,7 +85,13 @@ const Severity = ({ navigation }: ScreenProps) => {
               step={1}
               onValueChange={(value) => {
                 setSeverity(value);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (value > 4) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                } else if (value > 7) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                } else {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }
               }}
             />
             <Text style={styles.numbers}>10</Text>
@@ -94,7 +100,7 @@ const Severity = ({ navigation }: ScreenProps) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("AreaSelectScreen")}
+        right={() => navigation.navigate("TimeSelectScreen")}
       />
     </SafeView>
   );
