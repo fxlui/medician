@@ -15,8 +15,8 @@ export const TabBarButton = (props: BottomTabBarButtonProps) => {
 export const tabBarStyles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    height: 110,
-    borderRadius: 20,
+    height: 100,
+    borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.2,

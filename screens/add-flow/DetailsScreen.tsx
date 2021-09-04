@@ -16,7 +16,7 @@ import useColorScheme from "../../hooks/useColorScheme";
 
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { PressableBase } from "../../components/PressableBase";
-
+import { useStores } from "../../models/root-store-provider";
 import { Ionicons } from "@expo/vector-icons";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "DetailsScreen">;
@@ -43,6 +43,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
   });
 
   const inputRef = React.useRef<TextInput>(null);
+  const { addFlowStore } = useStores();
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -237,6 +238,8 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         </KeyboardAvoidingView>
       </View>
       <AddFlowNavBar
+        preventLeftDefault
+        preventRightDefault
         left={() => {
           if (
             (currentQuestion === 0 && currentAnswers.better !== "") ||
@@ -246,6 +249,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
+                addFlowStore.goBack();
                 navigation.pop();
                 break;
               case 0:
@@ -294,11 +298,20 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
                 break;
             }
           } else {
+            console.log("called")
+            addFlowStore.goBack();
             navigation.pop();
           }
         }}
         right={() => {
           if (currentQuestion >= 3) {
+            addFlowStore.setRecordDetails(
+              currentAnswers.better,
+              currentAnswers.worse,
+              currentAnswers.related,
+              currentAnswers.attempt
+            );
+            addFlowStore.goForward();
             navigation.navigate("MediaScreen");
           } else {
             nextQuestion();

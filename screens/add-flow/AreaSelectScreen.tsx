@@ -137,7 +137,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
         </View>
       </View>
       <AddFlowNavBar
-        second
+        preventLeftDefault
         left={() => navigation.pop()}
         right={() => {
           addFlowStore.setRecordAreas(

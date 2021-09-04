@@ -21,6 +21,7 @@ import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
 
 import AddFlowNavBar from "../../components/AddFlowNavBar";
+import { useStores } from "../../models/root-store-provider";
 
 import { Ionicons } from "@expo/vector-icons";
 import TileBase from "../../components/TileBase";
@@ -103,6 +104,8 @@ export default function MediaScreen({ navigation }: ScreenProps) {
   const [images, setImages] = React.useState<Media[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [visible, setIsVisible] = React.useState(false);
+
+  const { addFlowStore } = useStores();
 
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
@@ -310,9 +313,13 @@ export default function MediaScreen({ navigation }: ScreenProps) {
         onRequestClose={() => setIsVisible(false)}
       />
       <AddFlowNavBar
-        left={() => navigation.pop()}
-        right={() => navigation.navigate("Root")}
         last
+        left={() => navigation.pop()}
+        right={() => {
+          addFlowStore.setRecordAttachments(images);
+          addFlowStore.dbInsertFlow();
+          navigation.navigate("Root");
+        }}
       ></AddFlowNavBar>
     </SafeView>
   );

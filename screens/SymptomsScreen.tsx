@@ -52,7 +52,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
         right={() => {
           addFlowStore.setRecordType(selectedId);
           addFlowStore.resetProgress();
-          addFlowStore.setProgressBarLength(8);
+          addFlowStore.setProgressBarLength(5);
           navigation.navigate("AreaSelectScreen");
         }}
       />
