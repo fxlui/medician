@@ -5,6 +5,7 @@ import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
+import { useStores } from "../../models/root-store-provider";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import SelectionTile from "../../components/SelectionTile";
@@ -14,6 +15,8 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletScreen">;
 const ToiletScreen = ({ navigation }: ScreenProps) => {
   const [pee, setPee] = useState<boolean | null>(null);
   const [poo, setPoo] = useState<boolean | null>(null);
+
+  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -36,11 +39,13 @@ const ToiletScreen = ({ navigation }: ScreenProps) => {
         </View>
       </View>
       <AddFlowNavBar
+        preventRightDefault
         left={() => navigation.pop()}
         right={() => {
           if (pee === null && poo === null) {
             Alert.alert("No Selection", "You need to select an option first!");
           } else {
+            addFlowStore.goForward();
             navigation.navigate("ToiletPainScreen");
           }
         }}

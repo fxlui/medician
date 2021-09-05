@@ -108,7 +108,7 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         // some logic here
-        right={() => navigation.navigate("ToiletScreen")}
+        right={() => navigation.navigate("SeverityScreen")}
       />
     </SafeView>
   );

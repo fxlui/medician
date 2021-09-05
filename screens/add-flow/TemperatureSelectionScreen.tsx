@@ -7,6 +7,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
+import { useStores } from "../../models/root-store-provider";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = CompositeScreenProps<
@@ -16,6 +17,7 @@ type ScreenProps = CompositeScreenProps<
 
 const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
   const [measured, setMeasured] = useState<boolean | null>(null);
+  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -40,14 +42,17 @@ const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
         </View>
       </View>
       <AddFlowNavBar
+        preventRightDefault
         left={() => navigation.pop()}
         right={() => {
           if (measured === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else if (measured === true) {
+            addFlowStore.goForward();
             navigation.navigate("TemperatureScreen");
           } else {
-            navigation.navigate("Root"); // end
+            addFlowStore.goForward();
+            navigation.navigate("SeverityScreen");
           }
         }}
       />

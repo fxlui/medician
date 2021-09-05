@@ -102,7 +102,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("Root")}
+        right={() => navigation.navigate("SeverityScreen")}
       />
     </SafeView>
   );

@@ -94,8 +94,7 @@ const SleepHoursScreen = ({ navigation }: ScreenProps) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        // some logic here
-        right={() => navigation.navigate("Root")}
+        right={() => navigation.navigate("SeverityScreen")}
       />
     </SafeView>
   );

@@ -6,6 +6,7 @@ import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
+import { useStores } from "../../models/root-store-provider";
 import { StackScreenProps } from "@react-navigation/stack";
 import SelectionTile from "../../components/SelectionTile";
 
@@ -13,6 +14,7 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletPainScreen">;
 
 const ToiletPainScreen = ({ navigation }: ScreenProps) => {
   const [pain, setPain] = useState<boolean | null>(null);
+  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -35,11 +37,13 @@ const ToiletPainScreen = ({ navigation }: ScreenProps) => {
         </View>
       </View>
       <AddFlowNavBar
+        preventRightDefault
         left={() => navigation.pop()}
         right={() => {
           if (pain === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
+            addFlowStore.goForward();
             navigation.navigate("ToiletColorScreen");
           }
         }}

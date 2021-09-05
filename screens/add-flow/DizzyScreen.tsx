@@ -5,6 +5,7 @@ import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 import SelectionTile from "../../components/SelectionTile";
 
+import { useStores } from "../../models/root-store-provider";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
@@ -16,6 +17,7 @@ type ScreenProps = CompositeScreenProps<
 
 const DizzyScreen = ({ navigation }: ScreenProps) => {
   const [value, setValue] = useState<boolean | null>(null);
+  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -40,12 +42,14 @@ const DizzyScreen = ({ navigation }: ScreenProps) => {
         </View>
       </View>
       <AddFlowNavBar
+        preventRightDefault
         left={() => navigation.pop()}
         right={() => {
           if (value === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
-            navigation.navigate("Root");
+            addFlowStore.goForward();
+            navigation.navigate("SeverityScreen");
           }
         }}
       />

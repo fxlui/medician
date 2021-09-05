@@ -48,10 +48,15 @@ export const AddFlowStoreModel = types
       self.currentNewRecord.attatchmentPaths = cast(attachments);
     },
     goBack: () => {
-      self.currentProgress -= 1;
+      console.log(self.currentProgress)
+      if (self.currentProgress != 1) {
+        self.currentProgress -= 1;
+      }
     },
     goForward: () => {
-      self.currentProgress += 1;
+      if (self.currentProgress != self.progressLength) {
+        self.currentProgress += 1;
+      }
     },
     resetProgress: () => {
       self.currentProgress = 1;

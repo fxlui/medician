@@ -22,11 +22,13 @@ import DizzyScreen from "../screens/add-flow/DizzyScreen";
 
 import SleepHoursScreen from "../screens/add-flow/SleepHoursScreen";
 
+import { useStores } from "../models/root-store-provider";
 import CustomScreen from "../screens/add-flow/CustomScreen";
 
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
 const AddFlowNavigator = () => {
+  const { addFlowStore } = useStores();
   return (
     <AddFlowStack.Navigator
       initialRouteName="SymptomsScreen"
@@ -34,6 +36,11 @@ const AddFlowNavigator = () => {
         header: () => <ProgressBar />,
         headerMode: "float",
       }}
+      screenListeners={() => ({
+        gestureEnd: () => {
+          addFlowStore.goBack();
+        }
+      })}
     >
       <AddFlowStack.Screen
         name="SymptomsScreen"
@@ -55,12 +62,17 @@ const AddFlowNavigator = () => {
       <AddFlowStack.Screen
         name="TemperatureSelectionScreen"
         component={TemperatureSelectionScreen}
+        options={{ headerMode: "screen" }}
       />
       <AddFlowStack.Screen
         name="TemperatureScreen"
         component={TemperatureScreen}
       />
-      <AddFlowStack.Screen name="ToiletScreen" component={ToiletScreen} />
+      <AddFlowStack.Screen
+        name="ToiletScreen"
+        component={ToiletScreen}
+        options={{ headerMode: "screen" }}
+      />
       <AddFlowStack.Screen
         name="ToiletPainScreen"
         component={ToiletPainScreen}
@@ -69,12 +81,21 @@ const AddFlowNavigator = () => {
         name="ToiletColorScreen"
         component={ToiletColorScreen}
       />
-      <AddFlowStack.Screen name="DizzyScreen" component={DizzyScreen} />
+      <AddFlowStack.Screen
+        name="DizzyScreen"
+        component={DizzyScreen}
+        options={{ headerMode: "screen" }}
+      />
       <AddFlowStack.Screen
         name="SleepHoursScreen"
         component={SleepHoursScreen}
+        options={{ headerMode: "screen" }}
       />
-      <AddFlowStack.Screen name="CustomScreen" component={CustomScreen} />
+      <AddFlowStack.Screen
+        name="CustomScreen"
+        component={CustomScreen}
+        options={{ headerMode: "screen" }}
+      />
     </AddFlowStack.Navigator>
   );
 };

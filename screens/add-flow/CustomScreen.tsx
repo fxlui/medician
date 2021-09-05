@@ -36,7 +36,7 @@ export default function CustomScreen({ navigation }: ScreenProps) {
 
   const inputRef = React.useRef<TextInput>(null);
 
-  const handleNavigation = () => navigation.navigate("MediaScreen");
+  const handleNavigation = () => navigation.navigate("SeverityScreen");
 
   return (
     <SafeView style={styles.container} disableTop>

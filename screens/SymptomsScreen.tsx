@@ -13,11 +13,40 @@ import { AddFlowParamList } from "../types";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 
+type screenType = [keyof AddFlowParamList, number];
+
 export default function SymptomsScreen({ navigation, route }: ScreenProps) {
 
   const { addFlowStore } = useStores();
-  const [selectedId, setSelectedId] = useState(1);
+  const [selectedId, setSelectedId] = useState(route.params.type === "feel" ? 1 : 7);
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
+
+  function useScreenDirect() : screenType {
+    switch (selectedId) {
+      case 1:
+      case 2:
+      case 16:
+      case 17:
+        return ["AreaSelectScreen", 5];
+      case 3:
+      case 4:
+        addFlowStore.setProgressBarLength(6);
+        return ["TemperatureSelectionScreen", 6];
+      case 15:
+        addFlowStore.setProgressBarLength(7);
+        return ["ToiletScreen", 7];
+      case 5:
+      case 13:
+        addFlowStore.setProgressBarLength(5);
+        return ["DizzyScreen", 5];
+      case 12:
+        addFlowStore.setProgressBarLength(5);
+        return ["SleepHoursScreen", 5];
+      default:
+        addFlowStore.setProgressBarLength(5);
+        return ["CustomScreen", 5];
+    }
+  }
 
   return (
     <SafeView disableBottom>
@@ -45,15 +74,15 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
         </ScrollView>
       </View>
       <AddFlowNavBar
-        first
         left={() => {
           navigation.pop();
         }}
         right={() => {
+          const [screenName, progressLength] = useScreenDirect();
           addFlowStore.setRecordType(selectedId);
           addFlowStore.resetProgress();
-          addFlowStore.setProgressBarLength(5);
-          navigation.navigate("AreaSelectScreen");
+          addFlowStore.setProgressBarLength(progressLength);
+          navigation.navigate(screenName);
         }}
       />
     </SafeView>
