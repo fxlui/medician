@@ -33,6 +33,7 @@ const AddFlowNavigator = () => {
       screenOptions={{
         header: () => <ProgressBar />,
         headerMode: "float",
+        cardShadowEnabled: true,
       }}
     >
       <AddFlowStack.Screen
