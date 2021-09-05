@@ -15,7 +15,7 @@ import { PressableBase } from "../components/PressableBase";
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList, "ActionScreen">,
   StackScreenProps<AddFlowParamList>,
-  StackSahjklcreenProps<AddAppointmentParamList>
+  StackScreenProps<AddAppointmentParamList>
 >;
 
 export default function ActionScreen({ navigation }: ScreenProps) {

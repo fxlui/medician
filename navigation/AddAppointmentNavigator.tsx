@@ -15,6 +15,7 @@ const AddFlowNavigator = () => {
         header: () => <ProgressBar percentage={50} />,
       }}
     >
+
       <AddAppointmentStack.Screen
         name="PickTime"
         component={PickTime}
