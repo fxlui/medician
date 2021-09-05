@@ -3,6 +3,7 @@ import { NavigatorScreenParams } from "@react-navigation/core";
 export type RootStackParamList = {
   Root: undefined;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
+  AddAppointment: NavigatorScreenParams<AddAppointmentParamList>;
   Notification: {
     id: string;
     name: string;

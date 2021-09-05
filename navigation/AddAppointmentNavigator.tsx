@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { AddAppointmentParamList } from "../types";
 import ProgressBar from "../components/ProgressBar";
-import PickTime from "../screens/add-appt-flow/PickDate"
+import PickTime from "../screens/add-appt-flow/PickTime"
 
 const AddAppointmentStack = createStackNavigator<AddAppointmentParamList>();
 
