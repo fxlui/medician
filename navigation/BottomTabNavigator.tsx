@@ -43,13 +43,16 @@ export const BottomTabNavigator = () => {
         options={{
           tabBarIcon: () => {
             return (
-              <Icon name="Add" props={{
+              <Icon
+                name="Add"
+                props={{
                   fill: "#F8583B",
                   width: 30,
-                  height: 30
+                  height: 30,
                 }}
               />
-            )},
+            );
+          },
         }}
         listeners={({ navigation }) => ({
           tabPress: (event) => {

@@ -7,10 +7,8 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { StackScreenProps } from "@react-navigation/stack";
 
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
@@ -21,7 +19,14 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "TimeSelectScreen">;
+import { StackScreenProps } from "@react-navigation/stack";
+import { CompositeScreenProps } from "@react-navigation/core";
+import { AddFlowParamList, RootStackParamList } from "../../types";
+
+type ScreenProps = CompositeScreenProps<
+  StackScreenProps<AddFlowParamList, "AppointmentTimeScreen">,
+  StackScreenProps<RootStackParamList>
+>;
 
 interface DateSelection {
   dateobj: DateObject;
@@ -38,30 +43,9 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
   return result;
 };
 
-export default function TimeSelectScreen({ navigation }: ScreenProps) {
+export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
-
-  React.useEffect(() => {
-    const now = new Date();
-    const nowOffset = new Date(
-      Date.now() - new Date().getTimezoneOffset() * 60000
-    );
-    if (selection.length === 0) {
-      setSelection([
-        {
-          dateobj: {
-            dateString: nowOffset.toISOString().split("T")[0],
-            day: nowOffset.getDay(),
-            month: nowOffset.getMonth(),
-            year: nowOffset.getFullYear(),
-            timestamp: now.getTime(),
-          },
-          date: now,
-        },
-      ]);
-    }
-  }, []);
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
@@ -110,7 +94,6 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           }}
         >
           <Calendar
-            maxDate={new Date()}
             hideExtraDays={true}
             style={{
               marginLeft: 25,
@@ -131,15 +114,21 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             )}
             onDayPress={(day) => {
               const now = moment();
-              setSelection((prev) => [
-                ...prev,
-                {
-                  dateobj: day,
-                  date: moment(
-                    `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
-                  ).toDate(),
-                },
-              ]);
+              if (dateInSelection(day, selection)) {
+                setSelection((prev) =>
+                  prev.filter((d) => d.dateobj.dateString !== day.dateString)
+                );
+              } else {
+                setSelection((prev) => [
+                  ...prev,
+                  {
+                    dateobj: day,
+                    date: moment(
+                      `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
+                    ).toDate(),
+                  },
+                ]);
+              }
             }}
             theme={{
               backgroundColor: "transparent",
@@ -157,7 +146,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             }}
           />
           <View>
-            {selection.sort((a, b) => (a.date < b.date ? 1 : -1)) &&
+            {selection.sort((a, b) => (a.date > b.date ? 1 : -1)) &&
               selection.map((item) => (
                 <SwipeBar
                   key={item.date.getTime()}
@@ -227,7 +216,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => navigation.navigate("DetailsScreen")
+            ? () => navigation.navigate("AppointmentDetailsScreen")
             : () =>
                 Alert.alert(
                   "No selection yet",

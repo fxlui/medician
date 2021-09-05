@@ -14,7 +14,6 @@ import { AddFlowParamList } from "../types";
 type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 
 export default function SymptomsScreen({ navigation, route }: ScreenProps) {
-
   const { addFlowStore } = useStores();
   const [selectedId, setSelectedId] = useState(1);
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
@@ -24,19 +23,19 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ overflow: "visible", paddingBottom: 100 }}>
-            <Text style={styles.greeting}>
-              I {route.params.type}...
-            </Text>
+            <Text style={styles.greeting}>I {route.params.type}...</Text>
             <View style={styles.list}>
               {symptomArray.map((symptom) => {
-                return(
+                return (
                   <SymptomTile
                     selected={symptom.id === selectedId}
                     key={symptom.id}
                     iconName={symptom.name}
-                    title={symptom.description}
+                    title={symptom.name}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
-                    onPress={() => {setSelectedId(symptom.id)}}
+                    onPress={() => {
+                      setSelectedId(symptom.id);
+                    }}
                   />
                 );
               })}
@@ -62,7 +61,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   greeting: {
     fontSize: 26,
@@ -75,6 +74,6 @@ const styles = StyleSheet.create({
     overflow: "visible",
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingLeft: 40
+    paddingLeft: 40,
   },
 });

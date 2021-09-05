@@ -28,7 +28,6 @@ export type AddFlowParamList = {
   TimeSelectScreen: undefined;
   DetailsScreen: undefined;
   MediaScreen: undefined;
-  PickTime: undefined;
   TemperatureSelectionScreen: undefined;
   TemperatureScreen: undefined;
   ToiletScreen: undefined;
@@ -37,6 +36,8 @@ export type AddFlowParamList = {
   DizzyScreen: undefined;
   SleepHoursScreen: undefined;
   CustomScreen: undefined;
+  AppointmentTimeScreen: undefined;
+  AppointmentDetailsScreen: undefined;
 };
 
 export enum HomeTileTypes {

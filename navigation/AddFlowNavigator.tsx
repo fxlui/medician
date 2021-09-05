@@ -5,13 +5,14 @@ import { AddFlowParamList } from "../types";
 import ProgressBar from "../components/ProgressBar";
 import SymptomsScreen from "../screens/SymptomsScreen";
 
+// Default Flow
 import AreaSelect from "../screens/add-flow/AreaSelectScreen";
 import SeverityScreen from "../screens/add-flow/SeverityScreen";
 import TimeSelectScreen from "../screens/add-flow/TimeSelectScreen";
 import DetailsScreen from "../screens/add-flow/DetailsScreen";
-import PickTime from "../screens/add-appt-flow/PickTimeScreen";
 import MediaScreen from "../screens/add-flow/MediaScreen";
 
+// Add Flow Optional Screens
 import TemperatureSelectionScreen from "../screens/add-flow/TemperatureSelectionScreen";
 import TemperatureScreen from "../screens/add-flow/TemperatureScreen";
 
@@ -24,6 +25,10 @@ import DizzyScreen from "../screens/add-flow/DizzyScreen";
 import SleepHoursScreen from "../screens/add-flow/SleepHoursScreen";
 
 import CustomScreen from "../screens/add-flow/CustomScreen";
+
+// Add Appointment Flow
+import AppointmentTimeScreen from "../screens/add-appt-flow/AppointmentTimeScreen";
+import AppointmentDetailsScreen from "../screens/add-appt-flow/AppointmentDetailsScreen";
 
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
@@ -54,7 +59,6 @@ const AddFlowNavigator = () => {
       />
       <AddFlowStack.Screen name="DetailsScreen" component={DetailsScreen} />
       <AddFlowStack.Screen name="MediaScreen" component={MediaScreen} />
-      <AddFlowStack.Screen name="PickTime" component={PickTime} />
       <AddFlowStack.Screen
         name="TemperatureSelectionScreen"
         component={TemperatureSelectionScreen}
@@ -78,6 +82,14 @@ const AddFlowNavigator = () => {
         component={SleepHoursScreen}
       />
       <AddFlowStack.Screen name="CustomScreen" component={CustomScreen} />
+      <AddFlowStack.Screen
+        name="AppointmentTimeScreen"
+        component={AppointmentTimeScreen}
+      />
+      <AddFlowStack.Screen
+        name="AppointmentDetailsScreen"
+        component={AppointmentDetailsScreen}
+      />
     </AddFlowStack.Navigator>
   );
 };

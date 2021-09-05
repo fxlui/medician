@@ -159,7 +159,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             }}
           />
           <View>
-            {selection.sort((a, b) => (a.date < b.date ? 1 : -1)) &&
+            {selection.sort((a, b) => (a.date > b.date ? 1 : -1)) &&
               selection.map((item) => (
                 <SwipeBar
                   key={item.date.getTime()}
@@ -230,9 +230,9 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         right={
           selection.length > 0
             ? () => {
-              // addFlowStore.setRecordTime(selection.map(item => item.date));
-              navigation.navigate("DetailsScreen");
-            }
+                // addFlowStore.setRecordTime(selection.map(item => item.date));
+                navigation.navigate("DetailsScreen");
+              }
             : () =>
                 Alert.alert(
                   "No selection yet",

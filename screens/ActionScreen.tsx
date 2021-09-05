@@ -58,7 +58,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               style={{ marginRight: 30 }}
               onPress={() => {
                 navigation.navigate("AddFlow", {
-                  screen: "PickTime",
+                  screen: "AppointmentTimeScreen",
                 });
               }}
             />
@@ -67,7 +67,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               subtitle={"Routine"}
               onPress={() => {
                 navigation.navigate("AddFlow", {
-                  screen: "PickTime",
+                  screen: "AppointmentTimeScreen",
                 });
               }}
             />
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   tiles: {
-    marginTop: 40,
+    marginTop: 50,
     flexDirection: "column",
     alignItems: "center",
   },
