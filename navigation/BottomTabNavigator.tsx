@@ -62,12 +62,20 @@ export const BottomTabNavigator = () => {
         })}
       />
       <BottomTab.Screen
-        name="Records"
+        name="Overview"
         component={SymptomOverview}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="assignment" color={color} />
           ),
+          headerShown: true,
+          headerStyle: {
+            borderWidth: 0,
+            height: 110,
+          },
+          headerTitleStyle: {
+            fontSize: 19,
+          },
         }}
       />
     </BottomTab.Navigator>
