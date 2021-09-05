@@ -7,7 +7,7 @@ interface ProgressProps {
   percentage: number;
 }
 
-export const ProgressBar:FC<ProgressProps> = ({ percentage }) => {
+export const ProgressBar: FC<ProgressProps> = ({ percentage }) => {
   const colorScheme = useColorScheme();
   return (
     <View style={styles.container}>
@@ -21,16 +21,17 @@ export const ProgressBar:FC<ProgressProps> = ({ percentage }) => {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 80,
-    paddingLeft: 35,
+    height: 120,
+    paddingLeft: 30,
+    paddingBottom: 15,
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   progressBarBackDrop: {
     backgroundColor: "#EDEDED",
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#45B649",
     borderRadius: 10,
     height: 10,
-  }
+  },
 });
 
-export default ProgressBar
+export default ProgressBar;

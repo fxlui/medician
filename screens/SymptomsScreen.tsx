@@ -14,7 +14,7 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 
 export default function ActionScreen({ navigation, route }: ScreenProps) {
 
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState("1");
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
 
   return (

@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
   addTiles: {
     alignSelf: "stretch",
     flexDirection: 'row',
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
     justifyContent: "space-between"
   },
   cancelButton: {

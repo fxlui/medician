@@ -24,7 +24,8 @@ interface BaseChildren {
   size?: TileSize;
   onClick?: () => void;
   style?: StyleProp<ViewStyle>;
-  gradient: Animated.WithAnimatedArray<string>;
+  gradient?: Animated.WithAnimatedArray<string>;
+  textBox?: boolean;
 }
 
 const TileBase: React.FC<BaseChildren> = ({
@@ -33,6 +34,7 @@ const TileBase: React.FC<BaseChildren> = ({
   onClick = () => {},
   style = {},
   gradient = ["white", "white"],
+  textBox = false,
 }) => {
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
@@ -69,7 +71,10 @@ const TileBase: React.FC<BaseChildren> = ({
       onPress={handleOnClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onLongPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
+      onLongPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        handleOnClick();
+      }}
     >
       <Animated.View style={styles.shadow}>
         <AnimatedLinearGradient
@@ -83,6 +88,7 @@ const TileBase: React.FC<BaseChildren> = ({
             size == TileSize.ActionAdd && styles.actionAdd,
             animatedStyle,
             style,
+            textBox ? { padding: 0 } : {},
           ]}
         >
           {children}
@@ -119,12 +125,12 @@ const styles = StyleSheet.create({
   },
   extraLong: {
     width: 355,
-    height: 150
+    height: 150,
   },
   actionAdd: {
     width: 160,
-    height: 160
-  }
+    height: 160,
+  },
 });
 
 export default TileBase;
