@@ -5,10 +5,7 @@ import { types, SnapshotOut, Instance } from "mobx-state-tree";
  */
 export const UserModel = types
   .model("User", {
-    id: types.identifierNumber,
-    name: types.string,
-    gender: types.string,
-    age: types.integer
+    id: types.identifierNumber
   });
 
 type UserType = Instance<typeof UserModel>;

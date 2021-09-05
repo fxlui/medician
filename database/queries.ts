@@ -1,9 +1,20 @@
+export const insertUser = `
+INSERT OR IGNORE INTO user (id) VALUES (1)
+`;
+
+export const insertCollection = `
+INSERT OR IGNORE INTO collection(userId, date, type) VALUES(?, ?, ?)
+`;
+
+export const getCollection = `
+SELECT collection.id
+FROM collection
+WHERE collection.userId = ? and collection.type = ?
+`
+
 export const createUserTable = `
   CREATE TABLE if not exists "user" (
     "id"	INTEGER NOT NULL UNIQUE,
-    "name"	TEXT,
-    "gender"	TEXT,
-    "dob"	INTEGER,
     PRIMARY KEY("id" AUTOINCREMENT)
   );
 `;
@@ -13,10 +24,14 @@ CREATE TABLE if not exists "collection" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"userId"	INTEGER NOT NULL,
 	"date"	INTEGER NOT NULL,
-	"type"	INTEGER NOT NULL,
+	"type"	TEXT NOT NULL,
 	FOREIGN KEY("userId") REFERENCES "user"("id"),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+`;
+
+export const deleteRecordTable = `
+DROP TABLE IF EXISTS entry
 `;
 
 export const createRecordTable = `
@@ -25,16 +40,19 @@ export const createRecordTable = `
     "time"	INTEGER NOT NULL,
     "severity"	INTEGER NOT NULL,
     "area"	TEXT NOT NULL,
+    "subArea"	TEXT NOT NULL,
     "collectionId"	INTEGER NOT NULL,
     "better"	TEXT,
     "worse"	TEXT,
     "related"	TEXT,
     "attempt"	TEXT,
     "temperature"	REAL,
+    "toiletType"	INTEGER,
     "toiletPain"	INTEGER,
     "colour"	INTEGER,
     "dizzy"	INTEGER,
     "sleep"	REAL,
+    "description"	TEXT,
     FOREIGN KEY("collectionId") REFERENCES "collection"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)
   )

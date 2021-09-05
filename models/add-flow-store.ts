@@ -5,6 +5,7 @@ import {
   SnapshotOut,
   SnapshotOrInstance
 } from "mobx-state-tree";
+import { addCollection } from "../database/dbAPI";
 import { RecordModel } from "./record";
 
 /**
@@ -23,7 +24,7 @@ export const AddFlowStoreModel = types
     setProgressBarLength: (length: number) => {
       self.progressLength = length;
     },
-    setRecordType: (typeId: number) => {
+    setRecordType: (typeId: string) => {
       self.currentNewRecord.type = typeId;
     },
     setRecordTime: (times: SnapshotOrInstance<typeof self.currentNewRecord.time>) => {
@@ -80,10 +81,16 @@ export const AddFlowStoreModel = types
     },
     resetProgress: () => {
       self.currentProgress = 1;
+    },
+    resetAddFlow: () => {
+      self.currentNewRecord = RecordModel.create();
     }
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
+    dbInsertCollection: async (userId: number) => {
+      await addCollection(userId, self.currentNewRecord.type);
+    },
     dbInsertFlow: () => {
       console.log(self.currentNewRecord.type);
       console.log(self.currentNewRecord.area);

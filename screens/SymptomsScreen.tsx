@@ -18,31 +18,31 @@ type screenType = [keyof AddFlowParamList, number];
 export default function SymptomsScreen({ navigation, route }: ScreenProps) {
 
   const { addFlowStore } = useStores();
-  const [selectedId, setSelectedId] = useState(route.params.type === "feel" ? 1 : 7);
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
+
+  const [selectedId, setSelectedId] = useState(route.params.type === "feel" ? 1 : 14);
+  const [selectedName, setSelectedName] = useState(route.params.type === "feel" ? "pain" : "breathe");
 
   function useScreenDirect() : screenType {
     switch (selectedId) {
       case 1:
       case 2:
-      case 16:
+      case 23:
         return ["AreaSelectScreen", 5];
       case 3:
       case 4:
-        addFlowStore.setProgressBarLength(6);
         return ["TemperatureSelectionScreen", 6];
-      case 15:
-        addFlowStore.setProgressBarLength(7);
+      case 22:
+      case 8:
         return ["ToiletScreen", 7];
       case 5:
       case 13:
-        addFlowStore.setProgressBarLength(5);
+      case 20:
         return ["DizzyScreen", 5];
       case 12:
-        addFlowStore.setProgressBarLength(5);
+      case 19:
         return ["SleepHoursScreen", 5];
       default:
-        addFlowStore.setProgressBarLength(5);
         return ["CustomScreen", 5];
     }
   }
@@ -64,7 +64,10 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
                     iconName={symptom.icon}
                     title={symptom.name}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
-                    onPress={() => {setSelectedId(symptom.id)}}
+                    onPress={() => {
+                      setSelectedId(symptom.id);
+                      setSelectedName(symptom.name);
+                    }}
                   />
                 );
               })}
@@ -78,8 +81,9 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
         }}
         right={() => {
           const [screenName, progressLength] = useScreenDirect();
-          addFlowStore.setRecordType(selectedId);
           addFlowStore.resetProgress();
+          addFlowStore.resetAddFlow();
+          addFlowStore.setRecordType(selectedName);
           addFlowStore.setProgressBarLength(progressLength);
           navigation.navigate(screenName);
         }}

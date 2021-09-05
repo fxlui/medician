@@ -1,7 +1,7 @@
 [
   {
     "id": 14,
-    "name": "breath",
+    "name": "breathe",
     "icon": "Breathe"
   },
   {
@@ -46,6 +46,11 @@
   },
   {
     "id": 23,
+    "name": "stop scratching",
+    "icon": "Itchy"
+  },
+  {
+    "id": 24,
     "name": "not on list",
     "icon": "Add"
   }

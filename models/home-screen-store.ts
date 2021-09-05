@@ -8,7 +8,6 @@ import {
 } from "mobx-state-tree";
 import { TreatmentModel } from "./treatment";
 import { AppointmentModel } from "./appointment";
-import { number } from "mobx-state-tree/dist/internal";
 
 /**
  * The Home Screen Store model.
