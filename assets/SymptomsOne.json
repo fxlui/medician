@@ -1,36 +1,36 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "name": "Pain",
     "description": "pain"
   },
   {
-    "id": "2",
+    "id": 2,
     "name": "Itchy",
     "description": "itchy"
   },
   {
-    "id": "3",
+    "id": 3,
     "name": "Hot",
     "description": "hot"
   },
   {
-    "id": "4",
+    "id": 4,
     "name": "Cold",
     "description": "cold"
   },
   {
-    "id": "5",
+    "id": 5,
     "name": "Dizzy",
     "description": "dizzy"
   },
   {
-    "id": "6",
+    "id": 6,
     "name": "Nauseous",
     "description": "nauseous"
   },
   {
-    "id": "17",
+    "id": 17,
     "name": "Add",
     "description": "not on list"
   }

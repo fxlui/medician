@@ -149,7 +149,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
 
   return (
     <SafeView style={styles.container} disableTop>
-      <Text style={styles.greeting}>Attach any photos and videos here.</Text>
+      <Text style={styles.greeting}>Attach any photos or videos here.</Text>
       <View
         style={{
           flex: 1,
@@ -218,7 +218,12 @@ export default function MediaScreen({ navigation }: ScreenProps) {
                     }}
                     onClick={
                       img.type === "video"
-                        ? () => {}
+                        ? () => {
+                            Alert.alert(
+                              "It's a video!",
+                              "Video playbacks aren't supported yet. Don't worry - they are still saved in Medician and you'll be able to play them in the next update. :)"
+                            );
+                          }
                         : () => {
                             setCurrentIndex(index);
                             setIsVisible(true);
@@ -267,7 +272,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
         >
           <TileBase
             onClick={takeImage}
-            style={{ marginRight: 30, height: 100, width: 100 }}
+            style={{ marginRight: 40, height: 100, width: 100 }}
             gradient={[tileColor, tileColor]}
           >
             <View

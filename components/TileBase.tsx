@@ -124,12 +124,12 @@ const styles = StyleSheet.create({
     height: 58,
   },
   extraLong: {
-    width: 355,
-    height: 150,
+    width: 340,
+    height: 140,
   },
   actionAdd: {
-    width: 160,
-    height: 160,
+    width: 155,
+    height: 155,
   },
 });
 

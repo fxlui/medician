@@ -1,17 +1,34 @@
 import * as React from "react";
-import Svg, { SvgProps, Path } from "react-native-svg";
+import Svg, {
+  SvgProps,
+  Path,
+  Defs,
+  LinearGradient,
+  Stop,
+} from "react-native-svg";
 
-function AppointmentsSVG(props: SvgProps) {
+function SvgComponent(props: SvgProps) {
   return (
-    <Svg
-      viewBox="0 0 24 24"
-      width={50}
-      height={50}
-      {...props}
-    >
-      <Path d="M4 2c-.534 0-1.037.208-1.414.586A1.988 1.988 0 002 4v3c0 2.942 1.83 5.454 4.408 6.486.354.616.914 1.09 1.592 1.33V18a4 4 0 004 4h4a4 4 0 004-4v-.174A3 3 0 0022 15a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 002 2.824V18a2 2 0 01-2 2h-4a2 2 0 01-2-2v-3.184a2.987 2.987 0 001.592-1.33A7.01 7.01 0 0016 6.976V4a2 2 0 00-2-2h-1a1 1 0 000 2h1v2.777c0 2.61-1.901 4.945-4.498 5.198a5.171 5.171 0 01-.555.025c-2.733-.028-4.946-2.262-4.945-5.023L4 4h1a1 1 0 000-2H4z" />
+    <Svg width={32} height={32} viewBox="0 0 32 32" fill="none" {...props}>
+      <Path
+        d="M3.2 0C1.451 0 0 1.451 0 3.2l.003 4.763C.003 7.841 0 7.853 0 8c0 4.706 2.933 8.744 7.063 10.397a4.781 4.781 0 002.537 2.11V25.6c0 3.516 2.884 6.4 6.4 6.4h6.4c3.516 0 6.4-2.884 6.4-6.4v-.278a4.8 4.8 0 001.794-7.916A4.8 4.8 0 0022.4 20.8a4.8 4.8 0 003.2 4.519v.281c0 1.787-1.413 3.2-3.2 3.2H16a3.176 3.176 0 01-3.2-3.2v-5.094a4.781 4.781 0 002.537-2.11C19.468 16.745 22.4 12.707 22.4 8V3.2c0-1.749-1.451-3.2-3.2-3.2H16v3.2h3.2V8c0 4.438-3.562 8-8 8-4.438 0-8-3.562-8-8 0 .12.003.109.003-.037L3.2 3.2h3.2V0H3.2z"
+        fill={props.fill ? props.fill : "url(#prefix__paint0_linear)"}
+      />
+      <Defs>
+        <LinearGradient
+          id="prefix__paint0_linear"
+          x1={16}
+          y1={0}
+          x2={16}
+          y2={32}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#18BDF1" />
+          <Stop offset={1} stopColor="#00A3FF" />
+        </LinearGradient>
+      </Defs>
     </Svg>
   );
 }
 
-export default AppointmentsSVG
+export default SvgComponent;

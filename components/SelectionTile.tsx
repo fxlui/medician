@@ -1,8 +1,7 @@
 import * as React from "react";
-import { StyleSheet, StyleProp, ViewStyle, View } from "react-native";
+import { StyleSheet, StyleProp, ViewStyle } from "react-native";
 
-import { Icon } from "./Icon";
-import { Text } from "./Themed";
+import { Text, View } from "./Themed";
 import useColorScheme from "../hooks/useColorScheme";
 import TileBase, { TileSize } from "./TileBase";
 
@@ -10,16 +9,14 @@ interface TileDetails {
   title: string;
   index?: number;
   onPress: () => void;
-  iconName: string;
-  selected: boolean;
+  selected: boolean | null;
   extraStyles?: StyleProp<ViewStyle>;
 }
 
-const SymptomTile: React.FC<TileDetails> = ({
+const SelectionTile: React.FC<TileDetails> = ({
   title,
   onPress,
   extraStyles,
-  iconName,
   selected,
 }) => {
   const colorScheme = useColorScheme();
@@ -30,8 +27,7 @@ const SymptomTile: React.FC<TileDetails> = ({
     ? "#fff"
     : "#252525";
 
-  const contentColor =
-    colorScheme === "dark" ? "#fff" : selected ? "#fff" : "#000";
+  const iconColor = colorScheme === "dark" ? "#fff" : "#333";
 
   return (
     <TileBase
@@ -41,19 +37,11 @@ const SymptomTile: React.FC<TileDetails> = ({
       style={extraStyles}
     >
       <View style={styles.content}>
-        <Icon
-          name={iconName}
-          props={{
-            width: 42,
-            height: 42,
-            fill: contentColor,
-          }}
-        />
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: "500",
-            color: contentColor,
+            color: selected ? "#fff" : iconColor,
           }}
         >
           {title}
@@ -66,9 +54,10 @@ const SymptomTile: React.FC<TileDetails> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    alignItems: "stretch",
-    justifyContent: "space-between",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
   },
 });
 
-export default SymptomTile;
+export default SelectionTile;

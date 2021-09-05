@@ -1,4 +1,4 @@
-import { createContext, useContext, FC} from "react";
+import { createContext, useContext } from "react";
 import { RootStore, RootStoreModel } from "./root-store";
 
 const RootStoreContext = createContext<RootStore>({} as RootStore);

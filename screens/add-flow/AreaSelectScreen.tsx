@@ -8,53 +8,51 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
+import BodyAreas from "../../assets/BodyAreas.json";
+import { useStores } from "../../models/root-store-provider";
 import * as Haptics from "expo-haptics";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e26d72",
-    title: "Third Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145ee26d72",
-    title: "Fourth Item",
-  },
-];
-
-interface baseData {
+interface topBaseData {
   index: number;
   dataIndex: number;
   item: {
-    id: string;
-    title: string;
+    id: number;
+    emoji: string;
+    text: string;
+  };
+}
+
+interface bottomBaseData {
+  index: number;
+  dataIndex: number;
+  item: {
+    id: number;
+    text: string;
   };
 }
 
 const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   const [selectedTop, setSelectedTop] = useState(0);
   const [selectedBottom, setSelectedBottom] = useState(0);
+  const { addFlowStore } = useStores();
 
-  const topRef = React.createRef<Carousel<{ id: string; title: string }>>();
-  const bottomRef = React.createRef<Carousel<{ id: string; title: string }>>();
+  const topRef =
+    React.createRef<Carousel<{ id: number; emoji: string; text: string }>>();
+  const bottomRef = React.createRef<Carousel<{ id: number; text: string }>>();
 
-  const renderTopTile = ({ item, index }: baseData) => {
+  const bodyAreaArr = BodyAreas;
+
+  const renderTopTile = ({ item, index }: topBaseData) => {
     return (
       <TopTile
-        title={item.title}
+        title={item.text}
         style={{
           marginRight: 15,
         }}
         index={index}
+        emoji={item.emoji}
         selected={selectedTop === index}
         updater={() => {
           topRef.current?.snapToItem(index);
@@ -63,10 +61,10 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
     );
   };
 
-  const renderBottomTile = ({ item, index }: baseData) => {
+  const renderBottomTile = ({ item, index }: bottomBaseData) => {
     return (
       <BottomTile
-        title={item.title}
+        title={item.text}
         style={{
           marginRight: 15,
         }}
@@ -86,7 +84,11 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
         <View style={styles.child}>
           <View style={{}}>
             <Carousel
-              data={DATA}
+              data={bodyAreaArr.map((item) => ({
+                id: item.id,
+                emoji: item.emoji,
+                text: item.text,
+              }))}
               renderItem={renderTopTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
@@ -102,13 +104,17 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
                 setSelectedTop(index);
+                setSelectedBottom(0);
+                bottomRef.current?.snapToItem(0);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
-              onSnapToItem={(index) => {}}
               ref={topRef}
             />
             <Carousel
-              data={DATA}
+              data={bodyAreaArr[selectedTop].parts.map((item, index) => ({
+                id: index,
+                text: item,
+              }))}
               renderItem={renderBottomTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
@@ -134,8 +140,15 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
         </View>
       </View>
       <AddFlowNavBar
+        second
         left={() => navigation.pop()}
-        right={() => navigation.navigate("SeverityScreen")}
+        right={() => {
+          addFlowStore.setRecordAreas(
+            bodyAreaArr[selectedTop].text,
+            bodyAreaArr[selectedTop].parts[selectedBottom]
+          );
+          navigation.navigate("SeverityScreen");
+        }}
       />
     </SafeView>
   );
