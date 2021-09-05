@@ -3,7 +3,6 @@ import { NavigatorScreenParams } from "@react-navigation/core";
 export type RootStackParamList = {
   Root: undefined;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
-  AddAppointment: NavigatorScreenParams<AddAppointmentParamList>;
   Notification: {
     id: string;
     name: string;
@@ -29,11 +28,8 @@ export type AddFlowParamList = {
   TimeSelectScreen: undefined;
   DetailsScreen: undefined;
   MediaScreen: undefined;
-};
-
-export type AddAppointmentParamList = {
   PickTime: undefined
-}
+};
 
 export enum HomeTileTypes {
   Medication = "med",

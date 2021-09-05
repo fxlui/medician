@@ -6,7 +6,7 @@ import { CompositeScreenProps } from "@react-navigation/core";
 import Icon from "../components/Icon";
 import AddTile from "../components/AddTile";
 import SafeView from "../components/SafeView";
-import { RootStackParamList, AddFlowParamList, AddAppointmentParamList } from "../types";
+import { RootStackParamList, AddFlowParamList} from "../types";
 import EntryTile from "../components/EntryTile";
 import { Text, View } from "../components/Themed";
 import { TileSize } from "../components/TileBase";
@@ -14,8 +14,7 @@ import { PressableBase } from "../components/PressableBase";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList, "ActionScreen">,
-  StackScreenProps<AddFlowParamList>,
-  StackScreenProps<AddAppointmentParamList>
+  StackScreenProps<AddFlowParamList>
 >;
 
 export default function ActionScreen({ navigation }: ScreenProps) {
@@ -58,8 +57,8 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               title={"Add"}
               subtitle={"Appointment"}
               onClick={() => {
-                navigation.navigate("PickDate", {
-                  screen: "PickDate",
+                navigation.navigate("AddFlow", {
+                  screen: "PickTime",
                   
                 })
               }}
@@ -68,8 +67,8 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               title={"Add"}
               subtitle={"Routine"}
               onClick={() => {
-                navigation.navigate("PickDate", {
-                  screen: "PickDate",
+                navigation.navigate("AddFlow", {
+                  screen: "PickTime",
                   
                 })
               }}
