@@ -56,6 +56,12 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             <AddTile
               title={"Add"}
               subtitle={"Appointment"}
+              onClick={() => {
+                navigation.navigate("AddAppointment", {
+                  screen: "AppointmentScreen",
+                  
+                })
+              }}
             />
             <AddTile
               title={"Add"}
@@ -101,8 +107,8 @@ const styles = StyleSheet.create({
   addTiles: {
     alignSelf: "stretch",
     flexDirection: 'row',
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     justifyContent: "space-between"
   },
   cancelButton: {
