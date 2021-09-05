@@ -13,4 +13,4 @@ const twoSymptoms = ["hot", "cold"];
 const threeSymptoms = ["going to toilet is difficult", "go to toilet"];
 const fourSymptoms = ["dizzy", "walking is difficult", "walk"];
 const fiveSymptoms = ["sleeping is difficult", "sleep"];
-const sixSymptoms = ["nauseous", "breathing is difficult", "hearing is difficult", "seeing is difficult", "breath", "hear", "see", "speak", "speaking is diffuclt", "concentrate"];
+const sixSymptoms = ["nauseous", "breathing is difficult", "hearing is difficult", "seeing is difficult", "breathe", "hear", "see", "speak", "speaking is diffuclt", "concentrate"];
