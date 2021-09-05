@@ -230,7 +230,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         right={
           selection.length > 0
             ? () => {
-              // addFlowStore.setRecordTime(selection.map(item => item.date));
+              addFlowStore.setRecordTime(selection.map(item => item.date));
               navigation.navigate("DetailsScreen");
             }
             : () =>

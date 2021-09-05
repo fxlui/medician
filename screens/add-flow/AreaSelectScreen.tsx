@@ -140,14 +140,14 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
         </View>
       </View>
       <AddFlowNavBar
-        second
+        preventLeftDefault
         left={() => navigation.pop()}
         right={() => {
           addFlowStore.setRecordAreas(
             bodyAreaArr[selectedTop].text,
             bodyAreaArr[selectedTop].parts[selectedBottom]
           );
-          navigation.navigate("CustomScreen");
+          navigation.navigate("DetailsScreen");
         }}
       />
     </SafeView>

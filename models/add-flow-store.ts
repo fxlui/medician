@@ -42,6 +42,11 @@ export const AddFlowStoreModel = types
       self.currentNewRecord.related = related;
       self.currentNewRecord.attempt = attempt;
     },
+    setRecordAttachments: (attachments: SnapshotOrInstance<
+      typeof self.currentNewRecord.attatchmentPaths
+    >) => {
+      self.currentNewRecord.attatchmentPaths = cast(attachments);
+    },
     goBack: () => {
       self.currentProgress -= 1;
     },
@@ -54,7 +59,17 @@ export const AddFlowStoreModel = types
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
-
+    dbInsertFlow: () => {
+      console.log(self.currentNewRecord.type);
+      console.log(self.currentNewRecord.area);
+      console.log(self.currentNewRecord.subArea);
+      console.log(self.currentNewRecord.severity);
+      console.log(self.currentNewRecord.better);
+      console.log(self.currentNewRecord.worse);
+      console.log(self.currentNewRecord.related);
+      console.log(self.currentNewRecord.attempt);
+      console.log(self.currentNewRecord.attatchmentPaths)
+    }
   }));
 
 type AddFlowStoreType = Instance<typeof AddFlowStoreModel>;

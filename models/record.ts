@@ -19,7 +19,11 @@ export const RecordModel = types
     toiletPain: types.optional(types.integer, 0),
     colour: types.optional(types.integer, 0),
     dizzy: types.optional(types.integer, 0),
-    sleep: types.optional(types.integer, 0)
+    sleep: types.optional(types.integer, 0),
+    attatchmentPaths: types.array(types.model({
+      type: types.optional(types.string, "video"),
+      uri: types.optional(types.string, "")
+    }))
   });
 
 /**
