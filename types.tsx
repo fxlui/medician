@@ -30,6 +30,10 @@ export type AddFlowParamList = {
   MediaScreen: undefined;
 };
 
+export type AddAppointmentParamList = {
+  PickTime: undefined
+}
+
 export enum HomeTileTypes {
   Medication = "med",
   Exercise = "exe",

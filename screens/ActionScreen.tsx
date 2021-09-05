@@ -6,7 +6,7 @@ import { CompositeScreenProps } from "@react-navigation/core";
 import Icon from "../components/Icon";
 import AddTile from "../components/AddTile";
 import SafeView from "../components/SafeView";
-import { RootStackParamList, AddFlowParamList } from "../types";
+import { RootStackParamList, AddFlowParamList, AddAppointmentParamList } from "../types";
 import EntryTile from "../components/EntryTile";
 import { Text, View } from "../components/Themed";
 import { TileSize } from "../components/TileBase";
@@ -14,7 +14,8 @@ import { PressableBase } from "../components/PressableBase";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList, "ActionScreen">,
-  StackScreenProps<AddFlowParamList>
+  StackScreenProps<AddFlowParamList>,
+  StackSahjklcreenProps<AddAppointmentParamList>
 >;
 
 export default function ActionScreen({ navigation }: ScreenProps) {
@@ -57,8 +58,8 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               title={"Add"}
               subtitle={"Appointment"}
               onClick={() => {
-                navigation.navigate("AddAppointment", {
-                  screen: "AppointmentScreen",
+                navigation.navigate("PickDate", {
+                  screen: "PickDate",
                   
                 })
               }}
@@ -66,6 +67,12 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             <AddTile
               title={"Add"}
               subtitle={"Routine"}
+              onClick={() => {
+                navigation.navigate("PickDate", {
+                  screen: "PickDate",
+                  
+                })
+              }}
             />
           </View>
           <PressableBase
