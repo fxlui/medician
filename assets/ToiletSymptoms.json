@@ -1,0 +1,44 @@
+{
+  "type": [
+    {
+      "id": 0,
+      "name": "Pee"
+    },
+    {
+      "id": 1,
+      "name": "Poo"
+    }
+  ],
+  "hurt": [
+    {
+      "id": 0,
+      "type": false
+    },
+    {
+      "id": 1,
+      "type": true
+    }
+  ],
+  "color": [
+    {
+      "id": 0,
+      "emoji": "🟤",
+      "name": "Brown"
+    },
+    {
+      "id": 1,
+      "emoji": "🟢",
+      "name": "Green"
+    },
+    {
+      "id": 2,
+      "emoji": "🔴",
+      "name": "Red"
+    },
+    {
+      "id": 3,
+      "emoji": "⚫",
+      "name": "Black"
+    }
+  ]
+}

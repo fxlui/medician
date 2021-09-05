@@ -6,7 +6,7 @@ import { types, Instance, SnapshotOut } from "mobx-state-tree";
  */
 export const RecordModel = types
   .model("Record", {
-    type: types.optional(types.integer, 1),
+    type: types.optional(types.integer, 0),
     time: types.optional(types.array(types.Date), []),
     severity: types.optional(types.integer, 0),
     area: types.optional(types.string, ""),
@@ -16,10 +16,12 @@ export const RecordModel = types
     related: types.optional(types.string, ""),
     attempt: types.optional(types.string, ""),
     temperature: types.optional(types.number, 0),
-    toiletPain: types.optional(types.integer, 0),
-    colour: types.optional(types.integer, 0),
-    dizzy: types.optional(types.integer, 0),
-    sleep: types.optional(types.integer, 0),
+    toiletType: types.optional(types.integer, -1),
+    toiletPain: types.optional(types.integer, -1),
+    colour: types.optional(types.integer, -1),
+    dizzy: types.optional(types.integer, -1),
+    sleep: types.optional(types.number, 0),
+    description: types.optional(types.string, ""),
     attatchmentPaths: types.array(types.model({
       type: types.optional(types.string, "video"),
       uri: types.optional(types.string, "")

@@ -234,10 +234,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
               navigation.navigate("DetailsScreen");
             }
             : () =>
-                Alert.alert(
-                  "No selection yet",
-                  "In order to add a new record, you will need to select the date and times of occurances."
-                )
+              Alert.alert(
+                "No selection yet",
+                "In order to add a new record, you will need to select the date and times of occurances."
+              )
         }
       />
     </SafeView>

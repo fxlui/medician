@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet } from "react-native";
-import useColorScheme from "../../hooks/useColorScheme";
 import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
@@ -43,6 +42,7 @@ const ToiletPainScreen = ({ navigation }: ScreenProps) => {
           if (pain === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
+            addFlowStore.setRecordToiletPain(pain ? 1 : 0);
             addFlowStore.goForward();
             navigation.navigate("ToiletColorScreen");
           }

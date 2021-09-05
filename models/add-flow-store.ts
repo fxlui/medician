@@ -47,8 +47,28 @@ export const AddFlowStoreModel = types
     >) => {
       self.currentNewRecord.attatchmentPaths = cast(attachments);
     },
+    setRecordTemperature: (temperature: number) => {
+      self.currentNewRecord.temperature = temperature;
+    },
+    setRecordToiletType: (type: number) => {
+      self.currentNewRecord.toiletType = type;
+    },
+    setRecordToiletPain: (pain: number) => {
+      self.currentNewRecord.toiletPain = pain;
+    },
+    setRecordColor: (color: number) => {
+      self.currentNewRecord.colour = color;
+    },
+    setRecordDizzy: (dizzy: number) => {
+      self.currentNewRecord.dizzy = dizzy;
+    },
+    setRecordSleep: (hours: number) => {
+      self.currentNewRecord.sleep = hours;
+    },
+    setRecordDescription: (description: string) => {
+      self.currentNewRecord.description = description;
+    },
     goBack: () => {
-      console.log(self.currentProgress)
       if (self.currentProgress != 1) {
         self.currentProgress -= 1;
       }
@@ -73,6 +93,13 @@ export const AddFlowStoreModel = types
       console.log(self.currentNewRecord.worse);
       console.log(self.currentNewRecord.related);
       console.log(self.currentNewRecord.attempt);
+      console.log(self.currentNewRecord.toiletType);
+      console.log(self.currentNewRecord.toiletPain);
+      console.log(self.currentNewRecord.colour);
+      console.log(self.currentNewRecord.dizzy);
+      console.log(self.currentNewRecord.sleep);
+      console.log(self.currentNewRecord.description);
+      console.log(self.currentNewRecord.time);
       console.log(self.currentNewRecord.attatchmentPaths)
     }
   }));

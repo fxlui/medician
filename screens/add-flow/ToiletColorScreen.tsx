@@ -8,6 +8,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
+import { useStores } from "../../models/root-store-provider";
 
 import Carousel from "react-native-snap-carousel";
 import * as Haptics from "expo-haptics";
@@ -48,6 +49,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
   const [selected, setSelected] = useState(0);
 
   const tileRef = React.createRef<Carousel<{ emoji: string; title: string }>>();
+  const { addFlowStore } = useStores();
 
   const renderTile = ({ item, index }: baseData) => {
     return (
@@ -102,7 +104,10 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("SeverityScreen")}
+        right={() => {
+          addFlowStore.setRecordColor(selected);
+          navigation.navigate("SeverityScreen");
+        }}
       />
     </SafeView>
   );

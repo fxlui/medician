@@ -26,7 +26,6 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
       case 1:
       case 2:
       case 16:
-      case 17:
         return ["AreaSelectScreen", 5];
       case 3:
       case 4:

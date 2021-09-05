@@ -11,6 +11,7 @@ import { Entypo } from "@expo/vector-icons";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
+import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
 type ScreenProps = CompositeScreenProps<
@@ -24,6 +25,8 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
   const [temperature, setTemperature] = useState(36.5);
   const [unit, setUnit] = useState("C");
+  const { addFlowStore } = useStores();
+
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
@@ -107,8 +110,10 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        // some logic here
-        right={() => navigation.navigate("SeverityScreen")}
+        right={() => {
+          addFlowStore.setRecordTemperature(temperature);
+          navigation.navigate("SeverityScreen")
+        }}
       />
     </SafeView>
   );

@@ -8,6 +8,7 @@ import TileBase from "../../components/TileBase";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
+import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
 import { Entypo } from "@expo/vector-icons";
@@ -22,6 +23,8 @@ const SleepHoursScreen = ({ navigation }: ScreenProps) => {
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
   const [hours, setHours] = useState(8.5);
+  const { addFlowStore } = useStores();
+
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
@@ -94,7 +97,10 @@ const SleepHoursScreen = ({ navigation }: ScreenProps) => {
       </View>
       <AddFlowNavBar
         left={() => navigation.pop()}
-        right={() => navigation.navigate("SeverityScreen")}
+        right={() => {
+          addFlowStore.setRecordSleep(hours);
+          navigation.navigate("SeverityScreen")
+        }}
       />
     </SafeView>
   );

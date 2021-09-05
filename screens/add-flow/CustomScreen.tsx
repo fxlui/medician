@@ -17,6 +17,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import { PressableBase } from "../../components/PressableBase";
+import { useStores } from "../../models/root-store-provider";
 import { Ionicons } from "@expo/vector-icons";
 
 type ScreenProps = CompositeScreenProps<
@@ -35,8 +36,12 @@ export default function CustomScreen({ navigation }: ScreenProps) {
   const [currentText, setCurrentText] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
+  const { addFlowStore } = useStores();
 
-  const handleNavigation = () => navigation.navigate("SeverityScreen");
+  const handleNavigation = () => {
+    addFlowStore.setRecordDescription(currentText);
+    navigation.navigate("SeverityScreen")
+  };
 
   return (
     <SafeView style={styles.container} disableTop>
