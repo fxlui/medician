@@ -61,8 +61,8 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
                   <SymptomTile
                     selected={symptom.id === selectedId}
                     key={symptom.id}
-                    iconName={symptom.name}
-                    title={symptom.description}
+                    iconName={symptom.icon}
+                    title={symptom.name}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
                     onPress={() => {setSelectedId(symptom.id)}}
                   />

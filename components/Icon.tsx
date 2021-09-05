@@ -48,7 +48,7 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <DizzySVG {...props} />;
     case "Exercise":
       return <ExerciseSVG {...props} />;
-    case "Hearing":
+    case "Hear":
       return <HearingSVG {...props} />;
     case "Hot":
       return <HotSVG {...props} />;
