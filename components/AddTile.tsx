@@ -9,14 +9,19 @@ import useColorScheme from "../hooks/useColorScheme";
 interface TileDetails {
   title: string;
   subtitle: string;
+  onClick: () => void;
 }
 
-const Tile: React.FC<TileDetails> = ({ title, subtitle }) => {
+const Tile: React.FC<TileDetails> = ({ title, subtitle, onClick }) => {
   const colorScheme = useColorScheme();
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   return (
-    <TileBase size={TileSize.ActionAdd} gradient={[tileColor, tileColor]}>
+    <TileBase 
+      size={TileSize.ActionAdd} 
+      gradient={[tileColor, tileColor]}
+      onClick={onClick}
+    >
       <View style={styles.content}>
         {subtitle === "Routine"
           ?
