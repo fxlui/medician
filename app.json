@@ -26,7 +26,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to allow users to take photos/videos for tracking symptoms.",
-        "NSPhotoLibraryUsageDescription": "This app uses the photo library to allow users to select photos/videos for tracking symptoms."
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library to allow users to select photos/videos for tracking symptoms.",
+        "NSFaceIDUsageDescription": "This app uses Face ID to allow users to lock their app with Face ID authentication.",
+        "NSTouchIDUsageDescription": "This app uses Touch ID to allow users to lock their app with Face ID authentication."
       },
       "bundleIdentifier": "com.logicpop.medician",
       "buildNumber": "1.0.0"

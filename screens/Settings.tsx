@@ -31,6 +31,7 @@ type ScreenProps = StackScreenProps<RootStackParamList, "Settings">;
 const SettingsScreen = ({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
+  const borderColor = colorScheme === "light" ? "#dbdbdb" : "#333";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   const [showSettings, setShowSettings] = React.useState(false);
@@ -94,7 +95,12 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
         {showSettings ? (
           <View style={styles.section}>
             <Text style={styles.header}>Settings</Text>
-            <View style={[styles.row, { backgroundColor: tileColor }]}>
+            <View
+              style={[
+                styles.row,
+                { backgroundColor: tileColor, borderColor: borderColor },
+              ]}
+            >
               <Text style={styles.rowText}>Lock with {bioText}</Text>
               <Switch
                 style={{ marginLeft: "auto" }}
@@ -131,7 +137,11 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
             <View
               style={[
                 styles.row,
-                { borderBottomWidth: 0, backgroundColor: tileColor },
+                {
+                  borderBottomWidth: 0,
+                  backgroundColor: tileColor,
+                  borderColor: borderColor,
+                },
               ]}
             >
               <Text style={styles.rowText}>Contact Us</Text>
@@ -142,7 +152,12 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
               WebBrowser.openBrowserAsync("https://logicpop.com.au")
             }
           >
-            <View style={[styles.row, { backgroundColor: tileColor }]}>
+            <View
+              style={[
+                styles.row,
+                { backgroundColor: tileColor, borderColor: borderColor },
+              ]}
+            >
               <Text style={styles.rowText}>Privacy Policy</Text>
             </View>
           </TouchableOpacity>
@@ -150,7 +165,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
 
         <View style={styles.copyright}>
           <Text style={styles.copyrightText}>Made with </Text>
-          <Ionicons name="heart-outline" size={20} color="black" />
+          <Ionicons name="heart-outline" size={20} color={textColor} />
           <Text> at logicpop</Text>
         </View>
       </ScrollView>
@@ -189,7 +204,6 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: "#ddd",
   },
   rowText: {
     fontSize: 16,
