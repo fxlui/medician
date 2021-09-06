@@ -20,9 +20,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 import { AddFlowParamList, RootStackParamList } from "../../types";
-import BodyAreas from "../../assets/BodyAreas.json";
+import uniqueSymptoms from "../../assets/uniqueSymptoms.json";
 
-import { TopTile, BottomTile } from "../../components/AreaTile";
+import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
 import { useStores } from "../../models/root-store-provider";
@@ -36,18 +36,8 @@ interface topBaseData {
   index: number;
   dataIndex: number;
   item: {
-    id: number;
-    emoji: string;
-    text: string;
-  };
-}
-
-interface bottomBaseData {
-  index: number;
-  dataIndex: number;
-  item: {
-    id: number;
-    text: string;
+    title: string;
+    type: string;
   };
 }
 
@@ -66,7 +56,7 @@ export default function RoutineDetailsScreen({
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
 
   const routineType = route.params.type;
-  const bodyAreaArr = BodyAreas;
+  const symptomArr = uniqueSymptoms;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
@@ -75,13 +65,10 @@ export default function RoutineDetailsScreen({
     React.useState<Number | null>(null);
 
   const [selectedTop, setSelectedTop] = React.useState(0);
-  const [selectedBottom, setSelectedBottom] = React.useState(0);
-  const [selectedArea, setSelectedArea] = React.useState("");
+  const [selectedSymptom, setSelectedSymptom] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
-  const topRef =
-    React.createRef<Carousel<{ id: number; emoji: string; text: string }>>();
-  const bottomRef = React.createRef<Carousel<{ id: number; text: string }>>();
+  const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
   const { addFlowStore } = useStores();
 
@@ -146,10 +133,10 @@ export default function RoutineDetailsScreen({
 
   const renderTopTile = ({ item, index }: topBaseData) => {
     return (
-      <TopTile
-        title={item.text}
+      <OverviewSymptomTile
+        title={item.title}
         index={index}
-        emoji={item.emoji}
+        iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
           topRef.current?.snapToItem(index);
@@ -158,21 +145,10 @@ export default function RoutineDetailsScreen({
     );
   };
 
-  const renderBottomTile = ({ item, index }: bottomBaseData) => {
-    return (
-      <BottomTile
-        title={item.text}
-        index={index}
-        selected={selectedBottom === index}
-        updater={() => {
-          bottomRef.current?.snapToItem(index);
-        }}
-      />
-    );
-  };
-
   const getAlertTimeText = (minutes: Number) => {
     switch (minutes) {
+      case -1:
+        return `No notifications`;
       case 0:
         return `At the time of ${routineType}`;
       case 5:
@@ -210,8 +186,8 @@ export default function RoutineDetailsScreen({
         >
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ1 }]}>
             <Text style={styles.question}>{getQuestion(0)}</Text>
-            {!inputFocused && selectedArea !== "" ? (
-              <Text style={styles.answer}>{selectedArea}</Text>
+            {!inputFocused && selectedSymptom !== "" ? (
+              <Text style={styles.answer}>{selectedSymptom}</Text>
             ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
@@ -293,11 +269,7 @@ export default function RoutineDetailsScreen({
                 }}
               >
                 <Carousel
-                  data={bodyAreaArr.map((item) => ({
-                    id: item.id,
-                    emoji: item.emoji,
-                    text: item.text,
-                  }))}
+                  data={symptomArr}
                   renderItem={renderTopTile}
                   vertical={false}
                   sliderWidth={Dimensions.get("window").width}
@@ -311,46 +283,16 @@ export default function RoutineDetailsScreen({
                   }}
                   itemWidth={150}
                   inactiveSlideOpacity={0.8}
-                  onLayout={() =>
-                    setSelectedArea(
-                      BodyAreas[selectedTop].parts[selectedBottom]
-                    )
-                  }
+                  onLayout={() => {
+                    topRef.current?.snapToItem(selectedTop);
+                    setSelectedSymptom(symptomArr[selectedTop].title);
+                  }}
                   onScrollIndexChanged={(index) => {
                     setSelectedTop(index);
-                    bottomRef.current?.snapToItem(0);
-                    //setSelectedBottom(0);
-                    setSelectedArea(BodyAreas[index].parts[0]);
+                    setSelectedSymptom(symptomArr[index].title);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                   ref={topRef}
-                />
-                <Carousel
-                  data={bodyAreaArr[selectedTop].parts.map((item, index) => ({
-                    id: index,
-                    text: item,
-                  }))}
-                  renderItem={renderBottomTile}
-                  vertical={false}
-                  sliderWidth={Dimensions.get("window").width}
-                  containerCustomStyle={{
-                    overflow: "visible",
-                  }}
-                  contentContainerCustomStyle={{
-                    justifyContent: "center",
-                    alignItems: "flex-start",
-                    overflow: "visible",
-                    marginTop: 30,
-                    marginBottom: 20,
-                  }}
-                  itemWidth={150}
-                  inactiveSlideOpacity={0.8}
-                  onScrollIndexChanged={(index) => {
-                    setSelectedBottom(index);
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setSelectedArea(BodyAreas[selectedTop].parts[index]);
-                  }}
-                  ref={bottomRef}
                 />
               </View>
             ) : null}
@@ -369,6 +311,7 @@ export default function RoutineDetailsScreen({
                   color: textColor,
                 }}
               >
+                <Picker.Item label="No notifications" value={-1} />
                 <Picker.Item label={`At time of ${routineType}`} value={0} />
                 <Picker.Item label="5 minutes before" value={5} />
                 <Picker.Item label="15 minutes before" value={15} />

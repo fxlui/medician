@@ -166,7 +166,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
         <View style={styles.copyright}>
           <Text style={styles.copyrightText}>Made with </Text>
           <Ionicons name="heart-outline" size={20} color={textColor} />
-          <Text> at logicpop</Text>
+          <Text> by logicpop</Text>
         </View>
       </ScrollView>
     </SafeView>

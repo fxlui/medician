@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     paddingLeft: 30,
     marginTop: 15,
-    maxWidth: "80%",
+    maxWidth: "85%",
   },
   greetingSub: {
     marginTop: 10,
@@ -238,6 +238,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     paddingLeft: 30,
     opacity: 0.5,
-    maxWidth: "80%",
+    maxWidth: "90%",
   },
 });
