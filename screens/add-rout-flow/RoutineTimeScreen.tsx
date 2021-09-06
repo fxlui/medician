@@ -81,8 +81,8 @@ export default function RoutineTimeScreen({ navigation }: ScreenProps) {
       >
         <Text style={styles.greeting}>Choose the times for your routine.</Text>
         <Text style={styles.greetingSub}>
-          Check with your physician or pharmacist before starting any medication
-          or supplements.
+          Check with your doctor or pharmacist before starting any medication or
+          supplements.
         </Text>
         <View
           style={{
