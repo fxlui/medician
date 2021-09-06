@@ -55,7 +55,9 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ overflow: "visible", paddingBottom: 100 }}>
-            <Text style={styles.greeting}>I {route.params.type}...</Text>
+            <Text style={styles.greeting}>
+              I {route.params.type === "cant" ? "can't" : "feel"}...
+            </Text>
             <View style={styles.list}>
               {symptomArray.map((symptom) => {
                 return (
