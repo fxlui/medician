@@ -19,10 +19,14 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
   const { addFlowStore } = useStores();
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
 
-  const [selectedId, setSelectedId] = useState(route.params.type === "feel" ? 1 : 14);
-  const [selectedName, setSelectedName] = useState(route.params.type === "feel" ? "pain" : "breathe");
+  const [selectedId, setSelectedId] = useState(
+    route.params.type === "feel" ? 1 : 14
+  );
+  const [selectedName, setSelectedName] = useState(
+    route.params.type === "feel" ? "pain" : "breathe"
+  );
 
-  function useScreenDirect() : screenType {
+  function useScreenDirect(): screenType {
     switch (selectedId) {
       case 1:
       case 2:
@@ -38,7 +42,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
       case 13:
       case 20:
         return ["DizzyScreen", 5];
-      case 12:
+      case 7:
       case 19:
         return ["SleepHoursScreen", 5];
       default:
