@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "medician",
+    "name": "Medician",
     "slug": "medician",
     "version": "1.0.0",
+    "owner": "logicpop",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -10,16 +11,27 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "dark": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000"
+      }
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["assets/**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to allow users to take photos/videos for tracking symptoms.",
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library to allow users to select photos/videos for tracking symptoms.",
+        "NSFaceIDUsageDescription": "This app uses Face ID to allow users to lock their app with Face ID authentication.",
+        "NSTouchIDUsageDescription": "This app uses Touch ID to allow users to lock their app with Face ID authentication."
+      },
+      "bundleIdentifier": "com.logicpop.medician",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
