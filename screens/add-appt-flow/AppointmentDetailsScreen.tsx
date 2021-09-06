@@ -378,6 +378,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         </KeyboardAvoidingView>
       </View>
       <AddFlowNavBar
+        last={currentQuestion === 2}
         left={() => {
           if (
             (currentQuestion === 0 && currentDoctor !== "") ||
@@ -429,7 +430,6 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           }
         }}
         right={handleNavigation}
-        last
       ></AddFlowNavBar>
     </SafeView>
   );

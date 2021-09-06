@@ -49,6 +49,7 @@ function RootNavigator() {
           headerShown: false,
           ...TransitionPresets.ModalSlideFromBottomIOS,
           cardShadowEnabled: true,
+          gestureEnabled: false
         }}
       />
       <RootStack.Screen

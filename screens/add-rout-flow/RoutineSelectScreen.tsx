@@ -9,6 +9,7 @@ import { RootStackParamList, AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import TileBase, { TileSize } from "../../components/TileBase";
 import { PressableBase } from "../../components/PressableBase";
+import { useStores } from "../../models/root-store-provider";
 import useColorScheme from "../../hooks/useColorScheme";
 
 type ScreenProps = CompositeScreenProps<
@@ -19,12 +20,15 @@ type ScreenProps = CompositeScreenProps<
 export default function RoutineSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const { addFlowStore } = useStores();
 
   const handleSelectMedication = () => {
+    addFlowStore.goForward();
     navigation.navigate("RoutineDetailsScreen", { type: "medication" });
   };
 
   const handleSelectExercise = () => {
+    addFlowStore.goForward();
     navigation.navigate("RoutineDetailsScreen", { type: "exercise" });
   };
 

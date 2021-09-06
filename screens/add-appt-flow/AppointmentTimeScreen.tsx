@@ -21,6 +21,7 @@ import TileBase from "../../components/TileBase";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
+import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
 type ScreenProps = CompositeScreenProps<
@@ -50,6 +51,8 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
 
+  const { addFlowStore } = useStores();
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -71,6 +74,11 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
     setEditingDate(undefined);
     hideDatePicker();
   };
+
+  const handleNavigation = () => {
+    addFlowStore.goForward();
+    navigation.navigate("AppointmentDetailsScreen");
+  }
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -209,10 +217,11 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
         headerTextIOS="Select Time"
       />
       <AddFlowNavBar
+        preventRightDefault
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => navigation.navigate("AppointmentDetailsScreen")
+            ? handleNavigation
             : () =>
                 Alert.alert(
                   "No selection yet",

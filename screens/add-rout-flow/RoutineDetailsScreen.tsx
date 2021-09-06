@@ -25,6 +25,7 @@ import BodyAreas from "../../assets/BodyAreas.json";
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
+import { useStores } from "../../models/root-store-provider";
 import * as Haptics from "expo-haptics";
 
 type ScreenProps = CompositeScreenProps<
@@ -82,6 +83,8 @@ export default function RoutineDetailsScreen({
     React.createRef<Carousel<{ id: number; emoji: string; text: string }>>();
   const bottomRef = React.createRef<Carousel<{ id: number; text: string }>>();
 
+  const { addFlowStore } = useStores();
+
   const getQuestion = (question: Number) => {
     switch (question) {
       case 0:
@@ -134,6 +137,7 @@ export default function RoutineDetailsScreen({
 
   const handleNavigation = () => {
     if (currentQuestion >= 2) {
+      addFlowStore.goForward();
       navigation.navigate("RoutineTimeScreen");
     } else {
       nextQuestion();
@@ -377,6 +381,8 @@ export default function RoutineDetailsScreen({
         </KeyboardAvoidingView>
       </View>
       <AddFlowNavBar
+        preventLeftDefault
+        preventRightDefault
         left={() => {
           if (
             (currentQuestion === 0 && currentText !== "") ||
@@ -386,6 +392,7 @@ export default function RoutineDetailsScreen({
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
+                addFlowStore.goBack();
                 navigation.pop();
                 break;
               case 0:
@@ -424,6 +431,7 @@ export default function RoutineDetailsScreen({
                 break;
             }
           } else {
+            addFlowStore.goBack();
             navigation.pop();
           }
         }}

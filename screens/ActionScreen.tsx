@@ -10,6 +10,7 @@ import { RootStackParamList, AddFlowParamList } from "../types";
 import EntryTile from "../components/EntryTile";
 import { Text, View } from "../components/Themed";
 import { TileSize } from "../components/TileBase";
+import { useStores } from "../models/root-store-provider";
 import { PressableBase } from "../components/PressableBase";
 
 type ScreenProps = CompositeScreenProps<
@@ -18,6 +19,9 @@ type ScreenProps = CompositeScreenProps<
 >;
 
 export default function ActionScreen({ navigation }: ScreenProps) {
+
+  const { addFlowStore } = useStores();
+
   return (
     <SafeView>
       <View style={styles.container}>
@@ -57,6 +61,8 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               subtitle={"Appointment"}
               style={{ marginRight: 30 }}
               onPress={() => {
+                addFlowStore.resetProgress();
+                addFlowStore.setProgressBarLength(2);
                 navigation.navigate("AddFlow", {
                   screen: "AppointmentTimeScreen",
                 });
@@ -66,6 +72,8 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               title={"Add"}
               subtitle={"Routine"}
               onPress={() => {
+                addFlowStore.resetProgress();
+                addFlowStore.setProgressBarLength(3);
                 navigation.navigate("AddFlow", {
                   screen: "RoutineSelectScreen",
                 });
