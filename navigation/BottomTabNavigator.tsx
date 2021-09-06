@@ -70,9 +70,10 @@ export const BottomTabNavigator = () => {
           ),
           headerShown: true,
           headerStyle: {
-            height: 110,
-            shadowColor: 'transparent'
+            height: 100,
+            shadowColor: "transparent",
           },
+          title: "Overview",
           headerTitleStyle: {
             fontSize: 19,
           },

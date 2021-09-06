@@ -18,6 +18,17 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList>
 >;
 
+const greetingTextFromTime = () => {
+  const now = new Date();
+  if (now.getHours() < 12) {
+    return "Good morning 🌅,";
+  } else if (now.getHours() < 18) {
+    return "Good afternoon ☀️,";
+  } else {
+    return "Good evening 🌃,";
+  }
+};
+
 export default function ActionScreen({ navigation }: ScreenProps) {
 
   const { addFlowStore } = useStores();
@@ -26,7 +37,8 @@ export default function ActionScreen({ navigation }: ScreenProps) {
     <SafeView>
       <View style={styles.container}>
         <Text style={styles.greeting}>
-          Good evening 🌥,{"\n"}How are you today?
+          {greetingTextFromTime()}
+          {"\n"}How are you today?
         </Text>
         <View style={styles.tiles}>
           <EntryTile
@@ -80,23 +92,23 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               }}
             />
           </View>
-          <PressableBase
-            extraProps={{
-              style: styles.cancelButton,
-              accessibilityLabel: "Cancel Add Action",
-            }}
-            onPress={() => navigation.pop()}
-          >
-            <Icon
-              name="Cancel"
-              props={{
-                fill: "#F8583B",
-                width: 30,
-                height: 30,
-              }}
-            />
-          </PressableBase>
         </View>
+        <PressableBase
+          extraProps={{
+            style: styles.cancelButton,
+            accessibilityLabel: "Cancel Add Action",
+          }}
+          onPress={() => navigation.pop()}
+        >
+          <Icon
+            name="Cancel"
+            props={{
+              fill: "#F8583B",
+              width: 30,
+              height: 30,
+            }}
+          />
+        </PressableBase>
       </View>
     </SafeView>
   );
@@ -116,15 +128,17 @@ const styles = StyleSheet.create({
   },
   tiles: {
     marginTop: 50,
-    flexDirection: "column",
+    flex: 7,
     alignItems: "center",
+    justifyContent: "center",
   },
   addTiles: {
     flexDirection: "row",
     justifyContent: "center",
   },
   cancelButton: {
-    position: "absolute",
-    marginTop: "160%",
+    flex: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

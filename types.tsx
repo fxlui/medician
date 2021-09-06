@@ -11,6 +11,7 @@ export type RootStackParamList = {
   };
   ActionScreen: undefined;
   NotFound: undefined;
+  Settings: undefined;
 };
 
 export type BottomTabParamList = {
@@ -52,7 +53,20 @@ export enum HomeTileTypes {
 }
 
 export type DatabaseEntryType = [
-  number, number, number, string, string,
-  string, string, string, string, number,
-  number, number, number, number, number, string
-]
+  number,
+  number,
+  number,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  string
+];
