@@ -16,7 +16,7 @@ export type RootStackParamList = {
 export type BottomTabParamList = {
   HomeScreen: undefined;
   DirectToAddFlow: undefined;
-  Records: undefined;
+  OverviewScreen: undefined;
 };
 
 export type AddFlowParamList = {

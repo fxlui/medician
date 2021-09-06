@@ -5,7 +5,7 @@ import SafeView from "../components/SafeView";
 import { CompositeScreenProps } from "@react-navigation/core";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
-import { AddFlowParamList, HomeTileTypes } from "../types";
+import { HomeTileTypes } from "../types";
 import { BottomTabParamList, RootStackParamList } from "../types";
 
 import HomeTile from "../components/HomeTile";
@@ -15,6 +15,8 @@ import OverviewSymptomTile from "../components/OverviewSymptomTile";
 import * as Haptics from "expo-haptics";
 import Carousel from "react-native-snap-carousel";
 import Timeline from "react-native-timeline-flatlist";
+import { observer } from "mobx-react-lite";
+import { useStores } from "../models/root-store-provider";
 import useColorScheme from "../hooks/useColorScheme";
 
 type ScreenProps = CompositeScreenProps<
@@ -122,267 +124,247 @@ const timelineData1 = [
   { time: "1 SEP\n16:30", emoji: "🙃", title: "Hi", description: "Back" },
 ];
 
-const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
-  const colorScheme = useColorScheme();
-  const [symptomSelected, setSymptomSelected] = useState(0);
-
-  const topRef = React.createRef<Carousel<{ title: string }>>();
-
-  const renderSymptomTile = ({ item, index }: SymptomBaseData) => {
-    return (
-      <OverviewSymptomTile
-        title={item.title}
-        iconName={item.title}
-        updater={() => {
-          topRef.current?.snapToItem(index);
-        }}
-        selected={symptomSelected === index}
-      />
-    );
-  };
-
-  const renderAreaTile = ({ item, index }: BaseData) => {
-    return (
-      <TopTile
-        title={item.title}
-        style={{
-          marginRight: 15,
-        }}
-        index={index}
-        selected={false}
-        updater={() => {}}
-        emoji={"e"}
-      />
-    );
-  };
-
-  const renderHomeTile = ({ item, index }: tileItemProps) => {
-    return (
-      <HomeTile
-        title={item.name}
-        style={{
-          marginRight: 15,
-        }}
-        index={index}
-        type={item.type}
-        onPress={() => {
-          navigation.push("Notification", {
-            id: item.id,
-            name: item.name,
-            notes: item.notes,
-            type: item.type,
-          });
-        }}
-      />
-    );
-  };
-
-  const renderTimelineTile = (item) => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            marginRight: 15,
-            marginLeft: 15,
-          }}
-        >
-          {item.emoji}
-        </Text>
-        <Text
-          style={{
-            fontSize: 14,
-            fontWeight: "600",
-            textAlign: "right",
-          }}
-        >
-          {item.title}
-        </Text>
-        <Text style={[styles.textDescription]}>{item.description}</Text>
-      </View>
-    );
-  };
-
-  const renderSymptomOverview = () => (
-    <>
-      <View
-        style={[
-          styles.header,
-          { backgroundColor: colorScheme === "light" ? "white" : "#121212" },
-        ]}
-      >
-        <Carousel
-          data={symptoms}
-          renderItem={renderSymptomTile}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          contentContainerCustomStyle={{
-            justifyContent: "center",
-            alignItems: "flex-start",
-            overflow: "visible",
-          }}
-          itemWidth={150}
-          inactiveSlideOpacity={0.8}
-          onScrollIndexChanged={(index) => {
-            // TODO move this state to MobX
-            setSymptomSelected(index);
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
-          ref={topRef}
-        />
-      </View>
-
-      <View style={styles.overflowView}>
-        <Text style={styles.name}>Area</Text>
-        <Carousel
-          style={{ overflow: "visible" }}
-          data={AREA_DATA}
-          renderItem={renderAreaTile}
-          inactiveSlideScale={1}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width}
-          activeSlideAlignment={"start"}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          itemWidth={165}
-          inactiveSlideOpacity={1}
-          onScrollIndexChanged={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
-        />
-
-        <Text style={styles.name}>Routines</Text>
-        <Carousel
-          style={{ overflow: "visible" }}
-          data={DATA}
-          renderItem={renderHomeTile}
-          inactiveSlideScale={1}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width}
-          activeSlideAlignment={"start"}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          itemWidth={165}
-          inactiveSlideOpacity={1}
-          onScrollIndexChanged={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
-        />
-        <Text style={styles.name}>Appointments</Text>
-        <Carousel
-          data={DATA}
-          renderItem={renderHomeTile}
-          inactiveSlideScale={1}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width}
-          activeSlideAlignment={"start"}
-          containerCustomStyle={{
-            overflow: "visible",
-          }}
-          itemWidth={160}
-          inactiveSlideOpacity={1}
-          onScrollIndexChanged={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
-        />
-      </View>
-      <Text
-        style={[
-          styles.name,
-          {
-            paddingLeft: 25,
-          },
-        ]}
-      >
-        Timeline
-      </Text>
-    </>
-  );
-
-  return (
-    <SafeView disableTop disableBottom style={styles.container}>
-      <Timeline
-        style={styles.list}
-        data={timelineData1}
-        separator={false}
-        circleSize={15}
-        circleColor="#E9E9E9"
-        lineColor="#E9E9E9"
-        timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-        timeStyle={{
-          textAlign: "center",
-          color: "grey",
-          padding: 5,
-          borderRadius: 13,
-          overflow: "hidden",
-        }}
-        descriptionStyle={{ color: "gray" }}
-        detailContainerStyle={{
-          flexDirection: "row",
-          marginBottom: 20,
-          width: 215,
-          height: 60,
-          alignItems: "center",
-          backgroundColor: "white",
-          borderRadius: 10,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 9,
-          elevation: 5,
-        }}
-        renderDetail={renderTimelineTile}
-        onEventPress={() => {}}
-        // @ts-ignore
-        options={{
-          ListHeaderComponent: renderSymptomOverview,
-        }}
-        rowContainerStyle={{
-          marginLeft: 25,
-        }}
-      />
-    </SafeView>
-  );
-};
+const SymptomOverview: React.FC<ScreenProps> = observer(
+  
+  ({ navigation }) => {
+   const colorScheme = useColorScheme();
+  //  const [symptomSelected, setSymptomSelected] = useState(0);
+  const { overviewStore } = useStores();
+ 
+   const topRef = React.createRef<Carousel<{ title: string }>>();
+   const scrollBackground = colorScheme === "light" ? "#fff" : "#121212";
+   const topBackground = colorScheme === "light" ? "white" : "#121212";
+ 
+   const renderSymptomTile = ({ item, index }: SymptomBaseData) => {
+     return (
+       <OverviewSymptomTile
+         title={item.title}
+         iconName={item.title}
+         updater={() => {
+           topRef.current?.snapToItem(index);
+         }}
+         selected={overviewStore.selectedSymptom === index}
+       />
+     );
+   };
+ 
+   const renderAreaTile = ({ item, index }: BaseData) => {
+     return (
+       <TopTile
+         title={item.title}
+         style={styles.tileMargin}
+         index={index}
+         selected={false}
+         updater={() => {}}
+         emoji={"e"}
+       />
+     );
+   };
+ 
+   const renderHomeTile = ({ item, index }: tileItemProps) => {
+     return (
+       <HomeTile
+         title={item.name}
+         style={styles.tileMargin}
+         index={index}
+         type={item.type}
+         onPress={() => {
+           navigation.push("Notification", {
+             id: item.id,
+             name: item.name,
+             notes: item.notes,
+             type: item.type,
+           });
+         }}
+       />
+     );
+   };
+ 
+   const renderTimelineTile = (item) => {
+     return (
+       <View
+         style={{
+           flexDirection: "row",
+           alignItems: "center",
+           backgroundColor: "white",
+         }}
+       >
+         <Text
+           style={{
+             fontSize: 20,
+             marginRight: 15,
+             marginLeft: 15,
+           }}
+         >
+           {item.emoji}
+         </Text>
+         <Text
+           style={{
+             fontSize: 14,
+             fontWeight: "600",
+             textAlign: "right",
+           }}
+         >
+           {item.title}
+         </Text>
+         <Text style={[styles.textDescription]}>{item.description}</Text>
+       </View>
+     );
+   }
+ 
+   const topComponent = React.memo(
+     () => {
+       return (
+         <View style={styles.overflowView}>
+           <View style={[
+             styles.header, { backgroundColor: topBackground }]}
+           >
+             <Carousel
+               data={symptoms}
+               renderItem={renderSymptomTile}
+               vertical={false}
+               sliderWidth={Dimensions.get("window").width}
+               containerCustomStyle={{
+                 overflow: "visible",
+               }}
+               contentContainerCustomStyle={{
+                 justifyContent: "center",
+                 alignItems: "flex-start",
+                 overflow: "visible",
+               }}
+               itemWidth={150}
+               inactiveSlideOpacity={0.8}
+               onScrollIndexChanged={(index) => {
+                 overviewStore.setSelectedSymptom(index);
+                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+               }}
+               ref={topRef}
+             />
+           </View>
+           <View style={{ paddingLeft: 25 }}>
+             <Text style={styles.name}>Area</Text>
+             <Carousel
+               style={{ overflow: "visible" }}
+               data={AREA_DATA}
+               renderItem={renderAreaTile}
+               inactiveSlideScale={1}
+               vertical={false}
+               sliderWidth={Dimensions.get("window").width}
+               activeSlideAlignment={"start"}
+               containerCustomStyle={{
+                 overflow: "visible",
+               }}
+               itemWidth={165}
+               inactiveSlideOpacity={1}
+               onScrollIndexChanged={() => {
+                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+               }}
+             />
+             <Text style={styles.name}>Routines</Text>
+             <Carousel
+               style={{ overflow: "visible" }}
+               data={DATA}
+               renderItem={renderHomeTile}
+               inactiveSlideScale={1}
+               vertical={false}
+               sliderWidth={Dimensions.get("window").width}
+               activeSlideAlignment={"start"}
+               containerCustomStyle={{
+                 overflow: "visible",
+               }}
+               itemWidth={165}
+               inactiveSlideOpacity={1}
+               onScrollIndexChanged={() => {
+                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+               }}
+             />
+             <Text style={styles.name}>Appointments</Text>
+             <Carousel
+               data={DATA}
+               renderItem={renderHomeTile}
+               inactiveSlideScale={1}
+               vertical={false}
+               sliderWidth={Dimensions.get("window").width}
+               activeSlideAlignment={"start"}
+               containerCustomStyle={{
+                 overflow: "visible",
+               }}
+               itemWidth={160}
+               inactiveSlideOpacity={1}
+               onScrollIndexChanged={() => {
+                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+               }}
+             />
+           </View>
+         </View>
+       );
+     }
+   )
+ 
+   return (
+     <SafeView disableTop disableBottom style={styles.container}>
+       <Timeline
+         style={styles.list}
+         data={timelineData1}
+         separator={false}
+         circleSize={15}
+         circleColor="#E9E9E9"
+         lineColor="#E9E9E9"
+         timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
+         timeStyle={{
+           textAlign: "center",
+           color: "grey",
+           padding: 5,
+           borderRadius: 13,
+           overflow: "visible"
+         }}
+         descriptionStyle={{ color: "gray" }}
+         detailContainerStyle={{
+           flexDirection: "row",
+           marginBottom: 20,
+           width: 215,
+           height: 60,
+           alignItems: "center",
+           backgroundColor: "white",
+           borderRadius: 10,
+           shadowColor: "#000",
+           shadowOffset: { width: 0, height: 4 },
+           shadowOpacity: 0.1,
+           shadowRadius: 9,
+           elevation: 5,
+           overflow: "visible",
+         }}
+         renderDetail={renderTimelineTile}
+         onEventPress={() => {}}
+         // @ts-ignore
+         options={{
+           ListHeaderComponent: topComponent,
+         }}
+         rowContainerStyle={{
+           marginLeft: 25,
+         }}
+       />
+     </SafeView>
+   );
+ }
+);
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     flex: 1,
+    overflow: "visible"
   },
   overflowView: {
     overflow: "visible",
-    paddingLeft: 25,
-  },
-  title: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 15,
-    alignSelf: "center",
+    paddingBottom: 40
   },
   header: {
     paddingVertical: 30,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 8,
     shadowOpacity: 0.1,
-    // shadowRadius: 9,
-    elevation: 5,
-  },
-  list: {
-    overflow: "visible",
-    marginBottom: 120,
+    zIndex: 10
   },
   name: {
     fontSize: 18,
@@ -391,10 +373,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 5,
   },
-  image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+  tileMargin: {
+    marginRight: 15
+  },
+  list: {
+    overflow: "visible",
+    paddingBottom: 100,
   },
   textDescription: {
     marginLeft: 10,

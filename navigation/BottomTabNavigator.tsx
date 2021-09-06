@@ -7,7 +7,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import HomeScreen from "../screens/HomeScreen";
 import SymptomOverview from "../screens/SymptomOverview";
-import { View } from "../components/Themed";
+import { View, Text } from "../components/Themed";
 import Icon from "../components/Icon";
 
 import { BottomTabParamList } from "../types";
@@ -62,7 +62,7 @@ export const BottomTabNavigator = () => {
         })}
       />
       <BottomTab.Screen
-        name="Overview"
+        name="OverviewScreen"
         component={SymptomOverview}
         options={{
           tabBarIcon: ({ color }) => (
@@ -70,8 +70,8 @@ export const BottomTabNavigator = () => {
           ),
           headerShown: true,
           headerStyle: {
-            borderWidth: 0,
             height: 110,
+            shadowColor: 'transparent'
           },
           headerTitleStyle: {
             fontSize: 19,
