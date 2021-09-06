@@ -26,27 +26,28 @@ import CheckmarkSVG from "../assets/icons/checkmarkSVG";
 import IgnoreSVG from "../assets/icons/ignoreSVG";
 import WalkSVG from "../assets/icons/walkSVG";
 import EditSVG from "../assets/icons/editSVG";
+import MoreSVG from "../assets/icons/moreSVG";
 
 interface IconProps {
   name: string;
   props?: SvgProps;
 }
 
-export const Icon:FC<IconProps> = ({ name, props }) => {
-  switch (name) {
-    case "Appointment":
+export const Icon: FC<IconProps> = ({ name, props }) => {
+  switch (name.toLocaleLowerCase()) {
+    case "appointment":
       return <AppointmentsSVG {...props} />;
     case "brain":
       return <BrainSVG {...props} />;
     case "breathe":
       return <BreatheSVG {...props} />;
-    case "Cancel":
+    case "cancel":
       return <CancelSVG {...props} />;
     case "cold":
       return <ColdSVG {...props} />;
     case "dizzy":
       return <DizzySVG {...props} />;
-    case "Exercise":
+    case "exercise":
       return <ExerciseSVG {...props} />;
     case "hear":
       return <HearingSVG {...props} />;
@@ -54,7 +55,7 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <HotSVG {...props} />;
     case "itchy":
       return <ItchySVG {...props} />;
-    case "Medication":
+    case "medication":
       return <MedicationSVG {...props} />;
     case "nauseous":
       return <NauseousSVG {...props} />;
@@ -70,23 +71,23 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
       return <ToiletSVG {...props} />;
     case "walk":
       return <WalkSVG {...props} />;
-    case "Add":
+    case "add":
       return <AddSVG {...props} />;
-    case "Cancel":
-      return <CancelSVG {...props} />;
     case "smell":
       return <SmellSVG {...props} />;
-    case "Time":
-      return <TimeSVG {...props} />
-    case "Checkmark":
+    case "time":
+      return <TimeSVG {...props} />;
+    case "checkmark":
       return <CheckmarkSVG {...props} />;
-    case "Ignore":
+    case "ignore":
       return <IgnoreSVG {...props} />;
-    case "Edit":
-      return <EditSVG {...props} />
+    case "edit":
+      return <EditSVG {...props} />;
+    case "more":
+      return <MoreSVG {...props} />;
     default:
       return <NotFoundSVG {...props} />;
   }
-}
+};
 
 export default Icon;

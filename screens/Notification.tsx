@@ -1,16 +1,12 @@
-import {
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity
-} from "react-native";
+import { StyleSheet, StatusBar, TouchableOpacity } from "react-native";
 import React, { FC } from "react";
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, Feather } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import {
   medicationGradient,
   exerciseGradient,
-  appointmentGradient
+  appointmentGradient,
 } from "../constants/Colors";
 import Icon from "../components/Icon";
 import { View, Text } from "react-native";
@@ -23,36 +19,32 @@ type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
 const NotificationScreen = ({
   navigation,
   route: {
-    params: { id, type, name, notes }
-  }
-} : ScreenProps) => {
+    params: { id, type, name, notes },
+  },
+}: ScreenProps) => {
+  const iconType =
+    type === HomeTileTypes.Appointment
+      ? "Appointment"
+      : type === HomeTileTypes.Exercise
+      ? "Exercise"
+      : "Medication";
 
-  const iconType = type === HomeTileTypes.Appointment
-    ? "Appointment"
-    : type === HomeTileTypes.Exercise
-    ? "Exercise"
-    : "Medication"
-
-  const colorTheme = type === HomeTileTypes.Appointment
-  ? appointmentGradient[0]
-  : type === HomeTileTypes.Medication
-  ? medicationGradient[0]
-  : exerciseGradient[0]
+  const colorTheme =
+    type === HomeTileTypes.Appointment
+      ? appointmentGradient[1]
+      : type === HomeTileTypes.Medication
+      ? medicationGradient[0]
+      : exerciseGradient[0];
 
   return (
-    <SafeView style={[styles.container,
-      { backgroundColor: colorTheme }
-    ]}>
+    <SafeView style={[styles.container, { backgroundColor: colorTheme }]}>
       <StatusBar barStyle="light-content" />
       <View style={styles.top}>
         <PressableBase
           onPress={() => navigation.pop()}
-          extraProps={{ style: { alignSelf: 'center' } }}
+          extraProps={{ style: { alignSelf: "center", padding: 10 } }}
         >
-          <Icon
-            name="Edit"
-            props={{ fill: "#fff", width: 30, height: 30 }}
-          />
+          <Feather name="edit" size={25} color="#fff" />
         </PressableBase>
       </View>
       <View style={styles.centerView}>
@@ -60,12 +52,8 @@ const NotificationScreen = ({
           name={iconType}
           props={{ fill: "#fff", width: 100, height: 100 }}
         />
-        <Text style={[styles.name]}>
-          {name}
-        </Text>
-        <Text style={[styles.notes]}>
-          {notes}
-        </Text>
+        <Text style={[styles.name]}>{name}</Text>
+        <Text style={[styles.notes]}>{notes}</Text>
       </View>
       <View style={styles.bottomGroup}>
         <View style={styles.buttonGroup}>
@@ -90,7 +78,7 @@ const NotificationScreen = ({
         </View>
         <PressableBase
           onPress={() => navigation.pop()}
-          extraProps={{ style: { alignSelf: 'center' } }}
+          extraProps={{ style: { alignSelf: "center" } }}
         >
           <Entypo name="chevron-down" size={35} color="#fff" />
         </PressableBase>
@@ -100,12 +88,12 @@ const NotificationScreen = ({
 };
 
 const ActionButton: FC<{
-  onPress : () => void,
-  label: string,
-  iconName: string,
-  fillColor: string
+  onPress: () => void;
+  label: string;
+  iconName: string;
+  fillColor: string;
 }> = ({ onPress, label, iconName, fillColor }) => {
-  return(
+  return (
     <View style={styles.buttonContainer}>
       <TouchableOpacity
         onPress={onPress}
@@ -114,52 +102,50 @@ const ActionButton: FC<{
       >
         <Icon
           name={iconName}
-          props={{ fill: fillColor , width: 30, height: 30 }}
+          props={{ fill: fillColor, width: 30, height: 30 }}
         />
       </TouchableOpacity>
-      <Text style={[styles.buttonLabel]}>
-        {label}
-      </Text>
+      <Text style={[styles.buttonLabel]}>{label}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   top: {
     alignSelf: "stretch",
     flexDirection: "row",
     justifyContent: "flex-end",
     paddingRight: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   centerView: {
-    alignItems: "center"
+    alignItems: "center",
   },
   name: {
     fontSize: 22,
     fontWeight: "500",
     color: "#fff",
-    marginTop: 20
+    marginTop: 20,
   },
   notes: {
     fontSize: 18,
     opacity: 0.6,
-    color: "#fff"
+    color: "#fff",
   },
   buttonContainer: {
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonLabel: {
     opacity: 0.7,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "500",
-    color: "#fff"
+    color: "#fff",
   },
   actionButton: {
     width: 60,
@@ -169,7 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: "#fff",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonGroup: {
     flexDirection: "row",
@@ -177,13 +163,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingLeft: 70,
     paddingRight: 70,
-    marginBottom: 50
+    marginBottom: 90,
   },
   bottomGroup: {
     alignSelf: "stretch",
     justifyContent: "flex-end",
-    alignContent: "center"
-  }
+    alignContent: "center",
+  },
 });
 
 export default NotificationScreen;

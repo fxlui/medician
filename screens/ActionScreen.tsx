@@ -20,17 +20,18 @@ type ScreenProps = CompositeScreenProps<
 
 const greetingTextFromTime = () => {
   const now = new Date();
-  if (now.getHours() < 12) {
+  if (now.getHours() > 21 || now.getHours() < 5) {
+    return "Good evening 💤,";
+  } else if (now.getHours() < 12) {
     return "Good morning 🌅,";
   } else if (now.getHours() < 18) {
     return "Good afternoon ☀️,";
   } else {
-    return "Good evening 🌃,";
+    return "Good evening 🌙,";
   }
 };
 
 export default function ActionScreen({ navigation }: ScreenProps) {
-
   const { addFlowStore } = useStores();
 
   return (
@@ -38,7 +39,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
       <View style={styles.container}>
         <Text style={styles.greeting}>
           {greetingTextFromTime()}
-          {"\n"}How are you today?
+          {"\n"}How are you feeling?
         </Text>
         <View style={styles.tiles}>
           <EntryTile

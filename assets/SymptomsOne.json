@@ -1,72 +1,72 @@
 [
   {
     "id": 1,
-    "name": "pain",
+    "name": "Pain",
     "icon": "pain"
   },
   {
     "id": 2,
-    "name": "itchy",
+    "name": "Itchy",
     "icon": "itchy"
   },
   {
     "id": 3,
-    "name": "hot",
+    "name": "Hot",
     "icon": "hot"
   },
   {
     "id": 4,
-    "name": "cold",
+    "name": "Cold",
     "icon": "cold"
   },
   {
     "id": 5,
-    "name": "dizzy",
+    "name": "Dizzy",
     "icon": "dizzy"
   },
   {
     "id": 6,
-    "name": "nauseous",
+    "name": "Nauseous",
     "icon": "nauseous"
   },
   {
     "id": 7,
-    "name": "sleeping is difficult",
+    "name": "Sleeping is difficult",
     "icon": "sleep"
   },
   {
     "id": 8,
-    "name": "going to toilet is difficult",
+    "name": "Going to toilet is difficult",
     "icon": "toilet"
   },
   {
     "id": 9,
-    "name": "breathing is difficult",
+    "name": "Breathing is difficult",
     "icon": "breathe"
   },
   {
     "id": 10,
-    "name": "hearing is difficult",
+    "name": "Hearing is difficult",
     "icon": "hear"
   },
   {
     "id": 11,
-    "name": "seeing is difficult",
+    "name": "Seeing is difficult",
     "icon": "see"
   },
   {
     "id": 12,
-    "name": "speaking is difficult",
+    "name": "Speaking is difficult",
     "icon": "speak"
   },
   {
     "id": 13,
-    "name": "walking is difficult",
+    "name": "Walking is difficult",
     "icon": "walk"
   },
   {
     "id": 24,
-    "name": "not on list",
-    "icon": "Add"
+    "name": "Not on list",
+    "icon": "more"
   }
 ]

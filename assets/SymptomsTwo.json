@@ -1,57 +1,57 @@
 [
   {
     "id": 14,
-    "name": "breathe",
+    "name": "Breathe",
     "icon": "breathe"
   },
   {
     "id": 15,
-    "name": "hear",
+    "name": "Hear",
     "icon": "hear"
   },
   {
     "id": 16,
-    "name": "see",
+    "name": "See",
     "icon": "see"
   },
   {
     "id": 17,
-    "name": "smell",
+    "name": "Smell",
     "icon": "smell"
   },
   {
     "id": 18,
-    "name": "speak",
+    "name": "Speak",
     "icon": "speak"
   },
   {
     "id": 19,
-    "name": "sleep",
+    "name": "Sleep",
     "icon": "sleep"
   },
   {
     "id": 20,
-    "name": "walk",
+    "name": "Walk",
     "icon": "walk"
   },
   {
     "id": 21,
-    "name": "concentrate",
+    "name": "Concentrate",
     "icon": "brain"
   },
   {
     "id": 22,
-    "name": "go to toilet properly",
+    "name": "Go to toilet properly",
     "icon": "toilet"
   },
   {
     "id": 23,
-    "name": "stop scratching",
+    "name": "Stop scratching",
     "icon": "itchy"
   },
   {
     "id": 24,
-    "name": "not on list",
-    "icon": "Add"
+    "name": "Not on list",
+    "icon": "more"
   }
 ]

@@ -7,6 +7,7 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 import { HomeTileTypes } from "../types";
 import { BottomTabParamList, RootStackParamList } from "../types";
+import uniqueSymptoms from "../assets/uniqueSymptoms.json";
 
 import HomeTile from "../components/HomeTile";
 import { TopTile } from "../components/AreaTile";
@@ -33,6 +34,7 @@ interface SymptomBaseData {
   dataIndex: number;
   item: {
     title: string;
+    type: string;
   };
 }
 interface tileItemData {
@@ -99,21 +101,13 @@ const AREA_DATA = [
   },
 ];
 
-const symptoms = [
-  {
-    title: "pain",
-  },
-  {
-    title: "brain",
-  },
-];
-
+const symptomArr = uniqueSymptoms;
 
 const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
   const colorScheme = useColorScheme();
   const [symptomSelected, setSymptomSelected] = useState(0);
 
-  const topRef = React.createRef<Carousel<{ title: string }>>();
+  const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
   const scrollBackground = colorScheme === "light" ? "#fff" : "#121212";
   const topBackground = colorScheme === "light" ? "white" : "#121212";
 
@@ -121,7 +115,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
     return (
       <OverviewSymptomTile
         title={item.title}
-        iconName={item.title}
+        iconName={item.type}
         updater={() => {
           topRef.current?.snapToItem(index);
         }}
@@ -164,14 +158,12 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
     <SafeView disableTop disableBottom style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ backgroundColor : scrollBackground}}
+        style={{ backgroundColor: scrollBackground }}
       >
         <View style={styles.overflowView}>
-          <View style={[
-            styles.header, { backgroundColor: topBackground }]}
-          >
+          <View style={[styles.header, { backgroundColor: topBackground }]}>
             <Carousel
-              data={symptoms}
+              data={symptomArr}
               renderItem={renderSymptomTile}
               vertical={false}
               sliderWidth={Dimensions.get("window").width}
@@ -250,7 +242,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
       </ScrollView>
     </SafeView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -258,7 +250,7 @@ const styles = StyleSheet.create({
   },
   overflowView: {
     overflow: "visible",
-    paddingBottom: 140
+    paddingBottom: 140,
   },
   header: {
     paddingVertical: 30,
@@ -266,7 +258,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 8,
     shadowOpacity: 0.1,
-    zIndex: 10
+    zIndex: 10,
   },
   name: {
     fontSize: 18,
@@ -276,7 +268,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   tileMargin: {
-    marginRight: 15
+    marginRight: 15,
   },
 });
 

@@ -68,12 +68,14 @@ type ScreenProps = CompositeScreenProps<
 
 const greetingTextFromTime = () => {
   const now = new Date();
-  if (now.getHours() < 12) {
+  if (now.getHours() > 21 || now.getHours() < 5) {
+    return "Good night! 💤";
+  } else if (now.getHours() < 12) {
     return "Good morning! 🌅";
   } else if (now.getHours() < 18) {
     return "Good afternoon! ☀️";
   } else {
-    return "Good evening! 🌃";
+    return "Good evening! 🌙";
   }
 };
 
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
   header: {
     marginTop: 65,
     marginLeft: 5,
-    marginRight: 20,
+    marginRight: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
