@@ -236,6 +236,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
                inactiveSlideOpacity={0.8}
                onScrollIndexChanged={(index) => {
                  overviewStore.setSelectedSymptom(index);
+                //  console.log(overviewStore.selectedSymptom);
                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                }}
                ref={topRef}

@@ -10,6 +10,7 @@ import {
   addRecord,
   getLastRecordId
 } from "../database/dbAPI";
+import { AppointmentModel } from "./appointment";
 import { RecordModel } from "./record";
 
 /**
@@ -20,6 +21,7 @@ import { RecordModel } from "./record";
 export const AddFlowStoreModel = types
   .model("AddFlowStore", {
     currentNewRecord: types.optional(RecordModel, {}),
+    currentNewAppointment: types.optional(AppointmentModel, {}), 
     progressLength: types.optional(types.integer, 1),
     currentProgress: types.optional(types.integer, 1),
   })

@@ -5,11 +5,17 @@ import { types, Instance, SnapshotOut } from "mobx-state-tree";
  */
 export const AppointmentModel = types
   .model("Appointment", {
+    name: types.optional(types.string, ""),
+    doctor: types.optional(types.string, ""),
+    symptomType: types.optional(types.string, ""),
+    time: types.array(types.Date),
+    alert: types.array(types.Date)
+  });
+
+export const SavedAppointmentModel = AppointmentModel
+  .props({
     id: types.identifierNumber,
-    name: types.string,
-    notes: types.optional(types.string, ""),
-    time: types.Date,
-    alert: types.integer
+    collectionId: types.integer
   });
 
 type AppointmentType = Instance<typeof AppointmentModel>;
