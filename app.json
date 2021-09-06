@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "medician",
+    "name": "Medician",
     "slug": "medician",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,11 +15,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["assets/**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {

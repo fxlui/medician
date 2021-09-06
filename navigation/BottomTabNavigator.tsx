@@ -71,7 +71,7 @@ export const BottomTabNavigator = () => {
           headerShown: true,
           headerStyle: {
             borderWidth: 0,
-            height: 110,
+            height: 100,
           },
           headerTitleStyle: {
             fontSize: 19,

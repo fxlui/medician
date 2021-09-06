@@ -12,6 +12,10 @@ import HomeTile from "../components/HomeTile";
 import { HomeTileTypes } from "../types";
 import { BottomTabParamList, RootStackParamList } from "../types";
 
+import { Feather } from "@expo/vector-icons";
+import useColorScheme from "../hooks/useColorScheme";
+import { PressableBase } from "../components/PressableBase";
+
 interface tileItemData {
   id: string;
   name: string;
@@ -62,7 +66,20 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
+const greetingTextFromTime = () => {
+  const now = new Date();
+  if (now.getHours() < 12) {
+    return "Good morning! 🌅";
+  } else if (now.getHours() < 18) {
+    return "Good afternoon! ☀️";
+  } else {
+    return "Good evening! 🌃";
+  }
+};
+
 const HomeScreen = ({ navigation }: ScreenProps) => {
+  const colorScheme = useColorScheme();
+  const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const renderTile = ({ item, index }: tileItemProps) => {
     return (
       <HomeTile
@@ -88,7 +105,18 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
     <SafeView disableBottom style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.overflowView}>
-          <Text style={styles.greeting}>Good evening 🌥,{"\n"}Ririmes</Text>
+          <View style={styles.header}>
+            <Text style={styles.greeting}>
+              Hey there.{"\n"}
+              {greetingTextFromTime()}
+            </Text>
+            <PressableBase
+              onPress={() => navigation.navigate("Settings")}
+              extraProps={{ style: { padding: 15 } }}
+            >
+              <Feather name="more-horizontal" size={24} color={textColor} />
+            </PressableBase>
+          </View>
           <Text style={styles.name}>Medication</Text>
           <Carousel
             style={{ overflow: "visible" }}
@@ -156,11 +184,17 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingBottom: 125,
   },
+  header: {
+    marginTop: 65,
+    marginLeft: 5,
+    marginRight: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   greeting: {
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 65,
-    marginLeft: 5,
   },
   name: {
     fontSize: 18,
