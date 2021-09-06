@@ -60,10 +60,6 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
   };
 
   const handleConfirm = (newDate: Date) => {
-    if (newDate > new Date()) {
-      Alert.alert("Invalid Time", "Please select a time in the past");
-      return;
-    }
     setSelection((prev) =>
       prev.map((d) => {
         if (d.date === editingDate) {
@@ -83,9 +79,9 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
           paddingBottom: 125,
         }}
       >
-        <Text style={styles.greeting}>When did it occur?</Text>
+        <Text style={styles.greeting}>When is your appointment?</Text>
         <Text style={styles.greetingSub}>
-          You can select multiple dates and times.
+          Select the dates you have booked.
         </Text>
         <View
           style={{
@@ -152,8 +148,8 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
                   key={item.date.getTime()}
                   onPress={() => {
                     Alert.alert(
-                      "Delete occurance?",
-                      `Are you sure you want to remove the occurance at ${item.date.toLocaleString()}?`,
+                      "Delete appointment?",
+                      `Are you sure you want to remove the appointment at ${item.date.toLocaleString()}?`,
                       [
                         {
                           text: "Cancel",
@@ -220,7 +216,7 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
             : () =>
                 Alert.alert(
                   "No selection yet",
-                  "In order to add a new record, you will need to select the date and times of occurances."
+                  "In order to add a new record, you will need to select the date and times of appointments."
                 )
         }
       />

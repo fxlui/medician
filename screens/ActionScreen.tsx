@@ -67,7 +67,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               subtitle={"Routine"}
               onPress={() => {
                 navigation.navigate("AddFlow", {
-                  screen: "AppointmentTimeScreen",
+                  screen: "RoutineSelectScreen",
                 });
               }}
             />

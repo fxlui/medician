@@ -28,7 +28,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as Haptics from "expo-haptics";
 
 type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
+  StackScreenProps<AddFlowParamList, "RoutineDetailsScreen">,
   StackScreenProps<RootStackParamList>
 >;
 interface topBaseData {
@@ -52,21 +52,27 @@ interface bottomBaseData {
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
+export default function RoutineDetailsScreen({
+  navigation,
+  route,
+}: ScreenProps) {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
-  const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
+
+  const routineType = route.params.type;
+  const bodyAreaArr = BodyAreas;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [currentDoctor, setCurrentDoctor] = React.useState("");
   const [alertMinutesBefore, setAlertMinutesBefore] =
     React.useState<Number | null>(null);
+
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedBottom, setSelectedBottom] = React.useState(0);
   const [selectedArea, setSelectedArea] = React.useState("");
@@ -79,11 +85,11 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const getQuestion = (question: Number) => {
     switch (question) {
       case 0:
-        return "Who are you seeing?";
-      case 1:
         return "What is this for?";
-      case 2:
+      case 1:
         return "When do you want us to remind you?";
+      case 2:
+        return "Extra notes";
       default:
         return "";
     }
@@ -128,13 +134,11 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
 
   const handleNavigation = () => {
     if (currentQuestion >= 2) {
-      navigation.navigate("Root");
+      navigation.navigate("RoutineTimeScreen");
     } else {
       nextQuestion();
     }
   };
-
-  const bodyAreaArr = BodyAreas;
 
   const renderTopTile = ({ item, index }: topBaseData) => {
     return (
@@ -166,7 +170,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const getAlertTimeText = (minutes: Number) => {
     switch (minutes) {
       case 0:
-        return "At the time of your appointment";
+        return `At the time of ${routineType}`;
       case 5:
         return "5 minutes before";
       case 15:
@@ -191,7 +195,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         }}
       >
         <Text style={styles.greeting}>
-          Please tell me more about your appointment.
+          Please tell me more about your {routineType}.
         </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -202,22 +206,22 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         >
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ1 }]}>
             <Text style={styles.question}>{getQuestion(0)}</Text>
-            {!inputFocused && currentDoctor !== "" ? (
-              <Text style={styles.answer}>{currentDoctor}</Text>
-            ) : null}
-          </Animated.View>
-          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
-            <Text style={styles.question}>{getQuestion(1)}</Text>
             {!inputFocused && selectedArea !== "" ? (
               <Text style={styles.answer}>{selectedArea}</Text>
             ) : null}
           </Animated.View>
-          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ3 }]}>
-            <Text style={styles.question}>{getQuestion(2)}</Text>
+          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
+            <Text style={styles.question}>{getQuestion(1)}</Text>
             {!inputFocused && alertMinutesBefore !== null ? (
               <Text style={styles.answer}>
                 {getAlertTimeText(alertMinutesBefore)}
               </Text>
+            ) : null}
+          </Animated.View>
+          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ3 }]}>
+            <Text style={styles.question}>{getQuestion(2)}</Text>
+            {!inputFocused && currentText !== "" ? (
+              <Text style={styles.answer}>{currentText}</Text>
             ) : null}
           </Animated.View>
         </ScrollView>
@@ -230,7 +234,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           <View
             style={{
               backgroundColor:
-                currentQuestion === 1 ? "transparent" : tileColor,
+                currentQuestion === 0 ? "transparent" : tileColor,
               borderRadius: 16,
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 4 },
@@ -243,7 +247,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
               marginBottom: inputFocused ? 160 : 85,
             }}
           >
-            {currentQuestion === 0 ? (
+            {currentQuestion === 2 ? (
               <>
                 <AnimatedTextInput
                   ref={inputRef}
@@ -261,12 +265,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   value={currentText}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
-                  onChangeText={(text) => {
-                    setCurrentText(text);
-                    if (currentQuestion === 0) {
-                      setCurrentDoctor(text);
-                    }
-                  }}
+                  onChangeText={(text) => setCurrentText(text)}
                 />
                 <PressableBase
                   extraProps={{
@@ -282,7 +281,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                 </PressableBase>
               </>
             ) : null}
-            {currentQuestion === 1 ? (
+            {currentQuestion === 0 ? (
               <View
                 style={{
                   backgroundColor: "transparent",
@@ -338,7 +337,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                     alignItems: "flex-start",
                     overflow: "visible",
                     marginTop: 30,
-                    marginBottom: 0,
+                    marginBottom: 20,
                   }}
                   itemWidth={150}
                   inactiveSlideOpacity={0.8}
@@ -351,7 +350,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                 />
               </View>
             ) : null}
-            {currentQuestion === 2 ? (
+            {currentQuestion === 1 ? (
               <Picker
                 selectedValue={alertMinutesBefore}
                 onValueChange={(itemValue, itemIndex) =>
@@ -366,7 +365,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   color: textColor,
                 }}
               >
-                <Picker.Item label="At time of appointment" value={0} />
+                <Picker.Item label={`At time of ${routineType}`} value={0} />
                 <Picker.Item label="5 minutes before" value={5} />
                 <Picker.Item label="15 minutes before" value={15} />
                 <Picker.Item label="1 hour before" value={60} />
@@ -380,7 +379,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
       <AddFlowNavBar
         left={() => {
           if (
-            (currentQuestion === 0 && currentDoctor !== "") ||
+            (currentQuestion === 0 && currentText !== "") ||
             currentQuestion > 0
           ) {
             const qNow = currentQuestion - 1;
@@ -400,7 +399,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
-                setCurrentText(currentDoctor);
+                setCurrentText(currentText);
                 break;
               case 1:
                 Animated.timing(animatedOpacityQ2, {
@@ -429,7 +428,6 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           }
         }}
         right={handleNavigation}
-        last
       ></AddFlowNavBar>
     </SafeView>
   );

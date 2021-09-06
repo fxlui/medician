@@ -7,13 +7,10 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { StackScreenProps } from "@react-navigation/stack";
 
 import SafeView from "../../components/SafeView";
-import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
-import { useStores } from "../../models/root-store-provider";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { Calendar, DateObject } from "react-native-calendars";
@@ -22,7 +19,14 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SwipeBar from "../../components/SwipeBar";
 import TileBase from "../../components/TileBase";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "TimeSelectScreen">;
+import { StackScreenProps } from "@react-navigation/stack";
+import { CompositeScreenProps } from "@react-navigation/core";
+import { AddFlowParamList, RootStackParamList } from "../../types";
+
+type ScreenProps = CompositeScreenProps<
+  StackScreenProps<AddFlowParamList, "RoutineTimeScreen">,
+  StackScreenProps<RootStackParamList>
+>;
 
 interface DateSelection {
   dateobj: DateObject;
@@ -39,31 +43,9 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
   return result;
 };
 
-export default function TimeSelectScreen({ navigation }: ScreenProps) {
+export default function RoutineTimeScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
-  const { addFlowStore } = useStores();
-
-  React.useEffect(() => {
-    const now = new Date();
-    const nowOffset = new Date(
-      Date.now() - new Date().getTimezoneOffset() * 60000
-    );
-    if (selection.length === 0) {
-      setSelection([
-        {
-          dateobj: {
-            dateString: nowOffset.toISOString().split("T")[0],
-            day: nowOffset.getDay(),
-            month: nowOffset.getMonth(),
-            year: nowOffset.getFullYear(),
-            timestamp: now.getTime(),
-          },
-          date: now,
-        },
-      ]);
-    }
-  }, []);
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
@@ -78,10 +60,6 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
   };
 
   const handleConfirm = (newDate: Date) => {
-    if (newDate > new Date()) {
-      Alert.alert("Invalid Time", "Please select a time in the past");
-      return;
-    }
     setSelection((prev) =>
       prev.map((d) => {
         if (d.date === editingDate) {
@@ -101,9 +79,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           paddingBottom: 125,
         }}
       >
-        <Text style={styles.greeting}>When did it occur?</Text>
+        <Text style={styles.greeting}>Choose the times for your routine.</Text>
         <Text style={styles.greetingSub}>
-          You can select multiple dates and times.
+          Check with your doctor or pharmacist before starting any medication or
+          supplements.
         </Text>
         <View
           style={{
@@ -112,7 +91,6 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           }}
         >
           <Calendar
-            maxDate={new Date()}
             hideExtraDays={true}
             style={{
               marginLeft: 25,
@@ -165,8 +143,8 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
                   key={item.date.getTime()}
                   onPress={() => {
                     Alert.alert(
-                      "Delete occurance?",
-                      `Are you sure you want to remove the occurance at ${item.date.toLocaleString()}?`,
+                      "Delete routine?",
+                      `Are you sure you want to remove the routine at ${item.date.toLocaleString()}?`,
                       [
                         {
                           text: "Cancel",
@@ -229,16 +207,14 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => {
-                addFlowStore.setRecordTime(selection.map((item) => item.date));
-                navigation.navigate("DetailsScreen");
-              }
+            ? () => navigation.navigate("Root")
             : () =>
                 Alert.alert(
                   "No selection yet",
-                  "In order to add a new record, you will need to select the date and times of occurances."
+                  "In order to add a new routine, you will need to select the date and times of routines."
                 )
         }
+        last
       />
     </SafeView>
   );
@@ -253,13 +229,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     paddingLeft: 30,
     marginTop: 15,
+    maxWidth: "80%",
   },
   greetingSub: {
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 20,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "400",
     paddingLeft: 30,
     opacity: 0.5,
+    maxWidth: "80%",
   },
 });
