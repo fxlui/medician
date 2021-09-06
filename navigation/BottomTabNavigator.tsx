@@ -6,7 +6,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import { TabBarButton, tabBarStyles } from "../components/TabBar";
 import HomeScreen from "../screens/HomeScreen";
-import RecordsScreen from "../screens/RecordsScreen";
+import SymptomOverview from "../screens/SymptomOverview";
 import { View } from "../components/Themed";
 import Icon from "../components/Icon";
 
@@ -43,13 +43,16 @@ export const BottomTabNavigator = () => {
         options={{
           tabBarIcon: () => {
             return (
-              <Icon name="Add" props={{
+              <Icon
+                name="Add"
+                props={{
                   fill: "#F8583B",
                   width: 30,
-                  height: 30
+                  height: 30,
                 }}
               />
-            )},
+            );
+          },
         }}
         listeners={({ navigation }) => ({
           tabPress: (event) => {
@@ -59,12 +62,20 @@ export const BottomTabNavigator = () => {
         })}
       />
       <BottomTab.Screen
-        name="Records"
-        component={RecordsScreen}
+        name="Overview"
+        component={SymptomOverview}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="assignment" color={color} />
           ),
+          headerShown: true,
+          headerStyle: {
+            borderWidth: 0,
+            height: 110,
+          },
+          headerTitleStyle: {
+            fontSize: 19,
+          },
         }}
       />
     </BottomTab.Navigator>

@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  View,
-  StyleProp,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { View, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text } from "./Themed";
 import TileBase, { TileSize } from "./TileBase";
 import useColorScheme from "../hooks/useColorScheme";
 
 interface TileDetails {
-  title: string ;
+  title: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
@@ -21,7 +16,12 @@ interface TileDetails {
 }
 
 const Tile: React.FC<TileDetails> = ({
-  title, style, size, list, onClick, emoji
+  title,
+  style,
+  size,
+  list,
+  onClick,
+  emoji,
 }) => {
   const colorScheme = useColorScheme();
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
@@ -46,7 +46,7 @@ const Tile: React.FC<TileDetails> = ({
             cold{"\n"}
             ...
           </Text>
-        ) : 
+        ) : (
           <Text style={styles.list}>
             sleep{"\n"}
             breathe{"\n"}
@@ -54,7 +54,7 @@ const Tile: React.FC<TileDetails> = ({
             hear{"\n"}
             ...
           </Text>
-        }
+        )}
       </View>
     </TileBase>
   );
@@ -71,11 +71,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   list: {
-    fontSize: 18,
+    fontSize: 16,
     opacity: 0.68,
     fontWeight: "500",
     textAlign: "right",
-  }
+  },
 });
 
 export default Tile;

@@ -1,16 +1,15 @@
-import React from 'react';
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
-import { StyleSheet } from 'react-native';
-import { PressableBase } from './PressableBase';
-
+import React from "react";
+import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
+import { StyleSheet } from "react-native";
+import { PressableBase } from "./PressableBase";
 
 export const TabBarButton = (props: BottomTabBarButtonProps) => {
-  return(
-    <PressableBase extraProps={props}>
+  return (
+    <PressableBase extraProps={props} tabBar>
       {props.children}
     </PressableBase>
   );
-}
+};
 
 export const tabBarStyles = StyleSheet.create({
   tabBar: {
@@ -24,8 +23,8 @@ export const tabBarStyles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 60,
     paddingRight: 60,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center'
-  }
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
 });

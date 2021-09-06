@@ -100,8 +100,9 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={160}
+            itemWidth={165}
             inactiveSlideOpacity={1}
+            inactiveSlideScale={0.9}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -116,8 +117,9 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={160}
+            itemWidth={165}
             inactiveSlideOpacity={1}
+            inactiveSlideScale={0.9}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -132,8 +134,9 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={160}
+            itemWidth={165}
             inactiveSlideOpacity={1}
+            inactiveSlideScale={0.9}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginBottom: 20,
     marginLeft: 5,
-  }
+  },
 });
 
 export default HomeScreen;

@@ -5,7 +5,8 @@ import * as Haptics from "expo-haptics";
 export const PressableBase: FC<{
   onPress?: () => void;
   extraProps?: PressableProps;
-}> = ({ children, extraProps, onPress }) => {
+  tabBar?: boolean;
+}> = ({ children, extraProps, onPress, tabBar = false }) => {
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
     transform: [{ scale: animatedValue }],
@@ -18,6 +19,7 @@ export const PressableBase: FC<{
       tension: 50,
       useNativeDriver: true,
     }).start();
+    if (tabBar) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handlePressOut = () => {
@@ -30,7 +32,7 @@ export const PressableBase: FC<{
   };
 
   const handleOnPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (onPress) onPress();
   };
 

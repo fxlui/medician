@@ -15,8 +15,8 @@ import * as VideoThumbnails from "expo-video-thumbnails";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
-import SafeView from "../../components/SafeView";
 import { AddFlowParamList, RootStackParamList } from "../../types";
+import SafeView from "../../components/SafeView";
 import { Text, View } from "../../components/Themed";
 import useColorScheme from "../../hooks/useColorScheme";
 

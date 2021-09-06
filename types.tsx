@@ -36,6 +36,8 @@ export type AddFlowParamList = {
   DizzyScreen: undefined;
   SleepHoursScreen: undefined;
   CustomScreen: undefined;
+  AppointmentTimeScreen: undefined;
+  AppointmentDetailsScreen: undefined;
 };
 
 export enum HomeTileTypes {

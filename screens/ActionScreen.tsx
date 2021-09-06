@@ -56,9 +56,21 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               title={"Add"}
               subtitle={"Appointment"}
               style={{ marginRight: 30 }}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate("AddFlow", {
+                  screen: "AppointmentTimeScreen",
+                });
+              }}
             />
-            <AddTile title={"Add"} subtitle={"Routine"} />
+            <AddTile
+              title={"Add"}
+              subtitle={"Routine"}
+              onPress={() => {
+                navigation.navigate("AddFlow", {
+                  screen: "AppointmentTimeScreen",
+                });
+              }}
+            />
           </View>
           <PressableBase
             extraProps={{
@@ -95,7 +107,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   tiles: {
-    marginTop: 40,
+    marginTop: 50,
     flexDirection: "column",
     alignItems: "center",
   },
