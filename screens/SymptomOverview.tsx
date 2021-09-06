@@ -104,10 +104,10 @@ const AREA_DATA = [
 
 const symptoms = [
   {
-    title: "Pain",
+    title: "pain",
   },
   {
-    title: "Brain",
+    title: "brain",
   },
 ];
 

@@ -36,45 +36,45 @@ export const Icon:FC<IconProps> = ({ name, props }) => {
   switch (name) {
     case "Appointment":
       return <AppointmentsSVG {...props} />;
-    case "Brain":
+    case "brain":
       return <BrainSVG {...props} />;
-    case "Breathe":
+    case "breathe":
       return <BreatheSVG {...props} />;
     case "Cancel":
       return <CancelSVG {...props} />;
-    case "Cold":
+    case "cold":
       return <ColdSVG {...props} />;
-    case "Dizzy":
+    case "dizzy":
       return <DizzySVG {...props} />;
     case "Exercise":
       return <ExerciseSVG {...props} />;
-    case "Hear":
+    case "hear":
       return <HearingSVG {...props} />;
-    case "Hot":
+    case "hot":
       return <HotSVG {...props} />;
-    case "Itchy":
+    case "itchy":
       return <ItchySVG {...props} />;
     case "Medication":
       return <MedicationSVG {...props} />;
-    case "Nauseous":
+    case "nauseous":
       return <NauseousSVG {...props} />;
-    case "Pain":
+    case "pain":
       return <PainSVG {...props} />;
-    case "See":
+    case "see":
       return <SeeSVG {...props} />;
-    case "Sleep":
+    case "sleep":
       return <SleepSVG {...props} />;
-    case "Speak":
+    case "speak":
       return <SpeakSVG {...props} />;
-    case "Toilet":
+    case "toilet":
       return <ToiletSVG {...props} />;
-    case "Walk":
+    case "walk":
       return <WalkSVG {...props} />;
     case "Add":
       return <AddSVG {...props} />;
     case "Cancel":
       return <CancelSVG {...props} />;
-    case "Smell":
+    case "smell":
       return <SmellSVG {...props} />;
     case "Time":
       return <TimeSVG {...props} />

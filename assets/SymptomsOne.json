@@ -2,67 +2,67 @@
   {
     "id": 1,
     "name": "pain",
-    "icon": "Pain"
+    "icon": "pain"
   },
   {
     "id": 2,
     "name": "itchy",
-    "icon": "Itchy"
+    "icon": "itchy"
   },
   {
     "id": 3,
     "name": "hot",
-    "icon": "Hot"
+    "icon": "hot"
   },
   {
     "id": 4,
     "name": "cold",
-    "icon": "Cold"
+    "icon": "cold"
   },
   {
     "id": 5,
     "name": "dizzy",
-    "icon": "Dizzy"
+    "icon": "dizzy"
   },
   {
     "id": 6,
     "name": "nauseous",
-    "icon": "Nauseous"
+    "icon": "nauseous"
   },
   {
     "id": 7,
     "name": "sleeping is difficult",
-    "icon": "Sleep"
+    "icon": "sleep"
   },
   {
     "id": 8,
     "name": "going to toilet is difficult",
-    "icon": "Toilet"
+    "icon": "toilet"
   },
   {
     "id": 9,
     "name": "breathing is difficult",
-    "icon": "Breathe"
+    "icon": "breathe"
   },
   {
     "id": 10,
     "name": "hearing is difficult",
-    "icon": "Hear"
+    "icon": "hear"
   },
   {
     "id": 11,
     "name": "seeing is difficult",
-    "icon": "See"
+    "icon": "see"
   },
   {
     "id": 12,
     "name": "speaking is difficult",
-    "icon": "Speak"
+    "icon": "speak"
   },
   {
     "id": 13,
     "name": "walking is difficult",
-    "icon": "Walk"
+    "icon": "walk"
   },
   {
     "id": 24,
