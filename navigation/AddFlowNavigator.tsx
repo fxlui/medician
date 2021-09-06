@@ -30,6 +30,11 @@ import CustomScreen from "../screens/add-flow/CustomScreen";
 import AppointmentTimeScreen from "../screens/add-appt-flow/AppointmentTimeScreen";
 import AppointmentDetailsScreen from "../screens/add-appt-flow/AppointmentDetailsScreen";
 
+// Add Routine Flow
+import RoutineSelectScreen from "../screens/add-rout-flow/RoutineSelectScreen";
+import RoutineDetailsScreen from "../screens/add-rout-flow/RoutineDetailsScreen";
+import RoutineTimeScreen from "../screens/add-rout-flow/RoutineTimeScreen";
+
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
 const AddFlowNavigator = () => {
@@ -89,6 +94,18 @@ const AddFlowNavigator = () => {
       <AddFlowStack.Screen
         name="AppointmentDetailsScreen"
         component={AppointmentDetailsScreen}
+      />
+      <AddFlowStack.Screen
+        name="RoutineSelectScreen"
+        component={RoutineSelectScreen}
+      />
+      <AddFlowStack.Screen
+        name="RoutineDetailsScreen"
+        component={RoutineDetailsScreen}
+      />
+      <AddFlowStack.Screen
+        name="RoutineTimeScreen"
+        component={RoutineTimeScreen}
       />
     </AddFlowStack.Navigator>
   );

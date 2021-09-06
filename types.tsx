@@ -38,6 +38,11 @@ export type AddFlowParamList = {
   CustomScreen: undefined;
   AppointmentTimeScreen: undefined;
   AppointmentDetailsScreen: undefined;
+  RoutineSelectScreen: undefined;
+  RoutineDetailsScreen: {
+    type: "medication" | "exercise";
+  };
+  RoutineTimeScreen: undefined;
 };
 
 export enum HomeTileTypes {
