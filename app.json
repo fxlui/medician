@@ -3,6 +3,7 @@
     "name": "Medician",
     "slug": "medician",
     "version": "1.0.0",
+    "owner": "logicpop",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -26,7 +27,9 @@
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to allow users to take photos/videos for tracking symptoms.",
         "NSPhotoLibraryUsageDescription": "This app uses the photo library to allow users to select photos/videos for tracking symptoms."
-      }
+      },
+      "bundleIdentifier": "com.logicpop.medician",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
