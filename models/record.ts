@@ -1,4 +1,4 @@
-import { types, Instance, SnapshotOut } from "mobx-state-tree";
+import { types, Instance, SnapshotOut, getSnapshot } from "mobx-state-tree";
 
 /**
  * The Record model.
@@ -9,8 +9,8 @@ export const RecordModel = types
     type: types.optional(types.string, ""),
     time: types.optional(types.array(types.Date), []),
     severity: types.optional(types.integer, 0),
-    area: types.optional(types.string, ""),
-    subArea: types.optional(types.string, ""),
+    area: types.optional(types.string, "other"),
+    subArea: types.optional(types.string, "other"),
     better: types.optional(types.string, ""),
     worse: types.optional(types.string, ""),
     related: types.optional(types.string, ""),
@@ -26,7 +26,12 @@ export const RecordModel = types
       type: types.optional(types.string, "video"),
       uri: types.optional(types.string, "")
     }))
-  });
+  })
+  .views((self) => ({
+    getSortedTimes: () => {
+      return getSnapshot(self.time).sort((a, b) => a - b);
+    }
+  }))
 
 /**
  * The Saved Record model.

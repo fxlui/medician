@@ -112,7 +112,7 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
         left={() => navigation.pop()}
         right={() => {
           addFlowStore.setRecordTemperature(temperature);
-          navigation.navigate("SeverityScreen")
+          navigation.navigate("AreaSelectScreen")
         }}
       />
     </SafeView>

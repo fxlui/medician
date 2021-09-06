@@ -31,7 +31,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
         return ["AreaSelectScreen", 5];
       case 3:
       case 4:
-        return ["TemperatureSelectionScreen", 6];
+        return ["TemperatureSelectionScreen", 7];
       case 22:
       case 8:
         return ["ToiletScreen", 7];

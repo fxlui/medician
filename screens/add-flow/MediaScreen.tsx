@@ -105,7 +105,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [visible, setIsVisible] = React.useState(false);
 
-  const { addFlowStore } = useStores();
+  const { user, addFlowStore } = useStores();
 
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
@@ -322,7 +322,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={() => {
           addFlowStore.setRecordAttachments(images);
-          addFlowStore.dbInsertFlow();
+          addFlowStore.dbInsertFlow(user.id);
           navigation.navigate("Root");
         }}
       ></AddFlowNavBar>

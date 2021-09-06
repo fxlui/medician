@@ -5,7 +5,11 @@ import {
   SnapshotOut,
   SnapshotOrInstance
 } from "mobx-state-tree";
-import { addCollection } from "../database/dbAPI";
+import {
+  addCollection,
+  addRecord,
+  getLastRecordId
+} from "../database/dbAPI";
 import { RecordModel } from "./record";
 
 /**
@@ -88,26 +92,37 @@ export const AddFlowStoreModel = types
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
-    dbInsertCollection: async (userId: number) => {
-      await addCollection(userId, self.currentNewRecord.type);
-    },
-    dbInsertFlow: () => {
-      console.log(self.currentNewRecord.type);
-      console.log(self.currentNewRecord.area);
-      console.log(self.currentNewRecord.subArea);
-      console.log(self.currentNewRecord.severity);
-      console.log(self.currentNewRecord.better);
-      console.log(self.currentNewRecord.worse);
-      console.log(self.currentNewRecord.related);
-      console.log(self.currentNewRecord.attempt);
-      console.log(self.currentNewRecord.toiletType);
-      console.log(self.currentNewRecord.toiletPain);
-      console.log(self.currentNewRecord.colour);
-      console.log(self.currentNewRecord.dizzy);
-      console.log(self.currentNewRecord.sleep);
-      console.log(self.currentNewRecord.description);
-      console.log(self.currentNewRecord.time);
-      console.log(self.currentNewRecord.attatchmentPaths)
+    dbInsertFlow: async (userId: number) => {
+      try {
+        const collectionId = await addCollection(userId, self.currentNewRecord.type);
+        await Promise.all(
+          self.currentNewRecord
+          .getSortedTimes()
+          .map(
+          time => addRecord([
+            collectionId,
+            time,
+            self.currentNewRecord.severity,
+            self.currentNewRecord.area,
+            self.currentNewRecord.subArea,
+            self.currentNewRecord.better,
+            self.currentNewRecord.worse,
+            self.currentNewRecord.related,
+            self.currentNewRecord.attempt,
+            self.currentNewRecord.temperature,
+            self.currentNewRecord.toiletType,
+            self.currentNewRecord.toiletPain,
+            self.currentNewRecord.colour,
+            self.currentNewRecord.dizzy,
+            self.currentNewRecord.sleep,
+            self.currentNewRecord.description
+          ])
+        ));
+        const lastRecordId = await getLastRecordId();
+        console.log(lastRecordId);
+      } catch (error) {
+        console.error("Insert record into database failed: ", error)
+      }
     }
   }));
 

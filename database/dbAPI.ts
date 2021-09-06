@@ -7,11 +7,14 @@ import {
   createAlertTable,
   createAttachmentTable,
   createCollectionTable,
-  deleteRecordTable,
   insertUser,
   insertCollection,
-  getCollection
+  getCollectionId,
+  insertRecord,
+  getLastInsertedRecordId,
+  getLastInsertedRecord
 } from "./queries";
+import { DatabaseEntryType } from "../types";
 
 function openDatabase() {
   const db = SQLite.openDatabase("db.db");
@@ -24,7 +27,8 @@ export async function initDatabase() {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
       tx => {
-        tx.executeSql(deleteRecordTable);
+        tx.executeSql(`DROP TABLE IF EXISTS entry`);
+        tx.executeSql(`DROP TABLE IF EXISTS collection`);
         tx.executeSql(createUserTable);
         tx.executeSql(createRecordTable);
         tx.executeSql(createCollectionTable);
@@ -43,15 +47,68 @@ export async function initDatabase() {
   });
 }
 
+/**
+ * 
+ * @param userId User's id
+ * @param type Symptom type
+ * @returns Id of existing/added colleciton
+ */
 export async function addCollection(userId: number, type: string) {
   return new Promise<number>((resolve, reject) => {
     db.transaction(
       tx => {
-        tx.executeSql(insertCollection);
         tx.executeSql(
-          getCollection,
+          insertCollection,
+          [userId, (new Date()).getTime(), type]
+        );
+        tx.executeSql(
+          getCollectionId,
           [ userId, type ],
-          (_, { rows }) => resolve(rows._array[0] as number)
+          (_, { rows }) => {
+            const result = rows._array[0] as { id: number };
+            resolve(result.id);
+          }
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+/**
+ * @param data Array of Record attributes
+ * @returns Id of the last record added
+ */
+export async function addRecord(data: DatabaseEntryType) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(insertRecord, data);
+        tx.executeSql(
+          getLastInsertedRecord,
+          undefined,
+          (_, { rows }) => {
+            console.log(rows._array);
+            resolve();
+          }
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function getLastRecordId() {
+  return new Promise<number>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          getLastInsertedRecordId,
+          undefined,
+          (_, { rows }) => {
+            const result = rows._array[0] as { id: number };
+            resolve(result.id);
+          }
         );
       },
       (error) => reject(error)
