@@ -31,7 +31,7 @@ type ScreenProps = StackScreenProps<RootStackParamList, "Settings">;
 const SettingsScreen = ({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const borderColor = colorScheme === "light" ? "#dbdbdb" : "#333";
+  const borderColor = colorScheme === "light" ? "#dbdbdb" : "#454545";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   const [showSettings, setShowSettings] = React.useState(false);
