@@ -4,7 +4,14 @@
     "emoji": "🤯",
     "text": "Head",
     "parts": [
-        "Eyes", "Ears", "Nose", "Mouth", "Teeth", "Face", "Scalp", "Brain"
+      "Eyes",
+      "Ears",
+      "Nose",
+      "Mouth",
+      "Teeth",
+      "Face",
+      "Scalp",
+      "Brain"
     ]
   },
   {
@@ -12,7 +19,14 @@
     "emoji": "👕",
     "text": "Body",
     "parts": [
-        "Neck", "Throat", "Chest", "Abdomen", "Pelvis", "Genitals", "Buttocks", "Back" 
+      "Neck",
+      "Throat",
+      "Chest",
+      "Abdomen",
+      "Pelvis",
+      "Genitals",
+      "Buttocks",
+      "Back"
     ]
   },
   {
@@ -20,7 +34,14 @@
     "emoji": "💪",
     "text": "Arms",
     "parts": [
-        "Shoulder", "Armpit", "Upper Arm", "Elbow", "Forearm", "Wrist", "Hand", "Fingers"
+      "Shoulder",
+      "Armpit",
+      "Upper Arm",
+      "Elbow",
+      "Forearm",
+      "Wrist",
+      "Hand",
+      "Fingers"
     ]
   },
   {
@@ -28,7 +49,21 @@
     "emoji": "🦵",
     "text": "Legs",
     "parts": [
-        "Thigh", "Hamstring", "Knee", "Back of Knee", "Shin", "Calf", "Ankle", "Foot", "Toes"
+      "Thigh",
+      "Hamstring",
+      "Knee",
+      "Back of Knee",
+      "Shin",
+      "Calf",
+      "Ankle",
+      "Foot",
+      "Toes"
     ]
+  },
+  {
+    "id": 4,
+    "emoji": "🔮",
+    "text": "Other",
+    "parts": ["Not in list"]
   }
 ]

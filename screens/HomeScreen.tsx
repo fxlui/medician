@@ -102,7 +102,7 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
             }}
             itemWidth={165}
             inactiveSlideOpacity={1}
-            inactiveSlideScale={0.9}
+            inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -119,7 +119,7 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
             }}
             itemWidth={165}
             inactiveSlideOpacity={1}
-            inactiveSlideScale={0.9}
+            inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
@@ -136,7 +136,7 @@ const HomeScreen = ({ navigation }: ScreenProps) => {
             }}
             itemWidth={165}
             inactiveSlideOpacity={1}
-            inactiveSlideScale={0.9}
+            inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}

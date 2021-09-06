@@ -20,11 +20,35 @@ import { Ionicons } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 import { AddFlowParamList, RootStackParamList } from "../../types";
+import BodyAreas from "../../assets/BodyAreas.json";
+
+import { TopTile, BottomTile } from "../../components/AreaTile";
+import Carousel from "react-native-snap-carousel";
+import { Picker } from "@react-native-picker/picker";
+import * as Haptics from "expo-haptics";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
   StackScreenProps<RootStackParamList>
 >;
+interface topBaseData {
+  index: number;
+  dataIndex: number;
+  item: {
+    id: number;
+    emoji: string;
+    text: string;
+  };
+}
+
+interface bottomBaseData {
+  index: number;
+  dataIndex: number;
+  item: {
+    id: number;
+    text: string;
+  };
+}
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
@@ -40,14 +64,17 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [currentAnswers, setCurrentAnswers] = React.useState({
-    doctor: "",
-    area: "",
-  });
-  const [alertSecondsBefore, setAlertSecondsBefore] =
+  const [currentDoctor, setCurrentDoctor] = React.useState("");
+  const [alertMinutesBefore, setAlertMinutesBefore] =
     React.useState<Number | null>(null);
+  const [selectedTop, setSelectedTop] = React.useState(0);
+  const [selectedBottom, setSelectedBottom] = React.useState(0);
+  const [selectedArea, setSelectedArea] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
+  const topRef =
+    React.createRef<Carousel<{ id: number; emoji: string; text: string }>>();
+  const bottomRef = React.createRef<Carousel<{ id: number; text: string }>>();
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -77,7 +104,6 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           useNativeDriver: false,
         }).start();
         setCurrentQuestion(1);
-        setCurrentText(currentAnswers.area);
         break;
       case 1:
         Animated.timing(animatedOpacityQ2, {
@@ -91,7 +117,6 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           useNativeDriver: false,
         }).start();
         setCurrentQuestion(2);
-        setCurrentText(alertSecondsBefore ? alertSecondsBefore.toString() : "");
         break;
       case 2:
         setCurrentQuestion(3);
@@ -102,10 +127,58 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   };
 
   const handleNavigation = () => {
-    if (currentQuestion >= 3) {
+    if (currentQuestion >= 2) {
       navigation.navigate("MediaScreen");
     } else {
       nextQuestion();
+    }
+  };
+
+  const bodyAreaArr = BodyAreas;
+
+  const renderTopTile = ({ item, index }: topBaseData) => {
+    return (
+      <TopTile
+        title={item.text}
+        index={index}
+        emoji={item.emoji}
+        selected={selectedTop === index}
+        updater={() => {
+          topRef.current?.snapToItem(index);
+        }}
+      />
+    );
+  };
+
+  const renderBottomTile = ({ item, index }: bottomBaseData) => {
+    return (
+      <BottomTile
+        title={item.text}
+        index={index}
+        selected={selectedBottom === index}
+        updater={() => {
+          bottomRef.current?.snapToItem(index);
+        }}
+      />
+    );
+  };
+
+  const getAlertTimeText = (minutes: Number) => {
+    switch (minutes) {
+      case 0:
+        return "At the time of your appointment";
+      case 5:
+        return "5 minutes before";
+      case 15:
+        return "15 minutes before";
+      case 60:
+        return "1 hour before";
+      case 60 * 24:
+        return "1 day before";
+      case 60 * 24 * 3:
+        return "3 days before";
+      default:
+        return "";
     }
   };
 
@@ -129,21 +202,23 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         >
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ1 }]}>
             <Text style={styles.question}>{getQuestion(0)}</Text>
-            {!inputFocused && currentAnswers.doctor !== "" && (
-              <Text style={styles.answer}>{currentAnswers.doctor}</Text>
-            )}
+            {!inputFocused && currentDoctor !== "" ? (
+              <Text style={styles.answer}>{currentDoctor}</Text>
+            ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
             <Text style={styles.question}>{getQuestion(1)}</Text>
-            {!inputFocused && currentAnswers.area !== "" && (
-              <Text style={styles.answer}>{currentAnswers.area}</Text>
-            )}
+            {!inputFocused && selectedArea !== "" ? (
+              <Text style={styles.answer}>{selectedArea}</Text>
+            ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ3 }]}>
             <Text style={styles.question}>{getQuestion(2)}</Text>
-            {!inputFocused && alertSecondsBefore && (
-              <Text style={styles.answer}>{alertSecondsBefore}</Text>
-            )}
+            {!inputFocused && alertMinutesBefore !== null ? (
+              <Text style={styles.answer}>
+                {getAlertTimeText(alertMinutesBefore)}
+              </Text>
+            ) : null}
           </Animated.View>
         </ScrollView>
         <KeyboardAvoidingView
@@ -154,7 +229,8 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         >
           <View
             style={{
-              backgroundColor: tileColor,
+              backgroundColor:
+                currentQuestion === 1 ? "transparent" : tileColor,
               borderRadius: 16,
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 4 },
@@ -167,64 +243,139 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
               marginBottom: inputFocused ? 160 : 85,
             }}
           >
-            <AnimatedTextInput
-              ref={inputRef}
-              placeholder={"Type in your response here..."}
-              placeholderTextColor="lightgrey"
-              style={{
-                padding: 20,
-                flex: 8,
-                fontSize: 16,
-                marginTop: 20,
-                maxHeight: 125,
-                color: textColor,
-              }}
-              multiline={true}
-              value={currentText}
-              onFocus={() => setInputFocused(true)}
-              onBlur={() => setInputFocused(false)}
-              onChangeText={(text) => {
-                setCurrentText(text);
-                switch (currentQuestion) {
-                  case 0:
-                    setCurrentAnswers({
-                      ...currentAnswers,
-                      doctor: text,
-                    });
-                    break;
-                  case 1:
-                    setCurrentAnswers({
-                      ...currentAnswers,
-                      area: text,
-                    });
-                    break;
-                  case 2:
-                    setAlertSecondsBefore(alertSecondsBefore); // TODO change
-                    break;
-                  default:
-                    break;
+            {currentQuestion === 0 ? (
+              <>
+                <AnimatedTextInput
+                  ref={inputRef}
+                  placeholder={"Type in your response here..."}
+                  placeholderTextColor="lightgrey"
+                  style={{
+                    padding: 20,
+                    flex: 8,
+                    fontSize: 16,
+                    marginTop: 20,
+                    maxHeight: 125,
+                    color: textColor,
+                  }}
+                  multiline={true}
+                  value={currentText}
+                  onFocus={() => setInputFocused(true)}
+                  onBlur={() => setInputFocused(false)}
+                  onChangeText={(text) => {
+                    setCurrentText(text);
+                    if (currentQuestion === 0) {
+                      setCurrentDoctor(text);
+                    }
+                  }}
+                />
+                <PressableBase
+                  extraProps={{
+                    style: {
+                      flex: 2,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    },
+                  }}
+                  onPress={handleNavigation}
+                >
+                  <Ionicons name="ios-send" size={20} color={textColor} />
+                </PressableBase>
+              </>
+            ) : null}
+            {currentQuestion === 1 ? (
+              <View
+                style={{
+                  backgroundColor: "transparent",
+                  marginRight: -20,
+                }}
+              >
+                <Carousel
+                  data={bodyAreaArr.map((item) => ({
+                    id: item.id,
+                    emoji: item.emoji,
+                    text: item.text,
+                  }))}
+                  renderItem={renderTopTile}
+                  vertical={false}
+                  sliderWidth={Dimensions.get("window").width}
+                  containerCustomStyle={{
+                    overflow: "visible",
+                  }}
+                  contentContainerCustomStyle={{
+                    justifyContent: "center",
+                    alignItems: "flex-end",
+                    overflow: "visible",
+                  }}
+                  itemWidth={150}
+                  inactiveSlideOpacity={0.8}
+                  onScrollIndexChanged={(index) => {
+                    setSelectedTop(index);
+                    bottomRef.current?.snapToItem(0);
+                    //setSelectedBottom(0);
+                    setSelectedArea(BodyAreas[index].parts[0]);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }}
+                  ref={topRef}
+                />
+                <Carousel
+                  data={bodyAreaArr[selectedTop].parts.map((item, index) => ({
+                    id: index,
+                    text: item,
+                  }))}
+                  renderItem={renderBottomTile}
+                  vertical={false}
+                  sliderWidth={Dimensions.get("window").width}
+                  containerCustomStyle={{
+                    overflow: "visible",
+                  }}
+                  contentContainerCustomStyle={{
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    overflow: "visible",
+                    marginTop: 30,
+                    marginBottom: 0,
+                  }}
+                  itemWidth={150}
+                  inactiveSlideOpacity={0.8}
+                  onScrollIndexChanged={(index) => {
+                    setSelectedBottom(index);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setSelectedArea(BodyAreas[selectedTop].parts[index]);
+                  }}
+                  ref={bottomRef}
+                />
+              </View>
+            ) : null}
+            {currentQuestion === 2 ? (
+              <Picker
+                selectedValue={alertMinutesBefore}
+                onValueChange={(itemValue, itemIndex) =>
+                  setAlertMinutesBefore(itemValue)
                 }
-              }}
-            />
-            <PressableBase
-              extraProps={{
-                style: {
-                  flex: 2,
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-              }}
-              onPress={handleNavigation}
-            >
-              <Ionicons name="ios-send" size={20} color={textColor} />
-            </PressableBase>
+                style={{
+                  height: 150,
+                  width: "100%",
+                  marginBottom: 60,
+                }}
+                itemStyle={{
+                  color: textColor,
+                }}
+              >
+                <Picker.Item label="At time of appointment" value={0} />
+                <Picker.Item label="5 minutes before" value={5} />
+                <Picker.Item label="15 minutes before" value={15} />
+                <Picker.Item label="1 hour before" value={60} />
+                <Picker.Item label="1 day before" value={60 * 24} />
+                <Picker.Item label="3 days before" value={60 * 24 * 3} />
+              </Picker>
+            ) : null}
           </View>
         </KeyboardAvoidingView>
       </View>
       <AddFlowNavBar
         left={() => {
           if (
-            (currentQuestion === 0 && currentAnswers.doctor !== "") ||
+            (currentQuestion === 0 && currentDoctor !== "") ||
             currentQuestion > 0
           ) {
             const qNow = currentQuestion - 1;
@@ -244,7 +395,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
-                setCurrentText(currentAnswers.doctor);
+                setCurrentText(currentDoctor);
                 break;
               case 1:
                 Animated.timing(animatedOpacityQ2, {
@@ -257,7 +408,6 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
-                setCurrentText(currentAnswers.area);
                 break;
               case 2:
                 Animated.timing(animatedOpacityQ3, {
@@ -274,6 +424,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           }
         }}
         right={handleNavigation}
+        last
       ></AddFlowNavBar>
     </SafeView>
   );
