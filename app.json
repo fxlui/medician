@@ -10,15 +10,23 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "dark": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000"
+      }
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["assets/**/*"],
     "ios": {
-      "supportsTablet": false,
-      "requireFullScreen": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to allow users to take photos/videos for tracking symptoms.",
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library to allow users to select photos/videos for tracking symptoms."
+      }
     },
     "android": {
       "adaptiveIcon": {
