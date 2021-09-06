@@ -36,7 +36,7 @@ const Tile: React.FC<TileDetails> = ({
       <View style={styles.content}>
         <View style={styles.left}>
           <Text style={{ fontSize: 42 }}>{emoji}</Text>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>{title}</Text>
+          <Text style={{ fontSize: 18, fontWeight: "500" }}>{title}</Text>
         </View>
         {list == "symptoms" ? (
           <Text style={styles.list}>
