@@ -25,18 +25,40 @@ export type AddFlowParamList = {
     type: "feel" | "cant";
   };
   AreaSelectScreen: undefined;
-  SeverityScreen: undefined;
+  SeverityScreen: {
+    method: "add" | "edit";
+  };
   TimeSelectScreen: undefined;
-  DetailsScreen: undefined;
-  MediaScreen: undefined;
-  TemperatureSelectionScreen: undefined;
-  TemperatureScreen: undefined;
-  ToiletScreen: undefined;
-  ToiletPainScreen: undefined;
-  ToiletColorScreen: undefined;
-  DizzyScreen: undefined;
-  SleepHoursScreen: undefined;
-  CustomScreen: undefined;
+  DetailsScreen: {
+    method: "add" | "edit";
+  };
+  MediaScreen: {
+    method: "add" | "edit";
+  };
+  TemperatureSelectionScreen: {
+    method: "add" | "edit";
+  };
+  TemperatureScreen: {
+    method: "add" | "edit";
+  };
+  ToiletScreen: {
+    method: "add" | "edit";
+  };
+  ToiletPainScreen: {
+    method: "add" | "edit";
+  };
+  ToiletColorScreen: {
+    method: "add" | "edit";
+  };
+  DizzyScreen: {
+    method: "add" | "edit";
+  };
+  SleepHoursScreen: {
+    method: "add" | "edit";
+  };
+  CustomScreen: {
+    method: "add" | "edit";
+  };
   AppointmentTimeScreen: undefined;
   AppointmentDetailsScreen: undefined;
   RoutineSelectScreen: undefined;
