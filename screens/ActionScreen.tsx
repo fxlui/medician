@@ -122,12 +122,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 25,
     paddingRight: 25,
+    alignItems: "center",
+    justifyContent: "center",
   },
   greeting: {
     fontSize: 26,
     fontWeight: "600",
     marginTop: 65,
-    marginLeft: 5,
+    marginLeft: -100,
   },
   tiles: {
     marginTop: 50,

@@ -52,16 +52,21 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
+  const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
+
   const [currentDoctor, setCurrentDoctor] = React.useState("");
   const [alertMinutesBefore, setAlertMinutesBefore] =
     React.useState<number>(-1);
+
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
   const [selectedSymptomType, setSelectedSymptomType] = React.useState("pain");
+
+  const [extraNotes, setExtraNotes] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
@@ -113,6 +118,17 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         setCurrentQuestion(2);
         break;
       case 2:
+        Animated.timing(animatedOpacityQ3, {
+          toValue: 0.5,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(animatedOpacityQ4, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        setCurrentText(extraNotes);
         setCurrentQuestion(3);
         break;
       default:
@@ -121,7 +137,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   };
 
   const handleNavigation = async () => {
-    if (currentQuestion >= 2) {
+    if (currentQuestion >= 3) {
       if (currentDoctor === "") {
         Alert.alert(
           "Missing Information",
@@ -180,6 +196,31 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
     }
   };
 
+  const handleGoBack = () => {
+    if (currentDoctor !== "" || extraNotes !== "") {
+      Alert.alert(
+        "Are you sure?",
+        "You have unsaved changes. Are you sure you want to go back?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: () => {
+              navigation.pop();
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      navigation.pop();
+    }
+  };
+
   return (
     <SafeView style={styles.container} disableTop>
       <View
@@ -218,6 +259,12 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
               </Text>
             ) : null}
           </Animated.View>
+          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ4 }]}>
+            <Text style={styles.question}>{getQuestion(3)}</Text>
+            {!inputFocused && extraNotes !== "" ? (
+              <Text style={styles.answer}>{extraNotes}</Text>
+            ) : null}
+          </Animated.View>
         </ScrollView>
         <KeyboardAvoidingView
           behavior="position"
@@ -241,7 +288,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
               marginBottom: inputFocused ? 160 : 85,
             }}
           >
-            {currentQuestion === 0 ? (
+            {currentQuestion === 0 || currentQuestion === 3 ? (
               <>
                 <AnimatedTextInput
                   ref={inputRef}
@@ -263,6 +310,8 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                     setCurrentText(text);
                     if (currentQuestion === 0) {
                       setCurrentDoctor(text);
+                    } else if (currentQuestion === 3) {
+                      setExtraNotes(text);
                     }
                   }}
                 />
@@ -345,7 +394,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         </KeyboardAvoidingView>
       </View>
       <AddFlowNavBar
-        last={currentQuestion === 2}
+        last={currentQuestion === 3}
         left={() => {
           if (
             (currentQuestion === 0 && currentDoctor !== "") ||
@@ -355,7 +404,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
-                navigation.pop();
+                handleGoBack();
                 break;
               case 0:
                 Animated.timing(animatedOpacityQ1, {
@@ -388,15 +437,22 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
+                Animated.timing(animatedOpacityQ4, {
+                  toValue: 0.5,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
                 break;
               default:
                 break;
             }
           } else {
-            navigation.pop();
+            handleGoBack();
           }
         }}
         right={handleNavigation}
+        preventLeftDefault={true}
+        preventRightDefault={true}
       ></AddFlowNavBar>
     </SafeView>
   );
