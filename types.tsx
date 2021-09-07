@@ -12,6 +12,10 @@ export type RootStackParamList = {
   ActionScreen: undefined;
   NotFound: undefined;
   Settings: undefined;
+  Timeline: {
+    type: string;
+    area: string;
+  };
 };
 
 export type BottomTabParamList = {
