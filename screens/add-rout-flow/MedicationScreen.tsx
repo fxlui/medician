@@ -26,10 +26,11 @@ import uniqueSymptoms from "../../assets/uniqueSymptoms.json";
 import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
+import { useStores } from "../../models/root-store-provider";
 import * as Haptics from "expo-haptics";
 
 type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
+  StackScreenProps<AddFlowParamList, "MedicationScreen">,
   StackScreenProps<RootStackParamList>
 >;
 interface topBaseData {
@@ -43,34 +44,64 @@ interface topBaseData {
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
+export default function RoutineDetailsScreen({
+  navigation,
+  route,
+}: ScreenProps) {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
+  const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
+  const animatedOpacityQ5 = React.useRef(new Animated.Value(0.5)).current;
+
+  const symptomArr = uniqueSymptoms;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [currentDoctor, setCurrentDoctor] = React.useState("");
   const [alertMinutesBefore, setAlertMinutesBefore] =
     React.useState<Number>(-1);
+
+  const [medTitle, setMedTitle] = React.useState(""); //medication title
+
+  const [doseAmount, setDoseAmount] = React.useState(1);
+  const [doseUnit, setDoseUnit] = React.useState("");
+  const [dose, setDose] = React.useState("");
+
+  React.useEffect(() => {
+    if (!doseAmount || !doseUnit) return;
+    setDose(`${doseAmount} x ${doseUnit}`);
+  }, [doseAmount, doseUnit]);
+
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
+  const [extraNotes, setExtraNotes] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
+  const { addFlowStore } = useStores();
+
+  React.useEffect(() => {
+    console.log(medTitle);
+  }, [currentQuestion]);
+
   const getQuestion = (question: Number) => {
     switch (question) {
       case 0:
-        return "Who are you seeing?";
+        return "What's the name of the medication?";
       case 1:
-        return "What is this for?";
+        return "What's the dose?";
       case 2:
+        return "What is this for?";
+      case 3:
         return "When do you want us to remind you?";
+      case 4:
+        return "Extra notes";
       default:
         return "";
     }
@@ -108,7 +139,34 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         setCurrentQuestion(2);
         break;
       case 2:
+        Animated.timing(animatedOpacityQ3, {
+          toValue: 0.5,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(animatedOpacityQ4, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
         setCurrentQuestion(3);
+        break;
+      case 3:
+        Animated.timing(animatedOpacityQ4, {
+          toValue: 0.5,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(animatedOpacityQ5, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        setCurrentQuestion(4);
+        setCurrentText(extraNotes);
+        break;
+      case 4:
+        setCurrentQuestion(5);
         break;
       default:
         break;
@@ -116,23 +174,25 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   };
 
   const handleNavigation = () => {
-    if (currentQuestion >= 2) {
-      if (currentDoctor === "") {
+    // used to be 4
+    if (currentQuestion >= 3) {
+      if (medTitle === "" || dose === "" || selectedSymptom === "") {
         Alert.alert(
           "Missing Information",
           `Please fill out the following:\n\n${
-            currentDoctor === "" ? "Name of the doctor\n" : ""
+            medTitle === "" ? "Name of medication\n" : ""
+          }${dose === "" ? "Dose of medication\n" : ""}${
+            selectedSymptom === "" ? "Symptom\n" : ""
           }`
         );
         return;
       }
-      navigation.navigate("Root");
+      addFlowStore.goForward();
+      navigation.navigate("RoutineTimeScreen");
     } else {
       nextQuestion();
     }
   };
-
-  const symptomArr = uniqueSymptoms;
 
   const renderTopTile = ({ item, index }: topBaseData) => {
     return (
@@ -151,9 +211,9 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const getAlertTimeText = (minutes: Number) => {
     switch (minutes) {
       case -1:
-        return "No notifications";
+        return `No notifications`;
       case 0:
-        return "At the time of your appointments";
+        return `At the time of medication`;
       case 5:
         return "5 minutes before";
       case 15:
@@ -178,7 +238,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         }}
       >
         <Text style={styles.greeting}>
-          Please tell me more about your appointment.
+          Please tell me more about your medication.
         </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -189,24 +249,42 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         >
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ1 }]}>
             <Text style={styles.question}>{getQuestion(0)}</Text>
-            {!inputFocused && currentDoctor !== "" ? (
-              <Text style={styles.answer}>{currentDoctor}</Text>
+            {!inputFocused && medTitle !== "" ? (
+              <Text style={styles.answer}>{medTitle}</Text>
             ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
             <Text style={styles.question}>{getQuestion(1)}</Text>
-            {!inputFocused && selectedSymptom !== "" ? (
-              <Text style={styles.answer}>{selectedSymptom}</Text>
+            {inputFocused && currentQuestion === 1 ? (
+              <Text style={[styles.answer, { opacity: 0.9, fontSize: 16 }]}>
+                You'll get to choose the frequency in the next screen.
+              </Text>
+            ) : null}
+            {!inputFocused && dose !== "" ? (
+              <Text style={styles.answer}>{dose}</Text>
             ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ3 }]}>
             <Text style={styles.question}>{getQuestion(2)}</Text>
+            {!inputFocused && selectedSymptom !== "" ? (
+              <Text style={styles.answer}>{selectedSymptom}</Text>
+            ) : null}
+          </Animated.View>
+          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ4 }]}>
+            <Text style={styles.question}>{getQuestion(3)}</Text>
             {!inputFocused && alertMinutesBefore !== null ? (
               <Text style={styles.answer}>
                 {getAlertTimeText(alertMinutesBefore)}
               </Text>
             ) : null}
           </Animated.View>
+
+          {/*<Animated.View style={[styles.qna, { opacity: animatedOpacityQ5 }]}>
+            <Text style={styles.question}>{getQuestion(4)}</Text>
+            {!inputFocused && extraNotes !== "" ? (
+              <Text style={styles.answer}>{extraNotes}</Text>
+            ) : null}
+            </Animated.View>*/}
         </ScrollView>
         <KeyboardAvoidingView
           behavior="position"
@@ -217,7 +295,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           <View
             style={{
               backgroundColor:
-                currentQuestion === 1 ? "transparent" : tileColor,
+                currentQuestion === 2 ? "transparent" : tileColor,
               borderRadius: 16,
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 4 },
@@ -230,46 +308,62 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
               marginBottom: inputFocused ? 160 : 85,
             }}
           >
-            {currentQuestion === 0 ? (
-              <>
-                <AnimatedTextInput
-                  ref={inputRef}
-                  placeholder={"Type in your response here..."}
-                  placeholderTextColor="lightgrey"
-                  style={{
-                    padding: 20,
-                    flex: 8,
-                    fontSize: 16,
-                    marginTop: 20,
-                    maxHeight: 125,
+            {currentQuestion === 1 ? (
+              <View
+                style={{
+                  height: 210,
+                  width: "100%",
+                  borderRadius: 16,
+                  flexDirection: "row",
+                }}
+              >
+                <Picker
+                  selectedValue={doseAmount}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setDoseAmount(itemValue)
+                  }
+                  itemStyle={{
                     color: textColor,
                   }}
-                  multiline={true}
-                  value={currentText}
-                  onFocus={() => setInputFocused(true)}
-                  onBlur={() => setInputFocused(false)}
-                  onChangeText={(text) => {
-                    setCurrentText(text);
-                    if (currentQuestion === 0) {
-                      setCurrentDoctor(text);
-                    }
+                  style={{
+                    flex: 1,
                   }}
-                />
-                <PressableBase
-                  extraProps={{
-                    style: {
-                      flex: 2,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    },
-                  }}
-                  onPress={handleNavigation}
                 >
-                  <Ionicons name="ios-send" size={20} color={textColor} />
-                </PressableBase>
-              </>
+                  {Array.from({ length: 20 }, (_, i) => i + 1).map((item) => (
+                    <Picker.Item
+                      key={item}
+                      label={item.toString()}
+                      value={item}
+                    />
+                  ))}
+                </Picker>
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text>x</Text>
+                </View>
+                <Picker
+                  selectedValue={doseUnit}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setDoseUnit(itemValue)
+                  }
+                  itemStyle={{
+                    color: textColor,
+                  }}
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  <Picker.Item label="Tablet" value="tablet" />
+                  <Picker.Item label="Packet" value="packet" />
+                  <Picker.Item label="Drop" value="drop" />
+                  <Picker.Item label="10 mL" value="10 mL" />
+                  <Picker.Item label="25 mL" value="25 mL" />
+                  <Picker.Item label="50 mL" value="50 mL" />
+                </Picker>
+              </View>
             ) : null}
-            {currentQuestion === 1 ? (
+            {currentQuestion === 2 ? (
               <View
                 style={{
                   backgroundColor: "transparent",
@@ -304,7 +398,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                 />
               </View>
             ) : null}
-            {currentQuestion === 2 ? (
+            {currentQuestion === 3 ? (
               <Picker
                 selectedValue={alertMinutesBefore}
                 onValueChange={(itemValue, itemIndex) =>
@@ -320,7 +414,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                 }}
               >
                 <Picker.Item label="No notifications" value={-1} />
-                <Picker.Item label="At time of appointment" value={0} />
+                <Picker.Item label={`At time of medication`} value={0} />
                 <Picker.Item label="5 minutes before" value={5} />
                 <Picker.Item label="15 minutes before" value={15} />
                 <Picker.Item label="1 hour before" value={60} />
@@ -328,20 +422,63 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                 <Picker.Item label="3 days before" value={60 * 24 * 3} />
               </Picker>
             ) : null}
+            {currentQuestion === 4 || currentQuestion === 0 ? (
+              <>
+                <AnimatedTextInput
+                  ref={inputRef}
+                  placeholder={"Type in your response here..."}
+                  placeholderTextColor="lightgrey"
+                  style={{
+                    padding: 20,
+                    flex: 8,
+                    fontSize: 16,
+                    marginTop: 20,
+                    maxHeight: 125,
+                    color: textColor,
+                  }}
+                  multiline={true}
+                  value={currentText}
+                  onFocus={() => setInputFocused(true)}
+                  onBlur={() => setInputFocused(false)}
+                  onChangeText={(text) => {
+                    setCurrentText(text);
+                    if (currentQuestion === 4) {
+                      setExtraNotes(text);
+                    } else if (currentQuestion === 0) {
+                      setMedTitle(text);
+                    }
+                  }}
+                />
+                <PressableBase
+                  extraProps={{
+                    style: {
+                      flex: 2,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    },
+                  }}
+                  onPress={handleNavigation}
+                >
+                  <Ionicons name="ios-send" size={20} color={textColor} />
+                </PressableBase>
+              </>
+            ) : null}
           </View>
         </KeyboardAvoidingView>
       </View>
       <AddFlowNavBar
-        last={currentQuestion === 2}
+        preventLeftDefault
+        preventRightDefault
         left={() => {
           if (
-            (currentQuestion === 0 && currentDoctor !== "") ||
+            (currentQuestion === 0 && currentText !== "") ||
             currentQuestion > 0
           ) {
             const qNow = currentQuestion - 1;
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
+                addFlowStore.goBack();
                 navigation.pop();
                 break;
               case 0:
@@ -355,7 +492,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
-                setCurrentText(currentDoctor);
+                setCurrentText(medTitle);
                 break;
               case 1:
                 Animated.timing(animatedOpacityQ2, {
@@ -375,11 +512,29 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
+                Animated.timing(animatedOpacityQ4, {
+                  toValue: 0.5,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
+                break;
+              case 3:
+                Animated.timing(animatedOpacityQ4, {
+                  toValue: 1,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
+                Animated.timing(animatedOpacityQ5, {
+                  toValue: 0.5,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
                 break;
               default:
                 break;
             }
           } else {
+            addFlowStore.goBack();
             navigation.pop();
           }
         }}

@@ -24,12 +24,12 @@ export default function RoutineSelectScreen({ navigation }: ScreenProps) {
 
   const handleSelectMedication = () => {
     addFlowStore.goForward();
-    navigation.navigate("RoutineDetailsScreen", { type: "medication" });
+    navigation.navigate("MedicationScreen");
   };
 
   const handleSelectExercise = () => {
     addFlowStore.goForward();
-    navigation.navigate("RoutineDetailsScreen", { type: "exercise" });
+    navigation.navigate("ExerciseScreen");
   };
 
   return (

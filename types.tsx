@@ -47,9 +47,8 @@ export type AddFlowParamList = {
   AppointmentTimeScreen: undefined;
   AppointmentDetailsScreen: undefined;
   RoutineSelectScreen: undefined;
-  RoutineDetailsScreen: {
-    type: "medication" | "exercise";
-  };
+  MedicationScreen: undefined;
+  ExerciseScreen: undefined;
   RoutineTimeScreen: undefined;
 };
 

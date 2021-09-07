@@ -24,7 +24,7 @@ const ToiletScreen = ({ navigation }: ScreenProps) => {
         <Text style={styles.greeting}>Please select all that applies.</Text>
         <View style={styles.child}>
           <SelectionTile
-            title="Pee"
+            title="Urination"
             selected={pee}
             onPress={() => setPee((prev) => !prev)}
             extraStyles={{
@@ -32,7 +32,7 @@ const ToiletScreen = ({ navigation }: ScreenProps) => {
             }}
           />
           <SelectionTile
-            title="Poo"
+            title="Defecation"
             selected={poo}
             onPress={() => setPoo((prev) => !prev)}
           />
@@ -45,9 +45,9 @@ const ToiletScreen = ({ navigation }: ScreenProps) => {
           if (pee === null && poo === null) {
             Alert.alert("No Selection", "You need to select an option first!");
           } else {
-            addFlowStore
-              .currentNewRecord
-              .setRecordToiletType(pee ? 0 : poo ? 1 : -1);
+            addFlowStore.currentNewRecord.setRecordToiletType(
+              pee ? 0 : poo ? 1 : -1
+            );
             addFlowStore.goForward();
             navigation.navigate("ToiletPainScreen");
           }

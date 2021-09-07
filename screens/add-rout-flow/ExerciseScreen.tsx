@@ -6,6 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Animated,
+  Alert,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -29,7 +30,7 @@ import { useStores } from "../../models/root-store-provider";
 import * as Haptics from "expo-haptics";
 
 type ScreenProps = CompositeScreenProps<
-  StackScreenProps<AddFlowParamList, "RoutineDetailsScreen">,
+  StackScreenProps<AddFlowParamList, "ExerciseScreen">,
   StackScreenProps<RootStackParamList>
 >;
 interface topBaseData {
@@ -54,15 +55,19 @@ export default function RoutineDetailsScreen({
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
+  const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
 
-  const routineType = route.params.type;
   const symptomArr = uniqueSymptoms;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
+
   const [alertMinutesBefore, setAlertMinutesBefore] =
-    React.useState<Number | null>(null);
+    React.useState<Number>(-1);
+
+  const [exerciseName, setExerciseName] = React.useState("");
+  const [extraNotes, setExtraNotes] = React.useState("");
 
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
@@ -75,11 +80,13 @@ export default function RoutineDetailsScreen({
   const getQuestion = (question: Number) => {
     switch (question) {
       case 0:
-        return "What is this for?";
+        return "What is the exercise?";
       case 1:
-        return "When do you want us to remind you?";
+        return "Extra Notes";
       case 2:
-        return "Extra notes";
+        return "What is this for?";
+      case 3:
+        return "When do you want us to remind you?";
       default:
         return "";
     }
@@ -87,6 +94,8 @@ export default function RoutineDetailsScreen({
 
   const nextQuestion = () => {
     inputRef.current?.clear();
+    //inputRef.current?.blur();
+    //setInputFocused(false);
     switch (currentQuestion) {
       case 0:
         Animated.timing(animatedOpacityQ1, {
@@ -100,6 +109,7 @@ export default function RoutineDetailsScreen({
           useNativeDriver: false,
         }).start();
         setCurrentQuestion(1);
+        setCurrentText(extraNotes);
         break;
       case 1:
         Animated.timing(animatedOpacityQ2, {
@@ -115,6 +125,16 @@ export default function RoutineDetailsScreen({
         setCurrentQuestion(2);
         break;
       case 2:
+        Animated.timing(animatedOpacityQ3, {
+          toValue: 0.5,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(animatedOpacityQ4, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
         setCurrentQuestion(3);
         break;
       default:
@@ -123,7 +143,16 @@ export default function RoutineDetailsScreen({
   };
 
   const handleNavigation = () => {
-    if (currentQuestion >= 2) {
+    if (currentQuestion >= 3) {
+      if (exerciseName === "") {
+        Alert.alert(
+          "Missing Information",
+          `Please fill out the following:\n\n${
+            exerciseName === "" ? "Name of exercise\n" : ""
+          }`
+        );
+        return;
+      }
       addFlowStore.goForward();
       navigation.navigate("RoutineTimeScreen");
     } else {
@@ -150,7 +179,7 @@ export default function RoutineDetailsScreen({
       case -1:
         return `No notifications`;
       case 0:
-        return `At the time of ${routineType}`;
+        return `At the time of exercise`;
       case 5:
         return "5 minutes before";
       case 15:
@@ -175,7 +204,7 @@ export default function RoutineDetailsScreen({
         }}
       >
         <Text style={styles.greeting}>
-          Please tell me more about your {routineType}.
+          Please tell me more about your exercise.
         </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -186,22 +215,43 @@ export default function RoutineDetailsScreen({
         >
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ1 }]}>
             <Text style={styles.question}>{getQuestion(0)}</Text>
-            {!inputFocused && selectedSymptom !== "" ? (
-              <Text style={styles.answer}>{selectedSymptom}</Text>
+            {inputFocused && currentQuestion === 0 ? (
+              <Text style={[styles.answer, { opacity: 0.9, fontSize: 16 }]}>
+                e.g. Walk, Running, Swimming...
+              </Text>
+            ) : null}
+            {!inputFocused && exerciseName !== "" ? (
+              <Text style={styles.answer}>{exerciseName}</Text>
             ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ2 }]}>
             <Text style={styles.question}>{getQuestion(1)}</Text>
-            {!inputFocused && alertMinutesBefore !== null ? (
-              <Text style={styles.answer}>
-                {getAlertTimeText(alertMinutesBefore)}
-              </Text>
+            {inputFocused && currentQuestion === 1 ? (
+              <View>
+                <Text style={[styles.answer, { opacity: 0.9, fontSize: 16 }]}>
+                  e.g. 1 km, 10 km, 30 minutes...
+                </Text>
+                <Text style={[styles.answer, { opacity: 0.9, fontSize: 16 }]}>
+                  You'll get to choose the frequency in the next screen.
+                </Text>
+              </View>
+            ) : null}
+            {!inputFocused && extraNotes !== "" ? (
+              <Text style={styles.answer}>{extraNotes}</Text>
             ) : null}
           </Animated.View>
           <Animated.View style={[styles.qna, { opacity: animatedOpacityQ3 }]}>
             <Text style={styles.question}>{getQuestion(2)}</Text>
-            {!inputFocused && currentText !== "" ? (
-              <Text style={styles.answer}>{currentText}</Text>
+            {!inputFocused && selectedSymptom !== "" ? (
+              <Text style={styles.answer}>{selectedSymptom}</Text>
+            ) : null}
+          </Animated.View>
+          <Animated.View style={[styles.qna, { opacity: animatedOpacityQ4 }]}>
+            <Text style={styles.question}>{getQuestion(3)}</Text>
+            {!inputFocused && alertMinutesBefore !== null ? (
+              <Text style={styles.answer}>
+                {getAlertTimeText(alertMinutesBefore)}
+              </Text>
             ) : null}
           </Animated.View>
         </ScrollView>
@@ -214,7 +264,7 @@ export default function RoutineDetailsScreen({
           <View
             style={{
               backgroundColor:
-                currentQuestion === 0 ? "transparent" : tileColor,
+                currentQuestion === 2 ? "transparent" : tileColor,
               borderRadius: 16,
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 4 },
@@ -227,7 +277,7 @@ export default function RoutineDetailsScreen({
               marginBottom: inputFocused ? 160 : 85,
             }}
           >
-            {currentQuestion === 2 ? (
+            {currentQuestion === 1 || currentQuestion === 0 ? (
               <>
                 <AnimatedTextInput
                   ref={inputRef}
@@ -245,7 +295,14 @@ export default function RoutineDetailsScreen({
                   value={currentText}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
-                  onChangeText={(text) => setCurrentText(text)}
+                  onChangeText={(text) => {
+                    setCurrentText(text);
+                    if (currentQuestion === 1) {
+                      setExtraNotes(text);
+                    } else if (currentQuestion === 0) {
+                      setExerciseName(text);
+                    }
+                  }}
                 />
                 <PressableBase
                   extraProps={{
@@ -261,7 +318,7 @@ export default function RoutineDetailsScreen({
                 </PressableBase>
               </>
             ) : null}
-            {currentQuestion === 0 ? (
+            {currentQuestion === 2 ? (
               <View
                 style={{
                   backgroundColor: "transparent",
@@ -296,7 +353,7 @@ export default function RoutineDetailsScreen({
                 />
               </View>
             ) : null}
-            {currentQuestion === 1 ? (
+            {currentQuestion === 3 ? (
               <Picker
                 selectedValue={alertMinutesBefore}
                 onValueChange={(itemValue, itemIndex) =>
@@ -312,7 +369,7 @@ export default function RoutineDetailsScreen({
                 }}
               >
                 <Picker.Item label="No notifications" value={-1} />
-                <Picker.Item label={`At time of ${routineType}`} value={0} />
+                <Picker.Item label={`At time of exercise`} value={0} />
                 <Picker.Item label="5 minutes before" value={5} />
                 <Picker.Item label="15 minutes before" value={15} />
                 <Picker.Item label="1 hour before" value={60} />
@@ -349,7 +406,7 @@ export default function RoutineDetailsScreen({
                   duration: 300,
                   useNativeDriver: false,
                 }).start();
-                setCurrentText(currentText);
+                setCurrentText(exerciseName);
                 break;
               case 1:
                 Animated.timing(animatedOpacityQ2, {
@@ -366,6 +423,11 @@ export default function RoutineDetailsScreen({
               case 2:
                 Animated.timing(animatedOpacityQ3, {
                   toValue: 1,
+                  duration: 300,
+                  useNativeDriver: false,
+                }).start();
+                Animated.timing(animatedOpacityQ4, {
+                  toValue: 0.5,
                   duration: 300,
                   useNativeDriver: false,
                 }).start();

@@ -78,12 +78,12 @@ const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
         </View>
 
         <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Type of Difficulty</Text>
-          <Text style={styles.sectionText}>pee or poo</Text>
+          <Text style={styles.sectionTitle}>Type of Toilet Difficulty</Text>
+          <Text style={styles.sectionText}>Urination/Defecation</Text>
         </View>
 
         <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Colour of [pee/poo]</Text>
+          <Text style={styles.sectionTitle}>Color of [urine/fecal matter]</Text>
           <Text style={styles.sectionText}>Blue</Text>
         </View>
 
