@@ -146,7 +146,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
             bodyAreaArr[selectedTop].text,
             bodyAreaArr[selectedTop].parts[selectedBottom]
           );
-          navigation.navigate("SeverityScreen");
+          navigation.navigate("SeverityScreen", { method: "add" });
         }}
       />
     </SafeView>

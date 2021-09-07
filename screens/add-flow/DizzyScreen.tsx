@@ -15,13 +15,19 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const DizzyScreen = ({ navigation }: ScreenProps) => {
-  const [value, setValue] = useState<boolean | null>(null);
+const DizzyScreen = ({ navigation, route }: ScreenProps) => {
+  const defaultDizzyState = route.params.method === "add" ? null : false; // TODO read from store
+  const [value, setValue] = useState<boolean | null>(defaultDizzyState);
   const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
+        {route.params.method === "edit" ? (
+          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>
           Is your head spinning or the room spinning?
         </Text>
@@ -48,9 +54,13 @@ const DizzyScreen = ({ navigation }: ScreenProps) => {
           if (value === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
-            addFlowStore.goForward();
-            addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
-            navigation.navigate("SeverityScreen");
+            if (route.params.method === "add") {
+              addFlowStore.goForward();
+              addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
+            } else {
+              // TODO handle edit
+            }
+            navigation.navigate("SeverityScreen", route.params);
           }
         }}
       />

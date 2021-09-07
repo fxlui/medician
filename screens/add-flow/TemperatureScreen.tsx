@@ -19,11 +19,14 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const TemperatureScreen = ({ navigation }: ScreenProps) => {
+const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
-  const [temperature, setTemperature] = useState(36.5);
+
+  const defaultTemperature = route.params.method === "add" ? 37.0 : 36.5; // TODO Read from store
+  // !! important, data from store could be null so need to have fallback default value
+  const [temperature, setTemperature] = useState(defaultTemperature);
   const [unit, setUnit] = useState("C");
   const { addFlowStore } = useStores();
 
@@ -35,6 +38,11 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
             flex: 2,
           }}
         >
+          {route.params.method === "edit" ? (
+            <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+              Editing record for MOBX_PAIN at MOBX_AREA
+            </Text>
+          ) : null}
           <Text style={styles.greeting}>What was your temperature?</Text>
           <Text style={styles.greetingSub}>
             Tap on the number to change the unit.
@@ -111,8 +119,12 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.currentNewRecord.setRecordTemperature(temperature);
-          navigation.navigate("AreaSelectScreen")
+          if (route.params.method === "add") {
+            addFlowStore.currentNewRecord.setRecordTemperature(temperature);
+            navigation.navigate("AreaSelectScreen");
+          } else {
+            // TODO handle edit
+          }
         }}
       />
     </SafeView>

@@ -232,10 +232,10 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           selection.length > 0
             ? () => {
                 addFlowStore.goForward();
-                addFlowStore
-                  .currentNewRecord
-                  .setRecordTime(selection.map((item) => item.date));
-                navigation.navigate("DetailsScreen");
+                addFlowStore.currentNewRecord.setRecordTime(
+                  selection.map((item) => item.date)
+                );
+                navigation.navigate("DetailsScreen", { method: "add" });
               }
             : () =>
                 Alert.alert(

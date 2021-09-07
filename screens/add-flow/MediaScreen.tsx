@@ -96,12 +96,13 @@ interface Media {
   type: string | undefined;
 }
 
-export default function MediaScreen({ navigation }: ScreenProps) {
+export default function MediaScreen({ navigation, route }: ScreenProps) {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
-  const [images, setImages] = React.useState<Media[]>([]);
+  const defaultImagesList = route.params.method === "add" ? [] : []; // TODO read from store
+  const [images, setImages] = React.useState<Media[]>(defaultImagesList);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [visible, setIsVisible] = React.useState(false);
 
@@ -152,6 +153,11 @@ export default function MediaScreen({ navigation }: ScreenProps) {
 
   return (
     <SafeView style={styles.container} disableTop>
+      {route.params.method === "edit" ? (
+        <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+          Editing record for MOBX_PAIN at MOBX_AREA
+        </Text>
+      ) : null}
       <Text style={styles.greeting}>Attach any photos or videos here.</Text>
       <View
         style={{
@@ -321,8 +327,12 @@ export default function MediaScreen({ navigation }: ScreenProps) {
         last
         left={() => navigation.pop()}
         right={async () => {
-          addFlowStore.currentNewRecord.setRecordAttachments(images);
-          await addFlowStore.dbInsertRecord(user.id);
+          if (route.params.method === "add") {
+            addFlowStore.currentNewRecord.setRecordAttachments(images);
+            await addFlowStore.dbInsertRecord(user.id);
+          } else {
+            // TODO handle edit flow
+          }
           navigation.navigate("Root");
         }}
       ></AddFlowNavBar>

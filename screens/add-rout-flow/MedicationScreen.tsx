@@ -322,6 +322,7 @@ export default function RoutineDetailsScreen({
                   width: "100%",
                   borderRadius: 16,
                   flexDirection: "row",
+                  backgroundColor: "transparent",
                 }}
               >
                 <Picker
@@ -345,7 +346,11 @@ export default function RoutineDetailsScreen({
                   ))}
                 </Picker>
                 <View
-                  style={{ justifyContent: "center", alignItems: "center" }}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "transparent",
+                  }}
                 >
                   <Text>x</Text>
                 </View>

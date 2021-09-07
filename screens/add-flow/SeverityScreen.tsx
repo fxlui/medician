@@ -37,14 +37,20 @@ const getDiscomfortText = (severity: number) => {
   }
 };
 
-const Severity = ({ navigation }: ScreenProps) => {
-  const [severity, setSeverity] = useState(1);
+const Severity = ({ navigation, route }: ScreenProps) => {
+  const defaultSeverity = route.params.method === "add" ? 1 : 1; // TODO get from store
+  const [severity, setSeverity] = useState(defaultSeverity);
   const colorScheme = useColorScheme();
   const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
+        {route.params.method === "edit" ? (
+          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>How severe is it?</Text>
         <View style={styles.child}>
           <Text style={styles.emoji}>{getDiscomfortEmoji(severity)}</Text>
@@ -103,8 +109,12 @@ const Severity = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.currentNewRecord.setRecordSeverity(severity);
-          navigation.navigate("TimeSelectScreen");
+          if (route.params.method === "add") {
+            addFlowStore.currentNewRecord.setRecordSeverity(severity);
+            navigation.navigate("TimeSelectScreen");
+          } else {
+            // TODO handle edit
+          }
         }}
       />
     </SafeView>

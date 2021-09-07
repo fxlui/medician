@@ -88,7 +88,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
           addFlowStore.resetAddFlow();
           addFlowStore.currentNewRecord.setRecordType(selectedName);
           addFlowStore.setProgressBarLength(progressLength);
-          navigation.navigate(screenName);
+          navigation.navigate(screenName, { method: "add" });
         }}
       />
     </SafeView>

@@ -6,6 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Animated,
+  Alert,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -27,20 +28,30 @@ type ScreenProps = CompositeScreenProps<
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-export default function CustomScreen({ navigation }: ScreenProps) {
+export default function CustomScreen({ navigation, route }: ScreenProps) {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
   const [inputFocused, setInputFocused] = React.useState(false);
-  const [currentText, setCurrentText] = React.useState("");
+
+  const defaultText = route.params.method === "add" ? "" : "MOBX HERE"; //TODO: get from store
+  const [currentText, setCurrentText] = React.useState(defaultText);
 
   const inputRef = React.useRef<TextInput>(null);
   const { addFlowStore } = useStores();
 
   const handleNavigation = () => {
-    addFlowStore.currentNewRecord.setRecordDescription(currentText);
-    navigation.navigate("SeverityScreen")
+    if (currentText === "") {
+      Alert.alert("Please enter your symptoms.");
+      return;
+    }
+    if (route.params.method === "add") {
+      addFlowStore.currentNewRecord.setRecordDescription(currentText);
+    } else {
+      // TODO handle edit
+    }
+    navigation.navigate("SeverityScreen", route.params);
   };
 
   return (
@@ -51,6 +62,11 @@ export default function CustomScreen({ navigation }: ScreenProps) {
           flex: 1,
         }}
       >
+        {route.params.method === "edit" ? (
+          <Text style={{ opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>Please describe what you observe.</Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"

@@ -12,15 +12,22 @@ import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletScreen">;
 
-const ToiletScreen = ({ navigation }: ScreenProps) => {
-  const [pee, setPee] = useState<boolean | null>(null);
-  const [poo, setPoo] = useState<boolean | null>(null);
+const ToiletScreen = ({ navigation, route }: ScreenProps) => {
+  const defaultPee = route.params.method === "add" ? null : true; // TODO read from store
+  const defaultPoo = route.params.method === "add" ? null : true; // TODO read from store
+  const [pee, setPee] = useState<boolean | null>(defaultPee);
+  const [poo, setPoo] = useState<boolean | null>(defaultPoo);
 
   const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
+        {route.params.method === "edit" ? (
+          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>Please select all that applies.</Text>
         <View style={styles.child}>
           <SelectionTile
@@ -42,14 +49,23 @@ const ToiletScreen = ({ navigation }: ScreenProps) => {
         preventRightDefault
         left={() => navigation.pop()}
         right={() => {
-          if (pee === null && poo === null) {
+          if (
+            (pee === null && poo === null) ||
+            (pee === false && poo === null) ||
+            (poo === false && pee === null) ||
+            (poo === false && pee === false)
+          ) {
             Alert.alert("No Selection", "You need to select an option first!");
           } else {
-            addFlowStore.currentNewRecord.setRecordToiletType(
-              pee ? 0 : poo ? 1 : -1
-            );
-            addFlowStore.goForward();
-            navigation.navigate("ToiletPainScreen");
+            if (route.params.method === "add") {
+              addFlowStore.currentNewRecord.setRecordToiletType(
+                pee ? 0 : poo ? 1 : -1
+              );
+              addFlowStore.goForward();
+            } else {
+              // TODO handle edit
+            }
+            navigation.navigate("ToiletPainScreen", route.params);
           }
         }}
       />
