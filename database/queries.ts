@@ -25,7 +25,7 @@ INSERT INTO routine
 export const insertRoutineAlert = `
 INSERT INTO alert
 (routineId, time) values (?, ?)
-`
+`;
 
 export const insertAppointmentAlert = `
 INSERT INTO alert
@@ -36,15 +36,19 @@ export const getRecentAppointments = `
 SELECT *
 FROM appointment
 WHERE appointment.time <= ?
+AND routine.complete = 0
 `;
 
 export const getRecentRoutines = `
 SELECT *
 FROM routine
 WHERE routine.time <= ?
+AND routine.complete = 0
 `;
 
-export function getLastInserted(table: "entry" | "appointment" | "routine" | "alert") {
+export function getLastInserted(
+  table: "entry" | "appointment" | "routine" | "alert"
+) {
   return `
   SELECT *
   FROM ${table}
@@ -64,7 +68,7 @@ export const getCollectionId = `
 SELECT collection.id
 FROM collection
 WHERE collection.userId = ? and collection.type = ?
-`
+`;
 
 export const createUserTable = `
 CREATE TABLE if not exists "user" (

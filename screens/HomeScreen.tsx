@@ -19,6 +19,7 @@ import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import { useStores } from "../models/root-store-provider";
 import { PressableBase } from "../components/PressableBase";
+import moment from "moment";
 
 interface appointmentTileProps {
   index: number;
@@ -50,6 +51,36 @@ const greetingTextFromTime = () => {
   }
 };
 
+const getDateText = (date: Date) => {
+  const now = new Date();
+  const momentNow = moment(now);
+  if (date.getDate() === now.getDate()) {
+    return `Today ${date.getHours()}:${date.getMinutes()}`;
+  } else if (date.getDate() === now.getDate() - 1) {
+    return `Yesterday ${date.getHours()}:${date.getMinutes()}`;
+  } else if (date.getDate() === now.getDate() + 1) {
+    return `Tomorrow ${date.getHours()}:${date.getMinutes()}`;
+  } else if (momentNow.isoWeek() === moment(date).isoWeek()) {
+    return moment(date).format("dddd");
+  } else if (momentNow.isoWeek() + 1 === moment(date).isoWeek()) {
+    return `Next ${moment(date).format("dddd")}`;
+  } else {
+    return moment(date).format("MMM Do");
+  }
+};
+
+const getMedicationDoseText = (medicationDose: string) => {
+  const split = medicationDose.split(" × ");
+  if (split.length === 1) {
+    return `${split[0]}`;
+  } else if (/\d/.test(split[1])) {
+    return medicationDose;
+  }
+  const firstNum = parseInt(split[0]);
+  const ifS = firstNum === 1 ? "" : "s";
+  return `${split[0]} ${split[1]}${ifS}`;
+};
+
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const { homeScreenStore } = useStores();
@@ -61,8 +92,12 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
     return (
       <HomeTile
         title={item.title}
-        secondTitle={item.notes}
-        subTitle={item.time.toString()}
+        secondTitle={
+          routineType(item.type) === HomeTileTypes.Medication
+            ? getMedicationDoseText(item.notes)
+            : item.notes
+        }
+        subTitle={getDateText(new Date(item.time))}
         style={{
           marginRight: 15,
         }}

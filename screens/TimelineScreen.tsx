@@ -48,7 +48,7 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const lineColor = colorScheme === "light" ? "#E9E9E9" : "#333";
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const tileColor = colorScheme === "light" ? "#ffffff" : "#252525";
 
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -63,7 +63,6 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          backgroundColor: "white",
           flex: 1,
           alignSelf: "stretch",
           marginLeft: 5,
@@ -120,6 +119,7 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
             alignItems: "center",
             flex: 1,
             alignSelf: "stretch",
+            backgroundColor: "transparent",
           }}
         >
           <Text

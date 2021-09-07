@@ -73,8 +73,8 @@ export default function RoutineDetailsScreen({
   const [dose, setDose] = React.useState("");
 
   React.useEffect(() => {
-    if (!doseAmount || !doseUnit) return;
-    setDose(`${doseAmount} x ${doseUnit}`);
+    if (!doseUnit) setDoseUnit("tablet");
+    setDose(`${doseAmount} × ${doseUnit}`);
   }, [doseAmount, doseUnit]);
 
   const [selectedTop, setSelectedTop] = React.useState(0);
@@ -86,10 +86,6 @@ export default function RoutineDetailsScreen({
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
   const { addFlowStore } = useStores();
-
-  React.useEffect(() => {
-    console.log(medTitle);
-  }, [currentQuestion]);
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -352,7 +348,7 @@ export default function RoutineDetailsScreen({
                     backgroundColor: "transparent",
                   }}
                 >
-                  <Text>x</Text>
+                  <Text>×</Text>
                 </View>
                 <Picker
                   selectedValue={doseUnit}
@@ -400,12 +396,12 @@ export default function RoutineDetailsScreen({
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);
                     setSelectedSymptom(symptomArr[selectedTop].title);
-                    setSelectedSymptomType(symptomArr[selectedTop].type)
+                    setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
                   onScrollIndexChanged={(index) => {
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
-                    setSelectedSymptomType(symptomArr[index].type)
+                    setSelectedSymptomType(symptomArr[index].type);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                   ref={topRef}

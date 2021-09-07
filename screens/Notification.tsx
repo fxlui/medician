@@ -2,6 +2,8 @@ import { StyleSheet, StatusBar, TouchableOpacity } from "react-native";
 import React, { FC } from "react";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
   medicationGradient,
@@ -16,12 +18,27 @@ import { RootStackParamList, HomeTileTypes } from "../types";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
 
+const getGradient = (type: HomeTileTypes) => {
+  switch (type) {
+    case HomeTileTypes.Medication:
+      return medicationGradient;
+    case HomeTileTypes.Exercise:
+      return exerciseGradient;
+    case HomeTileTypes.Appointment:
+      return appointmentGradient;
+    default:
+      return ["fff", "fff"];
+  }
+};
+
 const NotificationScreen = ({
   navigation,
   route: {
     params: { id, type, name, notes },
   },
 }: ScreenProps) => {
+  const insets = useSafeAreaInsets();
+
   const iconType =
     type === HomeTileTypes.Appointment
       ? "Appointment"
@@ -37,12 +54,23 @@ const NotificationScreen = ({
       : exerciseGradient[0];
 
   return (
-    <SafeView style={[styles.container, { backgroundColor: colorTheme }]}>
+    <LinearGradient
+      colors={getGradient(type)}
+      style={[
+        styles.container,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
+      ]}
+    >
       <StatusBar barStyle="light-content" />
       <View style={styles.top}>
         <PressableBase
           onPress={() => navigation.pop()}
-          extraProps={{ style: { alignSelf: "center", padding: 10 } }}
+          extraProps={{
+            style: { alignSelf: "center", padding: 10, opacity: 0.8 },
+          }}
         >
           <Feather name="edit" size={25} color="#fff" />
         </PressableBase>
@@ -83,7 +111,7 @@ const NotificationScreen = ({
           <Entypo name="chevron-down" size={35} color="#fff" />
         </PressableBase>
       </View>
-    </SafeView>
+    </LinearGradient>
   );
 };
 
@@ -151,7 +179,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginBottom: 15,
-    opacity: 0.45,
+    opacity: 0.6,
     borderRadius: 30,
     backgroundColor: "#fff",
     justifyContent: "center",

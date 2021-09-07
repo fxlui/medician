@@ -65,7 +65,7 @@ const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
             style={{
               fontSize: 22,
               fontWeight: "500",
-              marginBottom: 10,
+              marginBottom: 20,
             }}
           >
             Pain in Head{"\n"}9 Sep 12:12
