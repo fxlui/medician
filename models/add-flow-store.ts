@@ -118,6 +118,7 @@ export const AddFlowStoreModel = types
           userId, self.currentNewRoutine.symptomType
         );
         console.log("collection id:", collectionId);
+        console.log("notes: ", self.currentNewRoutine.notes)
         const insertedRoutineIDs = await addRoutines(
           collectionId,
           self.currentNewRoutine.type,

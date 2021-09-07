@@ -19,12 +19,12 @@ export const AppointmentModel = types
     // Storing unix timestamps directly
     alert: types.array(types.number)
   })
-  .views((self) => ({
+  .views(self => ({
     getSortedTimes: () => {
       return [...getSnapshot(self.time)].sort((a, b) => a - b);
     }
   }))
-  .actions((self) => ({
+  .actions(self => ({
     setAppointmentTime: (time: SnapshotOrInstance<typeof self.time>) => {
       self.time = cast(time);
     },
@@ -44,8 +44,14 @@ export const SavedAppointmentModel = types
     collectionId: types.integer,
     complete: types.optional(types.number, 0),
     doctor: types.optional(types.string, "Mark Wong"),
-    time: types.Date
-  });
+    time: types.Date,
+    notes: types.optional(types.string, "")
+  })
+  .actions(self => ({
+    updateNotes: (notes: string) => {
+      self.notes = notes;
+    }
+  }));
 
 type AppointmentType = Instance<typeof AppointmentModel>;
 export interface Appointment extends AppointmentType {};

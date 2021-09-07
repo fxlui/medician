@@ -14,7 +14,7 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 export const insertAppointment = `
 INSERT INTO appointment
-(collectionId, doctor, time) values (?, ?, ?)
+(collectionId, doctor, time, notes) values (?, ?, ?, ?)
 `;
 
 export const insertRoutine = `
@@ -114,6 +114,7 @@ export const createAppointmentTable = `
     "collectionId"	INTEGER,
     "doctor"	TEXT,
     "time"	INTEGER NOT NULL,
+    "notes"  TEXT,
     "complete"	INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY("id" AUTOINCREMENT),
     FOREIGN KEY("collectionId") REFERENCES "collection"("id")

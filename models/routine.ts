@@ -15,7 +15,7 @@ export const RoutineModel = types
     type: types.optional(types.integer, 0),
     symptomType: types.optional(types.string, ""),
     minutesBefore: types.optional(types.number, -1),
-    title: types.optional(types.string, "title"),
+    title: types.optional(types.string, ""),
     notes: types.optional(types.string, ""),
     time: types.array(types.Date),
     alert: types.array(types.integer)
@@ -29,7 +29,8 @@ export const RoutineModel = types
     setRoutineType: (type: number) => {
       self.type = type;
     },
-    setRoutineDetails: (symptomType: string, minutes: number, notes: string) => {
+    setRoutineDetails: (title: string, symptomType: string, minutes: number, notes: string) => {
+      self.title = title;
       self.symptomType = symptomType;
       self.minutesBefore = minutes;
       self.notes = notes;
@@ -48,11 +49,11 @@ export const SavedRoutineModel = types
     id: types.identifierNumber,
     collectionId: types.integer,
     type: types.integer,
-    title: types.optional(types.string, "Title"),
+    title: types.string,
     notes: types.string,
     time: types.Date,
     complete: types.integer
-  })
+  });
 
 type RoutineType = Instance<typeof RoutineModel>;
 export interface Routine extends RoutineType {};
