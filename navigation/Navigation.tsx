@@ -16,10 +16,15 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import NotificationScreen from "../screens/Notification";
 import ActionScreen from "../screens/ActionScreen";
 import SettingsScreen from "../screens/Settings";
+
+import TimelineScreen from "../screens/TimelineScreen";
+import TimelineDetailsScreen from "../screens/TimelineDetailsScreen";
+
 import LinkingConfiguration from "./LinkingConfiguration";
 
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import useColorScheme from "../hooks/useColorScheme";
+import { PressableBase } from "../components/PressableBase";
 
 export default function Navigation({
   colorScheme,
@@ -55,7 +60,7 @@ function RootNavigator() {
           headerShown: false,
           ...TransitionPresets.ModalSlideFromBottomIOS,
           cardShadowEnabled: true,
-          gestureEnabled: false
+          gestureEnabled: false,
         }}
       />
       <RootStack.Screen
@@ -67,6 +72,55 @@ function RootNavigator() {
         name="Settings"
         component={SettingsScreen}
         options={{
+          headerShown: true,
+          cardShadowEnabled: true,
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back"
+              size={24}
+              color={textColor}
+              style={{ paddingLeft: 10 }}
+            />
+          ),
+          headerStyle: {
+            borderWidth: 0,
+            height: 100,
+          },
+          headerTitleStyle: {
+            fontSize: 18,
+          },
+        }}
+      />
+      <RootStack.Screen
+        name="Timeline"
+        component={TimelineScreen}
+        options={{
+          headerShown: true,
+          cardShadowEnabled: true,
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Ionicons
+              name="chevron-back"
+              size={24}
+              color={textColor}
+              style={{ paddingLeft: 10 }}
+            />
+          ),
+          headerStyle: {
+            borderWidth: 0,
+            height: 100,
+          },
+          headerTitleStyle: {
+            fontSize: 18,
+          },
+        }}
+      />
+      <RootStack.Screen
+        name="TimelineDetails"
+        component={TimelineDetailsScreen}
+        options={{
+          title: "Details",
           headerShown: true,
           cardShadowEnabled: true,
           headerBackTitleVisible: false,

@@ -33,7 +33,8 @@ import AppointmentDetailsScreen from "../screens/add-appt-flow/AppointmentDetail
 
 // Add Routine Flow
 import RoutineSelectScreen from "../screens/add-rout-flow/RoutineSelectScreen";
-import RoutineDetailsScreen from "../screens/add-rout-flow/RoutineDetailsScreen";
+import MedicationScreen from "../screens/add-rout-flow/MedicationScreen";
+import ExerciseScreen from "../screens/add-rout-flow/ExerciseScreen";
 import RoutineTimeScreen from "../screens/add-rout-flow/RoutineTimeScreen";
 
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
@@ -51,7 +52,7 @@ const AddFlowNavigator = () => {
       screenListeners={() => ({
         gestureEnd: () => {
           addFlowStore.goBack();
-        }
+        },
       })}
     >
       <AddFlowStack.Screen
@@ -121,9 +122,10 @@ const AddFlowNavigator = () => {
         component={RoutineSelectScreen}
       />
       <AddFlowStack.Screen
-        name="RoutineDetailsScreen"
-        component={RoutineDetailsScreen}
+        name="MedicationScreen"
+        component={MedicationScreen}
       />
+      <AddFlowStack.Screen name="ExerciseScreen" component={ExerciseScreen} />
       <AddFlowStack.Screen
         name="RoutineTimeScreen"
         component={RoutineTimeScreen}

@@ -88,7 +88,7 @@ const TileBase: React.FC<BaseChildren> = ({
             size == TileSize.ActionAdd && styles.actionAdd,
             animatedStyle,
             style,
-            textBox ? { padding: 0 } : {},
+            textBox || size == TileSize.Long ? { padding: 0 } : {},
           ]}
         >
           {children}
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     height: 145,
   },
   long: {
-    width: 242,
     height: 58,
   },
   extraLong: {

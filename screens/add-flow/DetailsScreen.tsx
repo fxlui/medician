@@ -6,6 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Animated,
+  Alert,
 } from "react-native";
 
 import { StackScreenProps } from "@react-navigation/stack";
@@ -62,6 +63,8 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   const nextQuestion = () => {
     inputRef.current?.clear();
+    //inputRef.current?.blur();
+    //setInputFocused(false);
     switch (currentQuestion) {
       case 0:
         Animated.timing(animatedOpacityQ1, {
@@ -105,9 +108,6 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         setCurrentQuestion(3);
         setCurrentText(currentAnswers.attempt);
         break;
-      case 3:
-        setCurrentQuestion(4);
-        break;
       default:
         break;
     }
@@ -115,9 +115,12 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   const handleNavigation = () => {
     if (currentQuestion >= 3) {
-      addFlowStore
-      .currentNewRecord
-      .setRecordDetails(
+      if (inputFocused) {
+        inputRef.current?.blur();
+        setInputFocused(false);
+        return;
+      }
+      addFlowStore.currentNewRecord.setRecordDetails(
         currentAnswers.better,
         currentAnswers.worse,
         currentAnswers.related,
@@ -127,6 +130,38 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
       navigation.navigate("MediaScreen");
     } else {
       nextQuestion();
+    }
+  };
+
+  const HandleBackNavigation = () => {
+    if (
+      currentAnswers.better !== "" ||
+      currentAnswers.worse !== "" ||
+      currentAnswers.related !== "" ||
+      currentAnswers.attempt !== ""
+    ) {
+      Alert.alert(
+        "Are you sure?",
+        "You have unsaved changes. Are you sure you want to go back?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: () => {
+              addFlowStore.goBack();
+              navigation.pop();
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      addFlowStore.goBack();
+      navigation.pop();
     }
   };
 
@@ -267,8 +302,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
-                addFlowStore.goBack();
-                navigation.pop();
+                HandleBackNavigation();
                 break;
               case 0:
                 Animated.timing(animatedOpacityQ1, {
@@ -316,8 +350,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
                 break;
             }
           } else {
-            addFlowStore.goBack();
-            navigation.pop();
+            HandleBackNavigation();
           }
         }}
         right={handleNavigation}
