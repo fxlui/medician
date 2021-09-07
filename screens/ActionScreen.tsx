@@ -75,6 +75,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               style={{ marginRight: 30 }}
               onPress={() => {
                 addFlowStore.resetProgress();
+                addFlowStore.resetAppointment();
                 addFlowStore.setProgressBarLength(2);
                 navigation.navigate("AddFlow", {
                   screen: "AppointmentTimeScreen",

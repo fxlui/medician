@@ -320,9 +320,9 @@ export default function MediaScreen({ navigation }: ScreenProps) {
       <AddFlowNavBar
         last
         left={() => navigation.pop()}
-        right={() => {
+        right={async () => {
           addFlowStore.currentNewRecord.setRecordAttachments(images);
-          addFlowStore.dbInsertFlow(user.id);
+          await addFlowStore.dbInsertRecord(user.id);
           navigation.navigate("Root");
         }}
       ></AddFlowNavBar>

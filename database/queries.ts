@@ -1,3 +1,5 @@
+import { get } from "mobx";
+
 export const insertUser = `
 INSERT OR IGNORE INTO user (id) VALUES (1)
 `;
@@ -12,16 +14,45 @@ INSERT INTO entry
 values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
+export const insertAppointment = `
+INSERT INTO appointment
+(collectionId, doctor, time) values (?, ?, ?)
+`;
+
+export const insertAppointmentAlert = `
+INSERT INTO alert
+(appointmentId, time) values (?, ?)
+`;
+
 export const getLastInsertedRecordId = `
 SELECT entry.id
 FROM entry
 WHERE entry.id = (SELECT MAX(entry.id) FROM entry)
-`
+`;
+
+export const getLastInsertedAppointmentId = `
+SELECT appointment.id
+FROM appointment
+WHERE appointment.id = (SELECT MAX(appointment.id) FROM appointment)
+`;
+
+export const getLastInsertedAlert = `
+SELECT *
+FROM alert
+WHERE alert.id = (SELECT MAX(alert.id) FROM alert)
+`;
+
 export const getLastInsertedRecord = `
 SELECT *
 FROM entry
 WHERE entry.id = (SELECT MAX(entry.id) FROM entry)
-`
+`;
+
+export const getLastInsertedAppointment = `
+SELECT *
+FROM appointment
+WHERE appointment.id = (SELECT MAX(appointment.id) FROM appointment)
+`;
 
 export const getCollectionId = `
 SELECT collection.id
@@ -75,8 +106,7 @@ export const createAppointmentTable = `
   CREATE TABLE if not exists "appointment" (
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
-    "name"	TEXT,
-    "notes"	TEXT,
+    "doctor"	TEXT,
     "time"	INTEGER NOT NULL,
     "complete"	INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY("id" AUTOINCREMENT),
@@ -84,8 +114,8 @@ export const createAppointmentTable = `
   )
 `;
 
-export const createTreatmentTable = `
-  CREATE TABLE if not exists "treatment" (
+export const createRoutineTable = `
+  CREATE TABLE if not exists "routine" (
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
     "type"	INTEGER NOT NULL,
@@ -103,11 +133,11 @@ export const createAlertTable = `
   CREATE TABLE if not exists "alert" (
     "id"	INTEGER NOT NULL UNIQUE,
     "appointmentId"	INTEGER,
-    "treatmentId"	INTEGER,
+    "routineId"	INTEGER,
     "time"	INTEGER NOT NULL,
     "dismissed"	INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
-    FOREIGN KEY("treatmentId") REFERENCES "treatment"("id"),
+    FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)
   )
 `;

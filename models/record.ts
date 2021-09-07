@@ -36,7 +36,7 @@ export const RecordModel = types
   })
   .views((self) => ({
     getSortedTimes: () => {
-      return getSnapshot(self.time).sort((a, b) => a - b);
+      return [...getSnapshot(self.time)].sort((a, b) => a - b);
     }
   }))
   .actions((self) => ({

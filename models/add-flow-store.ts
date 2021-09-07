@@ -6,7 +6,9 @@ import {
 import {
   addCollection,
   addRecord,
-  getLastRecordId
+  getLastRecordId,
+  addAppointments,
+  addAppointmentAlerts
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
 import { RecordModel } from "./record";
@@ -43,11 +45,14 @@ export const AddFlowStoreModel = types
     },
     resetAddFlow: () => {
       self.currentNewRecord = RecordModel.create();
+    },
+    resetAppointment: () => {
+      self.currentNewAppointment = AppointmentModel.create();
     }
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
-    dbInsertFlow: async (userId: number) => {
+    dbInsertRecord: async (userId: number) => {
       try {
         const collectionId = await addCollection(userId, self.currentNewRecord.type);
         await Promise.all(
@@ -77,6 +82,26 @@ export const AddFlowStoreModel = types
         console.log(lastRecordId);
       } catch (error) {
         console.error("Insert record into database failed: ", error)
+      }
+    },
+    dbInsertAppointment: async (userId: number) => {
+      try {
+        const collectionId = await addCollection(
+          userId, self.currentNewAppointment.symptomType
+        );
+        console.log("collection id:", collectionId);
+        const insertedAppointmentIDs = await addAppointments(
+          collectionId,
+          self.currentNewAppointment.doctor,
+          self.currentNewAppointment.getSortedTimes()
+        )
+        console.log("insertedAppointmentIDs", insertedAppointmentIDs);
+        await addAppointmentAlerts(
+          insertedAppointmentIDs,
+          self.currentNewAppointment.alert
+        );
+      } catch(error) {
+        console.warn(error);
       }
     }
   }));
