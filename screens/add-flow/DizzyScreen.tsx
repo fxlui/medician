@@ -49,7 +49,7 @@ const DizzyScreen = ({ navigation }: ScreenProps) => {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
             addFlowStore.goForward();
-            addFlowStore.setRecordDizzy(value ? 0 : 1);
+            addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
             navigation.navigate("SeverityScreen");
           }
         }}

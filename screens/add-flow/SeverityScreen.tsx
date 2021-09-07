@@ -103,7 +103,7 @@ const Severity = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.setRecordSeverity(severity);
+          addFlowStore.currentNewRecord.setRecordSeverity(severity);
           navigation.navigate("TimeSelectScreen");
         }}
       />

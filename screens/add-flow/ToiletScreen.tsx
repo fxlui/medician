@@ -45,7 +45,9 @@ const ToiletScreen = ({ navigation }: ScreenProps) => {
           if (pee === null && poo === null) {
             Alert.alert("No Selection", "You need to select an option first!");
           } else {
-            addFlowStore.setRecordToiletType(pee ? 0 : poo ? 1 : -1);
+            addFlowStore
+              .currentNewRecord
+              .setRecordToiletType(pee ? 0 : poo ? 1 : -1);
             addFlowStore.goForward();
             navigation.navigate("ToiletPainScreen");
           }

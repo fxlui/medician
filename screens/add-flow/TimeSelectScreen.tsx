@@ -226,11 +226,15 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         headerTextIOS="Select Time"
       />
       <AddFlowNavBar
+        preventRightDefault
         left={() => navigation.pop()}
         right={
           selection.length > 0
             ? () => {
-                addFlowStore.setRecordTime(selection.map((item) => item.date));
+                addFlowStore.goForward();
+                addFlowStore
+                  .currentNewRecord
+                  .setRecordTime(selection.map((item) => item.date));
                 navigation.navigate("DetailsScreen");
               }
             : () =>

@@ -142,7 +142,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.setRecordAreas(
+          addFlowStore.currentNewRecord.setRecordAreas(
             bodyAreaArr[selectedTop].text,
             bodyAreaArr[selectedTop].parts[selectedBottom]
           );

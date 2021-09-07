@@ -105,7 +105,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.setRecordColor(selected);
+          addFlowStore.currentNewRecord.setRecordColor(selected);
           navigation.navigate("SeverityScreen");
         }}
       />

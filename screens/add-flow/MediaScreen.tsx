@@ -321,7 +321,7 @@ export default function MediaScreen({ navigation }: ScreenProps) {
         last
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.setRecordAttachments(images);
+          addFlowStore.currentNewRecord.setRecordAttachments(images);
           addFlowStore.dbInsertFlow(user.id);
           navigation.navigate("Root");
         }}

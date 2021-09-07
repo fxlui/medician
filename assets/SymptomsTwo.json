@@ -2,56 +2,56 @@
   {
     "id": 14,
     "name": "Breathe",
-    "icon": "breathe"
+    "type": "breathe"
   },
   {
     "id": 15,
     "name": "Hear",
-    "icon": "hear"
+    "type": "hear"
   },
   {
     "id": 16,
     "name": "See",
-    "icon": "see"
+    "type": "see"
   },
   {
     "id": 17,
     "name": "Smell",
-    "icon": "smell"
+    "type": "smell"
   },
   {
     "id": 18,
     "name": "Speak",
-    "icon": "speak"
+    "type": "speak"
   },
   {
     "id": 19,
     "name": "Sleep",
-    "icon": "sleep"
+    "type": "sleep"
   },
   {
     "id": 20,
     "name": "Walk",
-    "icon": "walk"
+    "type": "walk"
   },
   {
     "id": 21,
     "name": "Concentrate",
-    "icon": "brain"
+    "type": "brain"
   },
   {
     "id": 22,
     "name": "Go to toilet properly",
-    "icon": "toilet"
+    "type": "toilet"
   },
   {
     "id": 23,
     "name": "Stop scratching",
-    "icon": "itchy"
+    "type": "itchy"
   },
   {
     "id": 24,
     "name": "Not on list",
-    "icon": "more"
+    "type": "more"
   }
 ]

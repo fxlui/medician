@@ -1,9 +1,7 @@
 import {
   types,
-  cast,
   Instance,
   SnapshotOut,
-  SnapshotOrInstance
 } from "mobx-state-tree";
 import {
   addCollection,
@@ -29,51 +27,6 @@ export const AddFlowStoreModel = types
   .actions((self) => ({
     setProgressBarLength: (length: number) => {
       self.progressLength = length;
-    },
-    setRecordType: (typeId: string) => {
-      self.currentNewRecord.type = typeId;
-    },
-    setRecordTime: (times: SnapshotOrInstance<typeof self.currentNewRecord.time>) => {
-      self.currentNewRecord.time = cast(times);
-    },
-    setRecordAreas: (area: string, subArea: string) => {
-      self.currentNewRecord.area = area;
-      self.currentNewRecord.subArea = subArea;
-    },
-    setRecordSeverity: (severity: number) => {
-      self.currentNewRecord.severity = severity;
-    },
-    setRecordDetails: (better: string, worse: string, related: string, attempt: string) => {
-      self.currentNewRecord.better = better;
-      self.currentNewRecord.worse = worse;
-      self.currentNewRecord.related = related;
-      self.currentNewRecord.attempt = attempt;
-    },
-    setRecordAttachments: (attachments: SnapshotOrInstance<
-      typeof self.currentNewRecord.attatchmentPaths
-    >) => {
-      self.currentNewRecord.attatchmentPaths = cast(attachments);
-    },
-    setRecordTemperature: (temperature: number) => {
-      self.currentNewRecord.temperature = temperature;
-    },
-    setRecordToiletType: (type: number) => {
-      self.currentNewRecord.toiletType = type;
-    },
-    setRecordToiletPain: (pain: number) => {
-      self.currentNewRecord.toiletPain = pain;
-    },
-    setRecordColor: (color: number) => {
-      self.currentNewRecord.colour = color;
-    },
-    setRecordDizzy: (dizzy: number) => {
-      self.currentNewRecord.dizzy = dizzy;
-    },
-    setRecordSleep: (hours: number) => {
-      self.currentNewRecord.sleep = hours;
-    },
-    setRecordDescription: (description: string) => {
-      self.currentNewRecord.description = description;
     },
     goBack: () => {
       if (self.currentProgress != 1) {

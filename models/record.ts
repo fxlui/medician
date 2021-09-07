@@ -1,4 +1,11 @@
-import { types, Instance, SnapshotOut, getSnapshot } from "mobx-state-tree";
+import {
+  cast,
+  types,
+  Instance,
+  SnapshotOut,
+  getSnapshot,
+  SnapshotOrInstance
+} from "mobx-state-tree";
 
 /**
  * The Record model.
@@ -32,6 +39,53 @@ export const RecordModel = types
       return getSnapshot(self.time).sort((a, b) => a - b);
     }
   }))
+  .actions((self) => ({
+    setRecordType: (typeId: string) => {
+      self.type = typeId;
+    },
+    setRecordTime: (times: SnapshotOrInstance<typeof self.time>) => {
+      self.time = cast(times);
+    },
+    setRecordAreas: (area: string, subArea: string) => {
+      self.area = area;
+      self.subArea = subArea;
+    },
+    setRecordSeverity: (severity: number) => {
+      self.severity = severity;
+    },
+    setRecordDetails: (better: string, worse: string, related: string, attempt: string) => {
+      self.better = better;
+      self.worse = worse;
+      self.related = related;
+      self.attempt = attempt;
+    },
+    setRecordAttachments: (attachments: SnapshotOrInstance<
+      typeof self.attatchmentPaths
+    >) => {
+      self.attatchmentPaths = cast(attachments);
+    },
+    setRecordTemperature: (temperature: number) => {
+      self.temperature = temperature;
+    },
+    setRecordToiletType: (type: number) => {
+      self.toiletType = type;
+    },
+    setRecordToiletPain: (pain: number) => {
+      self.toiletPain = pain;
+    },
+    setRecordColor: (color: number) => {
+      self.colour = color;
+    },
+    setRecordDizzy: (dizzy: number) => {
+      self.dizzy = dizzy;
+    },
+    setRecordSleep: (hours: number) => {
+      self.sleep = hours;
+    },
+    setRecordDescription: (description: string) => {
+      self.description = description;
+    },
+  }));
 
 /**
  * The Saved Record model.

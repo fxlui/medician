@@ -98,7 +98,7 @@ const SleepHoursScreen = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.setRecordSleep(hours);
+          addFlowStore.currentNewRecord.setRecordSleep(hours);
           navigation.navigate("SeverityScreen")
         }}
       />

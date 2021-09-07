@@ -111,7 +111,7 @@ const TemperatureScreen = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.setRecordTemperature(temperature);
+          addFlowStore.currentNewRecord.setRecordTemperature(temperature);
           navigation.navigate("AreaSelectScreen")
         }}
       />

@@ -115,7 +115,9 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
 
   const handleNavigation = () => {
     if (currentQuestion >= 3) {
-      addFlowStore.setRecordDetails(
+      addFlowStore
+      .currentNewRecord
+      .setRecordDetails(
         currentAnswers.better,
         currentAnswers.worse,
         currentAnswers.related,

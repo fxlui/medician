@@ -39,7 +39,7 @@ export default function CustomScreen({ navigation }: ScreenProps) {
   const { addFlowStore } = useStores();
 
   const handleNavigation = () => {
-    addFlowStore.setRecordDescription(currentText);
+    addFlowStore.currentNewRecord.setRecordDescription(currentText);
     navigation.navigate("SeverityScreen")
   };
 

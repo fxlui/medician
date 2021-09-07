@@ -64,12 +64,12 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
                   <SymptomTile
                     selected={symptom.id === selectedId}
                     key={symptom.id}
-                    iconName={symptom.icon}
+                    iconName={symptom.type}
                     title={symptom.name}
                     extraStyles={{ marginRight: 30, marginBottom: 30 }}
                     onPress={() => {
                       setSelectedId(symptom.id);
-                      setSelectedName(symptom.name);
+                      setSelectedName(symptom.type);
                     }}
                   />
                 );
@@ -86,7 +86,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
           const [screenName, progressLength] = useScreenDirect();
           addFlowStore.resetProgress();
           addFlowStore.resetAddFlow();
-          addFlowStore.setRecordType(selectedName);
+          addFlowStore.currentNewRecord.setRecordType(selectedName);
           addFlowStore.setProgressBarLength(progressLength);
           navigation.navigate(screenName);
         }}

@@ -42,7 +42,7 @@ const ToiletPainScreen = ({ navigation }: ScreenProps) => {
           if (pain === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
-            addFlowStore.setRecordToiletPain(pain ? 1 : 0);
+            addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
             addFlowStore.goForward();
             navigation.navigate("ToiletColorScreen");
           }
