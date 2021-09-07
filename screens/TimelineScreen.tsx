@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Alert } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import { CompositeScreenProps } from "@react-navigation/core";
@@ -11,6 +11,7 @@ import { BottomTabParamList, RootStackParamList } from "../types";
 import HomeTile from "../components/HomeTile";
 import { TopTile } from "../components/AreaTile";
 import OverviewSymptomTile from "../components/OverviewSymptomTile";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 import * as Haptics from "expo-haptics";
 import Carousel from "react-native-snap-carousel";
@@ -49,6 +50,8 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
+  const { showActionSheetWithOptions } = useActionSheet();
+
   const renderTimelineTile = (item: {
     emoji: string;
     title: string;
@@ -66,26 +69,79 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
           marginLeft: 5,
         }}
         gradient={[tileColor, tileColor]}
+        onClick={() => {
+          showActionSheetWithOptions(
+            {
+              title: `${route.params.type} on ${
+                route.params.area
+              } at ${moment().format("MMM D HH:mm")}`,
+              options: ["Details", "Edit", "Delete", "Cancel"],
+              cancelButtonIndex: 3,
+              destructiveButtonIndex: 2,
+            },
+            (selection) => {
+              if (selection === 0) {
+                navigation.navigate("TimelineDetails", {
+                  id: 0,
+                });
+              } else if (selection === 1) {
+                // edit
+              } else if (selection === 2) {
+                Alert.alert(
+                  "Delete",
+                  `Are you sure you want to delete the following entry?\n\n${
+                    route.params.type
+                  } on ${route.params.area} at ${moment().format(
+                    "MMM D HH:mm"
+                  )}`,
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      style: "destructive",
+                      onPress: () => {
+                        // delete
+                        // remove from state
+                      },
+                    },
+                  ]
+                );
+              }
+            }
+          );
+        }}
       >
-        <Text
+        <View
           style={{
-            fontSize: 20,
-            marginRight: 15,
-            marginLeft: 15,
+            flexDirection: "row",
+            alignItems: "center",
+            flex: 1,
+            alignSelf: "stretch",
           }}
         >
-          {item.emoji}
-        </Text>
-        <Text
-          style={{
-            fontSize: 15,
-            fontWeight: "500",
-            textAlign: "right",
-            color: textColor,
-          }}
-        >
-          {item.title}
-        </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              marginRight: 15,
+              marginLeft: 15,
+            }}
+          >
+            {item.emoji}
+          </Text>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "500",
+              textAlign: "right",
+              color: textColor,
+            }}
+          >
+            {item.title}
+          </Text>
+        </View>
       </TileBase>
     );
   };

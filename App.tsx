@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import * as LocalAuthentication from "expo-local-authentication";
 import * as SplashScreen from "expo-splash-screen";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -99,12 +100,14 @@ export default function App() {
     );
   } else {
     return (
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaProvider>
-      </RootStoreProvider>
+      <ActionSheetProvider>
+        <RootStoreProvider value={rootStore}>
+          <SafeAreaProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </SafeAreaProvider>
+        </RootStoreProvider>
+      </ActionSheetProvider>
     );
   }
 }

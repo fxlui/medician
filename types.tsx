@@ -16,6 +16,9 @@ export type RootStackParamList = {
     type: string;
     area: string;
   };
+  TimelineDetails: {
+    id: number;
+  };
 };
 
 export type BottomTabParamList = {
