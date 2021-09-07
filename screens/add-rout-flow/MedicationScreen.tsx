@@ -79,6 +79,7 @@ export default function RoutineDetailsScreen({
 
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
+  const [selectedSymtomType, setSelectedSymptomType] = React.useState("");
   const [extraNotes, setExtraNotes] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
@@ -188,6 +189,12 @@ export default function RoutineDetailsScreen({
         return;
       }
       addFlowStore.goForward();
+      addFlowStore.currentNewRoutine.setRoutineDetails(
+        medTitle,
+        selectedSymtomType,
+        selectedTop,
+        dose
+      );
       navigation.navigate("RoutineTimeScreen");
     } else {
       nextQuestion();
@@ -388,10 +395,12 @@ export default function RoutineDetailsScreen({
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);
                     setSelectedSymptom(symptomArr[selectedTop].title);
+                    setSelectedSymptomType(symptomArr[selectedTop].type)
                   }}
                   onScrollIndexChanged={(index) => {
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
+                    setSelectedSymptomType(symptomArr[index].type)
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                   ref={topRef}

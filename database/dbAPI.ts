@@ -144,7 +144,7 @@ export async function addAppointments(collectionId: number, doctor: string, time
         timeArr.forEach(time => {
           tx.executeSql(
             insertAppointment,
-            [collectionId, doctor, time],
+            [collectionId, doctor, time, ""],
             () => {},
             (_, error) => {
               console.log(error);

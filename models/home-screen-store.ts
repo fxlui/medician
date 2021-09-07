@@ -60,8 +60,9 @@ export const HomeScreenStoreModel = types
               id: item.id,
               collectionId: item.collectionId,
               complete: item.complete,
-              // doctor: item.doctor,
-              time: new Date(item.time)
+              doctor: item.doctor,
+              time: new Date(item.time),
+              notes: item.notes
             })
           )
         );
@@ -78,7 +79,7 @@ export const HomeScreenStoreModel = types
             item => SavedRoutineModel.create({
               id: item.id,
               collectionId: item.collectionId,
-              // title: item.titile,
+              title: item.title,
               notes: item.notes,
               type: item.type,
               time: new Date(item.time),
