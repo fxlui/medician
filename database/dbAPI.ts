@@ -11,13 +11,12 @@ import {
   insertCollection,
   getCollectionId,
   insertRecord,
-  getLastInsertedRecordId,
-  getLastInsertedRecord,
   insertAppointment,
   insertAppointmentAlert,
-  getLastInsertedAppointmentId,
-  getLastInsertedAppointment,
-  getLastInsertedAlert
+  insertRoutine,
+  insertRoutineAlert,
+  getLastInserted,
+  getLastInsertedId
 } from "./queries";
 import { DatabaseEntryType } from "../types";
 
@@ -96,7 +95,7 @@ export async function addRecord(data: DatabaseEntryType) {
       tx => {
         tx.executeSql(insertRecord, data);
         tx.executeSql(
-          getLastInsertedRecord,
+          getLastInserted("entry"),
           undefined,
           (_, { rows }) => {
             console.log(rows._array);
@@ -118,7 +117,7 @@ export async function getLastRecordId() {
     db.transaction(
       tx => {
         tx.executeSql(
-          getLastInsertedRecordId,
+          getLastInsertedId("entry"),
           undefined,
           (_, { rows }) => {
             const result = rows._array[0] as { id: number };
@@ -148,7 +147,7 @@ export async function addAppointments(collectionId: number, doctor: string, time
             }
           );
           tx.executeSql(
-            getLastInsertedAppointment,
+            getLastInserted("appointment"),
             undefined,
             (_, { rows } ) => {
               console.log(rows._array)
@@ -160,7 +159,7 @@ export async function addAppointments(collectionId: number, doctor: string, time
             }
           );
           tx.executeSql(
-            getLastInsertedAppointmentId,
+            getLastInsertedId("appointment"),
             undefined,
             (_, { rows } ) => {
               const result = rows._array[0] as { id: number };
@@ -196,7 +195,91 @@ export async function addAppointmentAlerts(appointmentIDs: number[], alertTimes:
             }
           );
           tx.executeSql(
-            getLastInsertedAlert,
+            getLastInserted("alert"),
+            undefined,
+            (_, { rows }) => console.log(rows._array),
+            (_, error) => {
+              console.log(error);
+              reject(error);
+              return true;
+            }
+          );
+        });
+      },
+      (error) => reject(error),
+      () => resolve()
+    );
+  });
+}
+
+export async function addRoutines(
+  collectionId: number, type: number, notes: string, timeArr: number[]
+) {
+  return new Promise<number[]>((resolve, reject) => {
+    const res: number[] = [];
+    db.transaction(
+      tx => {
+        timeArr.forEach(time => {
+          tx.executeSql(
+            insertRoutine,
+            [type, collectionId, notes, time],
+            () => {},
+            (_, error) => {
+              console.log(error);
+              reject();
+              return true;
+            }
+          );
+          tx.executeSql(
+            getLastInserted("routine"),
+            undefined,
+            (_, { rows } ) => {
+              console.log(rows._array)
+            },
+            (_, error) => {
+              console.log(error);
+              reject();
+              return true;
+            }
+          );
+          tx.executeSql(
+            getLastInsertedId("routine"),
+            undefined,
+            (_, { rows } ) => {
+              const result = rows._array[0] as { id: number };
+              res.push(result.id);
+            },
+            (_, error) => {
+              console.log(error);
+              reject();
+              return true;
+            }
+          )
+        });
+      },
+      (error) => reject(error),
+      () => resolve(res)
+    );
+  });
+}
+
+export async function addRoutineAlert(routineIDs: number[], alertIDs: number[]) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        routineIDs.forEach((routineID, index) => {
+          tx.executeSql(
+            insertRoutineAlert,
+            [routineID, alertIDs[index]],
+            () => {},
+            (_, error) => {
+              console.log(error);
+              reject();
+              return true;
+            }
+          );
+          tx.executeSql(
+            getLastInserted("alert"),
             undefined,
             (_, { rows }) => console.log(rows._array),
             (_, error) => {

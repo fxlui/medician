@@ -87,6 +87,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               subtitle={"Routine"}
               onPress={() => {
                 addFlowStore.resetProgress();
+                addFlowStore.resetRoutine();
                 addFlowStore.setProgressBarLength(3);
                 navigation.navigate("AddFlow", {
                   screen: "RoutineSelectScreen",

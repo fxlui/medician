@@ -21,6 +21,7 @@ import TileBase from "../../components/TileBase";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
+import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
 type ScreenProps = CompositeScreenProps<
@@ -49,6 +50,8 @@ export default function RoutineTimeScreen({ navigation }: ScreenProps) {
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
+
+  const { addFlowStore, user } = useStores();
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -207,7 +210,13 @@ export default function RoutineTimeScreen({ navigation }: ScreenProps) {
         left={() => navigation.pop()}
         right={
           selection.length > 0
-            ? () => navigation.navigate("Root")
+            ? async () => {
+                addFlowStore.currentNewRoutine.setRoutineTimeAndAlert(
+                  selection.map(item => item.date)
+                );
+                await addFlowStore.dbInsertRoutine(user.id);
+                navigation.navigate("Root");
+              }
             : () =>
                 Alert.alert(
                   "No selection yet",

@@ -19,6 +19,16 @@ INSERT INTO appointment
 (collectionId, doctor, time) values (?, ?, ?)
 `;
 
+export const insertRoutine = `
+INSERT INTO routine
+(type, collectionId, notes, time) values (?, ?, ?, ?)
+`;
+
+export const insertRoutineAlert = `
+INSERT INTO alert
+(routineId, time) values (?, ?)
+`
+
 export const insertAppointmentAlert = `
 INSERT INTO alert
 (appointmentId, time) values (?, ?)
@@ -35,6 +45,22 @@ SELECT appointment.id
 FROM appointment
 WHERE appointment.id = (SELECT MAX(appointment.id) FROM appointment)
 `;
+
+export function getLastInserted(table: "entry" | "appointment" | "routine" | "alert") {
+  return `
+  SELECT *
+  FROM ${table}
+  WHERE ${table}.id = (SELECT MAX(${table}.id) FROM ${table})
+  `;
+}
+
+export function getLastInsertedId(table: "entry" | "appointment" | "routine") {
+  return `
+  SELECT ${table}.id
+  FROM ${table}
+  WHERE ${table}.id = (SELECT MAX(${table}.id) FROM ${table})
+  `;
+}
 
 export const getLastInsertedAlert = `
 SELECT *
@@ -119,10 +145,8 @@ export const createRoutineTable = `
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
     "type"	INTEGER NOT NULL,
-    "title"	TEXT NOT NULL,
     "notes"	TEXT,
-    "start"	INTEGER,
-    "duration"	INTEGER,
+    "time"	INTEGER NOT NULL,
     "complete"	INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY("collectionId") REFERENCES "collection"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

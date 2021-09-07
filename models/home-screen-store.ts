@@ -6,7 +6,7 @@ import {
   Instance,
   SnapshotOut
 } from "mobx-state-tree";
-import { TreatmentModel } from "./treatment";
+import { RoutineModel } from "./routine";
 import { AppointmentModel } from "./appointment";
 
 /**
@@ -15,23 +15,23 @@ import { AppointmentModel } from "./appointment";
  */
 export const HomeScreenStoreModel = types
   .model("HomeScreenStore", {
-    recentTreatments: types.optional(types.array(TreatmentModel), []),
+    recentRoutines: types.optional(types.array(RoutineModel), []),
     recentAppointments: types.optional(types.array(AppointmentModel), []),
     collectionIds: types.optional(types.array(types.integer), [])
   })
   // Calls to get derived data
   .views((self) => ({
     getRecentMedications: () => {
-      return getSnapshot(self.recentTreatments).filter(item => item.type === 0);
+      return getSnapshot(self.recentRoutines).filter(item => item.type === 0);
     },
     getRecentExercises: () => {
-      return getSnapshot(self.recentTreatments).filter(item => item.type === 1);
+      return getSnapshot(self.recentRoutines).filter(item => item.type === 1);
     }
   }))
   // Synchronous actions defined here
   .actions((self) => ({
-    setTreatments: (treatment: SnapshotOrInstance<typeof self.recentTreatments>) => {
-      self.recentTreatments = cast(treatment);
+    setRoutines: (routine: SnapshotOrInstance<typeof self.recentRoutines>) => {
+      self.recentRoutines = cast(routine);
     },
     setAppointments: (appointments: SnapshotOrInstance<typeof self.recentAppointments>) => {
       self.recentAppointments = cast(appointments);
