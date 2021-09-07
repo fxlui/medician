@@ -15,8 +15,9 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
-  const [measured, setMeasured] = useState<boolean | null>(null);
+const TemperatureSelectionScreen = ({ navigation, route }: ScreenProps) => {
+  const defaultSelection = route.params.method === "add" ? null : true; // TODO get from store
+  const [measured, setMeasured] = useState<boolean | null>(defaultSelection);
   const { addFlowStore } = useStores();
 
   return (
@@ -48,11 +49,19 @@ const TemperatureSelectionScreen = ({ navigation }: ScreenProps) => {
           if (measured === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else if (measured === true) {
-            addFlowStore.goForward();
-            navigation.navigate("TemperatureScreen");
+            if (route.params.method === "add") {
+              addFlowStore.goForward();
+            } else {
+              // TODO handle edit
+            }
+            navigation.navigate("TemperatureScreen", route.params);
           } else {
-            addFlowStore.goForward();
-            navigation.navigate("SeverityScreen");
+            if (route.params.method === "add") {
+              addFlowStore.goForward();
+            } else {
+              // TODO handle edit
+            }
+            navigation.navigate("SeverityScreen", route.params);
           }
         }}
       />

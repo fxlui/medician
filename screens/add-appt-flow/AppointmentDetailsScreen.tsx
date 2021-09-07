@@ -74,6 +74,8 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         return "What is this for?";
       case 2:
         return "When do you want us to remind you?";
+      case 3:
+        return "Extra Notes";
       default:
         return "";
     }

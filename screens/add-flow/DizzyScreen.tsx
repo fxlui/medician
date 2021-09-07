@@ -15,8 +15,9 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const DizzyScreen = ({ navigation }: ScreenProps) => {
-  const [value, setValue] = useState<boolean | null>(null);
+const DizzyScreen = ({ navigation, route }: ScreenProps) => {
+  const defaultDizzyState = route.params.method === "add" ? null : false; // TODO read from store
+  const [value, setValue] = useState<boolean | null>(defaultDizzyState);
   const { addFlowStore } = useStores();
 
   return (
@@ -48,9 +49,13 @@ const DizzyScreen = ({ navigation }: ScreenProps) => {
           if (value === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
-            addFlowStore.goForward();
-            addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
-            navigation.navigate("SeverityScreen");
+            if (route.params.method === "add") {
+              addFlowStore.goForward();
+              addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
+            } else {
+              // TODO handle edit
+            }
+            navigation.navigate("SeverityScreen", route.params);
           }
         }}
       />

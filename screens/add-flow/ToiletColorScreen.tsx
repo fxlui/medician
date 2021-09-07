@@ -45,8 +45,9 @@ interface baseData {
   };
 }
 
-const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
-  const [selected, setSelected] = useState(0);
+const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation, route }) => {
+  const defaultSelection = route.params.method === "add" ? 0 : 1; // TODO read from store
+  const [selected, setSelected] = useState(defaultSelection);
 
   const tileRef = React.createRef<Carousel<{ emoji: string; title: string }>>();
   const { addFlowStore } = useStores();
@@ -105,8 +106,12 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation }) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.currentNewRecord.setRecordColor(selected);
-          navigation.navigate("SeverityScreen");
+          if (route.params.method === "add") {
+            addFlowStore.currentNewRecord.setRecordColor(selected);
+          } else {
+            // TODO handle edit
+          }
+          navigation.navigate("SeverityScreen", route.params);
         }}
       />
     </SafeView>

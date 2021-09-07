@@ -37,8 +37,9 @@ const getDiscomfortText = (severity: number) => {
   }
 };
 
-const Severity = ({ navigation }: ScreenProps) => {
-  const [severity, setSeverity] = useState(1);
+const Severity = ({ navigation, route }: ScreenProps) => {
+  const defaultSeverity = route.params.method === "add" ? 1 : 1; // TODO get from store
+  const [severity, setSeverity] = useState(defaultSeverity);
   const colorScheme = useColorScheme();
   const { addFlowStore } = useStores();
 
@@ -103,8 +104,12 @@ const Severity = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.currentNewRecord.setRecordSeverity(severity);
-          navigation.navigate("TimeSelectScreen");
+          if (route.params.method === "add") {
+            addFlowStore.currentNewRecord.setRecordSeverity(severity);
+            navigation.navigate("TimeSelectScreen");
+          } else {
+            // TODO handle edit
+          }
         }}
       />
     </SafeView>

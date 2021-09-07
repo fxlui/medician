@@ -18,11 +18,13 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const SleepHoursScreen = ({ navigation }: ScreenProps) => {
+const SleepHoursScreen = ({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
-  const [hours, setHours] = useState(8.5);
+
+  const defaultHours = route.params.method === "add" ? 8.5 : 8; // TODO get from store
+  const [hours, setHours] = useState(defaultHours);
   const { addFlowStore } = useStores();
 
   return (
@@ -98,8 +100,12 @@ const SleepHoursScreen = ({ navigation }: ScreenProps) => {
       <AddFlowNavBar
         left={() => navigation.pop()}
         right={() => {
-          addFlowStore.currentNewRecord.setRecordSleep(hours);
-          navigation.navigate("SeverityScreen")
+          if (route.params.method === "add") {
+            addFlowStore.currentNewRecord.setRecordSleep(hours);
+          } else {
+            // TODO handle edit
+          }
+          navigation.navigate("SeverityScreen", route.params);
         }}
       />
     </SafeView>

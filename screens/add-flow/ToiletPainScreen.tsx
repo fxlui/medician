@@ -11,8 +11,9 @@ import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletPainScreen">;
 
-const ToiletPainScreen = ({ navigation }: ScreenProps) => {
-  const [pain, setPain] = useState<boolean | null>(null);
+const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
+  const defaultSelection = route.params.method === "add" ? null : true; // TODO read from store
+  const [pain, setPain] = useState<boolean | null>(defaultSelection);
   const { addFlowStore } = useStores();
 
   return (
@@ -42,9 +43,13 @@ const ToiletPainScreen = ({ navigation }: ScreenProps) => {
           if (pain === null) {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
-            addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
-            addFlowStore.goForward();
-            navigation.navigate("ToiletColorScreen");
+            if (route.params.method === "add") {
+              addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
+              addFlowStore.goForward();
+            } else {
+              // TODO handle edit
+            }
+            navigation.navigate("ToiletColorScreen", route.params);
           }
         }}
       />
