@@ -12,6 +12,13 @@ export type RootStackParamList = {
   ActionScreen: undefined;
   NotFound: undefined;
   Settings: undefined;
+  Timeline: {
+    type: string;
+    area: string;
+  };
+  TimelineDetails: {
+    id: number;
+  };
 };
 
 export type BottomTabParamList = {
@@ -40,9 +47,8 @@ export type AddFlowParamList = {
   AppointmentTimeScreen: undefined;
   AppointmentDetailsScreen: undefined;
   RoutineSelectScreen: undefined;
-  RoutineDetailsScreen: {
-    type: "medication" | "exercise";
-  };
+  MedicationScreen: undefined;
+  ExerciseScreen: undefined;
   RoutineTimeScreen: undefined;
 };
 

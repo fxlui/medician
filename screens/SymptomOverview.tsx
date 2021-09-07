@@ -130,7 +130,12 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
         title={item.title}
         index={index}
         selected={false}
-        updater={() => {}}
+        updater={() =>
+          navigation.navigate("Timeline", {
+            type: item.title,
+            area: item.title,
+          })
+        }
         emoji={"e"}
       />
     );
@@ -185,7 +190,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
             />
           </View>
           <View style={{ paddingLeft: 25 }}>
-            <Text style={styles.name}>Area</Text>
+            <Text style={styles.name}>Timeline</Text>
             <Carousel
               style={{ overflow: "visible" }}
               data={AREA_DATA}

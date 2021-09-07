@@ -1400,6 +1400,14 @@
     fs-extra "^9.0.0"
     resolve-from "^5.0.0"
 
+"@expo/react-native-action-sheet@^3.10.0":
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-3.10.0.tgz#63ea23a90d6432305af427e40201e69b95d3fea6"
+  integrity sha512-K8qwMesLBavjrYaQge2yu6rj5CupVZaYNvYBtHvxx6SWe5z31uDKg2Gn9NXr6PAIWjfFoXgD8eRmEnznLcYMKw==
+  dependencies:
+    "@types/hoist-non-react-statics" "^3.3.1"
+    hoist-non-react-statics "^3.3.0"
+
 "@expo/spawn-async@1.5.0":
   version "1.5.0"
   resolved "https://registry.npmjs.org/@expo/spawn-async/-/spawn-async-1.5.0.tgz"
@@ -2255,6 +2263,14 @@
   version "2.0.40"
   resolved "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.40.tgz"
   integrity sha512-VbjwR1fhsn2h2KXAY4oy1fm7dCxaKy0D+deTb8Ilc3Eo3rc5+5eA4rfYmZaHgNJKxVyI0f6WIXzO2zLkVmQPHA==
+
+"@types/hoist-non-react-statics@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
+  integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
+  dependencies:
+    "@types/react" "*"
+    hoist-non-react-statics "^3.3.0"
 
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.3"
