@@ -54,6 +54,7 @@
     "react-native-image-viewing": "^0.2.0",
     "react-native-modal-datetime-picker": "^10.2.0",
     "react-native-reanimated": "~2.2.0",
+    "react-native-root-toast": "^3.2.1",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-snap-carousel": "4.0.0-beta.6",

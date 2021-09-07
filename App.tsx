@@ -8,6 +8,7 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import React, { useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 import {
   RootStoreProvider,
@@ -101,12 +102,14 @@ export default function App() {
   } else {
     return (
       <ActionSheetProvider>
-        <RootStoreProvider value={rootStore}>
-          <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
-          </SafeAreaProvider>
-        </RootStoreProvider>
+        <RootSiblingParent>
+          <RootStoreProvider value={rootStore}>
+            <SafeAreaProvider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar />
+            </SafeAreaProvider>
+          </RootStoreProvider>
+        </RootSiblingParent>
       </ActionSheetProvider>
     );
   }
