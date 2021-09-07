@@ -38,6 +38,11 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
             flex: 2,
           }}
         >
+          {route.params.method === "edit" ? (
+            <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+              Editing record for MOBX_PAIN at MOBX_AREA
+            </Text>
+          ) : null}
           <Text style={styles.greeting}>What was your temperature?</Text>
           <Text style={styles.greetingSub}>
             Tap on the number to change the unit.

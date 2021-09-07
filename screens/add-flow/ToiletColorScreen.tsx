@@ -72,6 +72,11 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation, route }) => {
 
   return (
     <SafeView style={styles.container} disableTop>
+      {route.params.method === "edit" ? (
+        <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+          Editing record for MOBX_PAIN at MOBX_AREA
+        </Text>
+      ) : null}
       <Text style={styles.greeting}>What colour is it?</Text>
       <View
         style={{

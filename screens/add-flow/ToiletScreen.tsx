@@ -23,6 +23,11 @@ const ToiletScreen = ({ navigation, route }: ScreenProps) => {
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
+        {route.params.method === "edit" ? (
+          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>Please select all that applies.</Text>
         <View style={styles.child}>
           <SelectionTile
@@ -44,7 +49,12 @@ const ToiletScreen = ({ navigation, route }: ScreenProps) => {
         preventRightDefault
         left={() => navigation.pop()}
         right={() => {
-          if (pee === null && poo === null) {
+          if (
+            (pee === null && poo === null) ||
+            (pee === false && poo === null) ||
+            (poo === false && pee === null) ||
+            (poo === false && pee === false)
+          ) {
             Alert.alert("No Selection", "You need to select an option first!");
           } else {
             if (route.params.method === "add") {

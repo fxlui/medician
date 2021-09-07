@@ -35,6 +35,11 @@ const SleepHoursScreen = ({ navigation, route }: ScreenProps) => {
             flex: 2,
           }}
         >
+          {route.params.method === "edit" ? (
+            <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+              Editing record for MOBX_PAIN at MOBX_AREA
+            </Text>
+          ) : null}
           <Text style={styles.greeting}>How long did you sleep?</Text>
           <Text style={styles.greetingSub}>
             Put in an estimate if you're not sure.

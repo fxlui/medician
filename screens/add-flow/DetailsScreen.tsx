@@ -179,6 +179,11 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
           flex: 1,
         }}
       >
+        {route.params.method === "edit" ? (
+          <Text style={{ opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>Please describe what you observe.</Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"

@@ -6,6 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Animated,
+  Alert,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -41,6 +42,10 @@ export default function CustomScreen({ navigation, route }: ScreenProps) {
   const { addFlowStore } = useStores();
 
   const handleNavigation = () => {
+    if (currentText === "") {
+      Alert.alert("Please enter your symptoms.");
+      return;
+    }
     if (route.params.method === "add") {
       addFlowStore.currentNewRecord.setRecordDescription(currentText);
     } else {
@@ -57,6 +62,11 @@ export default function CustomScreen({ navigation, route }: ScreenProps) {
           flex: 1,
         }}
       >
+        {route.params.method === "edit" ? (
+          <Text style={{ opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>Please describe what you observe.</Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"

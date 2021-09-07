@@ -153,6 +153,11 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
 
   return (
     <SafeView style={styles.container} disableTop>
+      {route.params.method === "edit" ? (
+        <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+          Editing record for MOBX_PAIN at MOBX_AREA
+        </Text>
+      ) : null}
       <Text style={styles.greeting}>Attach any photos or videos here.</Text>
       <View
         style={{

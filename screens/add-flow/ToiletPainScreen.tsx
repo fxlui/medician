@@ -19,6 +19,11 @@ const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
   return (
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
+        {route.params.method === "edit" ? (
+          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
         <Text style={styles.greeting}>Does it hurt?</Text>
         <View style={styles.child}>
           <SelectionTile
