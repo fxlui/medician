@@ -4,11 +4,16 @@ import {
   SnapshotOut,
 } from "mobx-state-tree";
 import {
-  addCollection,
   addRecord,
-  getLastRecordId
+  addRoutines,
+  addCollection,
+  getLastRecordId,
+  addAppointments,
+  addRoutineAlert,
+  addAppointmentAlerts
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
+import { RoutineModel } from "./routine";
 import { RecordModel } from "./record";
 
 /**
@@ -19,6 +24,7 @@ import { RecordModel } from "./record";
 export const AddFlowStoreModel = types
   .model("AddFlowStore", {
     currentNewRecord: types.optional(RecordModel, {}),
+    currentNewRoutine: types.optional(RoutineModel, {}),
     currentNewAppointment: types.optional(AppointmentModel, {}), 
     progressLength: types.optional(types.integer, 1),
     currentProgress: types.optional(types.integer, 1),
@@ -43,11 +49,17 @@ export const AddFlowStoreModel = types
     },
     resetAddFlow: () => {
       self.currentNewRecord = RecordModel.create();
+    },
+    resetAppointment: () => {
+      self.currentNewAppointment = AppointmentModel.create();
+    },
+    resetRoutine: () => {
+      self.currentNewRoutine = RoutineModel.create();
     }
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
-    dbInsertFlow: async (userId: number) => {
+    dbInsertRecord: async (userId: number) => {
       try {
         const collectionId = await addCollection(userId, self.currentNewRecord.type);
         await Promise.all(
@@ -77,6 +89,47 @@ export const AddFlowStoreModel = types
         console.log(lastRecordId);
       } catch (error) {
         console.error("Insert record into database failed: ", error)
+      }
+    },
+    dbInsertAppointment: async (userId: number) => {
+      try {
+        const collectionId = await addCollection(
+          userId, self.currentNewAppointment.symptomType
+        );
+        console.log("collection id:", collectionId);
+        const insertedAppointmentIDs = await addAppointments(
+          collectionId,
+          self.currentNewAppointment.doctor,
+          self.currentNewAppointment.getSortedTimes()
+        )
+        console.log("insertedAppointmentIDs", insertedAppointmentIDs);
+        await addAppointmentAlerts(
+          insertedAppointmentIDs,
+          self.currentNewAppointment.alert
+        );
+      } catch(error) {
+        console.warn(error);
+      }
+    },
+    dbInsertRoutine: async (userId: number) => {
+      try {
+        const collectionId = await addCollection(
+          userId, self.currentNewRoutine.symptomType
+        );
+        console.log("collection id:", collectionId);
+        const insertedRoutineIDs = await addRoutines(
+          collectionId,
+          self.currentNewRoutine.type,
+          self.currentNewRoutine.notes,
+          self.currentNewRoutine.getSortedTimes()
+        )
+        console.log("insertedRoutineIDs", insertedRoutineIDs);
+        await addRoutineAlert(
+          insertedRoutineIDs,
+          self.currentNewRoutine.alert
+        );
+      } catch (error) {
+        console.warn(error)
       }
     }
   }));

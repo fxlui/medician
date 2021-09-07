@@ -26,6 +26,7 @@ import uniqueSymptoms from "../../assets/uniqueSymptoms.json";
 import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
+import { useStores } from "../../models/root-store-provider";
 import * as Haptics from "expo-haptics";
 
 type ScreenProps = CompositeScreenProps<
@@ -45,6 +46,7 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
+  const { addFlowStore, user } = useStores();
   const textColor = colorScheme === "light" ? "#333333" : "#fff";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
@@ -56,9 +58,10 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [currentDoctor, setCurrentDoctor] = React.useState("");
   const [alertMinutesBefore, setAlertMinutesBefore] =
-    React.useState<Number>(-1);
+    React.useState<number>(-1);
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
+  const [selectedSymptomType, setSelectedSymptomType] = React.useState("pain");
 
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
@@ -115,7 +118,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
     }
   };
 
-  const handleNavigation = () => {
+  const handleNavigation = async () => {
     if (currentQuestion >= 2) {
       if (currentDoctor === "") {
         Alert.alert(
@@ -126,6 +129,12 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         );
         return;
       }
+      addFlowStore.currentNewAppointment.setAppointmentDetails(
+        currentDoctor,
+        selectedSymptomType,
+        alertMinutesBefore
+      );
+      await addFlowStore.dbInsertAppointment(user.id);
       navigation.navigate("Root");
     } else {
       nextQuestion();
@@ -148,7 +157,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
     );
   };
 
-  const getAlertTimeText = (minutes: Number) => {
+  const getAlertTimeText = (minutes: number) => {
     switch (minutes) {
       case -1:
         return "No notifications";
@@ -294,10 +303,12 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);
                     setSelectedSymptom(symptomArr[selectedTop].title);
+                    setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
                   onScrollIndexChanged={(index) => {
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
+                    setSelectedSymptomType(symptomArr[index].type);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                   ref={topRef}

@@ -77,6 +77,9 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
 
   const handleNavigation = () => {
     addFlowStore.goForward();
+    addFlowStore
+      .currentNewAppointment
+      .setAppointmentTime(selection.map(item => item.date));
     navigation.navigate("AppointmentDetailsScreen");
   }
 

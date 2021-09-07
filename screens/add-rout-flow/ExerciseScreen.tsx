@@ -64,20 +64,21 @@ export default function RoutineDetailsScreen({
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
 
   const [alertMinutesBefore, setAlertMinutesBefore] =
-    React.useState<Number>(-1);
+    React.useState<number>(-1);
 
   const [exerciseName, setExerciseName] = React.useState("");
   const [extraNotes, setExtraNotes] = React.useState("");
 
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
+  const [selectedSymptomType, setSelectedSymptomType] = React.useState("pain");
 
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
   const { addFlowStore } = useStores();
 
-  const getQuestion = (question: Number) => {
+  const getQuestion = (question: number) => {
     switch (question) {
       case 0:
         return "What is the exercise?";
@@ -154,6 +155,11 @@ export default function RoutineDetailsScreen({
         return;
       }
       addFlowStore.goForward();
+      addFlowStore.currentNewRoutine.setRoutineDetails(
+        selectedSymptomType,
+        alertMinutesBefore === null ? -1 : alertMinutesBefore,
+        currentText
+      );
       navigation.navigate("RoutineTimeScreen");
     } else {
       nextQuestion();
@@ -343,10 +349,12 @@ export default function RoutineDetailsScreen({
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);
                     setSelectedSymptom(symptomArr[selectedTop].title);
+                    setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
                   onScrollIndexChanged={(index) => {
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
+                    setSelectedSymptomType(symptomArr[index].type);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   }}
                   ref={topRef}
