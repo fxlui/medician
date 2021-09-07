@@ -16,8 +16,14 @@ import {
   insertRoutine,
   insertRoutineAlert,
   getLastInserted,
-  getLastInsertedId
+  getLastInsertedId,
+  getRecentAppointments,
+  getRecentRoutines
 } from "./queries";
+import {
+  SQLRoutineReturnType,
+  SQLAppointmentsReturnType
+} from "./db.types";
 import { DatabaseEntryType } from "../types";
 
 function openDatabase() {
@@ -213,7 +219,7 @@ export async function addAppointmentAlerts(appointmentIDs: number[], alertTimes:
 }
 
 export async function addRoutines(
-  collectionId: number, type: number, notes: string, timeArr: number[]
+  collectionId: number, type: number, title: string, notes: string, timeArr: number[]
 ) {
   return new Promise<number[]>((resolve, reject) => {
     const res: number[] = [];
@@ -222,7 +228,7 @@ export async function addRoutines(
         timeArr.forEach(time => {
           tx.executeSql(
             insertRoutine,
-            [type, collectionId, notes, time],
+            [type, collectionId, title, notes, time],
             () => {},
             (_, error) => {
               console.log(error);
@@ -294,4 +300,34 @@ export async function addRoutineAlert(routineIDs: number[], alertIDs: number[]) 
       () => resolve()
     );
   });
+}
+
+export async function fetchRecentAppointments() {
+  return new Promise<SQLAppointmentsReturnType[]>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          getRecentAppointments,
+          [Date.now() + 1000 * 60 * 60 * 24 * 14], // Two weeks from now
+          (_, { rows }) => resolve(rows._array as SQLAppointmentsReturnType[])
+        )
+      },
+      (error) => reject(error)
+    );
+  })
+}
+
+export async function fetchRecentRoutines() {
+  return new Promise<SQLRoutineReturnType[]>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          getRecentRoutines,
+          [Date.now() + 1000 * 60 * 60 * 24 * 14], // Two weeks from now
+          (_, { rows }) => resolve(rows._array as SQLRoutineReturnType[])
+        )
+      },
+      (error) => reject(error)
+    );
+  })
 }

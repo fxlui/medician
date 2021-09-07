@@ -113,6 +113,7 @@ export const AddFlowStoreModel = types
     },
     dbInsertRoutine: async (userId: number) => {
       try {
+        console.log("routine times: ", self.currentNewRoutine.getSortedTimes())
         const collectionId = await addCollection(
           userId, self.currentNewRoutine.symptomType
         );
@@ -120,6 +121,7 @@ export const AddFlowStoreModel = types
         const insertedRoutineIDs = await addRoutines(
           collectionId,
           self.currentNewRoutine.type,
+          self.currentNewRoutine.title,
           self.currentNewRoutine.notes,
           self.currentNewRoutine.getSortedTimes()
         )

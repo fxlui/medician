@@ -1,5 +1,3 @@
-import { get } from "mobx";
-
 export const insertUser = `
 INSERT OR IGNORE INTO user (id) VALUES (1)
 `;
@@ -21,7 +19,7 @@ INSERT INTO appointment
 
 export const insertRoutine = `
 INSERT INTO routine
-(type, collectionId, notes, time) values (?, ?, ?, ?)
+(type, collectionId, title, notes, time) values (?, ?, ?, ?, ?)
 `;
 
 export const insertRoutineAlert = `
@@ -34,16 +32,16 @@ INSERT INTO alert
 (appointmentId, time) values (?, ?)
 `;
 
-export const getLastInsertedRecordId = `
-SELECT entry.id
-FROM entry
-WHERE entry.id = (SELECT MAX(entry.id) FROM entry)
+export const getRecentAppointments = `
+SELECT *
+FROM appointment
+WHERE appointment.time <= ?
 `;
 
-export const getLastInsertedAppointmentId = `
-SELECT appointment.id
-FROM appointment
-WHERE appointment.id = (SELECT MAX(appointment.id) FROM appointment)
+export const getRecentRoutines = `
+SELECT *
+FROM routine
+WHERE routine.time <= ?
 `;
 
 export function getLastInserted(table: "entry" | "appointment" | "routine" | "alert") {
@@ -62,24 +60,6 @@ export function getLastInsertedId(table: "entry" | "appointment" | "routine") {
   `;
 }
 
-export const getLastInsertedAlert = `
-SELECT *
-FROM alert
-WHERE alert.id = (SELECT MAX(alert.id) FROM alert)
-`;
-
-export const getLastInsertedRecord = `
-SELECT *
-FROM entry
-WHERE entry.id = (SELECT MAX(entry.id) FROM entry)
-`;
-
-export const getLastInsertedAppointment = `
-SELECT *
-FROM appointment
-WHERE appointment.id = (SELECT MAX(appointment.id) FROM appointment)
-`;
-
 export const getCollectionId = `
 SELECT collection.id
 FROM collection
@@ -87,10 +67,10 @@ WHERE collection.userId = ? and collection.type = ?
 `
 
 export const createUserTable = `
-  CREATE TABLE if not exists "user" (
-    "id"	INTEGER NOT NULL UNIQUE,
-    PRIMARY KEY("id" AUTOINCREMENT)
-  )
+CREATE TABLE if not exists "user" (
+  "id"	INTEGER NOT NULL UNIQUE,
+  PRIMARY KEY("id" AUTOINCREMENT)
+)
 `;
 
 export const createCollectionTable = `
@@ -145,6 +125,7 @@ export const createRoutineTable = `
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
     "type"	INTEGER NOT NULL,
+    "title" TEXT,
     "notes"	TEXT,
     "time"	INTEGER NOT NULL,
     "complete"	INTEGER NOT NULL DEFAULT 0,

@@ -8,7 +8,8 @@ import {
 } from "mobx-state-tree";
 
 /**
- * The Appointment model.
+ * The Appointment model for adding new appointments.
+ * Not compatible for editting or displaying
  */
 export const AppointmentModel = types
   .model("Appointment", {
@@ -37,13 +38,21 @@ export const AppointmentModel = types
     }
   }));
 
-export const SavedAppointmentModel = AppointmentModel
-  .props({
+export const SavedAppointmentModel = types
+  .model("SavedAppointment",{
     id: types.identifierNumber,
-    collectionId: types.integer
+    collectionId: types.integer,
+    complete: types.optional(types.number, 0),
+    doctor: types.optional(types.string, "Mark Wong"),
+    time: types.Date
   });
 
 type AppointmentType = Instance<typeof AppointmentModel>;
 export interface Appointment extends AppointmentType {};
 type AppointmentSnapshotType = SnapshotOut<typeof AppointmentModel>;
 export interface AppointmentSnapshot extends AppointmentSnapshotType {};
+
+type SavedAppointmentType = Instance<typeof SavedAppointmentModel>;
+export interface SavedAppointment extends SavedAppointmentType {};
+type SavedAppointmentSnapshotType = SnapshotOut<typeof SavedAppointmentModel>;
+export interface SavedAppointmentSnapshot extends SavedAppointmentSnapshotType {};

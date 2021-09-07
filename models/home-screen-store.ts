@@ -1,13 +1,22 @@
 import {
   types,
   cast,
+  flow,
   SnapshotOrInstance,
   getSnapshot,
   Instance,
   SnapshotOut
 } from "mobx-state-tree";
-import { RoutineModel } from "./routine";
-import { AppointmentModel } from "./appointment";
+import {
+  SQLAppointmentsReturnType,
+  SQLRoutineReturnType
+} from "../database/db.types";
+import {
+  fetchRecentAppointments,
+  fetchRecentRoutines
+} from "../database/dbAPI";
+import { SavedRoutineModel } from "./routine";
+import { SavedAppointmentModel } from "./appointment";
 
 /**
  * The Home Screen Store model.
@@ -15,21 +24,24 @@ import { AppointmentModel } from "./appointment";
  */
 export const HomeScreenStoreModel = types
   .model("HomeScreenStore", {
-    recentRoutines: types.optional(types.array(RoutineModel), []),
-    recentAppointments: types.optional(types.array(AppointmentModel), []),
+    recentRoutines: types.optional(types.array(SavedRoutineModel), []),
+    recentAppointments: types.optional(types.array(SavedAppointmentModel), []),
     collectionIds: types.optional(types.array(types.integer), [])
   })
   // Calls to get derived data
-  .views((self) => ({
+  .views(self => ({
     getRecentMedications: () => {
       return getSnapshot(self.recentRoutines).filter(item => item.type === 0);
     },
     getRecentExercises: () => {
       return getSnapshot(self.recentRoutines).filter(item => item.type === 1);
+    },
+    getRecentAppointments: () => {
+      return getSnapshot(self.recentAppointments);
     }
   }))
   // Synchronous actions defined here
-  .actions((self) => ({
+  .actions(self => ({
     setRoutines: (routine: SnapshotOrInstance<typeof self.recentRoutines>) => {
       self.recentRoutines = cast(routine);
     },
@@ -38,11 +50,48 @@ export const HomeScreenStoreModel = types
     }
   }))
   // Asynchronous actions defined here
-  .actions((self) => ({
-    fetchAll: async () => {
-      return;
-    }
-  }));
+  .actions(self => {
+    const fetchAppointmentsAsync = flow(function*() {
+      try {
+        const results: SQLAppointmentsReturnType[] = yield fetchRecentAppointments();
+        self.recentAppointments = cast(
+          results.map(
+            item => SavedAppointmentModel.create({
+              id: item.id,
+              collectionId: item.collectionId,
+              complete: item.complete,
+              // doctor: item.doctor,
+              time: new Date(item.time)
+            })
+          )
+        );
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+
+    const fetchRoutinesAsync = flow(function*() {
+      try {
+        const results: SQLRoutineReturnType[] = yield fetchRecentRoutines();
+        self.recentRoutines = cast(
+          results.map(
+            item => SavedRoutineModel.create({
+              id: item.id,
+              collectionId: item.collectionId,
+              // title: item.titile,
+              notes: item.notes,
+              type: item.type,
+              time: new Date(item.time),
+              complete: item.complete
+            })
+          )
+        )
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+    return { fetchAppointmentsAsync, fetchRoutinesAsync };
+  });
 
 type HomeScreenStoreType = Instance<typeof HomeScreenStoreModel>;
 export interface HomeScreenStore extends HomeScreenStoreType {};

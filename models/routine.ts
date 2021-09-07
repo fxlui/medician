@@ -15,6 +15,7 @@ export const RoutineModel = types
     type: types.optional(types.integer, 0),
     symptomType: types.optional(types.string, ""),
     minutesBefore: types.optional(types.number, -1),
+    title: types.optional(types.string, "title"),
     notes: types.optional(types.string, ""),
     time: types.array(types.Date),
     alert: types.array(types.integer)
@@ -42,13 +43,23 @@ export const RoutineModel = types
     }
   }));
 
-export const SavedRoutineModel = RoutineModel
-  .props({
+export const SavedRoutineModel = types
+  .model("SavedRoutine" ,{
     id: types.identifierNumber,
-    collectionId: types.integer
+    collectionId: types.integer,
+    type: types.integer,
+    title: types.optional(types.string, "Title"),
+    notes: types.string,
+    time: types.Date,
+    complete: types.integer
   })
 
 type RoutineType = Instance<typeof RoutineModel>;
 export interface Routine extends RoutineType {};
 type RoutineSnapshotType = SnapshotOut<typeof RoutineModel>;
 export interface RoutineSnapshot extends RoutineSnapshotType {};
+
+type SavedRoutineType = Instance<typeof SavedRoutineModel>;
+export interface SavedRoutine extends SavedRoutineType {};
+type SavedRoutineSnapshotType = SnapshotOut<typeof SavedRoutineModel>;
+export interface SavedRoutineSnapshot extends SavedRoutineSnapshotType {};

@@ -12,6 +12,5 @@ export const useStores = () => useContext(RootStoreContext);
  */
 export const setupRootStore = async () => {
   const rootStore = RootStoreModel.create({} as RootStore);
-  await rootStore.homeScreenStore.fetchAll();
   return rootStore;
 }
