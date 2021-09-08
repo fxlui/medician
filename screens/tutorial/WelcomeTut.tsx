@@ -13,7 +13,7 @@ import { CompositeScreenProps } from "@react-navigation/core";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<TutorialParamList, "HomeTut">,
-  StackScreenProps<RootStackParamList>
+  StackScreenProps<RootStackParamList, "Root">
 >;
 
 const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
@@ -25,20 +25,21 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
     <SafeView disableBottom>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={styles.greeting}>
-              Hello.{"\n"}
-              Welcome to Medician.{"\n"}
-            </Text>
-            <Text style={styles.greeting}>
-              Let's get you familiar{"\n"}
-              with the app.{"\n"}
-            </Text>
-          </View>
+          <View>
+            <View style={styles.header}>
+              <Text style={styles.greeting}>
+                👋 Hello.{"\n"}
+                Welcome to Medician.{"\n"}
+              </Text>
+              <Text style={styles.greeting}>
+                Let's get you familiar{"\n"}
+                with the app.{"\n"}
+              </Text>
+            </View>
 
-          <View style={{
-            alignItems: "center"
-          }}>
+            <View style={{
+              alignItems: "center"
+            }}>
 
             <TileBase
               gradient={[tileColor, tileColor]}
@@ -50,14 +51,15 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
                 alignItems: "center",
               }}
               onClick={() => {
-                navigation.navigate("HomeScreen");
+                navigation.navigate("Root");
                 CustomHaptics("light");
               }}
-            >
+              >
               <Text style={{ fontSize: 16, fontWeight: "500"}}>
                 Skip Tutorial
               </Text>
             </TileBase>
+          </View>
         
          </View>
         </ScrollView>
