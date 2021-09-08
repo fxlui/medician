@@ -142,7 +142,7 @@ export async function getLastRecordId() {
   });
 }
 
-export async function addAppointments(collectionId: number, doctor: string, timeArr: number[]) {
+export async function addAppointments(collectionId: number, doctor: string, timeArr: number[], notes: string) {
   return new Promise<number[]>((resolve, reject) => {
     const res: number[] = [];
     db.transaction(
@@ -150,7 +150,7 @@ export async function addAppointments(collectionId: number, doctor: string, time
         timeArr.forEach(time => {
           tx.executeSql(
             insertAppointment,
-            [collectionId, doctor, time, ""],
+            [collectionId, doctor, time, notes],
             () => {},
             (_, error) => {
               console.log(error);

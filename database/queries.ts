@@ -60,6 +60,7 @@ SELECT *
 FROM appointment
 WHERE appointment.time <= ?
 AND appointment.complete = 0
+ORDER BY appointment.time
 `;
 
 export const getRecentRoutines = `
@@ -67,6 +68,7 @@ SELECT *
 FROM routine
 WHERE routine.time <= ?
 AND routine.complete = 0
+ORDER BY routine.time
 `;
 
 export function getLastInserted(

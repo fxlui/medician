@@ -100,7 +100,8 @@ export const AddFlowStoreModel = types
         const insertedAppointmentIDs = await addAppointments(
           collectionId,
           self.currentNewAppointment.doctor,
-          self.currentNewAppointment.getSortedTimes()
+          self.currentNewAppointment.getSortedTimes(),
+          self.currentNewAppointment.notes
         )
         console.log("insertedAppointmentIDs", insertedAppointmentIDs);
         await addAppointmentAlerts(
