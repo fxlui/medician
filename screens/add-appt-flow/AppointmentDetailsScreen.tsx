@@ -29,6 +29,8 @@ import { Picker } from "@react-native-picker/picker";
 import { useStores } from "../../models/root-store-provider";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
+import Toast from "react-native-root-toast";
+import TickToast from "../../components/TickToast";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
@@ -150,6 +152,18 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         );
         return;
       }
+      Toast.show(<TickToast message={`Appointment Added`} />, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.CENTER,
+        shadow: false,
+        animation: true,
+        hideOnPress: true,
+        delay: 50,
+        containerStyle: {
+          backgroundColor: "transparent",
+        },
+        opacity: 0.9,
+      });
       addFlowStore.currentNewAppointment.setAppointmentDetails(
         currentDoctor,
         selectedSymptomType,
@@ -398,6 +412,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
       </View>
       <AddFlowNavBar
         last={currentQuestion === 3}
+        preventRightHaptics={currentQuestion >= 3}
         left={() => {
           if (
             (currentQuestion === 0 && currentDoctor !== "") ||

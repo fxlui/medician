@@ -107,7 +107,9 @@ const Tile: React.FC<HomeTileProps> = ({
     >
       <View style={styles.content}>
         <View style={styles.left}>
-          <View style={{ padding: 5, backgroundColor: "transparent" }}>
+          <View
+            style={{ padding: 5, backgroundColor: "transparent", opacity: 0.9 }}
+          >
             {getIcon(type, index)}
           </View>
           <View style={styles.textContent}>
@@ -122,12 +124,19 @@ const Tile: React.FC<HomeTileProps> = ({
               {title}
             </Text>
             {secondTitle ? (
-              <Text style={{ color: textColor, fontSize: 16, marginBottom: 1 }}>
+              <Text style={{ color: textColor, fontSize: 16, opacity: 0.9 }}>
                 {secondTitle}
               </Text>
             ) : null}
             {subTitle ? (
-              <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
+              <Text
+                style={{
+                  marginTop: 2,
+                  color: textColor,
+                  fontSize: 14,
+                  opacity: 0.68,
+                }}
+              >
                 {subTitle}
               </Text>
             ) : null}

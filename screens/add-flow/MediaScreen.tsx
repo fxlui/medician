@@ -28,6 +28,8 @@ import TileBase from "../../components/TileBase";
 import SwipeBar from "../../components/SwipeBar";
 import { LinearGradient } from "expo-linear-gradient";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
+import Toast from "react-native-root-toast";
+import TickToast from "../../components/TickToast";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "MediaScreen">,
@@ -328,6 +330,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
       />
       <AddFlowNavBar
         last
+        preventRightHaptics
         left={() => navigation.pop()}
         right={async () => {
           if (route.params.method === "add") {
@@ -336,6 +339,26 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
           } else {
             // TODO handle edit flow
           }
+          Toast.show(
+            <TickToast
+              message={`Record ${
+                route.params.method.charAt(0).toUpperCase() +
+                route.params.method.slice(1)
+              }ed`}
+            />,
+            {
+              duration: Toast.durations.SHORT,
+              position: Toast.positions.CENTER,
+              shadow: false,
+              animation: true,
+              hideOnPress: true,
+              delay: 50,
+              containerStyle: {
+                backgroundColor: "transparent",
+              },
+              opacity: 0.9,
+            }
+          );
           navigation.navigate("Root");
         }}
       ></AddFlowNavBar>

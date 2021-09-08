@@ -83,7 +83,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
     return (
       <HomeTile
         title={item.doctor}
-        subTitle={item.time.toString()}
+        subTitle={getDateText(new Date(item.time))}
         style={{
           marginRight: 15,
         }}
