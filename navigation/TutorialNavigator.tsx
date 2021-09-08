@@ -5,7 +5,7 @@ import { TutorialParamList } from "../types";
 import ProgressBar from "../components/ProgressBar";
 import SymptomsScreen from "../screens/SymptomsScreen";
 
-import WelcomeTut from "../screens/tutorial/HomeTut";
+import WelcomeTut from "../screens/tutorial/WelcomeTut";
 import HomeTut from "../screens/tutorial/HomeTut";
 import ActionTut from "../screens/tutorial/ActionTut";
 import SymptomTut from "../screens/tutorial/SymptomTut";
@@ -18,28 +18,21 @@ import EndingTut from "../screens/tutorial/EndingTut";
 const TutorialStack = createStackNavigator<TutorialParamList>();
 
 const TutorialStackNavigator = () => {
-  const { addFlowStore } = useStores();
   return (
     <TutorialStack.Navigator
-      initialRouteName="SymptomsScreen"
+      initialRouteName="WelcomeTut"
       screenOptions={{
-        header: () => <ProgressBar />,
         headerMode: "float",
         cardShadowEnabled: true,
       }}
-      screenListeners={() => ({
-        gestureEnd: () => {
-          addFlowStore.goBack();
-        },
-      })}
     >
       <TutorialStack.Screen
-        name="SymptomsScreen"
-        component={SymptomsScreen}
+        name="WelcomeTut"
+        component={WelcomeTut}
         options={{ headerShown: false }}
       />
     </TutorialStack.Navigator>
   );
 };
 
-export default AddFlowNavigator;
+export default TutorialStackNavigator;

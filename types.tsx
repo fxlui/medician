@@ -2,6 +2,7 @@ import { NavigatorScreenParams } from "@react-navigation/core";
 
 export type RootStackParamList = {
   Root: undefined;
+  Tutorial: NavigatorScreenParams<TutorialParamList>;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
   Notification: {
     id: string;
