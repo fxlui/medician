@@ -43,6 +43,13 @@ FROM entry
 WHERE entry.collectionId = ?
 `;
 
+export const getSubAreaRecords = `
+SELECT *
+FROM entry
+WHERE entry.collectionId = ?
+AND entry.subArea = ?
+`;
+
 export const getRoutinesbyCollection = `
 SELECT 
   routine.id,

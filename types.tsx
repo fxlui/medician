@@ -13,6 +13,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Settings: undefined;
   Timeline: {
+    collectionId: number;
     type: string;
     area: string;
   };

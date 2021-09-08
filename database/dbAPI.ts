@@ -26,6 +26,7 @@ import {
   getAlertByID,
   getAppointmentByID,
   getRoutineByID,
+  getSubAreaRecords,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -33,6 +34,7 @@ import {
   SQLCollectionReturnType,
   FetchByCollectionResultType,
   SQLAlertReturnType,
+  SQLRecordReturnType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -429,6 +431,24 @@ export async function fetchCollectionData(collectionId: number) {
         console.log("dbAPI.ts: fetchCollectionData: ", result);
         resolve(result);
       }
+    );
+  });
+}
+
+export async function fetchSubAreaRecords(
+  collectionId: number,
+  subArea: string
+) {
+  return new Promise<SQLRecordReturnType[]>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          getSubAreaRecords,
+          [collectionId, subArea],
+          (_, { rows }) => resolve(rows._array as SQLRecordReturnType[])
+        );
+      },
+      (error) => reject(error)
     );
   });
 }

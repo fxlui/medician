@@ -28,6 +28,7 @@ export const OverviewStoreModel = types
         type: types.string,
       })
     ),
+    selectedCollectionId: types.maybe(types.number),
     currentCollectionRecords: types.array(SimpleRecordModel),
     currentCollectionRoutines: types.array(SavedRoutineModel),
     currentCollectionAppointments: types.array(SavedAppointmentModel),
@@ -45,12 +46,22 @@ export const OverviewStoreModel = types
     getCurrentAppointmentsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionAppointments)];
     },
+    getCurrentSelectedCollection: () => {
+      return [...getSnapshot(self.collections)].find(
+        (item) => item.id === self.selectedCollectionId
+      );
+    },
   }))
   .actions((self) => ({
     checkCurrentData: () => {
       console.log(self.getCurrentRecordsSnapshot());
       console.log(self.getCurrentRoutinesSnapshot());
       console.log(self.getCurrentAppointmentsSnapshot());
+    },
+    setSelectedCollection: (symptomType: string) => {
+      self.selectedCollectionId = self.collections.find(
+        (item) => item.type === symptomType
+      )?.id;
     },
   }))
   // Asynchronous actions
@@ -61,17 +72,19 @@ export const OverviewStoreModel = types
         self.collections = cast(
           result.map((item) => ({ id: item.id, type: item.type }))
         );
+        if (!self.selectedCollectionId && self.collections.length != 0) {
+          self.selectedCollectionId = self.collections[0].id;
+        }
       } catch (error) {
         console.warn(error);
       }
     });
 
-    const fetchCollectionDataAsync = flow(function* (symptomType: string) {
-      const id = self.collections.find((item) => item.type === symptomType)?.id;
-      if (id) {
+    const fetchCollectionDataAsync = flow(function* () {
+      if (self.selectedCollectionId) {
         try {
           const result: FetchByCollectionResultType = yield fetchCollectionData(
-            id
+            self.selectedCollectionId
           );
           self.currentCollectionRecords = cast(result.records);
           self.currentCollectionRoutines = cast(

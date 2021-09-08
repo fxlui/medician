@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Alert } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import { CompositeScreenProps } from "@react-navigation/core";
@@ -88,9 +88,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       );
       setDisplaySymptoms(fetchedCollections);
       if (fetchedCollections.length === 0) return;
-      await overviewStore.fetchCollectionDataAsync(
-        fetchedCollections[symptomSelected].type
-      );
+      await overviewStore.fetchCollectionDataAsync();
     });
     return unsubscribe;
   }, []);
@@ -116,10 +114,16 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         index={index}
         selected={false}
         updater={() => {
-          navigation.navigate("Timeline", {
-            area: item.subArea,
-            type: item.area,
-          });
+          const currentCollection = overviewStore.getCurrentSelectedCollection();
+          if (currentCollection) {
+            navigation.navigate("Timeline", {
+              collectionId: currentCollection.id,
+              type: currentCollection.type,
+              area: item.subArea,
+            });
+          } else {
+            Alert.alert("Current colleciotn not found !!!");
+          }
         }}
       />
     );
@@ -196,9 +200,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           onScrollIndexChanged={async (index) => {
             CustomHaptics("light");
             setSymptomSelected(index);
-            await overviewStore.fetchCollectionDataAsync(
-              displaySymptoms[index].type
-            );
+            overviewStore.setSelectedCollection(displaySymptoms[index].type);
+            await overviewStore.fetchCollectionDataAsync();
           }}
           ref={topRef}
         />
