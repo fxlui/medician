@@ -12,6 +12,7 @@ import { ColorSchemeName } from "react-native";
 import { RootStackParamList } from "../types";
 import AddFlowNavigator from "./AddFlowNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
+import TutorialNavigator from "./TutorialNavigator";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import NotificationScreen from "../screens/Notification";
 import ActionScreen from "../screens/ActionScreen";

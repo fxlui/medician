@@ -74,6 +74,16 @@ export type AddFlowParamList = {
   RoutineTimeScreen: undefined;
 };
 
+export type TutorialParamList = {
+  WelcomeTut: undefined;
+  HomeTut: undefined;
+  ActionTut: undefined;
+  SymptomTut: undefined;
+  RoutineTut: undefined;
+  OverviewTut: undefined;
+  EndingTut: undefined;
+}
+
 export enum HomeTileTypes {
   Medication = "med",
   Exercise = "exe",
