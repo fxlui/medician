@@ -32,6 +32,10 @@ INSERT INTO alert
 (appointmentId, eventTime, time) values (?, ?, ?)
 `;
 
+export const updateAlertSystemId = `
+UPDATE alert SET systemId = ? WHERE id = ?
+`;
+
 export const getAllCollecitons = `
 SELECT *
 FROM collection
@@ -246,6 +250,7 @@ export const createAlertTable = `
     "time"	INTEGER NOT NULL,
     "eventTime"  INTEGER NOT NULL,
     "completed"	INTEGER NOT NULL DEFAULT 0,
+    "systemId"  TEXT,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
     FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

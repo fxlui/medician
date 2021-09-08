@@ -27,6 +27,7 @@ import {
   getAppointmentByID,
   getRoutineByID,
   getSubAreaRecords,
+  updateAlertSystemId,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -218,6 +219,28 @@ export async function addAppointmentAlerts(
       },
       (error) => reject(error),
       () => resolve(res)
+    );
+  });
+}
+
+export async function updateAlertSystemID(alertID: number, systemID: string) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          updateAlertSystemId,
+          [systemID, alertID],
+          (_, success) => {
+            resolve();
+          },
+          (_, error) => {
+            console.log(error);
+            reject(error);
+            return true;
+          }
+        );
+      },
+      (error) => reject(error)
     );
   });
 }

@@ -7,6 +7,7 @@ import {
   addAppointmentAlerts,
   addRoutine,
   addAppointment,
+  updateAlertSystemID,
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
 import { RoutineModel } from "./routine";
@@ -122,7 +123,7 @@ export const AddFlowStoreModel = types
           .getSortedTimes()
           .map(async (timestamp, index) => {
             if (timestamp === -1) {
-              return;
+              return "";
             }
             return Notifications.scheduleNotificationAsync({
               content: {
@@ -144,7 +145,10 @@ export const AddFlowStoreModel = types
             });
           });
 
-        await Promise.all(notificationPromises);
+        const systemIds = await Promise.all(notificationPromises);
+        alertIDs.forEach(async (alertID, index) => {
+          await updateAlertSystemID(alertID, systemIds[index]);
+        });
       } catch (error) {
         console.warn(error);
       }
@@ -177,7 +181,7 @@ export const AddFlowStoreModel = types
           .getSortedTimes()
           .map(async (timestamp, index) => {
             if (timestamp === -1) {
-              return;
+              return "";
             }
             return Notifications.scheduleNotificationAsync({
               content: {
@@ -209,7 +213,10 @@ export const AddFlowStoreModel = types
             });
           });
 
-        await Promise.all(notificationPromises);
+        const systemIds = await Promise.all(notificationPromises);
+        alertIDs.forEach(async (alertID, index) => {
+          await updateAlertSystemID(alertID, systemIds[index]);
+        });
       } catch (error) {
         console.warn(error);
       }
