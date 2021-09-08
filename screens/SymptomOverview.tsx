@@ -56,25 +56,6 @@ interface BaseData {
   item: SimpleRecordSnapshot;
 }
 
-const AREA_DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "Head",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Abdomen",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e26d72",
-    title: "Feet",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145ee26d72",
-    title: "Fourth Item",
-  },
-];
-
 const symptomArr = uniqueSymptoms;
 
 const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
@@ -133,7 +114,12 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         title={item.subArea}
         index={index}
         selected={false}
-        updater={() => {}}
+        updater={() => {
+          navigation.navigate("Timeline", {
+            area: item.subArea,
+            type: item.area,
+          });
+        }}
       />
     );
   };
@@ -169,7 +155,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
     return (
       <HomeTile
         title={item.doctor}
-        subTitle={getDateText(new Date(item.time))}
+        subTitle={item.time.toString()}
         style={{
           marginRight: 15,
         }}
@@ -194,6 +180,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           data={displaySymptoms}
           renderItem={renderSymptomTile}
           vertical={false}
+          firstItem={0}
           sliderWidth={Dimensions.get("window").width}
           containerCustomStyle={{
             overflow: "visible",
@@ -279,8 +266,7 @@ const styles = StyleSheet.create({
     paddingBottom: 155,
   },
   header: {
-    paddingBottom: 30,
-    paddingTop: 10,
+    paddingVertical: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 8,

@@ -103,7 +103,8 @@ export const AddFlowStoreModel = types
         console.log("collection id:", collectionId);
         const insertedAppointmentID = await addAppointment(
           collectionId,
-          self.currentNewAppointment.doctor
+          self.currentNewAppointment.doctor,
+          self.currentNewAppointment.notes
         );
         console.log("insertedAppointmentID", addAppointment);
 
@@ -113,13 +114,11 @@ export const AddFlowStoreModel = types
           .map(async (timestamp, index) => {
             return Notifications.scheduleNotificationAsync({
               content: {
-                title: `${
-                  self.currentNewAppointment.type === 0
-                    ? "Medication"
-                    : "Exercise"
-                }: ${self.currentNewAppointment.title}`,
+                title: `Appointment for ${self.currentNewAppointment.symptomType}: ${self.currentNewAppointment.doctor}`,
                 subtitle: moment(timestamp).format("lll"),
-                body: self.currentNewAppointment.notes,
+                body:
+                  self.currentNewAppointment.notes.substring(0, 97) +
+                  (self.currentNewAppointment.notes.length > 97 ? "..." : ""),
                 sound: true,
               },
               trigger: new Date(self.currentNewAppointment.alert[index]),
@@ -166,7 +165,9 @@ export const AddFlowStoreModel = types
                   self.currentNewRoutine.type === 0 ? "Medication" : "Exercise"
                 }: ${self.currentNewRoutine.title}`,
                 subtitle: moment(timestamp).format("lll"),
-                body: self.currentNewRoutine.notes,
+                body:
+                  self.currentNewRoutine.notes.substring(0, 97) +
+                  (self.currentNewRoutine.notes.length > 97 ? "..." : ""),
                 sound: true,
               },
               trigger: new Date(self.currentNewRoutine.alert[index]),

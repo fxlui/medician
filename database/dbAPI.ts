@@ -131,7 +131,11 @@ export async function getLastRecordId() {
   });
 }
 
-export async function addAppointment(collectionId: number, doctor: string) {
+export async function addAppointment(
+  collectionId: number,
+  doctor: string,
+  notes: string
+) {
   return new Promise<number>((resolve, reject) => {
     db.transaction(
       (tx) => {

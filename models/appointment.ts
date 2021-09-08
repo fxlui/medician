@@ -17,7 +17,8 @@ export const AppointmentModel = types
     symptomType: types.optional(types.string, ""),
     time: types.array(types.Date),
     // Storing unix timestamps directly
-    alert: types.array(types.number)
+    alert: types.array(types.number),
+    notes: types.optional(types.string, "")
   })
   .views(self => ({
     getSortedTimes: () => {
@@ -28,13 +29,14 @@ export const AppointmentModel = types
     setAppointmentTime: (time: SnapshotOrInstance<typeof self.time>) => {
       self.time = cast(time);
     },
-    setAppointmentDetails: (name: string, type: string, alertMinutesBefore: number | null) => {
+    setAppointmentDetails: (name: string, type: string, alertMinutesBefore: number | null, notes: string) => {
       self.doctor = name;
       self.symptomType = type;
       self.alert = cast(self.getSortedTimes().map(
         item => 
           (alertMinutesBefore === null) ? -1 : (item - alertMinutesBefore * 60 * 1000)
       ));
+      self.notes = notes;
     }
   }));
 
