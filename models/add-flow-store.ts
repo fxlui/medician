@@ -108,22 +108,23 @@ export const AddFlowStoreModel = types
         console.log("insertedAppointmentID", addAppointment);
 
         // Registering notifications
-        const notificationPromises = self.currentNewAppointment.alert.map(
-          async (timestamp) => {
+        const notificationPromises = self.currentNewAppointment
+          .getSortedTimes()
+          .map(async (timestamp, index) => {
             return Notifications.scheduleNotificationAsync({
               content: {
-                title:
+                title: `${
                   self.currentNewAppointment.type === 0
                     ? "Medication"
-                    : "Exercise",
-                subtitle: self.currentNewAppointment.doctor,
+                    : "Exercise"
+                }: ${self.currentNewAppointment.title}`,
+                subtitle: moment(timestamp).format("lll"),
                 body: self.currentNewAppointment.notes,
                 sound: true,
               },
-              trigger: new Date(timestamp),
+              trigger: new Date(self.currentNewAppointment.alert[index]),
             });
-          }
-        );
+          });
 
         const notificationIds = await Promise.all(notificationPromises);
         console.log(notificationIds);
