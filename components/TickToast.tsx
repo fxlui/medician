@@ -1,31 +1,26 @@
 import * as React from "react";
 import { Animated, View } from "react-native";
 import Svg, { SvgProps, Path } from "react-native-svg";
-import * as Haptics from "expo-haptics";
 import useColorScheme from "../hooks/useColorScheme";
 import { Text } from "./Themed";
+import CustomHaptics from "../utils/CustomHaptics";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 /*
-const animation = (
-                  <View>
-                    <TickSVG />
-                  </View>
-                );
-                Toast.show(animation, {
-                  duration: Toast.durations.SHORT,
-                  position: Toast.positions.CENTER,
-                  shadow: false,
-                  animation: true,
-                  hideOnPress: true,
-                  delay: 50,
-                  containerStyle: {
-                    backgroundColor: "transparent",
-                  },
-                  opacity: 0.9,
-                });
-                */
+  Toast.show(<TickToast />, {
+    duration: Toast.durations.SHORT,
+    position: Toast.positions.CENTER,
+    shadow: false,
+    animation: true,
+    hideOnPress: true,
+    delay: 50,
+    containerStyle: {
+      backgroundColor: "transparent",
+    },
+    opacity: 0.9,
+  });
+*/
 interface TickProps extends SvgProps {
   message?: string;
 }
@@ -47,7 +42,7 @@ function SvgComponent(props: TickProps) {
       duration: 250,
       useNativeDriver: true,
     }).start();
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    CustomHaptics("done");
   }, []);
 
   return (

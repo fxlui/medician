@@ -11,7 +11,7 @@ import { AddFlowParamList, RootStackParamList } from "../../types";
 import { useStores } from "../../models/root-store-provider";
 
 import Carousel from "react-native-snap-carousel";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../../utils/CustomHaptics";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "ToiletColorScreen">,
@@ -103,7 +103,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation, route }) => {
           inactiveSlideOpacity={0.8}
           onScrollIndexChanged={(index) => {
             setSelected(index);
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            CustomHaptics("light");
           }}
           ref={tileRef}
         />

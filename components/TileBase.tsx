@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from "react-native";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../utils/CustomHaptics";
 
 import { LinearGradient } from "expo-linear-gradient";
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -62,7 +62,7 @@ const TileBase: React.FC<BaseChildren> = ({
   };
 
   const handleOnClick = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    CustomHaptics("medium");
     onClick();
   };
 
@@ -72,7 +72,7 @@ const TileBase: React.FC<BaseChildren> = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       onLongPress={() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        CustomHaptics("heavy");
         handleOnClick();
       }}
     >

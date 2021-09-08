@@ -25,6 +25,7 @@ import { PressableBase } from "../components/PressableBase";
 import { Ionicons } from "@expo/vector-icons";
 
 import * as LocalAuthentication from "expo-local-authentication";
+import CustomHaptics from "../utils/CustomHaptics";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Settings">;
 
@@ -34,8 +35,9 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
   const borderColor = colorScheme === "light" ? "#dbdbdb" : "#454545";
   const tileColor = colorScheme === "light" ? "#fff" : "#252525";
 
-  const [showSettings, setShowSettings] = React.useState(false);
+  const [showBioSettings, setShowBioSettings] = React.useState(false);
   const [lockApp, setLockApp] = React.useState(false);
+  const [useHaptics, setUseHaptics] = React.useState(true);
   const [bioText, setBioText] = React.useState("");
 
   React.useEffect(() => {
@@ -43,13 +45,17 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
       const result = await SecureStore.getItemAsync("enable_bio");
       if (result === "true") {
         setLockApp(true);
-        setShowSettings(true);
+        setShowBioSettings(true);
+      }
+      const hapticsResult = await SecureStore.getItemAsync("enable_haptics");
+      if (hapticsResult === "false") {
+        setUseHaptics(false);
       }
       const status = await LocalAuthentication.hasHardwareAsync();
       if (status) {
         const authStatus = await LocalAuthentication.isEnrolledAsync();
         if (authStatus) {
-          setShowSettings(true);
+          setShowBioSettings(true);
           const methods =
             await LocalAuthentication.supportedAuthenticationTypesAsync();
           if (
@@ -92,13 +98,17 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
         <Text style={styles.brand}>Medician</Text>
         <Text style={styles.version}>{Constants.manifest?.version}</Text>
 
-        {showSettings ? (
-          <View style={styles.section}>
-            <Text style={styles.header}>Settings</Text>
+        <View style={styles.section}>
+          <Text style={styles.header}>Settings</Text>
+          {showBioSettings ? (
             <View
               style={[
                 styles.row,
-                { backgroundColor: tileColor, borderColor: borderColor },
+                {
+                  backgroundColor: tileColor,
+                  borderColor: borderColor,
+                  borderBottomWidth: 0,
+                },
               ]}
             >
               <Text style={styles.rowText}>Lock with {bioText}</Text>
@@ -126,8 +136,31 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
                 }}
               />
             </View>
+          ) : null}
+          <View
+            style={[
+              styles.row,
+              { backgroundColor: tileColor, borderColor: borderColor },
+            ]}
+          >
+            <Text style={styles.rowText}>Haptics in App</Text>
+            <Switch
+              style={{ marginLeft: "auto" }}
+              value={useHaptics}
+              onValueChange={(value) => {
+                const setHaptics = async () => {
+                  if (!value) {
+                    await SecureStore.setItemAsync("enable_haptics", "false");
+                  } else {
+                    await SecureStore.setItemAsync("enable_haptics", "true");
+                  }
+                };
+                setHaptics();
+                setUseHaptics(value);
+              }}
+            />
           </View>
-        ) : null}
+        </View>
 
         <View style={styles.section}>
           <Text style={styles.header}>About</Text>

@@ -27,7 +27,7 @@ import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
 import { useStores } from "../../models/root-store-provider";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../../utils/CustomHaptics";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "MedicationScreen">,
@@ -402,7 +402,7 @@ export default function RoutineDetailsScreen({
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
                     setSelectedSymptomType(symptomArr[index].type);
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    CustomHaptics("light");
                   }}
                   ref={topRef}
                 />

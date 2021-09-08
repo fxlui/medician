@@ -13,7 +13,7 @@ import HomeTile from "../components/HomeTile";
 import { TopTile } from "../components/AreaTile";
 import OverviewSymptomTile from "../components/OverviewSymptomTile";
 
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../utils/CustomHaptics";
 import Carousel from "react-native-snap-carousel";
 import useColorScheme from "../hooks/useColorScheme";
 
@@ -184,7 +184,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
                 setSymptomSelected(index);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                CustomHaptics("light");
               }}
               ref={topRef}
             />
@@ -205,7 +205,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
               itemWidth={165}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                CustomHaptics("light");
               }}
             />
             <Text style={styles.name}>Routines</Text>
@@ -222,7 +222,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
               itemWidth={165}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                CustomHaptics("light");
               }}
             />
             <Text style={styles.name}>Appointments</Text>
@@ -239,7 +239,7 @@ const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
               itemWidth={165}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                CustomHaptics("light");
               }}
             />
           </View>

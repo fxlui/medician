@@ -1,7 +1,7 @@
 import React from "react";
 import useColorScheme from "../hooks/useColorScheme";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../utils/CustomHaptics";
 
 import { PressableBase } from "./PressableBase";
 import { View } from "./Themed";
@@ -15,12 +15,15 @@ const AddFlowNavBar: React.FC<{
   last?: boolean;
   preventLeftDefault?: boolean;
   preventRightDefault?: boolean;
-}> = ({ left, right, last = false,
+}> = ({
+  left,
+  right,
+  last = false,
   preventLeftDefault = false,
-  preventRightDefault = false
+  preventRightDefault = false,
 }) => {
   const funcWithHaptics = (func: () => void) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    CustomHaptics("light");
     func();
   };
   const colorScheme = useColorScheme();
@@ -46,7 +49,7 @@ const AddFlowNavBar: React.FC<{
         style={{
           position: "absolute",
           bottom: 0,
-          paddingBottom: 10,
+          paddingBottom: 15,
           alignSelf: "center",
           alignItems: "center",
           width: "100%",
@@ -64,7 +67,7 @@ const AddFlowNavBar: React.FC<{
           <PressableBase
             extraProps={{
               style: {
-                padding: 30,
+                padding: 32.5,
                 paddingLeft: 80,
                 paddingRight: 55,
               },
@@ -86,7 +89,7 @@ const AddFlowNavBar: React.FC<{
           <PressableBase
             extraProps={{
               style: {
-                padding: 30,
+                padding: 32.5,
                 paddingLeft: 55,
                 paddingRight: 80,
               },
@@ -117,8 +120,6 @@ const AddFlowNavBar: React.FC<{
       </View>
     </>
   );
-}
-
-
+};
 
 export default AddFlowNavBar;

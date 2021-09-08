@@ -10,7 +10,7 @@ import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
 import BodyAreas from "../../assets/BodyAreas.json";
 import { useStores } from "../../models/root-store-provider";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../../utils/CustomHaptics";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
 
@@ -106,7 +106,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
                 setSelectedTop(index);
                 setSelectedBottom(0);
                 bottomRef.current?.snapToItem(0);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                CustomHaptics("light");
               }}
               ref={topRef}
             />
@@ -132,7 +132,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
                 setSelectedBottom(index);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                CustomHaptics("light");
               }}
               ref={bottomRef}
             />

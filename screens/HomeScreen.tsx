@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Dimensions } from "react-native";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../utils/CustomHaptics";
 import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
@@ -19,7 +19,12 @@ import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import { useStores } from "../models/root-store-provider";
 import { PressableBase } from "../components/PressableBase";
-import moment from "moment";
+
+import {
+  greetingTextFromTime,
+  getDateText,
+  getMedicationDoseText,
+} from "../utils/NaturalTexts";
 
 interface appointmentTileProps {
   index: number;
@@ -37,49 +42,6 @@ type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
   StackScreenProps<RootStackParamList>
 >;
-
-const greetingTextFromTime = () => {
-  const now = new Date();
-  if (now.getHours() > 21 || now.getHours() < 5) {
-    return "Good night! 💤";
-  } else if (now.getHours() < 12) {
-    return "Good morning! 🌅";
-  } else if (now.getHours() < 18) {
-    return "Good afternoon! ☀️";
-  } else {
-    return "Good evening! 🌙";
-  }
-};
-
-const getDateText = (date: Date) => {
-  const now = new Date();
-  const momentNow = moment(now);
-  if (date.getDate() === now.getDate()) {
-    return `Today ${date.getHours()}:${date.getMinutes()}`;
-  } else if (date.getDate() === now.getDate() - 1) {
-    return `Yesterday ${date.getHours()}:${date.getMinutes()}`;
-  } else if (date.getDate() === now.getDate() + 1) {
-    return `Tomorrow ${date.getHours()}:${date.getMinutes()}`;
-  } else if (momentNow.isoWeek() === moment(date).isoWeek()) {
-    return moment(date).format("dddd");
-  } else if (momentNow.isoWeek() + 1 === moment(date).isoWeek()) {
-    return `Next ${moment(date).format("dddd")}`;
-  } else {
-    return moment(date).format("MMM Do");
-  }
-};
-
-const getMedicationDoseText = (medicationDose: string) => {
-  const split = medicationDose.split(" × ");
-  if (split.length === 1) {
-    return `${split[0]}`;
-  } else if (/\d/.test(split[1])) {
-    return medicationDose;
-  }
-  const firstNum = parseInt(split[0]);
-  const ifS = firstNum === 1 ? "" : "s";
-  return `${split[0]} ${split[1]}${ifS}`;
-};
 
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
@@ -176,7 +138,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              CustomHaptics("light");
             }}
           />
           <Text style={styles.name}>Exercise</Text>
@@ -193,7 +155,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              CustomHaptics("light");
             }}
           />
           <Text style={styles.name}>Appointment</Text>
@@ -210,7 +172,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              CustomHaptics("light");
             }}
           />
         </View>
