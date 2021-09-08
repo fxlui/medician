@@ -130,6 +130,7 @@ export default function RoutineDetailsScreen({
           useNativeDriver: false,
         }).start();
         setCurrentQuestion(2);
+        setInputFocused(false);
         break;
       case 2:
         Animated.timing(animatedOpacityQ3, {
@@ -142,6 +143,7 @@ export default function RoutineDetailsScreen({
           duration: 300,
           useNativeDriver: false,
         }).start();
+        setInputFocused(false);
         setCurrentQuestion(3);
         break;
       default:
@@ -197,6 +199,9 @@ export default function RoutineDetailsScreen({
       <OverviewSymptomTile
         title={item.title}
         index={index}
+        style={{
+          marginLeft: 5,
+        }}
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
@@ -370,7 +375,7 @@ export default function RoutineDetailsScreen({
                     alignItems: "flex-end",
                     overflow: "visible",
                   }}
-                  itemWidth={150}
+                  itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);

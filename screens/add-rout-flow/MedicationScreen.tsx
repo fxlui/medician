@@ -227,6 +227,9 @@ export default function RoutineDetailsScreen({
       <OverviewSymptomTile
         title={item.title}
         index={index}
+        style={{
+          marginLeft: 5,
+        }}
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
@@ -416,7 +419,7 @@ export default function RoutineDetailsScreen({
                     alignItems: "flex-end",
                     overflow: "visible",
                   }}
-                  itemWidth={150}
+                  itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);

@@ -26,7 +26,9 @@ import {
   getMedicationDoseText,
 } from "../utils/NaturalTexts";
 import { themeTextColor } from "../constants/Colors";
+
 import * as Notifications from "expo-notifications";
+import * as SecureStore from "expo-secure-store";
 
 interface appointmentTileProps {
   index: number;
@@ -98,12 +100,25 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
       (notification) => {
         const idNum = parseInt(`${notification.request.content.data.id}`);
         if (notification.request.content.data.id && !isNaN(idNum)) {
-          navigation.navigate("Notification", {
-            id: notification.request.content.data.id as string,
-            name: notification.request.content.data.name as string,
-            notes: notification.request.content.data.notes as string,
-            type: notification.request.content.data.type as HomeTileTypes,
-          });
+          const checkStatus = async () => {
+            const status = await SecureStore.getItemAsync("last_alert_id");
+            if (status === notification.request.content.data.id) {
+              // handled before
+              return;
+            } else {
+              await SecureStore.setItemAsync(
+                "last_alert_id",
+                `${notification.request.content.data.id}`
+              );
+              navigation.navigate("Notification", {
+                id: notification.request.content.data.id as string,
+                name: notification.request.content.data.name as string,
+                notes: notification.request.content.data.notes as string,
+                type: notification.request.content.data.type as HomeTileTypes,
+              });
+            }
+          };
+          checkStatus();
         }
       }
     );
