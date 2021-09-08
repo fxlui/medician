@@ -24,12 +24,12 @@ INSERT INTO routine
 
 export const insertRoutineAlert = `
 INSERT INTO alert
-(routineId, eventTime, time, systemId) values (?, ?, ?, ?)
+(routineId, eventTime, time) values (?, ?, ?)
 `;
 
 export const insertAppointmentAlert = `
 INSERT INTO alert
-(appointmentId, eventTime, time, systemId) values (?, ?, ?, ?)
+(appointmentId, eventTime, time) values (?, ?, ?)
 `;
 
 export const getAllCollecitons = `
@@ -53,6 +53,42 @@ export const getAppointmentsByCollection = `
 SELECT *
 FROM appointment
 WHERE appointment.collectionId = ?
+`;
+
+export const getAlertByID = `
+SELECT
+  alert.id,
+  alert.appointmentId,
+  alert.routineId,
+  alert.time,
+  alert.eventTime,
+  alert.completed
+FROM alert
+WHERE alert.id = ?
+`;
+
+export const getRoutineByID = `
+SELECT
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  routine.duration,
+  routime.sets,
+  routine.reps
+FROM routine
+WHERE routine.id = ?
+`;
+
+export const getAppointmentByID = `
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes
+FROM appointment
+WHERE appointment.id = ?
 `;
 
 // removed the time constraints on this
@@ -186,7 +222,6 @@ export const createAlertTable = `
     "time"	INTEGER NOT NULL,
     "eventTime"  INTEGER NOT NULL,
     "completed"	INTEGER NOT NULL DEFAULT 0,
-    "systemId"	TEXT,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
     FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

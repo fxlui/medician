@@ -23,12 +23,16 @@ import {
   getRecordsbyCollection,
   getRoutinesbyCollection,
   getFutureAppointments,
+  getAlertByID,
+  getAppointmentByID,
+  getRoutineByID,
 } from "./queries";
 import {
   SQLRoutineReturnType,
   SQLAppointmentsReturnType,
   SQLCollectionReturnType,
   FetchByCollectionResultType,
+  SQLAlertReturnType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -174,17 +178,19 @@ export async function addAppointment(
 export async function addAppointmentAlerts(
   appointmentID: number,
   actualTimes: number[],
-  alertTimes: number[],
-  systemIDs: string[]
+  alertTimes: number[]
 ) {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<number[]>((resolve, reject) => {
+    let res: number[] = [];
     db.transaction(
       (tx) => {
         actualTimes.forEach((time, index) => {
           tx.executeSql(
             insertAppointmentAlert,
-            [appointmentID, time, alertTimes[index], systemIDs[index]],
-            () => {},
+            [appointmentID, time, alertTimes[index]],
+            (_, success) => {
+              res.push(success.insertId);
+            },
             (_, error) => {
               console.log(error);
               reject(error);
@@ -209,7 +215,7 @@ export async function addAppointmentAlerts(
         });
       },
       (error) => reject(error),
-      () => resolve()
+      () => resolve(res)
     );
   });
 }
@@ -274,17 +280,19 @@ export async function addRoutine(
 export async function addRoutineAlert(
   routineID: number,
   actualTimes: number[],
-  alertTimes: number[],
-  systemIDs: string[]
+  alertTimes: number[]
 ) {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<number[]>((resolve, reject) => {
+    let res: number[] = [];
     db.transaction(
       (tx) => {
         actualTimes.forEach((time, index) => {
           tx.executeSql(
             insertRoutineAlert,
-            [routineID, time, alertTimes[index], systemIDs[index]],
-            () => {},
+            [routineID, time, alertTimes[index]],
+            (_, success) => {
+              res.push(success.insertId);
+            },
             (_, error) => {
               console.log(error);
               reject();
@@ -306,7 +314,46 @@ export async function addRoutineAlert(
         });
       },
       (error) => reject(error),
-      () => resolve()
+      () => resolve(res)
+    );
+  });
+}
+
+export async function fetchAlert(id: number) {
+  return new Promise<SQLAlertReturnType>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(getAlertByID, [id], (_, { rows }) =>
+          resolve(rows._array[0] as SQLAlertReturnType)
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function fetchAppointment(id: number) {
+  return new Promise<SQLAppointmentsReturnType>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(getAppointmentByID, [id], (_, { rows }) =>
+          resolve(rows._array[0] as SQLAppointmentsReturnType)
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function fetchRoutine(id: number) {
+  return new Promise<SQLRoutineReturnType>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(getRoutineByID, [id], (_, { rows }) =>
+          resolve(rows._array[0] as SQLRoutineReturnType)
+        );
+      },
+      (error) => reject(error)
     );
   });
 }

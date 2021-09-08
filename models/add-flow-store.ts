@@ -108,11 +108,21 @@ export const AddFlowStoreModel = types
         );
         console.log("insertedAppointmentID", addAppointment);
 
+        const alertIDs = await addAppointmentAlerts(
+          insertedAppointmentID,
+          self.currentNewAppointment.getSortedTimes(),
+          self.currentNewAppointment.alert
+        );
+        console.log(alertIDs);
+
         // Registering notifications
         // title: `Appointment for ${self.currentNewAppointment.symptomType}: ${self.currentNewAppointment.doctor}`,
         const notificationPromises = self.currentNewAppointment
           .getSortedTimes()
           .map(async (timestamp, index) => {
+            if (timestamp === -1) {
+              return;
+            }
             return Notifications.scheduleNotificationAsync({
               content: {
                 title: `Appointment with ${self.currentNewAppointment.doctor}`,
@@ -121,20 +131,14 @@ export const AddFlowStoreModel = types
                   self.currentNewAppointment.notes.substring(0, 97) +
                   (self.currentNewAppointment.notes.length > 97 ? "..." : ""),
                 sound: true,
+                badge: 1,
+                data: { id: alertIDs[index] },
               },
               trigger: new Date(self.currentNewAppointment.alert[index]),
             });
           });
 
-        const notificationIds = await Promise.all(notificationPromises);
-        console.log(notificationIds);
-
-        await addAppointmentAlerts(
-          insertedAppointmentID,
-          self.currentNewAppointment.getSortedTimes(),
-          self.currentNewAppointment.alert,
-          notificationIds
-        );
+        await Promise.all(notificationPromises);
       } catch (error) {
         console.warn(error);
       }
@@ -156,34 +160,42 @@ export const AddFlowStoreModel = types
         );
         console.log("insertedRoutineIDs", insertedRoutineID);
 
+        const alertIDs = await addRoutineAlert(
+          insertedRoutineID,
+          self.currentNewRoutine.getSortedTimes(),
+          self.currentNewRoutine.alert
+        );
+
         // Registering notifications
         const notificationPromises = self.currentNewRoutine
           .getSortedTimes()
           .map(async (timestamp, index) => {
+            if (timestamp === -1) {
+              return;
+            }
             return Notifications.scheduleNotificationAsync({
               content: {
                 title: `${
                   self.currentNewRoutine.type === 0 ? "Medication" : "Exercise"
                 }: ${self.currentNewRoutine.title}`,
-                subtitle: moment(timestamp).format("lll"),
+                subtitle:
+                  self.currentNewRoutine.type === 0
+                    ? self.currentNewRoutine.notes
+                    : moment(timestamp).format("lll"),
                 body:
-                  self.currentNewRoutine.notes.substring(0, 97) +
-                  (self.currentNewRoutine.notes.length > 97 ? "..." : ""),
+                  self.currentNewRoutine.type === 0
+                    ? moment(timestamp).format("lll")
+                    : self.currentNewRoutine.notes.substring(0, 97) +
+                      (self.currentNewRoutine.notes.length > 97 ? "..." : ""),
                 sound: true,
+                badge: 1,
+                data: { id: alertIDs[index] },
               },
               trigger: new Date(self.currentNewRoutine.alert[index]),
             });
           });
 
-        const notificationIds = await Promise.all(notificationPromises);
-        console.log(notificationIds);
-
-        await addRoutineAlert(
-          insertedRoutineID,
-          self.currentNewRoutine.getSortedTimes(),
-          self.currentNewRoutine.alert,
-          notificationIds
-        );
+        await Promise.all(notificationPromises);
       } catch (error) {
         console.warn(error);
       }

@@ -26,6 +26,7 @@ import {
   getMedicationDoseText,
 } from "../utils/NaturalTexts";
 import { themeTextColor } from "../constants/Colors";
+import * as Notifications from "expo-notifications";
 
 interface appointmentTileProps {
   index: number;
@@ -46,11 +47,71 @@ type ScreenProps = CompositeScreenProps<
 
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
-  const { homeScreenStore } = useStores();
+  const { homeScreenStore, alert } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
+
+  /* set up notification listener
+  React.useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: (notification) => {
+        const idNum = parseInt(`${notification.request.content.data.id}`);
+        console.log(`hihihi ${notification.request.content.data.id}`);
+        console.log(`hihi2 ${idNum}`);
+        console.log(
+          `hihi3 ${notification.request.content.data.id && !isNaN(idNum)}`
+        );
+        if (notification.request.content.data.id && !isNaN(idNum)) {
+          console.log("HIII I handled " + idNum);
+          alert.setAlertWithID(idNum);
+        }
+
+        return new Promise((resolve) =>
+          resolve({
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+          })
+        );
+      },
+      handleSuccess: () => {},
+      handleError: (error) => {
+        console.log(error);
+      },
+    });
+  }, []);
+  */
+
+  React.useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async (notification) => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        const idNum = parseInt(`${notification.request.content.data.id}`);
+        console.log(`hihihi ${notification.request.content.data.id}`);
+        console.log(`hihi2 ${idNum}`);
+        console.log(
+          `hihi3 ${notification.request.content.data.id && !isNaN(idNum)}`
+        );
+        if (notification.request.content.data.id && !isNaN(idNum)) {
+          console.log("HIII I handled " + idNum);
+          alert.setAlertWithID(idNum);
+          navigation.navigate("Notification");
+        }
+      }
+    );
+    return () => subscription.remove();
+  }, []);
 
   const renderRoutineTile = ({ item, index }: routineTileProps) => {
     return (

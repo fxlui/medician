@@ -8,29 +8,33 @@ import {
 } from "mobx-state-tree";
 import { SavedRoutineModel } from "./routine";
 import { fetchAllCollections, fetchCollectionData } from "../database/dbAPI";
-import { SQLCollectionReturnType, FetchByCollectionResultType } from "../database/db.types";
+import {
+  SQLCollectionReturnType,
+  FetchByCollectionResultType,
+} from "../database/db.types";
 import { SavedAppointmentModel } from "./appointment";
 
-const SimpleRecordModel = types
-  .model("SimpleRecordModel", {
-    id: types.identifierNumber,
-    area: types.string,
-    subArea: types.string
-  });
+const SimpleRecordModel = types.model("SimpleRecordModel", {
+  id: types.identifierNumber,
+  area: types.string,
+  subArea: types.string,
+});
 
 export const OverviewStoreModel = types
   .model("OverviewStore", {
-    collections: types.array(types.model({
-      id: types.identifierNumber,
-      type: types.string
-    })),
+    collections: types.array(
+      types.model({
+        id: types.identifierNumber,
+        type: types.string,
+      })
+    ),
     currentCollectionRecords: types.array(SimpleRecordModel),
     currentCollectionRoutines: types.array(SavedRoutineModel),
-    currentCollectionAppointments: types.array(SavedAppointmentModel)
+    currentCollectionAppointments: types.array(SavedAppointmentModel),
   })
-  .views(self => ({
+  .views((self) => ({
     getCollectionTypesSnapshot: () => {
-      return [...getSnapshot(self.collections)].map(item => item.type);
+      return [...getSnapshot(self.collections)].map((item) => item.type);
     },
     getCurrentRecordsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRecords)];
@@ -40,56 +44,58 @@ export const OverviewStoreModel = types
     },
     getCurrentAppointmentsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionAppointments)];
-    }
+    },
   }))
-  .actions(self => ({
+  .actions((self) => ({
     checkCurrentData: () => {
       console.log(self.getCurrentRecordsSnapshot());
       console.log(self.getCurrentRoutinesSnapshot());
       console.log(self.getCurrentAppointmentsSnapshot());
-    }
+    },
   }))
   // Asynchronous actions
-  .actions(self => {
-    const fetchAllCollectionsAsync = flow(function*() {
+  .actions((self) => {
+    const fetchAllCollectionsAsync = flow(function* () {
       try {
         const result: SQLCollectionReturnType[] = yield fetchAllCollections();
         self.collections = cast(
-          result.map(item => ({ id: item.id, type: item.type }))
+          result.map((item) => ({ id: item.id, type: item.type }))
         );
       } catch (error) {
         console.warn(error);
       }
     });
 
-    const fetchCollectionDataAsync = flow(function*(symptomType: string) {
-      const id = self.collections.find(item => item.type === symptomType)?.id;
+    const fetchCollectionDataAsync = flow(function* (symptomType: string) {
+      const id = self.collections.find((item) => item.type === symptomType)?.id;
       if (id) {
         try {
-          const result: FetchByCollectionResultType = yield fetchCollectionData(id);
+          const result: FetchByCollectionResultType = yield fetchCollectionData(
+            id
+          );
           self.currentCollectionRecords = cast(result.records);
           self.currentCollectionRoutines = cast(
-            result.routines.map(
-              item => SavedRoutineModel.create({
+            result.routines.map((item) =>
+              SavedRoutineModel.create({
                 id: item.id,
                 collectionId: item.collectionId,
                 title: item.title,
-                complete: item.complete,
+                complete: item.completed,
                 notes: item.notes,
-                time: new Date(item.time),
-                type: item.type
+                time: new Date(item.eventTime),
+                type: item.type,
               })
             )
           );
           self.currentCollectionAppointments = cast(
-            result.appointments.map(
-              item => SavedAppointmentModel.create({
+            result.appointments.map((item) =>
+              SavedAppointmentModel.create({
                 id: item.id,
                 collectionId: item.collectionId,
-                time: new Date(item.time),
+                time: new Date(item.eventTime),
                 doctor: item.doctor,
-                complete: item.complete,
-                notes: item.notes
+                complete: item.completed,
+                notes: item.notes,
               })
             )
           );
@@ -105,6 +111,6 @@ export const OverviewStoreModel = types
   });
 
 type SimpleRecordType = Instance<typeof SimpleRecordModel>;
-export interface SimpleRecord extends SimpleRecordType {};
+export interface SimpleRecord extends SimpleRecordType {}
 type SimpleRecordSnapshotType = SnapshotOut<typeof SimpleRecordModel>;
-export interface SimpleRecordSnapshot extends SimpleRecordSnapshotType {};
+export interface SimpleRecordSnapshot extends SimpleRecordSnapshotType {}

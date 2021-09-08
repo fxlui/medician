@@ -3,12 +3,14 @@ import { NavigatorScreenParams } from "@react-navigation/core";
 export type RootStackParamList = {
   Root: undefined;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
-  Notification: {
-    id: string;
-    name: string;
-    notes: string;
-    type: HomeTileTypes;
-  };
+  Notification:
+    | {
+        id: string;
+        name: string;
+        notes: string;
+        type: HomeTileTypes;
+      }
+    | undefined;
   ActionScreen: undefined;
   NotFound: undefined;
   Settings: undefined;

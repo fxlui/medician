@@ -7,6 +7,7 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
+
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
 import { RootStackParamList } from "../types";
@@ -47,6 +48,7 @@ function RootNavigator() {
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
       <RootStack.Screen name="Root" component={BottomTabNavigator} />

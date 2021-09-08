@@ -7,6 +7,15 @@ export interface SQLAppointmentsReturnType {
   eventTime: number;
 }
 
+export interface SQLAlertReturnType {
+  id: number;
+  appointmentId: number;
+  routineId: number;
+  time: number;
+  eventTime: number;
+  completed: number;
+}
+
 export interface SQLCollectionReturnType {
   id: number;
   date: number;
