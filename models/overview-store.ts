@@ -6,7 +6,6 @@ import {
   Instance,
   SnapshotOut,
 } from "mobx-state-tree";
-import { SavedRecordModel } from "./record";
 import { SavedRoutineModel } from "./routine";
 import { fetchAllCollections, fetchCollectionData } from "../database/dbAPI";
 import { SQLCollectionReturnType, FetchByCollectionResultType } from "../database/db.types";
@@ -42,6 +41,9 @@ export const OverviewStoreModel = types
     },
     getCurrentAppointmentsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionAppointments)];
+    },
+    getCurrentSelectedCollection: () => {
+      return [...getSnapshot(self.collections)].find(item => item.id === self.selectedCollectionId)
     }
   }))
   .actions(self => ({
@@ -83,9 +85,9 @@ export const OverviewStoreModel = types
                 id: item.id,
                 collectionId: item.collectionId,
                 title: item.title,
-                complete: item.complete,
+                complete: item.completed,
                 notes: item.notes,
-                time: new Date(item.time),
+                time: new Date(item.eventTime),
                 type: item.type
               })
             )
@@ -95,9 +97,9 @@ export const OverviewStoreModel = types
               item => SavedAppointmentModel.create({
                 id: item.id,
                 collectionId: item.collectionId,
-                time: new Date(item.time),
+                time: new Date(item.eventTime),
                 doctor: item.doctor,
-                complete: item.complete,
+                complete: item.completed,
                 notes: item.notes
               })
             )

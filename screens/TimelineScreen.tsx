@@ -1,42 +1,55 @@
-import React, { useState } from "react";
-import { StyleSheet, Dimensions, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Alert } from "react-native";
 import { Text, View } from "../components/Themed";
-import SafeView from "../components/SafeView";
-import { CompositeScreenProps } from "@react-navigation/core";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
-import { HomeTileTypes } from "../types";
-import { BottomTabParamList, RootStackParamList } from "../types";
-
-import HomeTile from "../components/HomeTile";
-import { TopTile } from "../components/AreaTile";
-import OverviewSymptomTile from "../components/OverviewSymptomTile";
+import { RootStackParamList } from "../types";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
-import * as Haptics from "expo-haptics";
-import Carousel from "react-native-snap-carousel";
 import Timeline from "react-native-timeline-flatlist";
 import { observer } from "mobx-react-lite";
-import { useStores } from "../models/root-store-provider";
 import useColorScheme from "../hooks/useColorScheme";
 import TileBase, { TileSize } from "../components/TileBase";
 import moment from "moment";
+import { useStores } from "../models/root-store-provider";
+import { SavedRecordSnapshot } from "../models/record";
 import { themeTextColor, themeTileColor } from "../constants/Colors";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Timeline">;
 
-const timelineData1 = [
-  {
-    time: `${moment().format("MMM D")}\n${moment().format("HH:mm")}`,
-    emoji: "🙃",
-    title: "Unbearable",
-    description: "Head",
-  },
-  { time: "1 SEP\n10:45", emoji: "🙃", title: "Mild", description: "Chest" },
-  { time: "1 SEP\n12:00", emoji: "🙃", title: "Numb", description: "Hand" },
-  { time: "1 SEP\n14:00", emoji: "🙃", title: "Tingling", description: "Arm" },
-  { time: "1 SEP\n16:30", emoji: "🙃", title: "Hi", description: "Back" },
-];
+interface timelineItemType {
+  id: number;
+  time: Date;
+  emoji: string;
+  severity: string;
+}
+
+const getDiscomfortEmoji = (severity: number) => {
+  if (severity < 4) {
+    return "😐";
+  } else if (severity < 7) {
+    return "😕";
+  } else if (severity < 10) {
+    return "😖";
+  } else {
+    return "😡";
+  }
+};
+
+const getDiscomfortText = (severity: number) => {
+  if (severity < 4) {
+    return "Minor discomfort";
+  } else if (severity < 7) {
+    return "Moderate discomfort";
+  } else if (severity < 10) {
+    return "Severe discomfort";
+  } else {
+    return "Unbearable";
+  }
+}
+
+const getTimeString = (timestamp: number) => {
+  return `${moment(timestamp).format("MMM D")}\n${moment().format("HH:mm")}`;
+}
 
 const TimelineScreen = ({ navigation, route }: ScreenProps) => {
   /*
@@ -45,6 +58,22 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
       headerTitle: route.params.area,
     });
   }, []);*/
+  const { editFlowStore } = useStores();
+  const [timelineRecords, setTimelineRecords] = useState<SavedRecordSnapshot[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus",
+      async () => {
+        console.log("TimelineScreen: ", route.params.collectionId, route.params.area);
+        await editFlowStore.fetchTimelineRecordsAsync(
+          route.params.collectionId, route.params.area
+        );
+        const records = editFlowStore.getTimelineRecordsSnapshot();
+        setTimelineRecords(records);
+      }
+    );
+    return unsubscribe;
+  }, []);
 
   const colorScheme = useColorScheme();
   const lineColor = colorScheme === "light" ? "#E9E9E9" : "#333";
@@ -55,11 +84,7 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
 
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const renderTimelineTile = (item: {
-    emoji: string;
-    title: string;
-    description: string;
-  }) => {
+  const renderTimelineTile = (item: timelineItemType) => {
     return (
       <TileBase
         size={TileSize.Long}
@@ -142,7 +167,7 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
               color: textColor,
             }}
           >
-            {item.title}
+            {item.severity}
           </Text>
         </View>
       </TileBase>
@@ -168,7 +193,14 @@ const TimelineScreen = ({ navigation, route }: ScreenProps) => {
   return (
     <Timeline
       style={styles.list}
-      data={timelineData1}
+      data={timelineRecords.map(
+        item => ({
+          id: item.id,
+          time: getTimeString(item.time),
+          emoji: getDiscomfortEmoji(item.severity),
+          severity: getDiscomfortText(item.severity)
+        })
+      )}
       separator={false}
       circleSize={15}
       circleColor={lineColor}

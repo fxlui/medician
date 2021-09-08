@@ -91,7 +91,7 @@ export const RecordModel = types
     .model("SavedRecordModel", {
       id: types.identifierNumber,
       collectionId: types.integer,
-      time: types.optional(types.array(types.Date), []),
+      time: types.Date,
       severity: types.optional(types.integer, 0),
       area: types.optional(types.string, "other"),
       subArea: types.optional(types.string, "other"),

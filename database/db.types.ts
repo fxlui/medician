@@ -33,3 +33,23 @@ export interface FetchByCollectionResultType {
   routines: SQLRoutineReturnType[];
   appointments: SQLAppointmentsReturnType[];
 }
+
+export interface SQLRecordReturnType {
+  id: number;
+  collectionId: number;
+  area: string;
+  subArea: string;
+  severity: number;
+  better: string;
+  worse: "",
+  related: string;
+  attempt: string;
+  description: string;
+  colour: number;
+  dizzy: number;
+  sleep: number;
+  temperature: number;
+  time: number;
+  toiletPain: number;
+  toiletType: number;
+}
