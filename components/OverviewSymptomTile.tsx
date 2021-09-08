@@ -64,7 +64,7 @@ const OverviewSymptomTile: React.FC<topTileDetails> = ({
           props={{
             width: 42,
             height: 42,
-            fill: selected ? "#fff" : textColor,
+            animatedValue: animatedTextColor,
           }}
         />
         <Animated.Text
