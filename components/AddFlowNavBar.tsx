@@ -15,12 +15,14 @@ const AddFlowNavBar: React.FC<{
   last?: boolean;
   preventLeftDefault?: boolean;
   preventRightDefault?: boolean;
+  preventRightHaptics?: boolean;
 }> = ({
   left,
   right,
   last = false,
   preventLeftDefault = false,
   preventRightDefault = false,
+  preventRightHaptics = false,
 }) => {
   const funcWithHaptics = (func: () => void) => {
     CustomHaptics("light");
@@ -99,7 +101,11 @@ const AddFlowNavBar: React.FC<{
               if (!preventRightDefault) {
                 addFlowStore.goForward();
               }
-              funcWithHaptics(right);
+              if (preventRightHaptics) {
+                right();
+              } else {
+                funcWithHaptics(right);
+              }
             }}
           >
             {last ? (
