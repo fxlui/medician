@@ -36,7 +36,7 @@ export const getRecentAppointments = `
 SELECT *
 FROM appointment
 WHERE appointment.time <= ?
-AND routine.complete = 0
+AND appointment.complete = 0
 `;
 
 export const getRecentRoutines = `

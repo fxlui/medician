@@ -172,7 +172,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
         <View style={styles.section}>
           <Text style={styles.header}>About</Text>
           <TouchableOpacity
-            onPress={() => Linking.openURL("mailto://hi@logicpop.com.au")}
+            onPress={() => Linking.openURL("mailto://support@logicpop.com.au")}
           >
             <View
               style={[
@@ -189,7 +189,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              WebBrowser.openBrowserAsync("https://logicpop.com.au")
+              WebBrowser.openBrowserAsync("https://logicpop.com.au/privacy")
             }
           >
             <View
