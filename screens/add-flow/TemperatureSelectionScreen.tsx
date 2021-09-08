@@ -18,7 +18,7 @@ type ScreenProps = CompositeScreenProps<
 const TemperatureSelectionScreen = ({ navigation, route }: ScreenProps) => {
   const defaultSelection = route.params.method === "add" ? null : true; // TODO get from store
   const [measured, setMeasured] = useState<boolean | null>(defaultSelection);
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -55,14 +55,14 @@ const TemperatureSelectionScreen = ({ navigation, route }: ScreenProps) => {
             Alert.alert("No Selection", "You need to select an option first.");
           } else if (measured === true) {
             if (route.params.method === "add") {
-              addFlowStore.goForward();
+              progressStore.goForward();
             } else {
               // TODO handle edit
             }
             navigation.navigate("TemperatureScreen", route.params);
           } else {
             if (route.params.method === "add") {
-              addFlowStore.goForward();
+              progressStore.goForward();
             } else {
               // TODO handle edit
             }

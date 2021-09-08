@@ -51,7 +51,7 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [editingDate, setEditingDate] = React.useState<Date>();
 
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -76,7 +76,7 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
   };
 
   const handleNavigation = () => {
-    addFlowStore.goForward();
+    progressStore.goForward();
     addFlowStore.currentNewAppointment.setAppointmentTime(
       selection.map((item) => item.date)
     );

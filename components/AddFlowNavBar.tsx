@@ -29,7 +29,7 @@ const AddFlowNavBar: React.FC<{
     func();
   };
   const colorScheme = useColorScheme();
-  const { addFlowStore } = useStores();
+  const { progressStore } = useStores();
 
   return (
     <>
@@ -77,7 +77,7 @@ const AddFlowNavBar: React.FC<{
             }}
             onPress={() => {
               if (!preventLeftDefault) {
-                addFlowStore.goBack();
+                progressStore.goBack();
               }
               funcWithHaptics(left);
             }}
@@ -99,7 +99,7 @@ const AddFlowNavBar: React.FC<{
             }}
             onPress={() => {
               if (!preventRightDefault) {
-                addFlowStore.goForward();
+                progressStore.goForward();
               }
               if (preventRightHaptics) {
                 right();

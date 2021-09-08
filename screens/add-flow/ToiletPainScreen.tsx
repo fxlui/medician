@@ -14,7 +14,7 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletPainScreen">;
 const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
   const defaultSelection = route.params.method === "add" ? null : true; // TODO read from store
   const [pain, setPain] = useState<boolean | null>(defaultSelection);
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -50,7 +50,7 @@ const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
           } else {
             if (route.params.method === "add") {
               addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
-              addFlowStore.goForward();
+              progressStore.goForward();
             } else {
               // TODO handle edit
             }

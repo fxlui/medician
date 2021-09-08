@@ -16,7 +16,7 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 type screenType = [keyof AddFlowParamList, number];
 
 export default function SymptomsScreen({ navigation, route }: ScreenProps) {
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
 
   const [selectedId, setSelectedId] = useState(
@@ -84,10 +84,10 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
         }}
         right={() => {
           const [screenName, progressLength] = useScreenDirect();
-          addFlowStore.resetProgress();
+          progressStore.resetProgress();
           addFlowStore.resetAddFlow();
           addFlowStore.currentNewRecord.setRecordType(selectedName);
-          addFlowStore.setProgressBarLength(progressLength);
+          progressStore.setProgressBarLength(progressLength);
           navigation.navigate(screenName, { method: "add" });
         }}
       />

@@ -18,7 +18,7 @@ const ToiletScreen = ({ navigation, route }: ScreenProps) => {
   const [pee, setPee] = useState<boolean | null>(defaultPee);
   const [poo, setPoo] = useState<boolean | null>(defaultPoo);
 
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -61,7 +61,7 @@ const ToiletScreen = ({ navigation, route }: ScreenProps) => {
               addFlowStore.currentNewRecord.setRecordToiletType(
                 pee ? 0 : poo ? 1 : -1
               );
-              addFlowStore.goForward();
+              progressStore.goForward();
             } else {
               // TODO handle edit
             }

@@ -53,7 +53,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
   });
 
   const inputRef = React.useRef<TextInput>(null);
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -135,7 +135,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
         currentAnswers.related,
         currentAnswers.attempt
       );
-      addFlowStore.goForward();
+      progressStore.goForward();
       navigation.navigate("MediaScreen", route.params);
     } else {
       nextQuestion();
@@ -161,7 +161,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
           {
             text: "Yes",
             onPress: () => {
-              addFlowStore.goBack();
+              progressStore.goBack();
               navigation.pop();
             },
           },
@@ -169,7 +169,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
         { cancelable: false }
       );
     } else {
-      addFlowStore.goBack();
+      progressStore.goBack();
       navigation.pop();
     }
   };

@@ -42,7 +42,7 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
 export default function TimeSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   React.useEffect(() => {
     const now = new Date();
@@ -245,7 +245,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         right={
           selection.length > 0
             ? () => {
-                addFlowStore.goForward();
+                progressStore.goForward();
                 addFlowStore.currentNewRecord.setRecordTime(
                   selection.map((item) => item.date)
                 );

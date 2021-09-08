@@ -18,7 +18,7 @@ type ScreenProps = CompositeScreenProps<
 const DizzyScreen = ({ navigation, route }: ScreenProps) => {
   const defaultDizzyState = route.params.method === "add" ? null : false; // TODO read from store
   const [value, setValue] = useState<boolean | null>(defaultDizzyState);
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -55,7 +55,7 @@ const DizzyScreen = ({ navigation, route }: ScreenProps) => {
             Alert.alert("No Selection", "You need to select an option first.");
           } else {
             if (route.params.method === "add") {
-              addFlowStore.goForward();
+              progressStore.goForward();
               addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
             } else {
               // TODO handle edit

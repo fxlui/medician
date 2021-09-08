@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions, Alert, ScrollView } from "react-native";
+import { StyleSheet, Alert, ScrollView } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
-import { CompositeScreenProps } from "@react-navigation/core";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
-import { HomeTileTypes } from "../types";
-import { BottomTabParamList, RootStackParamList } from "../types";
+import { RootStackParamList, AddFlowParamList } from "../types";
 
 import { observer } from "mobx-react-lite";
 import { useStores } from "../models/root-store-provider";
 import useColorScheme from "../hooks/useColorScheme";
-import TileBase, { TileSize } from "../components/TileBase";
 import moment from "moment";
 import uniqueSymptoms from "../assets/uniqueSymptoms.json";
 import { PressableBase } from "../components/PressableBase";
@@ -23,22 +19,67 @@ import {
 } from "../constants/Colors";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "TimelineDetails">;
+
+type addFlowScreenType = [keyof AddFlowParamList, number];
+
+
 const symptomArr = uniqueSymptoms;
+
 const TimelineDetailsScreen = observer(
   ({ navigation, route }: ScreenProps) => {
     const colorScheme = useColorScheme();
-    const lineColor = colorScheme === "light" ? "#E9E9E9" : "#333";
     const textColor =
-      colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
-    const tileColor =
-      colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
     const borderColor =
-      colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
-  
-    const entryID = route.params.id;
-  
+    colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
+    
     const { editFlowStore : {currentSymptomType, currentEditingRecord } } = useStores();
-  
+    
+    function useEditDirect(symptomType: string): addFlowScreenType {
+      console.log(symptomType)
+      switch (symptomType) {
+        case "pain":
+        case "itchy":
+          navigation.navigate("AddFlow", {
+            screen: "SeverityScreen",
+            params: { method: "edit" }
+          });   // also set progress bar length
+          return ["SeverityScreen", 2];
+        case "hot":
+        case "cold":
+          navigation.navigate("AddFlow", {
+            screen: "TemperatureSelectionScreen",
+            params: { method: "edit" }
+          });
+          return ["TemperatureSelectionScreen", 3];
+        case "toilet":
+          navigation.navigate("AddFlow", {
+            screen: "ToiletScreen",
+            params: { method: "edit" }
+          });
+          return ["ToiletScreen", 3];
+        case "dizzy":
+        case "walk":
+          navigation.navigate("AddFlow", {
+            screen: "DizzyScreen",
+            params: { method: "edit" }
+          });
+          return ["DizzyScreen", 2];
+        case "sleep":
+          navigation.navigate("AddFlow", {
+            screen: "SleepHoursScreen",
+            params: { method: "edit" }
+          });
+          return ["SleepHoursScreen", 3];
+        default:
+          navigation.navigate("AddFlow", {
+            screen: "CustomScreen",
+            params: { method: "edit" }
+          });
+          return ["CustomScreen", 3];
+      }
+    }
+
     const sectionStyle = StyleSheet.create({
       section: {
         marginTop: 10,
@@ -55,6 +96,7 @@ const TimelineDetailsScreen = observer(
             extraProps={{ style: { padding: 5 } }}
             onPress={() => {
               // navigate to edit
+              useEditDirect(currentSymptomType);
               console.log(route.params.id);
             }}
           >

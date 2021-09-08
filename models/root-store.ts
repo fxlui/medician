@@ -3,6 +3,7 @@ import { HomeScreenStoreModel } from "./home-screen-store";
 import { AddFlowStoreModel } from "./add-flow-store";
 import { OverviewStoreModel } from "./overview-store";
 import { EditFlowStoreModel } from "./edit-flow-store";
+import { ProgressStoreModel } from "./progress-store";
 import { UserModel } from "./user";
 
 /**
@@ -15,6 +16,7 @@ export const RootStoreModel = types.model("RootStore", {
   addFlowStore: types.optional(AddFlowStoreModel, {}),
   overviewStore: types.optional(OverviewStoreModel, {}),
   editFlowStore: types.optional(EditFlowStoreModel, {}),
+  progressStore: types.optional(ProgressStoreModel, {})
 });
 
 /**
