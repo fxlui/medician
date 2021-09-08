@@ -12,11 +12,24 @@ import { SavedRecordModel } from "./record";
 
 export const EditFlowStoreModel = types
   .model("EditFlowStore", {
-    timelineRecords: types.array(SavedRecordModel)
+    timelineRecords: types.array(SavedRecordModel),
+    currentSymptomType: types.optional(types.string, ""),
+    currentEditingRecord: types.maybe(SavedRecordModel)
   })
   .views(self => ({
     getTimelineRecordsSnapshot: () => {
       return getSnapshot(self.timelineRecords);
+    }
+  }))
+  .actions(self => ({
+    setCurrentEditingRecord: (recordId: number, symptomType: string) => {
+      self.currentSymptomType = symptomType;
+      const record = self.timelineRecords.find(item => item.id === recordId);
+      if (record) {
+        self.currentEditingRecord = cast(getSnapshot(record));
+      } else {
+        console.error("Error setCurrentEditingRecord, recordId not found");
+      }
     }
   }))
   .actions(self => {

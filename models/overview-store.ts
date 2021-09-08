@@ -64,7 +64,7 @@ export const OverviewStoreModel = types
         self.collections = cast(
           result.map(item => ({ id: item.id, type: item.type }))
         );
-        if (!self.selectedCollectionId) {
+        if (!self.selectedCollectionId && self.collections.length != 0) {
           self.selectedCollectionId = self.collections[0].id;
         }
       } catch (error) {
