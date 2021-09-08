@@ -1,61 +1,98 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
-import { TutorialParamList } from "../../types";
+import { TutorialParamList, RootStackParamList } from "../../types";
 import SafeView from "../../components/SafeView";
-import { TopTile, BottomTile } from "../../components/AreaTile";
-import AddFlowNavBar from "../../components/AddFlowNavBar";
+import TutorialNavBar from "../../components/TutorialNavBar";
+import TileBase from "../../components/TileBase";
+import useColorScheme from "../../hooks/useColorScheme";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import CustomHaptics from "../../utils/CustomHaptics";
+import { CompositeScreenProps } from "@react-navigation/core";
 
-type ScreenProps = StackScreenProps<TutorialParamList, "WelcomeTut">;
+type ScreenProps = CompositeScreenProps<
+  StackScreenProps<TutorialParamList, "HomeTut">,
+  StackScreenProps<RootStackParamList>
+>;
 
 const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
+  const colorScheme = useColorScheme();
+  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+
 
   return (
-    <SafeView style={styles.container} disableTop>
-      <View>
-        <Text style={styles.greeting}>Where is the area affected?</Text>
-        <View style={styles.child}>
-          <View style={{}}>
-            <Text>Hello</Text>
+    <SafeView disableBottom>
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <Text style={styles.greeting}>
+              Hello.{"\n"}
+              Welcome to Medician.{"\n"}
+            </Text>
+            <Text style={styles.greeting}>
+              Let's get you familiar{"\n"}
+              with the app.{"\n"}
+            </Text>
           </View>
-        </View>
+
+          <View style={{
+            alignItems: "center"
+          }}>
+
+            <TileBase
+              gradient={[tileColor, tileColor]}
+              style={{
+                marginTop: 40,
+                width: 150,
+                height: 80,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                navigation.navigate("HomeScreen");
+                CustomHaptics("light");
+              }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "500"}}>
+                Skip Tutorial
+              </Text>
+            </TileBase>
+        
+         </View>
+        </ScrollView>
       </View>
-      <AddFlowNavBar
-        left={() => navigation.pop()}
+      <TutorialNavBar
+        left={() => {
+          navigation.pop();
+        }}
         right={() => {
-          
-          // navigation.navigate("SeverityScreen", { method: "add" });
+          navigation.navigate("HomeTut");
         }}
       />
     </SafeView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     flex: 1,
   },
-  child: {
-    flex: 10,
-    justifyContent: "center",
-    alignItems: "center",
+  header: {
+    flex: 1,
+    marginLeft: 30,
+    flexDirection: "column",
+    justifyContent: "center"
   },
   greeting: {
-    flex: 1,
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 15,
-    paddingLeft: 30,
   },
   list: {
-    margin: 0,
-    padding: 0,
     overflow: "visible",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingLeft: 40,
   },
 });
-
 export default WelcomeTut;

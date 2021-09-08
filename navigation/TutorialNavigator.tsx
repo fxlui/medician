@@ -31,6 +31,36 @@ const TutorialStackNavigator = () => {
         component={WelcomeTut}
         options={{ headerShown: false }}
       />
+      <TutorialStack.Screen
+        name="HomeTut"
+        component={HomeTut}
+        options={{ headerShown: false }}
+      />
+      <TutorialStack.Screen
+        name="ActionTut"
+        component={ActionTut}
+        options={{ headerShown: false }}
+      />
+      <TutorialStack.Screen
+        name="SymptomTut"
+        component={SymptomTut}
+        options={{ headerShown: false }}
+      />
+      <TutorialStack.Screen
+        name="RoutineTut"
+        component={RoutineTut}
+        options={{ headerShown: false }}
+      />
+      <TutorialStack.Screen
+        name="OverviewTut"
+        component={OverviewTut}
+        options={{ headerShown: false }}
+      />
+      <TutorialStack.Screen
+        name="EndingTut"
+        component={EndingTut}
+        options={{ headerShown: false }}
+      />
     </TutorialStack.Navigator>
   );
 };
