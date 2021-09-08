@@ -76,10 +76,7 @@ const NotificationScreen = ({
         </PressableBase>
       </View>
       <View style={styles.centerView}>
-        <Icon
-          name={iconType}
-          props={{ fill: "#fff", width: 100, height: 100 }}
-        />
+        <Icon name={iconType} props={{ fill: "#fff", width: 80, height: 80 }} />
         <Text style={[styles.name]}>{name}</Text>
         <Text style={[styles.notes]}>{notes}</Text>
       </View>
@@ -106,7 +103,7 @@ const NotificationScreen = ({
         </View>
         <PressableBase
           onPress={() => navigation.pop()}
-          extraProps={{ style: { alignSelf: "center" } }}
+          extraProps={{ style: { alignSelf: "center", paddingBottom: 20 } }}
         >
           <Entypo name="chevron-down" size={35} color="#fff" />
         </PressableBase>

@@ -23,6 +23,8 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
+import Toast from "react-native-root-toast";
+import TickToast from "../../components/TickToast";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "RoutineTimeScreen">,
@@ -212,9 +214,21 @@ export default function RoutineTimeScreen({ navigation }: ScreenProps) {
           selection.length > 0
             ? async () => {
                 addFlowStore.currentNewRoutine.setRoutineTimeAndAlert(
-                  selection.map(item => item.date)
+                  selection.map((item) => item.date)
                 );
                 await addFlowStore.dbInsertRoutine(user.id);
+                Toast.show(<TickToast message={`Routine Added`} />, {
+                  duration: Toast.durations.SHORT,
+                  position: Toast.positions.CENTER,
+                  shadow: false,
+                  animation: true,
+                  hideOnPress: true,
+                  delay: 50,
+                  containerStyle: {
+                    backgroundColor: "transparent",
+                  },
+                  opacity: 0.9,
+                });
                 navigation.navigate("Root");
               }
             : () =>

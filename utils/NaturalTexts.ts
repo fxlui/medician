@@ -16,18 +16,19 @@ export const greetingTextFromTime = () => {
 export const getDateText = (date: Date) => {
   const now = new Date();
   const momentNow = moment(now);
+  const momentDate = moment(date);
   if (date.getDate() === now.getDate()) {
-    return `Today ${date.getHours()}:${date.getMinutes()}`;
+    return `Today ${momentDate.format("HH:mm")}`;
   } else if (date.getDate() === now.getDate() - 1) {
     return `Yesterday ${date.getHours()}:${date.getMinutes()}`;
   } else if (date.getDate() === now.getDate() + 1) {
     return `Tomorrow ${date.getHours()}:${date.getMinutes()}`;
-  } else if (momentNow.isoWeek() === moment(date).isoWeek()) {
-    return moment(date).format("dddd");
-  } else if (momentNow.isoWeek() + 1 === moment(date).isoWeek()) {
-    return `Next ${moment(date).format("dddd")}`;
+  } else if (momentNow.isoWeek() === momentDate.isoWeek()) {
+    return momentDate.format("dddd");
+  } else if (momentNow.isoWeek() + 1 === momentDate.isoWeek()) {
+    return `Next ${momentDate.format("dddd")}`;
   } else {
-    return moment(date).format("MMM Do");
+    return momentDate.format("MMM Do");
   }
 };
 

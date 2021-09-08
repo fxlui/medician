@@ -6,11 +6,11 @@ import {
   Platform,
   Image,
   Alert,
+  Modal,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
-import ImageView from "react-native-image-viewing";
 import * as VideoThumbnails from "expo-video-thumbnails";
 
 import { StackScreenProps } from "@react-navigation/stack";
@@ -23,11 +23,18 @@ import useColorScheme from "../../hooks/useColorScheme";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { useStores } from "../../models/root-store-provider";
 
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import TileBase from "../../components/TileBase";
 import SwipeBar from "../../components/SwipeBar";
 import { LinearGradient } from "expo-linear-gradient";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
+import Toast from "react-native-root-toast";
+import TickToast from "../../components/TickToast";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { PressableBase } from "../../components/PressableBase";
+
+//import { AVPlaybackStatus, Video } from "expo-av";
+//import VideoPlayer from "expo-video-player";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "MediaScreen">,
@@ -106,8 +113,8 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
 
   const defaultImagesList = route.params.method === "add" ? [] : []; // TODO read from store
   const [images, setImages] = React.useState<Media[]>(defaultImagesList);
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [visible, setIsVisible] = React.useState(false);
+  const [currentMedia, setCurrentMedia] = React.useState<Media>();
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const { user, addFlowStore } = useStores();
 
@@ -115,7 +122,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
     const hasPermission = await checkLibraryPermission();
     if (!hasPermission) return;
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
     console.log(result);
@@ -137,7 +144,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
     const hasPermission = await checkCameraPermission();
     if (!hasPermission) return;
     let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
     console.log(result);
@@ -154,6 +161,61 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
     }
   };
 
+  const ModalContainer: React.FC<{ img: Media }> = ({ img }) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.7)",
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: "transparent",
+          }}
+        >
+          {img.type === "video" /*<VideoPlayer
+              videoProps={{
+                shouldPlay: true,
+                resizeMode: Video.RESIZE_MODE_CONTAIN,
+                source: {
+                  uri: img.uri!,
+                },
+              }}
+            />*/ ? null : (
+            <Image
+              resizeMode="contain"
+              source={{ uri: img.uri }}
+              style={[
+                {
+                  width: Dimensions.get("window").width * 0.8,
+                  height: Dimensions.get("window").height * 0.8,
+                },
+              ]}
+            />
+          )}
+          <PressableBase
+            onPress={() => setModalVisible(!modalVisible)}
+            extraProps={{
+              style: {
+                alignSelf: "center",
+                padding: 25,
+                zIndex: 200,
+                backgroundColor: "black",
+                borderRadius: 15,
+                marginTop: 20,
+              },
+            }}
+          >
+            <Entypo name="chevron-down" size={35} color="#fff" />
+          </PressableBase>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeView style={styles.container} disableTop>
       {route.params.method === "edit" ? (
@@ -161,7 +223,9 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
           Editing record for MOBX_PAIN at MOBX_AREA
         </Text>
       ) : null}
-      <Text style={styles.greeting}>Attach any photos or videos here.</Text>
+      <Text style={styles.greeting}>
+        Attach any photos{/* or videos*/} here.
+      </Text>
       <View
         style={{
           flex: 1,
@@ -171,7 +235,6 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
         }}
       >
         <ScrollView
-          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: 200,
@@ -228,19 +291,17 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
                       alignItems: "center",
                       padding: 0,
                     }}
-                    onClick={
-                      img.type === "video"
-                        ? () => {
-                            Alert.alert(
-                              "It's a video!",
-                              "Video playbacks aren't supported yet. Don't worry - they are still saved in Medician and you'll be able to play them in the next update. :)"
-                            );
-                          }
-                        : () => {
-                            setCurrentIndex(index);
-                            setIsVisible(true);
-                          }
-                    }
+                    onClick={() => {
+                      if (img.type === "video") {
+                        Alert.alert(
+                          "It's a video!",
+                          "Video playbacks aren't supported yet. Don't worry - they are still saved in Medician and you'll be able to play them in the next update. :)"
+                        );
+                      } else {
+                        setCurrentMedia(img);
+                        setModalVisible(true);
+                      }
+                    }}
                   >
                     <Image
                       source={{ uri: img.uri! }}
@@ -316,18 +377,19 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
           </TileBase>
         </View>
       </View>
-      <ImageView
-        images={images.map((i) => {
-          if (i.type === "image") {
-            return { uri: i.uri! };
-          } else return {};
-        })}
-        imageIndex={currentIndex}
-        visible={visible}
-        onRequestClose={() => setIsVisible(false)}
-      />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <ModalContainer img={currentMedia!} />
+      </Modal>
       <AddFlowNavBar
         last
+        preventRightHaptics
         left={() => navigation.pop()}
         right={async () => {
           if (route.params.method === "add") {
@@ -336,6 +398,26 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
           } else {
             // TODO handle edit flow
           }
+          Toast.show(
+            <TickToast
+              message={`Record ${
+                route.params.method.charAt(0).toUpperCase() +
+                route.params.method.slice(1)
+              }ed`}
+            />,
+            {
+              duration: Toast.durations.SHORT,
+              position: Toast.positions.CENTER,
+              shadow: false,
+              animation: true,
+              hideOnPress: true,
+              delay: 50,
+              containerStyle: {
+                backgroundColor: "transparent",
+              },
+              opacity: 0.9,
+            }
+          );
           navigation.navigate("Root");
         }}
       ></AddFlowNavBar>
