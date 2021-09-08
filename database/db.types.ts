@@ -7,6 +7,13 @@ export interface SQLAppointmentsReturnType {
   time: number;
 }
 
+export interface SQLCollectionReturnType {
+  id: number;
+  date: number;
+  type: string;
+  userId: number;
+}
+
 export interface SQLRoutineReturnType {
   id: number;
   collectionId: number;
@@ -15,4 +22,14 @@ export interface SQLRoutineReturnType {
   notes: string;
   time: number;
   complete: number;
+}
+
+export interface FetchByCollectionResultType {
+  records: {
+    id: number,
+    area: string,
+    subArea: string
+  }[],
+  routines: SQLRoutineReturnType[],
+  appointments: SQLAppointmentsReturnType[]
 }

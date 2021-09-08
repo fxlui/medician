@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Dimensions, ScrollView } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
@@ -15,12 +15,19 @@ import OverviewSymptomTile from "../components/OverviewSymptomTile";
 
 import * as Haptics from "expo-haptics";
 import Carousel from "react-native-snap-carousel";
+import { useStores } from "../models/root-store-provider";
+import { observer } from "mobx-react-lite";
 import useColorScheme from "../hooks/useColorScheme";
 
 type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
   StackScreenProps<RootStackParamList>
 >;
+
+interface SymptomItem {
+  title: string;
+  type: string;
+}
 interface BaseData {
   index: number;
   dataIndex: number;
@@ -32,10 +39,7 @@ interface BaseData {
 interface SymptomBaseData {
   index: number;
   dataIndex: number;
-  item: {
-    title: string;
-    type: string;
-  };
+  item: SymptomItem;
 }
 interface tileItemData {
   id: string;
@@ -103,151 +107,173 @@ const AREA_DATA = [
 
 const symptomArr = uniqueSymptoms;
 
-const SymptomOverview: React.FC<ScreenProps> = ({ navigation }) => {
-  const colorScheme = useColorScheme();
-  const [symptomSelected, setSymptomSelected] = useState(0);
+const SymptomOverview: React.FC<ScreenProps> = observer(
 
-  const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
-  const scrollBackground = colorScheme === "light" ? "#fff" : "#121212";
-  const topBackground = colorScheme === "light" ? "white" : "#121212";
+  ({ navigation }) => {
 
-  const renderSymptomTile = ({ item, index }: SymptomBaseData) => {
-    return (
-      <OverviewSymptomTile
-        title={item.title}
-        iconName={item.type}
-        updater={() => {
-          topRef.current?.snapToItem(index);
-        }}
-        selected={symptomSelected === index}
-      />
-    );
-  };
-
-  const renderAreaTile = ({ item, index }: BaseData) => {
-    return (
-      <TopTile
-        title={item.title}
-        index={index}
-        selected={false}
-        updater={() =>
-          navigation.navigate("Timeline", {
-            type: item.title,
-            area: item.title,
-          })
+    const colorScheme = useColorScheme();
+    const [symptomSelected, setSymptomSelected] = useState(0);
+  
+    const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
+    const topBackground = colorScheme === "light" ? "white" : "#121212";
+    const [displaySymptoms, setDisplaySymptoms] = useState<SymptomItem[]>([]);
+    const { overviewStore } = useStores();
+  
+    useEffect(() => {
+      const unsubscribe = navigation.addListener("focus",
+        async () => {
+          await overviewStore.fetchAllCollectionsAsync();
+          const fetchedCollections = symptomArr.filter(
+            item =>
+              overviewStore
+              .getCollectionTypesSnapshot()
+              .includes(item.type)
+          )
+          setDisplaySymptoms(fetchedCollections);
+          if (fetchedCollections.length === 0) return;
+          await overviewStore.fetchCollectionDataAsync(fetchedCollections[symptomSelected].type);
         }
-        emoji={"e"}
-      />
-    );
-  };
-
-  const renderHomeTile = ({ item, index }: tileItemProps) => {
+      );
+      return unsubscribe;
+    }, []);
+  
+    const renderSymptomTile = ({ item, index }: SymptomBaseData) => {
+      return (
+        <OverviewSymptomTile
+          title={item.title}
+          iconName={item.type}
+          updater={() => {
+            topRef.current?.snapToItem(index);
+          }}
+          selected={symptomSelected === index}
+        />
+      );
+    };
+  
+    const renderAreaTile = ({ item, index }: BaseData) => {
+      return (
+        <TopTile
+          title={item.title}
+          index={index}
+          selected={false}
+          updater={() =>
+            navigation.navigate("Timeline", {
+              type: item.title,
+              area: item.title,
+            })
+          }
+          emoji={"e"}
+        />
+      );
+    };
+  
+    const renderHomeTile = ({ item, index }: tileItemProps) => {
+      return (
+        <HomeTile
+          title={item.name}
+          index={index}
+          type={item.type}
+          onPress={() => {
+            navigation.push("Notification", {
+              id: item.id,
+              name: item.name,
+              notes: item.notes,
+              type: item.type,
+            });
+          }}
+        />
+      );
+    };
+  
     return (
-      <HomeTile
-        title={item.name}
-        index={index}
-        type={item.type}
-        onPress={() => {
-          navigation.push("Notification", {
-            id: item.id,
-            name: item.name,
-            notes: item.notes,
-            type: item.type,
-          });
-        }}
-      />
-    );
-  };
-
-  return (
-    <SafeView disableTop disableBottom style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ backgroundColor: scrollBackground }}
-      >
-        <View style={styles.overflowView}>
-          <View style={[styles.header, { backgroundColor: topBackground }]}>
-            <Carousel
-              data={symptomArr}
-              renderItem={renderSymptomTile}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              contentContainerCustomStyle={{
-                justifyContent: "center",
-                alignItems: "flex-start",
-                overflow: "visible",
-              }}
-              itemWidth={150}
-              inactiveSlideOpacity={0.8}
-              onScrollIndexChanged={(index) => {
-                setSymptomSelected(index);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              ref={topRef}
-            />
-          </View>
-          <View style={{ paddingLeft: 25 }}>
-            <Text style={styles.name}>Timeline</Text>
-            <Carousel
-              style={{ overflow: "visible" }}
-              data={AREA_DATA}
-              renderItem={renderAreaTile}
-              inactiveSlideScale={1}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={165}
-              inactiveSlideOpacity={1}
-              onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            />
-            <Text style={styles.name}>Routines</Text>
-            <Carousel
-              data={DATA}
-              renderItem={renderHomeTile}
-              inactiveSlideScale={1}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={165}
-              inactiveSlideOpacity={1}
-              onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            />
-            <Text style={styles.name}>Appointments</Text>
-            <Carousel
-              data={DATA}
-              renderItem={renderHomeTile}
-              inactiveSlideScale={1}
-              vertical={false}
-              sliderWidth={Dimensions.get("window").width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={165}
-              inactiveSlideOpacity={1}
-              onScrollIndexChanged={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-            />
-          </View>
+      <SafeView disableTop disableBottom style={styles.container}>
+        <View style={[styles.header, { backgroundColor: topBackground }]}>
+          <Carousel
+            data={displaySymptoms}
+            renderItem={renderSymptomTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            containerCustomStyle={{
+              overflow: "visible",
+            }}
+            contentContainerCustomStyle={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+              overflow: "visible",
+            }}
+            itemWidth={150}
+            inactiveSlideOpacity={0.8}
+            onScrollIndexChanged={async (index) => {
+              setSymptomSelected(index);
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              await overviewStore.fetchCollectionDataAsync(displaySymptoms[index].type);
+              overviewStore.checkCurrentData();
+            }}
+            ref={topRef}
+          />
         </View>
-      </ScrollView>
-    </SafeView>
-  );
-};
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.overflowView}>
+            <View style={{ paddingLeft: 25 }}>
+              <Text style={styles.name}>Timeline</Text>
+              <Carousel
+                style={{ overflow: "visible" }}
+                data={AREA_DATA}
+                renderItem={renderAreaTile}
+                inactiveSlideScale={1}
+                vertical={false}
+                sliderWidth={Dimensions.get("window").width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={165}
+                inactiveSlideOpacity={1}
+                onScrollIndexChanged={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              />
+              <Text style={styles.name}>Routines</Text>
+              <Carousel
+                data={DATA}
+                renderItem={renderHomeTile}
+                inactiveSlideScale={1}
+                vertical={false}
+                sliderWidth={Dimensions.get("window").width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={165}
+                inactiveSlideOpacity={1}
+                onScrollIndexChanged={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              />
+              <Text style={styles.name}>Appointments</Text>
+              <Carousel
+                data={DATA}
+                renderItem={renderHomeTile}
+                inactiveSlideScale={1}
+                vertical={false}
+                sliderWidth={Dimensions.get("window").width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={165}
+                inactiveSlideOpacity={1}
+                onScrollIndexChanged={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </SafeView>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -255,7 +281,7 @@ const styles = StyleSheet.create({
   },
   overflowView: {
     overflow: "visible",
-    paddingBottom: 140,
+    paddingBottom: 155,
   },
   header: {
     paddingVertical: 30,

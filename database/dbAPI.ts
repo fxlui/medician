@@ -18,11 +18,17 @@ import {
   getLastInserted,
   getLastInsertedId,
   getRecentAppointments,
-  getRecentRoutines
+  getRecentRoutines,
+  getAllCollecitons,
+  getAppointmentsByCollection,
+  getRecordsbyCollection,
+  getRoutinesbyCollection
 } from "./queries";
 import {
   SQLRoutineReturnType,
-  SQLAppointmentsReturnType
+  SQLAppointmentsReturnType,
+  SQLCollectionReturnType,
+  FetchByCollectionResultType
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -104,7 +110,7 @@ export async function addRecord(data: DatabaseEntryType) {
           getLastInserted("entry"),
           undefined,
           (_, { rows }) => {
-            console.log(rows._array);
+            console.log("dbAPI.ts: Added Records: ",rows._array);
             resolve();
           }
         );
@@ -156,7 +162,7 @@ export async function addAppointments(collectionId: number, doctor: string, time
             getLastInserted("appointment"),
             undefined,
             (_, { rows } ) => {
-              console.log(rows._array)
+              console.log("dbAPI.ts: Added Appointments: ",rows._array)
             },
             (_, error) => {
               console.log(error);
@@ -203,7 +209,7 @@ export async function addAppointmentAlerts(appointmentIDs: number[], alertTimes:
           tx.executeSql(
             getLastInserted("alert"),
             undefined,
-            (_, { rows }) => console.log(rows._array),
+            (_, { rows }) => console.log("dbAPI.ts: Added Alerts for Appointments: ",rows._array),
             (_, error) => {
               console.log(error);
               reject(error);
@@ -240,7 +246,7 @@ export async function addRoutines(
             getLastInserted("routine"),
             undefined,
             (_, { rows } ) => {
-              console.log(rows._array)
+              console.log("dbAPI.ts: Added routines: ",rows._array)
             },
             (_, error) => {
               console.log(error);
@@ -287,7 +293,7 @@ export async function addRoutineAlert(routineIDs: number[], alertIDs: number[]) 
           tx.executeSql(
             getLastInserted("alert"),
             undefined,
-            (_, { rows }) => console.log(rows._array),
+            (_, { rows }) => console.log("dbAPI.ts: Added Alert for routines: ",rows._array),
             (_, error) => {
               console.log(error);
               reject(error);
@@ -330,4 +336,53 @@ export async function fetchRecentRoutines() {
       (error) => reject(error)
     );
   })
+}
+
+export async function fetchAllCollections() {
+  return new Promise<SQLCollectionReturnType[]>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          getAllCollecitons,
+          undefined,
+          (_, { rows }) => resolve(rows._array as SQLCollectionReturnType[])
+        );
+      },
+      (error) => reject(error)
+    );
+  })
+}
+
+export async function fetchCollectionData(collectionId: number) {
+  return new Promise<FetchByCollectionResultType>((resolve, reject) => {
+    const result: FetchByCollectionResultType = {
+      records: [],
+      routines: [],
+      appointments: []
+    };
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          getRecordsbyCollection,
+          [collectionId],
+          (_, { rows }) => result.records = rows._array
+        );
+        tx.executeSql(
+          getRoutinesbyCollection,
+          [collectionId],
+          (_, { rows }) => result.routines = rows._array
+        );
+        tx.executeSql(
+          getAppointmentsByCollection,
+          [collectionId],
+          (_, { rows }) => result.appointments = rows._array
+        );
+      },
+      (error) => reject(error),
+      () => {
+        console.log("dbAPI.ts: fetchCollectionData: ",result);
+        resolve(result);
+      }
+    );
+  });
 }

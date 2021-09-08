@@ -32,6 +32,29 @@ INSERT INTO alert
 (appointmentId, time) values (?, ?)
 `;
 
+export const getAllCollecitons = `
+SELECT *
+FROM collection
+`;
+
+export const getRecordsbyCollection = `
+SELECT entry.id, entry.area, entry.subArea
+FROM entry
+WHERE entry.collectionId = ?
+`;
+
+export const getRoutinesbyCollection = `
+SELECT *
+FROM routine
+WHERE routine.collectionId = ?
+`;
+
+export const getAppointmentsByCollection = `
+SELECT *
+FROM appointment
+WHERE appointment.collectionId = ?
+`;
+
 export const getRecentAppointments = `
 SELECT *
 FROM appointment

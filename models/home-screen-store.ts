@@ -25,8 +25,7 @@ import { SavedAppointmentModel } from "./appointment";
 export const HomeScreenStoreModel = types
   .model("HomeScreenStore", {
     recentRoutines: types.optional(types.array(SavedRoutineModel), []),
-    recentAppointments: types.optional(types.array(SavedAppointmentModel), []),
-    collectionIds: types.optional(types.array(types.integer), [])
+    recentAppointments: types.optional(types.array(SavedAppointmentModel), [])
   })
   // Calls to get derived data
   .views(self => ({
