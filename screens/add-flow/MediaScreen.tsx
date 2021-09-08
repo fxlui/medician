@@ -122,7 +122,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
     const hasPermission = await checkLibraryPermission();
     if (!hasPermission) return;
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
     console.log(result);
@@ -144,7 +144,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
     const hasPermission = await checkCameraPermission();
     if (!hasPermission) return;
     let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
     console.log(result);
@@ -223,7 +223,9 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
           Editing record for MOBX_PAIN at MOBX_AREA
         </Text>
       ) : null}
-      <Text style={styles.greeting}>Attach any photos or videos here.</Text>
+      <Text style={styles.greeting}>
+        Attach any photos{/* or videos*/} here.
+      </Text>
       <View
         style={{
           flex: 1,
