@@ -55,6 +55,8 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
 
+  const [newUser, setNewUser] = React.useState(false);
+
   // Notification Stuff :D
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
   React.useEffect(() => {
@@ -86,6 +88,13 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
   }, [lastNotificationResponse]);
 
   React.useEffect(() => {
+    const checkNewUser = async () => {
+      const newUser = await SecureStore.getItemAsync("new_user");
+      if (newUser) {
+        setNewUser(true);
+      }
+    };
+    checkNewUser();
     Notifications.setNotificationHandler({
       handleNotification: async (notification) => ({
         shouldShowAlert: true,
