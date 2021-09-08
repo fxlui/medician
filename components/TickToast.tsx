@@ -4,6 +4,7 @@ import Svg, { SvgProps, Path } from "react-native-svg";
 import useColorScheme from "../hooks/useColorScheme";
 import { Text } from "./Themed";
 import CustomHaptics from "../utils/CustomHaptics";
+import { themeTextColor, themeTileColor } from "../constants/Colors";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -29,8 +30,10 @@ function SvgComponent(props: TickProps) {
   const colorScheme = useColorScheme();
   const animatedValue = React.useRef(new Animated.Value(0)).current;
 
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
   const interpolateRotation = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: ["100px", "0px"],

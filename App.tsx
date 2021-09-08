@@ -24,18 +24,23 @@ import { Text, View } from "./components/Themed";
 import { FontAwesome } from "@expo/vector-icons";
 import TileBase from "./components/TileBase";
 
+import { themeTextColor, themeTileColor } from "./constants/Colors";
+
 export default function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const [lock, setLock] = useState(false);
 
   useEffect(() => {
     (async () => {
       await initDatabase();
+      await SecureStore.setItemAsync("enable_haptics", "true");
       const store = await setupRootStore();
       setRootStore(store);
     })();

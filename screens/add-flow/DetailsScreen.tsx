@@ -19,6 +19,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { PressableBase } from "../../components/PressableBase";
 import { useStores } from "../../models/root-store-provider";
 import { Ionicons } from "@expo/vector-icons";
+import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "DetailsScreen">;
 
@@ -26,8 +27,10 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;

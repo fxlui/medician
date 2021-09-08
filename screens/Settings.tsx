@@ -2,10 +2,8 @@ import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  Dimensions,
   Image,
   useColorScheme,
-  Pressable,
   TouchableOpacity,
   Linking,
   Platform,
@@ -21,19 +19,26 @@ import { Text, View } from "../components/Themed";
 import { RootStackParamList } from "../types";
 
 import { Medician } from "../assets/images/medician";
-import { PressableBase } from "../components/PressableBase";
 import { Ionicons } from "@expo/vector-icons";
 
 import * as LocalAuthentication from "expo-local-authentication";
-import CustomHaptics from "../utils/CustomHaptics";
+
+import {
+  themeTextColor,
+  themeBorderColor,
+  themeTileColor,
+} from "../constants/Colors";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Settings">;
 
 const SettingsScreen = ({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const borderColor = colorScheme === "light" ? "#dbdbdb" : "#454545";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const borderColor =
+    colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const [showBioSettings, setShowBioSettings] = React.useState(false);
   const [lockApp, setLockApp] = React.useState(false);
@@ -50,6 +55,8 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
       const hapticsResult = await SecureStore.getItemAsync("enable_haptics");
       if (hapticsResult === "false") {
         setUseHaptics(false);
+      } else if (hapticsResult === "true") {
+        setUseHaptics(true);
       }
       const status = await LocalAuthentication.hasHardwareAsync();
       if (status) {
@@ -226,7 +233,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   header: {
-    fontSize: 16,
+    fontSize: 14,
     opacity: 0.5,
     marginBottom: 10,
     marginLeft: 20,

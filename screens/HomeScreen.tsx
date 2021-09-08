@@ -25,6 +25,7 @@ import {
   getDateText,
   getMedicationDoseText,
 } from "../utils/NaturalTexts";
+import { themeTextColor } from "../constants/Colors";
 
 interface appointmentTileProps {
   index: number;
@@ -46,7 +47,8 @@ type ScreenProps = CompositeScreenProps<
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const { homeScreenStore } = useStores();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
 

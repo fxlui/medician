@@ -12,6 +12,7 @@ import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
 import { Entypo } from "@expo/vector-icons";
+import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "SleepHoursScreen">,
@@ -20,8 +21,10 @@ type ScreenProps = CompositeScreenProps<
 
 const SleepHoursScreen = ({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const defaultHours = route.params.method === "add" ? 8.5 : 8; // TODO get from store
   const [hours, setHours] = useState(defaultHours);

@@ -25,6 +25,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import useColorScheme from "../hooks/useColorScheme";
 import { PressableBase } from "../components/PressableBase";
+import { themeTextColor } from "../constants/Colors";
 
 export default function Navigation({
   colorScheme,
@@ -44,7 +45,8 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
       <RootStack.Screen name="Root" component={BottomTabNavigator} />
