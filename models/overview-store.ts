@@ -3,11 +3,20 @@ import {
   cast,
   flow,
   getSnapshot,
+  Instance,
+  SnapshotOut,
 } from "mobx-state-tree";
 import { SavedRoutineModel } from "./routine";
 import { fetchAllCollections, fetchCollectionData } from "../database/dbAPI";
 import { SQLCollectionReturnType, FetchByCollectionResultType } from "../database/db.types";
 import { SavedAppointmentModel } from "./appointment";
+
+const SimpleRecordModel = types
+  .model("SimpleRecordModel", {
+    id: types.identifierNumber,
+    area: types.string,
+    subArea: types.string
+  });
 
 export const OverviewStoreModel = types
   .model("OverviewStore", {
@@ -15,11 +24,7 @@ export const OverviewStoreModel = types
       id: types.identifierNumber,
       type: types.string
     })),
-    currentCollectionRecords: types.array(types.model({
-      id: types.identifierNumber,
-      area: types.string,
-      subArea: types.string
-    })),
+    currentCollectionRecords: types.array(SimpleRecordModel),
     currentCollectionRoutines: types.array(SavedRoutineModel),
     currentCollectionAppointments: types.array(SavedAppointmentModel)
   })
@@ -98,3 +103,8 @@ export const OverviewStoreModel = types
 
     return { fetchAllCollectionsAsync, fetchCollectionDataAsync };
   });
+
+type SimpleRecordType = Instance<typeof SimpleRecordModel>;
+export interface SimpleRecord extends SimpleRecordType {};
+type SimpleRecordSnapshotType = SnapshotOut<typeof SimpleRecordModel>;
+export interface SimpleRecordSnapshot extends SimpleRecordSnapshotType {};

@@ -16,6 +16,7 @@ import OverviewSymptomTile from "../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { useStores } from "../models/root-store-provider";
 import { observer } from "mobx-react-lite";
+import { SimpleRecordSnapshot } from "../models/overview-store";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
@@ -25,6 +26,17 @@ type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
   StackScreenProps<RootStackParamList>
 >;
+
+interface SymptomItem {
+  title: string;
+  type: string;
+}
+
+interface symptomTileProps {
+  index: number;
+  dataIndex: number;
+  item: SymptomItem;
+}
 
 interface appointmentTileProps {
   index: number;
@@ -38,23 +50,12 @@ interface routineTileProps {
   item: SavedRoutineSnapshot;
 }
 
-interface SymptomItem {
-  title: string;
-  type: string;
-}
 interface BaseData {
   index: number;
   dataIndex: number;
-  item: {
-    id: string;
-    title: string;
-  };
+  item: SimpleRecordSnapshot;
 }
-interface SymptomBaseData {
-  index: number;
-  dataIndex: number;
-  item: SymptomItem;
-}
+
 
 const AREA_DATA = [
   {
@@ -90,7 +91,12 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
     const { overviewStore } = useStores();
     const routineType = (dbType: number) =>
       dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
-  
+    const areaTileEmoji = (area: string) =>
+      area === "Head" ? "🤯" :
+      area === "Body" ? "👕" :
+      area === "Arms" ? "💪" :
+      area === "Legs" ? "🦵" : ""
+
     useEffect(() => {
       const unsubscribe = navigation.addListener("focus",
         async () => {
@@ -109,7 +115,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
       return unsubscribe;
     }, []);
   
-    const renderSymptomTile = ({ item, index }: SymptomBaseData) => {
+    const renderSymptomTile = ({ item, index }: symptomTileProps) => {
       return (
         <OverviewSymptomTile
           title={item.title}
@@ -125,16 +131,11 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
     const renderAreaTile = ({ item, index }: BaseData) => {
       return (
         <TopTile
-          title={item.title}
+          emoji={areaTileEmoji(item.area)}
+          title={item.subArea}
           index={index}
           selected={false}
-          updater={() =>
-            navigation.navigate("Timeline", {
-              type: item.title,
-              area: item.title,
-            })
-          }
-          emoji={"e"}
+          updater={() =>{}}
         />
       );
     };
@@ -209,7 +210,6 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
             onScrollIndexChanged={async (index) => {
               setSymptomSelected(index);
               await overviewStore.fetchCollectionDataAsync(displaySymptoms[index].type);
-              overviewStore.checkCurrentData();
             }}
             ref={topRef}
           />
@@ -220,7 +220,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
               <Text style={styles.name}>Timeline</Text>
               <Carousel
                 style={{ overflow: "visible" }}
-                data={AREA_DATA}
+                data={overviewStore.getCurrentRecordsSnapshot()}
                 renderItem={renderAreaTile}
                 inactiveSlideScale={1}
                 vertical={false}
