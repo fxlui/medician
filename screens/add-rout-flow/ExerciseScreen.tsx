@@ -30,6 +30,9 @@ import { useStores } from "../../models/root-store-provider";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
+import RegisterNotification from "../../utils/RegisterNotification";
+import * as Notifications from "expo-notifications";
+
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "ExerciseScreen">,
   StackScreenProps<RootStackParamList>
@@ -156,6 +159,25 @@ export default function RoutineDetailsScreen({
           }`
         );
         return;
+      }
+      if (alertMinutesBefore !== -1) {
+        RegisterNotification();
+        const getStatus = async () => {
+          const settings = await Notifications.getPermissionsAsync();
+          if (
+            !(
+              settings.granted ||
+              settings.ios?.status ===
+                Notifications.IosAuthorizationStatus.PROVISIONAL
+            )
+          ) {
+            Alert.alert(
+              "Missing Permissions",
+              "To receive notifications, please enable notifications in your settings."
+            );
+          }
+        };
+        getStatus();
       }
       addFlowStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(

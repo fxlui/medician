@@ -14,22 +14,22 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 export const insertAppointment = `
 INSERT INTO appointment
-(collectionId, doctor, time, notes) values (?, ?, ?, ?)
+(collectionId, doctor, notes) values (?, ?, ?)
 `;
 
 export const insertRoutine = `
 INSERT INTO routine
-(type, collectionId, title, notes, time) values (?, ?, ?, ?, ?)
+(type, collectionId, title, notes) values (?, ?, ?, ?)
 `;
 
 export const insertRoutineAlert = `
 INSERT INTO alert
-(routineId, time) values (?, ?)
+(routineId, eventTime, time, systemId) values (?, ?, ?, ?)
 `;
 
 export const insertAppointmentAlert = `
 INSERT INTO alert
-(appointmentId, time) values (?, ?)
+(appointmentId, eventTime, time, systemId) values (?, ?, ?, ?)
 `;
 
 export const getAllCollecitons = `
@@ -140,9 +140,7 @@ export const createAppointmentTable = `
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
     "doctor"	TEXT,
-    "time"	INTEGER NOT NULL,
     "notes"  TEXT,
-    "complete"	INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY("id" AUTOINCREMENT),
     FOREIGN KEY("collectionId") REFERENCES "collection"("id")
   )
@@ -155,8 +153,9 @@ export const createRoutineTable = `
     "type"	INTEGER NOT NULL,
     "title" TEXT,
     "notes"	TEXT,
-    "time"	INTEGER NOT NULL,
-    "complete"	INTEGER NOT NULL DEFAULT 0,
+    "duration"  INTEGER,
+    "sets" INTEGER,
+    "reps" INTEGER,
     FOREIGN KEY("collectionId") REFERENCES "collection"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)
   )
@@ -168,7 +167,9 @@ export const createAlertTable = `
     "appointmentId"	INTEGER,
     "routineId"	INTEGER,
     "time"	INTEGER NOT NULL,
-    "dismissed"	INTEGER NOT NULL DEFAULT 0,
+    "eventTime"  INTEGER NOT NULL,
+    "completed"	INTEGER NOT NULL DEFAULT 0,
+    "systemId"	TEXT,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
     FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

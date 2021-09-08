@@ -20,9 +20,9 @@ export const getDateText = (date: Date) => {
   if (date.getDate() === now.getDate()) {
     return `Today ${momentDate.format("HH:mm")}`;
   } else if (date.getDate() === now.getDate() - 1) {
-    return `Yesterday ${date.getHours()}:${date.getMinutes()}`;
+    return `Yesterday ${momentDate.format("HH:mm")}`;
   } else if (date.getDate() === now.getDate() + 1) {
-    return `Tomorrow ${date.getHours()}:${date.getMinutes()}`;
+    return `Tomorrow ${momentDate.format("HH:mm")}`;
   } else if (momentNow.isoWeek() === momentDate.isoWeek()) {
     return momentDate.format("dddd");
   } else if (momentNow.isoWeek() + 1 === momentDate.isoWeek()) {

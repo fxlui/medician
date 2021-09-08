@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import * as LocalAuthentication from "expo-local-authentication";
 import * as SplashScreen from "expo-splash-screen";
 import * as ScreenOrientation from "expo-screen-orientation";
+import * as Notifications from "expo-notifications";
 
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import React, { useState, useEffect } from "react";
@@ -149,10 +150,18 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
+      // TODO move following to end of tutorial
       await initDatabase();
-      await SecureStore.setItemAsync("enable_haptics", "true");
       const store = await setupRootStore();
       setRootStore(store);
+      await SecureStore.setItemAsync("enable_haptics", "true");
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: false,
+          shouldSetBadge: false,
+        }),
+      });
     })();
 
     const lockOrientation = async () => {

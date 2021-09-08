@@ -8,11 +8,13 @@ import {
   Linking,
   Platform,
   Switch,
+  Alert,
 } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { StackScreenProps } from "@react-navigation/stack";
 import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
+import * as Notifications from "expo-notifications";
 
 import SafeView from "../components/SafeView";
 import { Text, View } from "../components/Themed";
@@ -43,10 +45,17 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
   const [showBioSettings, setShowBioSettings] = React.useState(false);
   const [lockApp, setLockApp] = React.useState(false);
   const [useHaptics, setUseHaptics] = React.useState(true);
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(false);
   const [bioText, setBioText] = React.useState("");
 
   React.useEffect(() => {
     const getStatus = async () => {
+      const settings = await Notifications.getPermissionsAsync();
+      setNotificationsEnabled(
+        settings.granted ||
+          settings.ios?.status ===
+            Notifications.IosAuthorizationStatus.PROVISIONAL
+      );
       const result = await SecureStore.getItemAsync("enable_bio");
       if (result === "true") {
         setLockApp(true);
@@ -147,7 +156,11 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
           <View
             style={[
               styles.row,
-              { backgroundColor: tileColor, borderColor: borderColor },
+              {
+                backgroundColor: tileColor,
+                borderColor: borderColor,
+                borderBottomWidth: 0,
+              },
             ]}
           >
             <Text style={styles.rowText}>Haptics in App</Text>
@@ -164,6 +177,27 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
                 };
                 setHaptics();
                 setUseHaptics(value);
+              }}
+            />
+          </View>
+          <View
+            style={[
+              styles.row,
+              {
+                backgroundColor: tileColor,
+                borderColor: borderColor,
+              },
+            ]}
+          >
+            <Text style={styles.rowText}>Notifications</Text>
+            <Switch
+              style={{ marginLeft: "auto" }}
+              value={notificationsEnabled}
+              onValueChange={() => {
+                Alert.alert(
+                  "Notifications",
+                  "To enable or disable notifications, please go into your device's Settings app -> Medician -> Notifications."
+                );
               }}
             />
           </View>

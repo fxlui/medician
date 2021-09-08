@@ -1,20 +1,19 @@
-import {
-  types,
-  Instance,
-  SnapshotOut,
-} from "mobx-state-tree";
+import { types, Instance, SnapshotOut } from "mobx-state-tree";
 import {
   addRecord,
-  addRoutines,
   addCollection,
   getLastRecordId,
-  addAppointments,
   addRoutineAlert,
-  addAppointmentAlerts
+  addAppointmentAlerts,
+  addRoutine,
+  addAppointment,
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
 import { RoutineModel } from "./routine";
 import { RecordModel } from "./record";
+
+import * as Notifications from "expo-notifications";
+import moment from "moment";
 
 /**
  * The Add Flow Store model.
@@ -25,7 +24,7 @@ export const AddFlowStoreModel = types
   .model("AddFlowStore", {
     currentNewRecord: types.optional(RecordModel, {}),
     currentNewRoutine: types.optional(RoutineModel, {}),
-    currentNewAppointment: types.optional(AppointmentModel, {}), 
+    currentNewAppointment: types.optional(AppointmentModel, {}),
     progressLength: types.optional(types.integer, 1),
     currentProgress: types.optional(types.integer, 1),
   })
@@ -55,89 +54,140 @@ export const AddFlowStoreModel = types
     },
     resetRoutine: () => {
       self.currentNewRoutine = RoutineModel.create();
-    }
+    },
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
     dbInsertRecord: async (userId: number) => {
       try {
-        const collectionId = await addCollection(userId, self.currentNewRecord.type);
+        const collectionId = await addCollection(
+          userId,
+          self.currentNewRecord.type
+        );
         await Promise.all(
           self.currentNewRecord
-          .getSortedTimes()
-          .map(
-          time => addRecord([
-            collectionId,
-            time,
-            self.currentNewRecord.severity,
-            self.currentNewRecord.area,
-            self.currentNewRecord.subArea,
-            self.currentNewRecord.better,
-            self.currentNewRecord.worse,
-            self.currentNewRecord.related,
-            self.currentNewRecord.attempt,
-            self.currentNewRecord.temperature,
-            self.currentNewRecord.toiletType,
-            self.currentNewRecord.toiletPain,
-            self.currentNewRecord.colour,
-            self.currentNewRecord.dizzy,
-            self.currentNewRecord.sleep,
-            self.currentNewRecord.description
-          ])
-        ));
+            .getSortedTimes()
+            .map((time) =>
+              addRecord([
+                collectionId,
+                time,
+                self.currentNewRecord.severity,
+                self.currentNewRecord.area,
+                self.currentNewRecord.subArea,
+                self.currentNewRecord.better,
+                self.currentNewRecord.worse,
+                self.currentNewRecord.related,
+                self.currentNewRecord.attempt,
+                self.currentNewRecord.temperature,
+                self.currentNewRecord.toiletType,
+                self.currentNewRecord.toiletPain,
+                self.currentNewRecord.colour,
+                self.currentNewRecord.dizzy,
+                self.currentNewRecord.sleep,
+                self.currentNewRecord.description,
+              ])
+            )
+        );
         const lastRecordId = await getLastRecordId();
         console.log(lastRecordId);
       } catch (error) {
-        console.error("Insert record into database failed: ", error)
+        console.error("Insert record into database failed: ", error);
       }
     },
     dbInsertAppointment: async (userId: number) => {
       try {
         const collectionId = await addCollection(
-          userId, self.currentNewAppointment.symptomType
+          userId,
+          self.currentNewAppointment.symptomType
         );
         console.log("collection id:", collectionId);
-        const insertedAppointmentIDs = await addAppointments(
+        const insertedAppointmentID = await addAppointment(
           collectionId,
-          self.currentNewAppointment.doctor,
-          self.currentNewAppointment.getSortedTimes()
-        )
-        console.log("insertedAppointmentIDs", insertedAppointmentIDs);
-        await addAppointmentAlerts(
-          insertedAppointmentIDs,
-          self.currentNewAppointment.alert
+          self.currentNewAppointment.doctor
         );
-      } catch(error) {
+        console.log("insertedAppointmentID", addAppointment);
+
+        // Registering notifications
+        const notificationPromises = self.currentNewAppointment.alert.map(
+          async (timestamp) => {
+            return Notifications.scheduleNotificationAsync({
+              content: {
+                title:
+                  self.currentNewAppointment.type === 0
+                    ? "Medication"
+                    : "Exercise",
+                subtitle: self.currentNewAppointment.doctor,
+                body: self.currentNewAppointment.notes,
+                sound: true,
+              },
+              trigger: new Date(timestamp),
+            });
+          }
+        );
+
+        const notificationIds = await Promise.all(notificationPromises);
+        console.log(notificationIds);
+
+        await addAppointmentAlerts(
+          insertedAppointmentID,
+          self.currentNewAppointment.getSortedTimes(),
+          self.currentNewAppointment.alert,
+          []
+        );
+      } catch (error) {
         console.warn(error);
       }
     },
     dbInsertRoutine: async (userId: number) => {
       try {
-        console.log("routine times: ", self.currentNewRoutine.getSortedTimes())
+        console.log("routine times: ", self.currentNewRoutine.getSortedTimes());
         const collectionId = await addCollection(
-          userId, self.currentNewRoutine.symptomType
+          userId,
+          self.currentNewRoutine.symptomType
         );
         console.log("collection id:", collectionId);
-        console.log("notes: ", self.currentNewRoutine.notes)
-        const insertedRoutineIDs = await addRoutines(
+        console.log("notes: ", self.currentNewRoutine.notes);
+        const insertedRoutineID = await addRoutine(
           collectionId,
           self.currentNewRoutine.type,
           self.currentNewRoutine.title,
-          self.currentNewRoutine.notes,
-          self.currentNewRoutine.getSortedTimes()
-        )
-        console.log("insertedRoutineIDs", insertedRoutineIDs);
+          self.currentNewRoutine.notes
+        );
+        console.log("insertedRoutineIDs", insertedRoutineID);
+
+        // Registering notifications
+        const notificationPromises = self.currentNewRoutine
+          .getSortedTimes()
+          .map(async (timestamp, index) => {
+            return Notifications.scheduleNotificationAsync({
+              content: {
+                title: `${
+                  self.currentNewRoutine.type === 0 ? "Medication" : "Exercise"
+                }: ${self.currentNewRoutine.title}`,
+                subtitle: moment(timestamp).format("lll"),
+                body: self.currentNewRoutine.notes,
+                sound: true,
+              },
+              trigger: new Date(self.currentNewRoutine.alert[index]),
+            });
+          });
+
+        const notificationIds = await Promise.all(notificationPromises);
+        console.log(notificationIds);
+
         await addRoutineAlert(
-          insertedRoutineIDs,
-          self.currentNewRoutine.alert
+          insertedRoutineID,
+          self.currentNewRoutine.getSortedTimes(),
+          self.currentNewRoutine.alert,
+          notificationIds
         );
       } catch (error) {
-        console.warn(error)
+        console.warn(error);
       }
-    }
+    },
   }));
 
 type AddFlowStoreType = Instance<typeof AddFlowStoreModel>;
-export interface AddFlowStore extends AddFlowStoreType {};
+export interface AddFlowStore extends AddFlowStoreType {}
 type AddFlowStoreSnapshotType = SnapshotOut<typeof AddFlowStoreModel>;
-export interface AddFlowStoreSnapshot extends AddFlowStoreSnapshotType {};
+export interface AddFlowStoreSnapshot extends AddFlowStoreSnapshotType {}

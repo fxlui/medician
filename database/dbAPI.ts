@@ -22,13 +22,13 @@ import {
   getAllCollecitons,
   getAppointmentsByCollection,
   getRecordsbyCollection,
-  getRoutinesbyCollection
+  getRoutinesbyCollection,
 } from "./queries";
 import {
   SQLRoutineReturnType,
   SQLAppointmentsReturnType,
   SQLCollectionReturnType,
-  FetchByCollectionResultType
+  FetchByCollectionResultType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -42,7 +42,7 @@ const db = openDatabase();
 export async function initDatabase() {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
-      tx => {
+      (tx) => {
         tx.executeSql(`DROP TABLE IF EXISTS entry`);
         tx.executeSql(`DROP TABLE IF EXISTS collection`);
         tx.executeSql(`DROP TABLE IF EXISTS appointment`);
@@ -56,10 +56,15 @@ export async function initDatabase() {
         tx.executeSql(createRoutineTable);
         tx.executeSql(createAlertTable);
         tx.executeSql(createAttachmentTable);
-        tx.executeSql(insertUser, undefined, () => {}, (error) => {
-          reject(error);
-          return true;
-        })
+        tx.executeSql(
+          insertUser,
+          undefined,
+          () => {},
+          (error) => {
+            reject(error);
+            return true;
+          }
+        );
       },
       (error) => reject(error),
       () => resolve()
@@ -68,7 +73,7 @@ export async function initDatabase() {
 }
 
 /**
- * 
+ *
  * @param userId User's id
  * @param type Symptom type
  * @returns Id of existing/added colleciton
@@ -76,25 +81,17 @@ export async function initDatabase() {
 export async function addCollection(userId: number, type: string) {
   return new Promise<number>((resolve, reject) => {
     db.transaction(
-      tx => {
-        tx.executeSql(
-          insertCollection,
-          [userId, (new Date()).getTime(), type]
-        );
-        tx.executeSql(
-          getCollectionId,
-          [ userId, type ],
-          (_, { rows }) => {
-            const result = rows._array[0] as { id: number };
-            resolve(result.id);
-          }
-        );
+      (tx) => {
+        tx.executeSql(insertCollection, [userId, new Date().getTime(), type]);
+        tx.executeSql(getCollectionId, [userId, type], (_, { rows }) => {
+          const result = rows._array[0] as { id: number };
+          resolve(result.id);
+        });
       },
       (error) => reject(error)
     );
   });
 }
-
 
 // Modify before submit
 /**
@@ -104,16 +101,12 @@ export async function addCollection(userId: number, type: string) {
 export async function addRecord(data: DatabaseEntryType) {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
-      tx => {
+      (tx) => {
         tx.executeSql(insertRecord, data);
-        tx.executeSql(
-          getLastInserted("entry"),
-          undefined,
-          (_, { rows }) => {
-            console.log("dbAPI.ts: Added Records: ",rows._array);
-            resolve();
-          }
-        );
+        tx.executeSql(getLastInserted("entry"), undefined, (_, { rows }) => {
+          console.log("dbAPI.ts: Added Records: ", rows._array);
+          resolve();
+        });
       },
       (error) => reject(error)
     );
@@ -121,84 +114,72 @@ export async function addRecord(data: DatabaseEntryType) {
 }
 
 /**
- * 
+ *
  * @returns Id of the last record added
  */
 export async function getLastRecordId() {
   return new Promise<number>((resolve, reject) => {
     db.transaction(
-      tx => {
-        tx.executeSql(
-          getLastInsertedId("entry"),
-          undefined,
-          (_, { rows }) => {
-            const result = rows._array[0] as { id: number };
-            resolve(result.id);
-          }
-        );
+      (tx) => {
+        tx.executeSql(getLastInsertedId("entry"), undefined, (_, { rows }) => {
+          const result = rows._array[0] as { id: number };
+          resolve(result.id);
+        });
       },
       (error) => reject(error)
     );
   });
 }
 
-export async function addAppointments(collectionId: number, doctor: string, timeArr: number[]) {
-  return new Promise<number[]>((resolve, reject) => {
-    const res: number[] = [];
+export async function addAppointment(collectionId: number, doctor: string) {
+  return new Promise<number>((resolve, reject) => {
     db.transaction(
-      tx => {
-        timeArr.forEach(time => {
-          tx.executeSql(
-            insertAppointment,
-            [collectionId, doctor, time, ""],
-            () => {},
-            (_, error) => {
-              console.log(error);
-              reject();
-              return true;
-            }
-          );
-          tx.executeSql(
-            getLastInserted("appointment"),
-            undefined,
-            (_, { rows } ) => {
-              console.log("dbAPI.ts: Added Appointments: ",rows._array)
-            },
-            (_, error) => {
-              console.log(error);
-              reject();
-              return true;
-            }
-          );
-          tx.executeSql(
-            getLastInsertedId("appointment"),
-            undefined,
-            (_, { rows } ) => {
-              const result = rows._array[0] as { id: number };
-              res.push(result.id);
-            },
-            (_, error) => {
-              console.log(error);
-              reject();
-              return true;
-            }
-          );
-        });
+      (tx) => {
+        tx.executeSql(
+          insertAppointment,
+          [collectionId, doctor, notes],
+          (_, success) => {
+            resolve(success.insertId);
+          },
+          (_, error) => {
+            console.log(error);
+            reject();
+            return true;
+          }
+        );
+        // FOR TESTING
+        tx.executeSql(
+          getLastInserted("appointment"),
+          undefined,
+          (_, { rows }) => {
+            console.log("dbAPI.ts: Added Appointments: ", rows._array);
+          },
+          (_, error) => {
+            console.log(error);
+            reject();
+            return true;
+          }
+        );
+        // END TESTING
       },
-      (error) => reject(error),
-      () => resolve(res)
+      (error) => reject(error)
     );
   });
 }
 
-export async function addAppointmentAlerts(appointmentIDs: number[], alertTimes: number[]) {
+export async function addAppointmentAlerts(
+  appointmentID: number,
+  actualTimes: number[],
+  alertTimes: number[],
+  systemIDs: string[]
+) {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
-      tx => {
-        appointmentIDs.forEach((appointmentId, index) => {
+      (tx) => {
+        actualTimes.forEach((time, index) => {
           tx.executeSql(
             insertAppointmentAlert,
-            [appointmentId, alertTimes[index]],
+            [appointmentID, time, alertTimes[index], systemIDs[index]],
             () => {},
             (_, error) => {
               console.log(error);
@@ -206,10 +187,15 @@ export async function addAppointmentAlerts(appointmentIDs: number[], alertTimes:
               return true;
             }
           );
+          // FOR TESTING:
           tx.executeSql(
             getLastInserted("alert"),
             undefined,
-            (_, { rows }) => console.log("dbAPI.ts: Added Alerts for Appointments: ",rows._array),
+            (_, { rows }) =>
+              console.log(
+                "dbAPI.ts: Added Alerts for Appointments: ",
+                rows._array
+              ),
             (_, error) => {
               console.log(error);
               reject(error);
@@ -224,65 +210,76 @@ export async function addAppointmentAlerts(appointmentIDs: number[], alertTimes:
   });
 }
 
-export async function addRoutines(
-  collectionId: number, type: number, title: string, notes: string, timeArr: number[]
+export async function addRoutine(
+  collectionId: number,
+  type: number,
+  title: string,
+  notes: string
 ) {
-  return new Promise<number[]>((resolve, reject) => {
-    const res: number[] = [];
+  return new Promise<number>((resolve, reject) => {
     db.transaction(
-      tx => {
-        timeArr.forEach(time => {
-          tx.executeSql(
-            insertRoutine,
-            [type, collectionId, title, notes, time],
-            () => {},
-            (_, error) => {
-              console.log(error);
-              reject();
-              return true;
-            }
-          );
-          tx.executeSql(
-            getLastInserted("routine"),
-            undefined,
-            (_, { rows } ) => {
-              console.log("dbAPI.ts: Added routines: ",rows._array)
-            },
-            (_, error) => {
-              console.log(error);
-              reject();
-              return true;
-            }
-          );
-          tx.executeSql(
-            getLastInsertedId("routine"),
-            undefined,
-            (_, { rows } ) => {
-              const result = rows._array[0] as { id: number };
-              res.push(result.id);
-            },
-            (_, error) => {
-              console.log(error);
-              reject();
-              return true;
-            }
-          )
-        });
+      (tx) => {
+        tx.executeSql(
+          insertRoutine,
+          [type, collectionId, title, notes],
+          (_, success) => {
+            resolve(success.insertId);
+          },
+          (_, error) => {
+            console.log(error);
+            reject();
+            return true;
+          }
+        );
+
+        // FOLLOWING IS FOR TESTING
+        tx.executeSql(
+          getLastInserted("routine"),
+          undefined,
+          (_, { rows }) => {
+            console.log("dbAPI.ts: Added routines: ", rows._array);
+          },
+          (_, error) => {
+            console.log(error);
+            reject();
+            return true;
+          }
+        );
+        // END TESTING
+        /*
+        tx.executeSql(
+          getLastInsertedId("routine"),
+          undefined,
+          (_, { rows }) => {
+            const result = rows._array[0] as { id: number };
+            resolve(result.id);
+          },
+          (_, error) => {
+            console.log(error);
+            reject();
+            return true;
+          }
+        );
+        */
       },
-      (error) => reject(error),
-      () => resolve(res)
+      (error) => reject(error)
     );
   });
 }
 
-export async function addRoutineAlert(routineIDs: number[], alertIDs: number[]) {
+export async function addRoutineAlert(
+  routineID: number,
+  actualTimes: number[],
+  alertTimes: number[],
+  systemIDs: string[]
+) {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
-      tx => {
-        routineIDs.forEach((routineID, index) => {
+      (tx) => {
+        actualTimes.forEach((time, index) => {
           tx.executeSql(
             insertRoutineAlert,
-            [routineID, alertIDs[index]],
+            [routineID, time, alertTimes[index], systemIDs[index]],
             () => {},
             (_, error) => {
               console.log(error);
@@ -290,10 +287,12 @@ export async function addRoutineAlert(routineIDs: number[], alertIDs: number[]) 
               return true;
             }
           );
+          // FOR TESTING:
           tx.executeSql(
             getLastInserted("alert"),
             undefined,
-            (_, { rows }) => console.log("dbAPI.ts: Added Alert for routines: ",rows._array),
+            (_, { rows }) =>
+              console.log("dbAPI.ts: Added Alert for routines: ", rows._array),
             (_, error) => {
               console.log(error);
               reject(error);
@@ -311,46 +310,44 @@ export async function addRoutineAlert(routineIDs: number[], alertIDs: number[]) 
 export async function fetchRecentAppointments() {
   return new Promise<SQLAppointmentsReturnType[]>((resolve, reject) => {
     db.transaction(
-      tx => {
+      (tx) => {
         tx.executeSql(
           getRecentAppointments,
           [Date.now() + 1000 * 60 * 60 * 24 * 14], // Two weeks from now
           (_, { rows }) => resolve(rows._array as SQLAppointmentsReturnType[])
-        )
+        );
       },
       (error) => reject(error)
     );
-  })
+  });
 }
 
 export async function fetchRecentRoutines() {
   return new Promise<SQLRoutineReturnType[]>((resolve, reject) => {
     db.transaction(
-      tx => {
+      (tx) => {
         tx.executeSql(
           getRecentRoutines,
           [Date.now() + 1000 * 60 * 60 * 24 * 14], // Two weeks from now
           (_, { rows }) => resolve(rows._array as SQLRoutineReturnType[])
-        )
+        );
       },
       (error) => reject(error)
     );
-  })
+  });
 }
 
 export async function fetchAllCollections() {
   return new Promise<SQLCollectionReturnType[]>((resolve, reject) => {
     db.transaction(
-      tx => {
-        tx.executeSql(
-          getAllCollecitons,
-          undefined,
-          (_, { rows }) => resolve(rows._array as SQLCollectionReturnType[])
+      (tx) => {
+        tx.executeSql(getAllCollecitons, undefined, (_, { rows }) =>
+          resolve(rows._array as SQLCollectionReturnType[])
         );
       },
       (error) => reject(error)
     );
-  })
+  });
 }
 
 export async function fetchCollectionData(collectionId: number) {
@@ -358,29 +355,29 @@ export async function fetchCollectionData(collectionId: number) {
     const result: FetchByCollectionResultType = {
       records: [],
       routines: [],
-      appointments: []
+      appointments: [],
     };
     db.transaction(
-      tx => {
+      (tx) => {
         tx.executeSql(
           getRecordsbyCollection,
           [collectionId],
-          (_, { rows }) => result.records = rows._array
+          (_, { rows }) => (result.records = rows._array)
         );
         tx.executeSql(
           getRoutinesbyCollection,
           [collectionId],
-          (_, { rows }) => result.routines = rows._array
+          (_, { rows }) => (result.routines = rows._array)
         );
         tx.executeSql(
           getAppointmentsByCollection,
           [collectionId],
-          (_, { rows }) => result.appointments = rows._array
+          (_, { rows }) => (result.appointments = rows._array)
         );
       },
       (error) => reject(error),
       () => {
-        console.log("dbAPI.ts: fetchCollectionData: ",result);
+        console.log("dbAPI.ts: fetchCollectionData: ", result);
         resolve(result);
       }
     );
