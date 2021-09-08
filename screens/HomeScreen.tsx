@@ -75,6 +75,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             type: routineType(item.type),
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };
@@ -97,6 +98,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             type: HomeTileTypes.Appointment,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };

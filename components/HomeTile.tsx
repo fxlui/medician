@@ -4,6 +4,7 @@ import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Text, View } from "./Themed";
 import useColorScheme from "../hooks/useColorScheme";
 import Icon from "./Icon";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   medicationGradient,
@@ -22,6 +23,7 @@ interface HomeTileProps {
   index?: number;
   type: HomeTileTypes;
   onPress: () => void;
+  overDue?: boolean;
 }
 
 const getGradient = (type: HomeTileTypes) => {
@@ -86,6 +88,7 @@ const Tile: React.FC<HomeTileProps> = ({
   index,
   type,
   onPress,
+  overDue = false,
 }) => {
   const colorScheme = useColorScheme();
   const textColor =
@@ -108,9 +111,25 @@ const Tile: React.FC<HomeTileProps> = ({
       <View style={styles.content}>
         <View style={styles.left}>
           <View
-            style={{ padding: 5, backgroundColor: "transparent", opacity: 0.9 }}
+            style={{
+              backgroundColor: "transparent",
+              opacity: 0.9,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
           >
-            {getIcon(type, index)}
+            <View
+              style={{
+                backgroundColor: "transparent",
+                padding: 5,
+              }}
+            >
+              {getIcon(type, index)}
+            </View>
+            {overDue ? (
+              <Ionicons name="ios-time-outline" size={22} color={textColor} />
+            ) : null}
           </View>
           <View style={styles.textContent}>
             <Text
@@ -142,11 +161,6 @@ const Tile: React.FC<HomeTileProps> = ({
             ) : null}
           </View>
         </View>
-        {size == TileSize.Large ? (
-          <View style={styles.right}>
-            <Text>hi</Text>
-          </View>
-        ) : null}
       </View>
     </TileBase>
   );
@@ -155,7 +169,6 @@ const Tile: React.FC<HomeTileProps> = ({
 const styles = StyleSheet.create({
   content: {
     backgroundColor: "transparent",
-    flexDirection: "row",
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
