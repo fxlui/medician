@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Pressable, Animated, PressableProps } from "react-native";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../utils/CustomHaptics";
 
 export const PressableBase: FC<{
   onPress?: () => void;
@@ -19,7 +19,7 @@ export const PressableBase: FC<{
       tension: 50,
       useNativeDriver: true,
     }).start();
-    if (tabBar) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (tabBar) CustomHaptics("light");
   };
 
   const handlePressOut = () => {
@@ -32,7 +32,7 @@ export const PressableBase: FC<{
   };
 
   const handleOnPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    CustomHaptics("light");
     if (onPress) onPress();
   };
 

@@ -4,6 +4,7 @@ import { View, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Text } from "./Themed";
 import TileBase, { TileSize } from "./TileBase";
 import useColorScheme from "../hooks/useColorScheme";
+import { themeTileColor } from "../constants/Colors";
 
 interface TileDetails {
   title: string;
@@ -24,7 +25,8 @@ const Tile: React.FC<TileDetails> = ({
   emoji,
 }) => {
   const colorScheme = useColorScheme();
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   return (
     <TileBase

@@ -27,10 +27,14 @@ import IgnoreSVG from "../assets/icons/ignoreSVG";
 import WalkSVG from "../assets/icons/walkSVG";
 import EditSVG from "../assets/icons/editSVG";
 import MoreSVG from "../assets/icons/moreSVG";
+import { Animated } from "react-native";
+interface AnimatedProps extends SvgProps {
+  animatedValue?: Animated.AnimatedInterpolation;
+}
 
 interface IconProps {
   name: string;
-  props?: SvgProps;
+  props?: AnimatedProps;
 }
 
 export const Icon: FC<IconProps> = ({ name, props }) => {

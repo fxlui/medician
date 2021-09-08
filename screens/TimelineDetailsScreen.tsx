@@ -15,15 +15,23 @@ import TileBase, { TileSize } from "../components/TileBase";
 import moment from "moment";
 import { PressableBase } from "../components/PressableBase";
 import { Feather } from "@expo/vector-icons";
+import {
+  themeBorderColor,
+  themeTextColor,
+  themeTileColor,
+} from "../constants/Colors";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "TimelineDetails">;
 
 const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const lineColor = colorScheme === "light" ? "#E9E9E9" : "#333";
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
-  const borderColor = colorScheme === "light" ? "#dbdbdb" : "#454545";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+  const borderColor =
+    colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
 
   const entryID = route.params.id;
 
@@ -65,7 +73,7 @@ const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
             style={{
               fontSize: 22,
               fontWeight: "500",
-              marginBottom: 10,
+              marginBottom: 20,
             }}
           >
             Pain in Head{"\n"}9 Sep 12:12

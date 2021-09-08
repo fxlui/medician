@@ -15,6 +15,8 @@ import TileBase, { TileSize } from "./TileBase";
 
 interface HomeTileProps {
   title: string;
+  secondTitle?: string;
+  subTitle?: string;
   style?: StyleProp<ViewStyle>;
   size?: TileSize;
   index?: number;
@@ -77,6 +79,8 @@ const getIcon = (type: HomeTileTypes, index: Number | undefined) => {
 
 const Tile: React.FC<HomeTileProps> = ({
   title,
+  secondTitle,
+  subTitle,
   style,
   size,
   index,
@@ -107,10 +111,26 @@ const Tile: React.FC<HomeTileProps> = ({
             {getIcon(type, index)}
           </View>
           <View style={styles.textContent}>
-            <Text style={{ color: textColor, fontSize: 16 }}>{title}</Text>
-            <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
+            <Text
+              style={{
+                color: textColor,
+                fontSize: 16,
+                fontWeight: "500",
+                marginBottom: 1,
+              }}
+            >
               {title}
             </Text>
+            {secondTitle ? (
+              <Text style={{ color: textColor, fontSize: 16, marginBottom: 1 }}>
+                {secondTitle}
+              </Text>
+            ) : null}
+            {subTitle ? (
+              <Text style={{ color: textColor, fontSize: 14, opacity: 0.68 }}>
+                {subTitle}
+              </Text>
+            ) : null}
           </View>
         </View>
         {size == TileSize.Large ? (

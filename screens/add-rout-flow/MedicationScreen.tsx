@@ -27,7 +27,8 @@ import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
 import { useStores } from "../../models/root-store-provider";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../../utils/CustomHaptics";
+import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "MedicationScreen">,
@@ -49,8 +50,10 @@ export default function RoutineDetailsScreen({
   route,
 }: ScreenProps) {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
@@ -73,8 +76,8 @@ export default function RoutineDetailsScreen({
   const [dose, setDose] = React.useState("");
 
   React.useEffect(() => {
-    if (!doseAmount || !doseUnit) return;
-    setDose(`${doseAmount} x ${doseUnit}`);
+    if (!doseUnit) setDoseUnit("tablet");
+    setDose(`${doseAmount} × ${doseUnit}`);
   }, [doseAmount, doseUnit]);
 
   const [selectedTop, setSelectedTop] = React.useState(0);
@@ -86,10 +89,6 @@ export default function RoutineDetailsScreen({
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
   const { addFlowStore } = useStores();
-
-  React.useEffect(() => {
-    console.log(medTitle);
-  }, [currentQuestion]);
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -352,7 +351,7 @@ export default function RoutineDetailsScreen({
                     backgroundColor: "transparent",
                   }}
                 >
-                  <Text>x</Text>
+                  <Text>×</Text>
                 </View>
                 <Picker
                   selectedValue={doseUnit}
@@ -400,13 +399,13 @@ export default function RoutineDetailsScreen({
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop);
                     setSelectedSymptom(symptomArr[selectedTop].title);
-                    setSelectedSymptomType(symptomArr[selectedTop].type)
+                    setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
                   onScrollIndexChanged={(index) => {
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
-                    setSelectedSymptomType(symptomArr[index].type)
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setSelectedSymptomType(symptomArr[index].type);
+                    CustomHaptics("light");
                   }}
                   ref={topRef}
                 />

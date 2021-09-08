@@ -27,7 +27,8 @@ import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
 import { Picker } from "@react-native-picker/picker";
 import { useStores } from "../../models/root-store-provider";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../../utils/CustomHaptics";
+import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "ExerciseScreen">,
@@ -49,8 +50,10 @@ export default function RoutineDetailsScreen({
   route,
 }: ScreenProps) {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const animatedOpacityQ1 = React.useRef(new Animated.Value(1)).current;
   const animatedOpacityQ2 = React.useRef(new Animated.Value(0.5)).current;
@@ -356,7 +359,7 @@ export default function RoutineDetailsScreen({
                     setSelectedTop(index);
                     setSelectedSymptom(symptomArr[index].title);
                     setSelectedSymptomType(symptomArr[index].type);
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    CustomHaptics("light");
                   }}
                   ref={topRef}
                 />

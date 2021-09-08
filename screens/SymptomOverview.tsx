@@ -13,16 +13,30 @@ import HomeTile from "../components/HomeTile";
 import { TopTile } from "../components/AreaTile";
 import OverviewSymptomTile from "../components/OverviewSymptomTile";
 
-import * as Haptics from "expo-haptics";
 import Carousel from "react-native-snap-carousel";
 import { useStores } from "../models/root-store-provider";
 import { observer } from "mobx-react-lite";
+import { SavedAppointmentSnapshot } from "../models/appointment";
+import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
+import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
 
 type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
   StackScreenProps<RootStackParamList>
 >;
+
+interface appointmentTileProps {
+  index: number;
+  dataIndex: number;
+  item: SavedAppointmentSnapshot;
+}
+
+interface routineTileProps {
+  index: number;
+  dataIndex: number;
+  item: SavedRoutineSnapshot;
+}
 
 interface SymptomItem {
   title: string;
@@ -41,50 +55,6 @@ interface SymptomBaseData {
   dataIndex: number;
   item: SymptomItem;
 }
-interface tileItemData {
-  id: string;
-  name: string;
-  notes: string;
-  time: string;
-  type: HomeTileTypes;
-}
-
-interface tileItemProps {
-  index: number;
-  dataIndex: number;
-  item: tileItemData;
-}
-
-const DATA: tileItemData[] = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    name: "First Item",
-    notes: "aaa",
-    time: "",
-    type: HomeTileTypes.Exercise,
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    name: "Second Item",
-    notes: "aaa",
-    time: "",
-    type: HomeTileTypes.Medication,
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e26d72",
-    name: "Third Item",
-    notes: "aaa",
-    time: "",
-    type: HomeTileTypes.Appointment,
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145ee26d72",
-    name: "Fourth Item",
-    notes: "aaa",
-    time: "",
-    type: HomeTileTypes.Medication,
-  },
-];
 
 const AREA_DATA = [
   {
@@ -118,6 +88,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
     const topBackground = colorScheme === "light" ? "white" : "#121212";
     const [displaySymptoms, setDisplaySymptoms] = useState<SymptomItem[]>([]);
     const { overviewStore } = useStores();
+    const routineType = (dbType: number) =>
+      dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
   
     useEffect(() => {
       const unsubscribe = navigation.addListener("focus",
@@ -166,19 +138,50 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
         />
       );
     };
-  
-    const renderHomeTile = ({ item, index }: tileItemProps) => {
+
+    const renderRoutineTile = ({ item, index }: routineTileProps) => {
       return (
         <HomeTile
-          title={item.name}
+          title={item.title}
+          secondTitle={
+            routineType(item.type) === HomeTileTypes.Medication
+              ? getMedicationDoseText(item.notes)
+              : item.notes
+          }
+          subTitle={getDateText(new Date(item.time))}
+          style={{
+            marginRight: 15,
+          }}
           index={index}
-          type={item.type}
+          type={routineType(item.type)}
           onPress={() => {
             navigation.push("Notification", {
-              id: item.id,
-              name: item.name,
+              id: item.id.toString(),
+              name: item.title,
               notes: item.notes,
-              type: item.type,
+              type: routineType(item.type),
+            });
+          }}
+        />
+      );
+    };
+
+    const renderAppointmentTile = ({ item, index }: appointmentTileProps) => {
+      return (
+        <HomeTile
+          title={item.doctor}
+          subTitle={item.time.toString()}
+          style={{
+            marginRight: 15,
+          }}
+          index={index}
+          type={HomeTileTypes.Appointment}
+          onPress={() => {
+            navigation.push("Notification", {
+              id: item.id.toString(),
+              name: item.doctor,
+              notes: item.doctor,
+              type: HomeTileTypes.Appointment,
             });
           }}
         />
@@ -205,7 +208,6 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
             inactiveSlideOpacity={0.8}
             onScrollIndexChanged={async (index) => {
               setSymptomSelected(index);
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               await overviewStore.fetchCollectionDataAsync(displaySymptoms[index].type);
               overviewStore.checkCurrentData();
             }}
@@ -230,13 +232,12 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
                 itemWidth={165}
                 inactiveSlideOpacity={1}
                 onScrollIndexChanged={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               />
               <Text style={styles.name}>Routines</Text>
               <Carousel
-                data={DATA}
-                renderItem={renderHomeTile}
+                data={overviewStore.getCurrentRoutinesSnapshot()}
+                renderItem={renderRoutineTile}
                 inactiveSlideScale={1}
                 vertical={false}
                 sliderWidth={Dimensions.get("window").width}
@@ -247,13 +248,12 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
                 itemWidth={165}
                 inactiveSlideOpacity={1}
                 onScrollIndexChanged={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               />
               <Text style={styles.name}>Appointments</Text>
               <Carousel
-                data={DATA}
-                renderItem={renderHomeTile}
+                data={overviewStore.getCurrentAppointmentsSnapshot()}
+                renderItem={renderAppointmentTile}
                 inactiveSlideScale={1}
                 vertical={false}
                 sliderWidth={Dimensions.get("window").width}
@@ -264,7 +264,6 @@ const SymptomOverview: React.FC<ScreenProps> = observer(
                 itemWidth={165}
                 inactiveSlideOpacity={1}
                 onScrollIndexChanged={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               />
             </View>
@@ -304,3 +303,7 @@ const styles = StyleSheet.create({
 });
 
 export default SymptomOverview;
+function routineType(type: number) {
+  throw new Error("Function not implemented.");
+}
+

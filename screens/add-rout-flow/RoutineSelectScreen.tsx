@@ -11,6 +11,7 @@ import TileBase, { TileSize } from "../../components/TileBase";
 import { PressableBase } from "../../components/PressableBase";
 import { useStores } from "../../models/root-store-provider";
 import useColorScheme from "../../hooks/useColorScheme";
+import { themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>,
@@ -19,7 +20,8 @@ type ScreenProps = CompositeScreenProps<
 
 export default function RoutineSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
   const { addFlowStore } = useStores();
 
   const handleSelectMedication = () => {

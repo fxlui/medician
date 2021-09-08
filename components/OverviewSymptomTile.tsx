@@ -7,6 +7,7 @@ import useColorScheme from "../hooks/useColorScheme";
 
 import TileBase, { TileSize } from "./TileBase";
 import Icon from "./Icon";
+import { themeTextColor, themeTileColor } from "../constants/Colors";
 
 interface TileDetails {
   title: string;
@@ -33,8 +34,10 @@ const OverviewSymptomTile: React.FC<topTileDetails> = ({
   const colorScheme = useColorScheme();
   const animatedValue = React.useRef(new Animated.Value(0)).current;
 
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
   const animatedTileColor = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [tileColor, "#FF7272"],
@@ -64,7 +67,7 @@ const OverviewSymptomTile: React.FC<topTileDetails> = ({
           props={{
             width: 42,
             height: 42,
-            fill: selected ? "#fff" : textColor,
+            animatedValue: animatedTextColor,
           }}
         />
         <Animated.Text

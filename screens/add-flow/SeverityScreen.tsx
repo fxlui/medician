@@ -7,7 +7,7 @@ import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 
 import { StackScreenProps } from "@react-navigation/stack";
-import * as Haptics from "expo-haptics";
+import CustomHaptics from "../../utils/CustomHaptics";
 import { useStores } from "../../models/root-store-provider";
 import Slider from "@react-native-community/slider";
 
@@ -94,11 +94,11 @@ const Severity = ({ navigation, route }: ScreenProps) => {
               onValueChange={(value) => {
                 setSeverity(value);
                 if (value > 4) {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  CustomHaptics("medium");
                 } else if (value > 7) {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                  CustomHaptics("heavy");
                 } else {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  CustomHaptics("light");
                 }
               }}
             />

@@ -13,6 +13,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
+import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "TemperatureScreen">,
@@ -21,8 +22,10 @@ type ScreenProps = CompositeScreenProps<
 
 const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
-  const textColor = colorScheme === "light" ? "#333333" : "#fff";
-  const tileColor = colorScheme === "light" ? "#fff" : "#252525";
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const tileColor =
+    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const defaultTemperature = route.params.method === "add" ? 37.0 : 36.5; // TODO Read from store
   // !! important, data from store could be null so need to have fallback default value
