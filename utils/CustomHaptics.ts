@@ -7,10 +7,8 @@ export default function Vibrate(
   const fetchHaptics = async () => {
     const hapticsResult = await SecureStore.getItemAsync("enable_haptics");
     if (hapticsResult !== "true") {
-      console.log(0);
       return;
     } else {
-      console.log(1);
       switch (style) {
         case "extralight":
           Haptics.selectionAsync();
