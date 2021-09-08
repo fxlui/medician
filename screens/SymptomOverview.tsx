@@ -155,7 +155,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
     return (
       <HomeTile
         title={item.doctor}
-        subTitle={item.time.toString()}
+        subTitle={getDateText(new Date(item.time))}
         style={{
           marginRight: 15,
         }}
@@ -165,7 +165,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           navigation.push("Notification", {
             id: item.id.toString(),
             name: item.doctor,
-            notes: item.doctor,
+            notes: item.notes,
             type: HomeTileTypes.Appointment,
           });
         }}

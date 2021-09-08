@@ -15,7 +15,6 @@ import { View, Text } from "react-native";
 import SafeView from "../components/SafeView";
 import { PressableBase } from "../components/PressableBase";
 import { RootStackParamList, HomeTileTypes } from "../types";
-import { useStores } from "../models/root-store-provider";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
 
@@ -32,21 +31,13 @@ const getGradient = (type: HomeTileTypes) => {
   }
 };
 
-const NotificationScreen = ({ navigation, route }: ScreenProps) => {
-  const { alert } = useStores();
+const NotificationScreen = ({
+  navigation,
+  route: {
+    params: { id, type, name, notes },
+  },
+}: ScreenProps) => {
   const insets = useSafeAreaInsets();
-
-  const id = route.params?.id ? route.params.id : alert.getId();
-  const type = route.params?.type ? route.params.type : alert.getType();
-  const name = route.params?.name ? route.params.name : alert.getName();
-  const notes = route.params?.notes ? route.params.notes : alert.getNotes();
-
-  React.useEffect(() => {
-    console.log(id);
-    console.log(type);
-    console.log(name);
-    console.log(notes);
-  }, []);
 
   const iconType =
     type === HomeTileTypes.Appointment

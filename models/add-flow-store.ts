@@ -14,6 +14,7 @@ import { RecordModel } from "./record";
 
 import * as Notifications from "expo-notifications";
 import moment from "moment";
+import { HomeTileTypes } from "../types";
 
 /**
  * The Add Flow Store model.
@@ -132,7 +133,12 @@ export const AddFlowStoreModel = types
                   (self.currentNewAppointment.notes.length > 97 ? "..." : ""),
                 sound: true,
                 badge: 1,
-                data: { id: alertIDs[index] },
+                data: {
+                  id: alertIDs[index],
+                  name: self.currentNewAppointment.doctor,
+                  notes: self.currentNewAppointment.notes,
+                  type: HomeTileTypes.Appointment,
+                },
               },
               trigger: new Date(self.currentNewAppointment.alert[index]),
             });
@@ -189,7 +195,15 @@ export const AddFlowStoreModel = types
                       (self.currentNewRoutine.notes.length > 97 ? "..." : ""),
                 sound: true,
                 badge: 1,
-                data: { id: alertIDs[index] },
+                data: {
+                  id: alertIDs[index],
+                  name: self.currentNewRoutine.title,
+                  notes: self.currentNewRoutine.notes,
+                  type:
+                    self.currentNewRoutine.type === 0
+                      ? HomeTileTypes.Medication
+                      : HomeTileTypes.Exercise,
+                },
               },
               trigger: new Date(self.currentNewRoutine.alert[index]),
             });

@@ -44,15 +44,32 @@ WHERE entry.collectionId = ?
 `;
 
 export const getRoutinesbyCollection = `
-SELECT *
+SELECT 
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  alert.eventTime,
+  alert.completed
 FROM routine
+JOIN alert ON alert.routineId = routine.id
 WHERE routine.collectionId = ?
+ORDER BY alert.eventTime
 `;
 
 export const getAppointmentsByCollection = `
-SELECT *
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes,
+  alert.completed,
+  alert.eventTime
 FROM appointment
+JOIN alert ON alert.appointmentId = appointment.id
 WHERE appointment.collectionId = ?
+ORDER BY alert.eventTime
 `;
 
 export const getAlertByID = `

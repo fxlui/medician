@@ -47,42 +47,11 @@ type ScreenProps = CompositeScreenProps<
 
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const colorScheme = useColorScheme();
-  const { homeScreenStore, alert } = useStores();
+  const { homeScreenStore } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
-
-  /* set up notification listener
-  React.useEffect(() => {
-    Notifications.setNotificationHandler({
-      handleNotification: (notification) => {
-        const idNum = parseInt(`${notification.request.content.data.id}`);
-        console.log(`hihihi ${notification.request.content.data.id}`);
-        console.log(`hihi2 ${idNum}`);
-        console.log(
-          `hihi3 ${notification.request.content.data.id && !isNaN(idNum)}`
-        );
-        if (notification.request.content.data.id && !isNaN(idNum)) {
-          console.log("HIII I handled " + idNum);
-          alert.setAlertWithID(idNum);
-        }
-
-        return new Promise((resolve) =>
-          resolve({
-            shouldShowAlert: true,
-            shouldPlaySound: false,
-            shouldSetBadge: false,
-          })
-        );
-      },
-      handleSuccess: () => {},
-      handleError: (error) => {
-        console.log(error);
-      },
-    });
-  }, []);
-  */
 
   React.useEffect(() => {
     Notifications.setNotificationHandler({
@@ -105,8 +74,12 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         );
         if (notification.request.content.data.id && !isNaN(idNum)) {
           console.log("HIII I handled " + idNum);
-          alert.setAlertWithID(idNum);
-          navigation.navigate("Notification");
+          navigation.navigate("Notification", {
+            id: notification.request.content.data.id as string,
+            name: notification.request.content.data.name as string,
+            notes: notification.request.content.data.notes as string,
+            type: notification.request.content.data.type as HomeTileTypes,
+          });
         }
       }
     );
@@ -155,7 +128,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
           navigation.push("Notification", {
             id: item.id.toString(),
             name: item.doctor,
-            notes: item.doctor,
+            notes: item.notes,
             type: HomeTileTypes.Appointment,
           });
         }}
