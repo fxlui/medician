@@ -55,20 +55,35 @@ FROM appointment
 WHERE appointment.collectionId = ?
 `;
 
-export const getRecentAppointments = `
-SELECT *
+// removed the time constraints on this
+export const getFutureAppointments = `
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes,
+  alert.completed,
+  alert.eventTime
 FROM appointment
-WHERE appointment.time <= ?
-AND appointment.complete = 0
-ORDER BY appointment.time
+JOIN alert ON alert.appointmentId = appointment.id
+WHERE alert.completed = 0
+ORDER BY alert.eventTime
 `;
 
 export const getRecentRoutines = `
-SELECT *
+SELECT 
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  alert.eventTime,
+  alert.completed
 FROM routine
-WHERE routine.time <= ?
-AND routine.complete = 0
-ORDER BY routine.time
+JOIN alert ON alert.routineId = routine.id
+WHERE alert.eventTime <= ?
+AND alert.completed = 0
+ORDER BY alert.eventTime
 `;
 
 export function getLastInserted(

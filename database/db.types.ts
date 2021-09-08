@@ -3,8 +3,8 @@ export interface SQLAppointmentsReturnType {
   collectionId: number;
   doctor: string;
   notes: string;
-  complete: number;
-  time: number;
+  completed: number;
+  eventTime: number;
 }
 
 export interface SQLCollectionReturnType {
@@ -20,16 +20,16 @@ export interface SQLRoutineReturnType {
   type: number;
   title: string;
   notes: string;
-  time: number;
-  complete: number;
+  eventTime: number;
+  completed: number;
 }
 
 export interface FetchByCollectionResultType {
   records: {
-    id: number,
-    area: string,
-    subArea: string
-  }[],
-  routines: SQLRoutineReturnType[],
-  appointments: SQLAppointmentsReturnType[]
+    id: number;
+    area: string;
+    subArea: string;
+  }[];
+  routines: SQLRoutineReturnType[];
+  appointments: SQLAppointmentsReturnType[];
 }

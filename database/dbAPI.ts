@@ -17,12 +17,12 @@ import {
   insertRoutineAlert,
   getLastInserted,
   getLastInsertedId,
-  getRecentAppointments,
   getRecentRoutines,
   getAllCollecitons,
   getAppointmentsByCollection,
   getRecordsbyCollection,
   getRoutinesbyCollection,
+  getFutureAppointments,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -311,14 +311,12 @@ export async function addRoutineAlert(
   });
 }
 
-export async function fetchRecentAppointments() {
+export async function fetchFutureAppointments() {
   return new Promise<SQLAppointmentsReturnType[]>((resolve, reject) => {
     db.transaction(
       (tx) => {
-        tx.executeSql(
-          getRecentAppointments,
-          [Date.now() + 1000 * 60 * 60 * 24 * 14], // Two weeks from now
-          (_, { rows }) => resolve(rows._array as SQLAppointmentsReturnType[])
+        tx.executeSql(getFutureAppointments, [], (_, { rows }) =>
+          resolve(rows._array as SQLAppointmentsReturnType[])
         );
       },
       (error) => reject(error)

@@ -5,15 +5,15 @@ import {
   SnapshotOrInstance,
   getSnapshot,
   Instance,
-  SnapshotOut
+  SnapshotOut,
 } from "mobx-state-tree";
 import {
   SQLAppointmentsReturnType,
-  SQLRoutineReturnType
+  SQLRoutineReturnType,
 } from "../database/db.types";
 import {
-  fetchRecentAppointments,
-  fetchRecentRoutines
+  fetchFutureAppointments,
+  fetchRecentRoutines,
 } from "../database/dbAPI";
 import { SavedRoutineModel } from "./routine";
 import { SavedAppointmentModel } from "./appointment";
@@ -25,43 +25,46 @@ import { SavedAppointmentModel } from "./appointment";
 export const HomeScreenStoreModel = types
   .model("HomeScreenStore", {
     recentRoutines: types.optional(types.array(SavedRoutineModel), []),
-    recentAppointments: types.optional(types.array(SavedAppointmentModel), [])
+    recentAppointments: types.optional(types.array(SavedAppointmentModel), []),
   })
   // Calls to get derived data
-  .views(self => ({
+  .views((self) => ({
     getRecentMedications: () => {
-      return getSnapshot(self.recentRoutines).filter(item => item.type === 0);
+      return getSnapshot(self.recentRoutines).filter((item) => item.type === 0);
     },
     getRecentExercises: () => {
-      return getSnapshot(self.recentRoutines).filter(item => item.type === 1);
+      return getSnapshot(self.recentRoutines).filter((item) => item.type === 1);
     },
     getRecentAppointments: () => {
       return getSnapshot(self.recentAppointments);
-    }
+    },
   }))
   // Synchronous actions defined here
-  .actions(self => ({
+  .actions((self) => ({
     setRoutines: (routine: SnapshotOrInstance<typeof self.recentRoutines>) => {
       self.recentRoutines = cast(routine);
     },
-    setAppointments: (appointments: SnapshotOrInstance<typeof self.recentAppointments>) => {
+    setAppointments: (
+      appointments: SnapshotOrInstance<typeof self.recentAppointments>
+    ) => {
       self.recentAppointments = cast(appointments);
-    }
+    },
   }))
   // Asynchronous actions defined here
-  .actions(self => {
-    const fetchAppointmentsAsync = flow(function*() {
+  .actions((self) => {
+    const fetchAppointmentsAsync = flow(function* () {
       try {
-        const results: SQLAppointmentsReturnType[] = yield fetchRecentAppointments();
+        const results: SQLAppointmentsReturnType[] =
+          yield fetchFutureAppointments();
         self.recentAppointments = cast(
-          results.map(
-            item => SavedAppointmentModel.create({
+          results.map((item) =>
+            SavedAppointmentModel.create({
               id: item.id,
               collectionId: item.collectionId,
-              complete: item.complete,
+              complete: item.completed,
               doctor: item.doctor,
-              time: new Date(item.time),
-              notes: item.notes
+              time: new Date(item.eventTime),
+              notes: item.notes,
             })
           )
         );
@@ -70,22 +73,22 @@ export const HomeScreenStoreModel = types
       }
     });
 
-    const fetchRoutinesAsync = flow(function*() {
+    const fetchRoutinesAsync = flow(function* () {
       try {
         const results: SQLRoutineReturnType[] = yield fetchRecentRoutines();
         self.recentRoutines = cast(
-          results.map(
-            item => SavedRoutineModel.create({
+          results.map((item) =>
+            SavedRoutineModel.create({
               id: item.id,
               collectionId: item.collectionId,
               title: item.title,
               notes: item.notes,
               type: item.type,
-              time: new Date(item.time),
-              complete: item.complete
+              time: new Date(item.eventTime),
+              complete: item.completed,
             })
           )
-        )
+        );
       } catch (error) {
         console.warn(error);
       }
@@ -94,6 +97,6 @@ export const HomeScreenStoreModel = types
   });
 
 type HomeScreenStoreType = Instance<typeof HomeScreenStoreModel>;
-export interface HomeScreenStore extends HomeScreenStoreType {};
+export interface HomeScreenStore extends HomeScreenStoreType {}
 type HomeScreenStoreSnapshotType = SnapshotOut<typeof HomeScreenStoreModel>;
-export interface HomeScreenStoreSnapshot extends HomeScreenStoreSnapshotType {};
+export interface HomeScreenStoreSnapshot extends HomeScreenStoreSnapshotType {}

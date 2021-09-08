@@ -109,12 +109,13 @@ export const AddFlowStoreModel = types
         console.log("insertedAppointmentID", addAppointment);
 
         // Registering notifications
+        // title: `Appointment for ${self.currentNewAppointment.symptomType}: ${self.currentNewAppointment.doctor}`,
         const notificationPromises = self.currentNewAppointment
           .getSortedTimes()
           .map(async (timestamp, index) => {
             return Notifications.scheduleNotificationAsync({
               content: {
-                title: `Appointment for ${self.currentNewAppointment.symptomType}: ${self.currentNewAppointment.doctor}`,
+                title: `Appointment with ${self.currentNewAppointment.doctor}`,
                 subtitle: moment(timestamp).format("lll"),
                 body:
                   self.currentNewAppointment.notes.substring(0, 97) +
@@ -132,7 +133,7 @@ export const AddFlowStoreModel = types
           insertedAppointmentID,
           self.currentNewAppointment.getSortedTimes(),
           self.currentNewAppointment.alert,
-          []
+          notificationIds
         );
       } catch (error) {
         console.warn(error);
