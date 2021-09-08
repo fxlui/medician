@@ -87,15 +87,26 @@ export const RecordModel = types
     },
   }));
 
-/**
- * The Saved Record model.
- * This should be used when fetching existing record from db.
- */
-export const SavedRecordModel = RecordModel
-  .props({
-    id: types.identifierNumber,
-    collectionId: types.integer,
-  });
+  export const SavedRecordModel = types
+    .model("SavedRecordModel", {
+      id: types.identifierNumber,
+      collectionId: types.integer,
+      time: types.optional(types.array(types.Date), []),
+      severity: types.optional(types.integer, 0),
+      area: types.optional(types.string, "other"),
+      subArea: types.optional(types.string, "other"),
+      better: types.optional(types.string, ""),
+      worse: types.optional(types.string, ""),
+      related: types.optional(types.string, ""),
+      attempt: types.optional(types.string, ""),
+      temperature: types.optional(types.number, 0),
+      toiletType: types.optional(types.integer, -1),
+      toiletPain: types.optional(types.integer, -1),
+      colour: types.optional(types.integer, -1),
+      dizzy: types.optional(types.integer, -1),
+      sleep: types.optional(types.number, 0),
+      description: types.optional(types.string, "")
+    });
 
 type RecordType = Instance<typeof RecordModel>;
 export interface Record extends RecordType {};

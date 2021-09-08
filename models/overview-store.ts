@@ -6,6 +6,7 @@ import {
   Instance,
   SnapshotOut,
 } from "mobx-state-tree";
+import { SavedRecordModel } from "./record";
 import { SavedRoutineModel } from "./routine";
 import { fetchAllCollections, fetchCollectionData } from "../database/dbAPI";
 import { SQLCollectionReturnType, FetchByCollectionResultType } from "../database/db.types";
@@ -24,6 +25,7 @@ export const OverviewStoreModel = types
       id: types.identifierNumber,
       type: types.string
     })),
+    selectedCollectionId: types.maybe(types.number),
     currentCollectionRecords: types.array(SimpleRecordModel),
     currentCollectionRoutines: types.array(SavedRoutineModel),
     currentCollectionAppointments: types.array(SavedAppointmentModel)
@@ -47,6 +49,9 @@ export const OverviewStoreModel = types
       console.log(self.getCurrentRecordsSnapshot());
       console.log(self.getCurrentRoutinesSnapshot());
       console.log(self.getCurrentAppointmentsSnapshot());
+    },
+    setSelectedCollection: (symptomType: string) => {
+      self.selectedCollectionId = self.collections.find(item => item.type === symptomType)?.id;
     }
   }))
   // Asynchronous actions
@@ -57,16 +62,20 @@ export const OverviewStoreModel = types
         self.collections = cast(
           result.map(item => ({ id: item.id, type: item.type }))
         );
+        if (!self.selectedCollectionId) {
+          self.selectedCollectionId = self.collections[0].id;
+        }
       } catch (error) {
         console.warn(error);
       }
     });
 
-    const fetchCollectionDataAsync = flow(function*(symptomType: string) {
-      const id = self.collections.find(item => item.type === symptomType)?.id;
-      if (id) {
+    const fetchCollectionDataAsync = flow(function*() {
+      if (self.selectedCollectionId) {
         try {
-          const result: FetchByCollectionResultType = yield fetchCollectionData(id);
+          const result: FetchByCollectionResultType = yield fetchCollectionData(
+            self.selectedCollectionId
+          );
           self.currentCollectionRecords = cast(result.records);
           self.currentCollectionRoutines = cast(
             result.routines.map(

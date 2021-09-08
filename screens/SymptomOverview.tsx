@@ -87,9 +87,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       );
       setDisplaySymptoms(fetchedCollections);
       if (fetchedCollections.length === 0) return;
-      await overviewStore.fetchCollectionDataAsync(
-        fetchedCollections[symptomSelected].type
-      );
+      await overviewStore.fetchCollectionDataAsync();
     });
     return unsubscribe;
   }, []);
@@ -194,9 +192,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           inactiveSlideOpacity={0.8}
           onScrollIndexChanged={async (index) => {
             setSymptomSelected(index);
-            await overviewStore.fetchCollectionDataAsync(
-              displaySymptoms[index].type
-            );
+            overviewStore.setSelectedCollection(displaySymptoms[index].type);
+            await overviewStore.fetchCollectionDataAsync();
           }}
           ref={topRef}
         />
