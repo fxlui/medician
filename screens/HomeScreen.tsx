@@ -53,6 +53,36 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
 
+  // Notification Stuff :D
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+  React.useEffect(() => {
+    if (
+      lastNotificationResponse &&
+      lastNotificationResponse.notification.request.content.data.id &&
+      lastNotificationResponse.actionIdentifier ===
+        Notifications.DEFAULT_ACTION_IDENTIFIER
+    ) {
+      const idNum = parseInt(
+        `${lastNotificationResponse.notification.request.content.data.id}`
+      );
+      if (
+        lastNotificationResponse.notification.request.content.data.id &&
+        !isNaN(idNum)
+      ) {
+        navigation.navigate("Notification", {
+          id: lastNotificationResponse.notification.request.content.data
+            .id as string,
+          name: lastNotificationResponse.notification.request.content.data
+            .name as string,
+          notes: lastNotificationResponse.notification.request.content.data
+            .notes as string,
+          type: lastNotificationResponse.notification.request.content.data
+            .type as HomeTileTypes,
+        });
+      }
+    }
+  }, [lastNotificationResponse]);
+
   React.useEffect(() => {
     Notifications.setNotificationHandler({
       handleNotification: async (notification) => ({
@@ -67,13 +97,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
         const idNum = parseInt(`${notification.request.content.data.id}`);
-        console.log(`hihihi ${notification.request.content.data.id}`);
-        console.log(`hihi2 ${idNum}`);
-        console.log(
-          `hihi3 ${notification.request.content.data.id && !isNaN(idNum)}`
-        );
         if (notification.request.content.data.id && !isNaN(idNum)) {
-          console.log("HIII I handled " + idNum);
           navigation.navigate("Notification", {
             id: notification.request.content.data.id as string,
             name: notification.request.content.data.name as string,
@@ -172,7 +196,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
+            itemWidth={170}
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
@@ -189,7 +213,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
+            itemWidth={170}
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
@@ -206,7 +230,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
+            itemWidth={170}
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {

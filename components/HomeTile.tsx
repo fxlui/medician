@@ -137,8 +137,9 @@ const Tile: React.FC<HomeTileProps> = ({
                 color: textColor,
                 fontSize: 16,
                 fontWeight: "500",
-                marginBottom: 1,
+                marginBottom: 2,
               }}
+              numberOfLines={1}
             >
               {title}
             </Text>
@@ -155,6 +156,7 @@ const Tile: React.FC<HomeTileProps> = ({
                   fontSize: 14,
                   opacity: 0.68,
                 }}
+                numberOfLines={1}
               >
                 {subTitle}
               </Text>

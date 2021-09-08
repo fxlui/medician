@@ -21,6 +21,7 @@ import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
 import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
+import CustomHaptics from "../utils/CustomHaptics";
 
 type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
@@ -190,9 +191,10 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
             alignItems: "flex-start",
             overflow: "visible",
           }}
-          itemWidth={150}
+          itemWidth={165}
           inactiveSlideOpacity={0.8}
           onScrollIndexChanged={async (index) => {
+            CustomHaptics("light");
             setSymptomSelected(index);
             await overviewStore.fetchCollectionDataAsync(
               displaySymptoms[index].type
@@ -216,7 +218,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               containerCustomStyle={{
                 overflow: "visible",
               }}
-              itemWidth={165}
+              itemWidth={170}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
@@ -231,7 +233,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               containerCustomStyle={{
                 overflow: "visible",
               }}
-              itemWidth={165}
+              itemWidth={170}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
@@ -246,7 +248,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               containerCustomStyle={{
                 overflow: "visible",
               }}
-              itemWidth={165}
+              itemWidth={170}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />

@@ -85,8 +85,8 @@ const OverviewSymptomTile: React.FC<topTileDetails> = ({
           backgroundColor: animatedTileColor,
           flex: 1,
           position: "absolute",
-          width: 150,
-          height: 150,
+          width: 155,
+          height: 155,
           zIndex: -50,
         }}
       />

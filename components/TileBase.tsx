@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   default: {
-    width: 150,
-    height: 150,
+    width: 155,
+    height: 155,
   },
   large: {
     width: 302,
