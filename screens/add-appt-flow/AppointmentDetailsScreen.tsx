@@ -32,6 +32,9 @@ import { themeTextColor, themeTileColor } from "../../constants/Colors";
 import Toast from "react-native-root-toast";
 import TickToast from "../../components/TickToast";
 
+import RegisterNotification from "../../utils/RegisterNotification";
+import * as Notifications from "expo-notifications";
+
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
   StackScreenProps<RootStackParamList>
@@ -152,6 +155,25 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         );
         return;
       }
+      if (alertMinutesBefore !== -1) {
+        RegisterNotification();
+        const getStatus = async () => {
+          const settings = await Notifications.getPermissionsAsync();
+          if (
+            !(
+              settings.granted ||
+              settings.ios?.status ===
+                Notifications.IosAuthorizationStatus.PROVISIONAL
+            )
+          ) {
+            Alert.alert(
+              "Missing Permissions",
+              "To receive notifications, please enable notifications in your settings."
+            );
+          }
+        };
+        getStatus();
+      }
       Toast.show(<TickToast message={`Appointment Added`} />, {
         duration: Toast.durations.SHORT,
         position: Toast.positions.CENTER,
@@ -167,7 +189,8 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
       addFlowStore.currentNewAppointment.setAppointmentDetails(
         currentDoctor,
         selectedSymptomType,
-        alertMinutesBefore
+        alertMinutesBefore,
+        extraNotes
       );
       await addFlowStore.dbInsertAppointment(user.id);
       navigation.navigate("Root");

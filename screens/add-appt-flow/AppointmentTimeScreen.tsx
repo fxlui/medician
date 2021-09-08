@@ -77,11 +77,11 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
 
   const handleNavigation = () => {
     addFlowStore.goForward();
-    addFlowStore
-      .currentNewAppointment
-      .setAppointmentTime(selection.map(item => item.date));
+    addFlowStore.currentNewAppointment.setAppointmentTime(
+      selection.map((item) => item.date)
+    );
     navigation.navigate("AppointmentDetailsScreen");
-  }
+  };
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -131,7 +131,7 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
                   {
                     dateobj: day,
                     date: moment(
-                      `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
+                      `${day.dateString} ${now.format("HH:mm")}:00`
                     ).toDate(),
                   },
                 ]);

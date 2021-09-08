@@ -14,22 +14,22 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 export const insertAppointment = `
 INSERT INTO appointment
-(collectionId, doctor, time, notes) values (?, ?, ?, ?)
+(collectionId, doctor, notes) values (?, ?, ?)
 `;
 
 export const insertRoutine = `
 INSERT INTO routine
-(type, collectionId, title, notes, time) values (?, ?, ?, ?, ?)
+(type, collectionId, title, notes) values (?, ?, ?, ?)
 `;
 
 export const insertRoutineAlert = `
 INSERT INTO alert
-(routineId, time) values (?, ?)
+(routineId, eventTime, time, systemId) values (?, ?, ?, ?)
 `;
 
 export const insertAppointmentAlert = `
 INSERT INTO alert
-(appointmentId, time) values (?, ?)
+(appointmentId, eventTime, time, systemId) values (?, ?, ?, ?)
 `;
 
 export const getAllCollecitons = `
@@ -55,20 +55,35 @@ FROM appointment
 WHERE appointment.collectionId = ?
 `;
 
-export const getRecentAppointments = `
-SELECT *
+// removed the time constraints on this
+export const getFutureAppointments = `
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes,
+  alert.completed,
+  alert.eventTime
 FROM appointment
-WHERE appointment.time <= ?
-AND appointment.complete = 0
-ORDER BY appointment.time
+JOIN alert ON alert.appointmentId = appointment.id
+WHERE alert.completed = 0
+ORDER BY alert.eventTime
 `;
 
 export const getRecentRoutines = `
-SELECT *
+SELECT 
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  alert.eventTime,
+  alert.completed
 FROM routine
-WHERE routine.time <= ?
-AND routine.complete = 0
-ORDER BY routine.time
+JOIN alert ON alert.routineId = routine.id
+WHERE alert.eventTime <= ?
+AND alert.completed = 0
+ORDER BY alert.eventTime
 `;
 
 export function getLastInserted(
@@ -142,9 +157,7 @@ export const createAppointmentTable = `
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
     "doctor"	TEXT,
-    "time"	INTEGER NOT NULL,
     "notes"  TEXT,
-    "complete"	INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY("id" AUTOINCREMENT),
     FOREIGN KEY("collectionId") REFERENCES "collection"("id")
   )
@@ -157,8 +170,9 @@ export const createRoutineTable = `
     "type"	INTEGER NOT NULL,
     "title" TEXT,
     "notes"	TEXT,
-    "time"	INTEGER NOT NULL,
-    "complete"	INTEGER NOT NULL DEFAULT 0,
+    "duration"  INTEGER,
+    "sets" INTEGER,
+    "reps" INTEGER,
     FOREIGN KEY("collectionId") REFERENCES "collection"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)
   )
@@ -170,7 +184,9 @@ export const createAlertTable = `
     "appointmentId"	INTEGER,
     "routineId"	INTEGER,
     "time"	INTEGER NOT NULL,
-    "dismissed"	INTEGER NOT NULL DEFAULT 0,
+    "eventTime"  INTEGER NOT NULL,
+    "completed"	INTEGER NOT NULL DEFAULT 0,
+    "systemId"	TEXT,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
     FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

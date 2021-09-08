@@ -30,6 +30,9 @@ import { useStores } from "../../models/root-store-provider";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
+import RegisterNotification from "../../utils/RegisterNotification";
+import * as Notifications from "expo-notifications";
+
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "MedicationScreen">,
   StackScreenProps<RootStackParamList>
@@ -67,7 +70,7 @@ export default function RoutineDetailsScreen({
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [alertMinutesBefore, setAlertMinutesBefore] =
-    React.useState<Number>(-1);
+    React.useState<number>(-1);
 
   const [medTitle, setMedTitle] = React.useState(""); //medication title
 
@@ -82,7 +85,7 @@ export default function RoutineDetailsScreen({
 
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
-  const [selectedSymtomType, setSelectedSymptomType] = React.useState("");
+  const [selectedSymptomType, setSelectedSymptomType] = React.useState("");
   const [extraNotes, setExtraNotes] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
@@ -187,11 +190,30 @@ export default function RoutineDetailsScreen({
         );
         return;
       }
+      if (alertMinutesBefore !== -1) {
+        RegisterNotification();
+        const getStatus = async () => {
+          const settings = await Notifications.getPermissionsAsync();
+          if (
+            !(
+              settings.granted ||
+              settings.ios?.status ===
+                Notifications.IosAuthorizationStatus.PROVISIONAL
+            )
+          ) {
+            Alert.alert(
+              "Missing Permissions",
+              "To receive notifications, please enable notifications in your settings."
+            );
+          }
+        };
+        getStatus();
+      }
       addFlowStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
         medTitle,
-        selectedSymtomType,
-        selectedTop,
+        selectedSymptomType,
+        alertMinutesBefore === null ? -1 : alertMinutesBefore,
         dose
       );
       navigation.navigate("RoutineTimeScreen");

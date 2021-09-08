@@ -116,15 +116,29 @@ export default function RoutineTimeScreen({ navigation }: ScreenProps) {
             )}
             onDayPress={(day) => {
               const now = moment();
-              setSelection((prev) => [
-                ...prev,
-                {
-                  dateobj: day,
-                  date: moment(
-                    `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
-                  ).toDate(),
-                },
-              ]);
+              const newDate = moment(
+                `${day.dateString} ${now.format("HH:mm")}:00`
+              ).toDate();
+              let update = true;
+              selection.forEach((item) => {
+                if (item.date.getTime() === newDate.getTime()) {
+                  update = false;
+                  Alert.alert(
+                    "Existing time",
+                    "You have already selected this time. Please select another time or change the existing time."
+                  );
+                }
+              });
+              if (update)
+                setSelection((prev) => {
+                  return [
+                    ...prev,
+                    {
+                      dateobj: day,
+                      date: newDate,
+                    },
+                  ];
+                });
             }}
             theme={{
               backgroundColor: "transparent",
