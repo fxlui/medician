@@ -102,7 +102,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         if (notification.request.content.data.id && !isNaN(idNum)) {
           const checkStatus = async () => {
             const status = await SecureStore.getItemAsync("last_alert_id");
-            if (status === notification.request.content.data.id) {
+            if (status === `${notification.request.content.data.id}`) {
               // handled before
               return;
             } else {
