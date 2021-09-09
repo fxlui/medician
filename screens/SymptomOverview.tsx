@@ -190,7 +190,15 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
 
   return (
     <SafeView disableTop disableBottom style={styles.container}>
-      <View style={[styles.header, { backgroundColor: topBackground }]}>
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: topBackground },
+          displaySymptoms && {
+            paddingVertical: 0,
+          },
+        ]}
+      >
         <Carousel
           data={displaySymptoms}
           renderItem={renderSymptomTile}
@@ -220,6 +228,20 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         <View style={styles.overflowView}>
           <View style={{ paddingLeft: 25 }}>
             <Text style={styles.name}>Timeline</Text>
+
+            {uniqueBodyAreas.filter((item) =>
+              currentSubAreas.includes(item.subArea)
+            ).length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               style={{ overflow: "visible" }}
               data={uniqueBodyAreas.filter((item) =>
@@ -237,7 +259,19 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
+
             <Text style={styles.name}>Routines</Text>
+            {overviewStore.getCurrentRoutinesSnapshot().length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               data={overviewStore.getCurrentRoutinesSnapshot()}
               renderItem={renderRoutineTile}
@@ -252,7 +286,19 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
+
             <Text style={styles.name}>Appointments</Text>
+            {overviewStore.getCurrentAppointmentsSnapshot().length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               data={overviewStore.getCurrentAppointmentsSnapshot()}
               renderItem={renderAppointmentTile}

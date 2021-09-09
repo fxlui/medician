@@ -200,6 +200,16 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             </PressableBase>
           </View>
           <Text style={styles.name}>Medication</Text>
+          <Text
+            style={{
+              marginLeft: 5,
+              marginTop: -12.5,
+              marginBottom: 15,
+              opacity: 0.7,
+            }}
+          >
+            Next Two Weeks
+          </Text>
           <Carousel
             style={{ overflow: "visible" }}
             data={homeScreenStore.getRecentMedications()}
@@ -218,6 +228,16 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             }}
           />
           <Text style={styles.name}>Exercise</Text>
+          <Text
+            style={{
+              marginLeft: 5,
+              marginTop: -12.5,
+              marginBottom: 15,
+              opacity: 0.7,
+            }}
+          >
+            Next Two Weeks
+          </Text>
           <Carousel
             data={homeScreenStore.getRecentExercises()}
             renderItem={renderRoutineTile}
