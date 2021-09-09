@@ -42,6 +42,7 @@ import {
   getAttachmentbyRecordId,
   deleteAttachmentById,
   deleteAttachmentByRecordId,
+  deleteAlertQuery,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -502,6 +503,20 @@ export async function setAlertCompletedValue(id: number, completed: number) {
     db.transaction(
       (tx) => {
         tx.executeSql(setAlertCompleted, [completed, id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
+}
+
+export async function deleteAlertDB(id: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(deleteAlertQuery, [id], (_) => resolve());
       },
       (error) => {
         reject(error);

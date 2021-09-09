@@ -113,15 +113,10 @@ const NotificationScreen = ({
     setCurrentNotes(currentNotes.trim());
     const updateDB = async () => {
       console.log(currentAlert?.id);
-      homeScreenStore.updateAlertTitleNotes(
+      homeScreenStore.updateAlert(
         currentAlert?.id!,
         currentTitle,
-        currentNotes
-      );
-      console.log(currentAlertTime);
-      console.log(currentEventTime);
-      homeScreenStore.updateAlertTimes(
-        currentAlert?.id!,
+        currentNotes,
         currentEventTime!,
         currentAlertTime!
       );
@@ -208,38 +203,70 @@ const NotificationScreen = ({
               handleSave();
               return;
             }
-            showActionSheetWithOptions(
-              {
-                options: ["Edit", "Delete", "Cancel"],
-                cancelButtonIndex: 2,
-                destructiveButtonIndex: 1,
-              },
-              (selection) => {
-                if (selection === 0) {
-                  setEditing(true);
-                  startShake();
-                } else if (selection === 1) {
-                  Alert.alert(
-                    "Delete",
-                    "Are you sure you want to delete this notification?",
-                    [
-                      {
-                        text: "Cancel",
-                        style: "cancel",
-                      },
-                      {
-                        text: "Delete",
-                        style: "destructive",
-                        onPress: () => {
-                          //homeScreenStore.deleteNotification(id);
-                          navigation.pop();
+            if (currentCompleted) {
+              showActionSheetWithOptions(
+                {
+                  options: ["Delete", "Cancel"],
+                  cancelButtonIndex: 1,
+                  destructiveButtonIndex: 0,
+                },
+                (selection) => {
+                  if (selection === 0) {
+                    Alert.alert(
+                      "Delete",
+                      "Are you sure you want to delete this tile?",
+                      [
+                        {
+                          text: "Cancel",
+                          style: "cancel",
                         },
-                      },
-                    ]
-                  );
+                        {
+                          text: "Delete",
+                          style: "destructive",
+                          onPress: () => {
+                            homeScreenStore.deleteAlert(id);
+                            navigation.pop();
+                          },
+                        },
+                      ]
+                    );
+                  }
                 }
-              }
-            );
+              );
+            } else {
+              showActionSheetWithOptions(
+                {
+                  options: ["Edit", "Delete", "Cancel"],
+                  cancelButtonIndex: 2,
+                  destructiveButtonIndex: 1,
+                },
+                (selection) => {
+                  if (selection === 0) {
+                    setEditing(true);
+                    startShake();
+                  } else if (selection === 1) {
+                    Alert.alert(
+                      "Delete",
+                      "Are you sure you want to delete this tile?",
+                      [
+                        {
+                          text: "Cancel",
+                          style: "cancel",
+                        },
+                        {
+                          text: "Delete",
+                          style: "destructive",
+                          onPress: () => {
+                            homeScreenStore.deleteAlert(id);
+                            navigation.pop();
+                          },
+                        },
+                      ]
+                    );
+                  }
+                }
+              );
+            }
           }}
           extraProps={{
             style: { alignSelf: "center", padding: 10, opacity: 0.8 },

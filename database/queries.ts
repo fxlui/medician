@@ -181,6 +181,16 @@ SET eventTime = ?
 WHERE id = ?
 `;
 
+export const deleteAlertQuery = `
+DELETE FROM alert
+WHERE id = ?
+`;
+
+export const deleteRecordQuery = `
+DELETE FROM entry
+WHERE id = ?
+`;
+
 export const changeRoutineTitle = `
 UPDATE routine
 SET title = ?
