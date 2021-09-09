@@ -9,7 +9,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import { useStores } from "../../models/root-store-provider";
-
+import { getEditDescription } from "../../utils/ScreenUtils";
 import Carousel from "react-native-snap-carousel";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { observer } from "mobx-react-lite";
@@ -49,14 +49,19 @@ interface baseData {
 const ToiletColorScreen: React.FC<ScreenProps> = observer(
   ({ navigation, route }) => {
     const { addFlowStore, editFlowStore } = useStores();
-    const defaultSelection = route.params.method === "add" ? 0 :
-    !editFlowStore.currentEditingRecord ? 0 :
-    editFlowStore.currentEditingRecord.toiletType === -1 ? 0 : 
-    editFlowStore.currentEditingRecord.toiletType;
+    const defaultSelection =
+      route.params.method === "add"
+        ? 0
+        : !editFlowStore.currentEditingRecord
+        ? 0
+        : editFlowStore.currentEditingRecord.toiletType === -1
+        ? 0
+        : editFlowStore.currentEditingRecord.toiletType;
     const [selected, setSelected] = useState(defaultSelection);
-  
-    const tileRef = React.createRef<Carousel<{ emoji: string; title: string }>>();
-  
+
+    const tileRef =
+      React.createRef<Carousel<{ emoji: string; title: string }>>();
+
     const renderTile = ({ item, index }: baseData) => {
       return (
         <TopTile
@@ -74,12 +79,16 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
         />
       );
     };
-  
+
     return (
       <SafeView style={styles.container} disableTop>
         {route.params.method === "edit" ? (
           <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+            Editing record for{" "}
+            {getEditDescription(
+              editFlowStore.currentSymptomType,
+              editFlowStore.currentEditingRecord?.subArea
+            )}
           </Text>
         ) : null}
         <Text style={styles.greeting}>What colour is it?</Text>
@@ -106,6 +115,9 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
             }}
             itemWidth={150}
             inactiveSlideOpacity={0.8}
+            onLayout={() => {
+              tileRef.current?.snapToItem(selected, false, false);
+            }}
             onScrollIndexChanged={(index) => {
               setSelected(index);
               CustomHaptics("light");
@@ -119,7 +131,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
             if (route.params.method === "add") {
               addFlowStore.currentNewRecord.setRecordColor(selected);
             } else {
-              editFlowStore.currentEditingRecord?.updateRecordColor(selected)
+              editFlowStore.currentEditingRecord?.updateRecordColor(selected);
             }
             navigation.navigate("SeverityScreen", route.params);
           }}
@@ -127,7 +139,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
       </SafeView>
     );
   }
-)
+);
 
 const styles = StyleSheet.create({
   container: {

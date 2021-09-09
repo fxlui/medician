@@ -211,10 +211,10 @@ export default function RoutineDetailsScreen({
       }
       progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
-        medTitle,
+        medTitle.trim(),
         selectedSymptomType,
         alertMinutesBefore === null ? -1 : alertMinutesBefore,
-        dose
+        dose.trim()
       );
       navigation.navigate("RoutineTimeScreen");
     } else {
@@ -422,7 +422,7 @@ export default function RoutineDetailsScreen({
                   itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}

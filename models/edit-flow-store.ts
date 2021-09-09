@@ -1,81 +1,96 @@
+import { types, cast, flow, getSnapshot } from "mobx-state-tree";
 import {
-  types,
-  cast,
-  flow,
-  getSnapshot
-} from "mobx-state-tree";
-import { fetchSubAreaRecords, updateSingleRecord, fetchAttachmentByRecordId } from "../database/dbAPI";
-import { SQLRecordReturnType, SQLAttachmentReturnType } from "../database/db.types";
+  fetchSubAreaRecords,
+  updateSingleRecord,
+  fetchAttachmentByRecordId,
+  deleteRecordDB,
+} from "../database/dbAPI";
+import {
+  SQLRecordReturnType,
+  SQLAttachmentReturnType,
+} from "../database/db.types";
 import { SavedRecordModel } from "./record";
-
-const AttachmentModel = types
-  .model({
-    id: types.identifierNumber,
-    type: types.string,
-    uri: types.string
-  });
+const AttachmentModel = types.model({
+  id: types.identifierNumber,
+  type: types.string,
+  uri: types.string,
+});
 
 export const EditFlowStoreModel = types
   .model("EditFlowStore", {
     timelineRecords: types.array(SavedRecordModel),
     currentSymptomType: types.optional(types.string, ""),
     currentEditingRecord: types.maybe(SavedRecordModel),
-    currentRecordAttachments: types.array(AttachmentModel)
+    currentRecordAttachments: types.array(AttachmentModel),
   })
-  .views(self => ({
+  .views((self) => ({
     getTimelineRecordsSnapshot: () => {
       return getSnapshot(self.timelineRecords);
-    }
+    },
   }))
-  .actions(self => {
-    const setCurrentEditingRecordFetchAsync = flow(function*(recordId: number, symptomType: string) {
+  .actions((self) => {
+    const setCurrentEditingRecordFetchAsync = flow(function* (
+      recordId: number,
+      symptomType: string
+    ) {
       self.currentSymptomType = symptomType;
-      const record = self.timelineRecords.find(item => item.id === recordId);
+      const record = self.timelineRecords.find((item) => item.id === recordId);
       if (record) {
         self.currentEditingRecord = cast(getSnapshot(record));
-        const results: SQLAttachmentReturnType[] = yield fetchAttachmentByRecordId(record.id);
-        self.currentRecordAttachments = cast(results.map(
-          item => AttachmentModel.create({
-            id: item.id,
-            type: item.type,
-            uri: item.path
-          })
-        ));
+        const results: SQLAttachmentReturnType[] =
+          yield fetchAttachmentByRecordId(record.id);
+        self.currentRecordAttachments = cast(
+          results.map((item) =>
+            AttachmentModel.create({
+              id: item.id,
+              type: item.type,
+              uri: item.path,
+            })
+          )
+        );
       } else {
         console.error("Error setCurrentEditingRecord, recordId not found");
       }
     });
 
-    const fetchTimelineRecordsAsync = flow(function*(collectionId: number, subArea: string) {
+    const fetchTimelineRecordsAsync = flow(function* (
+      collectionId: number,
+      subArea: string
+    ) {
       try {
-        const result :SQLRecordReturnType[] = yield fetchSubAreaRecords(collectionId, subArea);
-        self.timelineRecords = cast(result.map(
-          item => SavedRecordModel.create({
-            id: item.id,
-            collectionId: item.collectionId,
-            area: item.area,
-            subArea: item.subArea,
-            severity: item.severity,
-            better: item.better,
-            worse: item.worse,
-            attempt: item.attempt,
-            related: item.related,
-            colour: item.colour,
-            time: new Date(item.time),
-            description: item.description,
-            dizzy: item.dizzy,
-            sleep: item.sleep,
-            temperature: item.temperature,
-            toiletPain: item.toiletPain,
-            toiletType: item.toiletType
-          }))
+        const result: SQLRecordReturnType[] = yield fetchSubAreaRecords(
+          collectionId,
+          subArea
+        );
+        self.timelineRecords = cast(
+          result.map((item) =>
+            SavedRecordModel.create({
+              id: item.id,
+              collectionId: item.collectionId,
+              area: item.area,
+              subArea: item.subArea,
+              severity: item.severity,
+              better: item.better,
+              worse: item.worse,
+              attempt: item.attempt,
+              related: item.related,
+              colour: item.colour,
+              time: new Date(item.time),
+              description: item.description,
+              dizzy: item.dizzy,
+              sleep: item.sleep,
+              temperature: item.temperature,
+              toiletPain: item.toiletPain,
+              toiletType: item.toiletType,
+            })
+          )
         );
       } catch (error) {
         console.warn(error);
       }
     });
 
-    const updateRecordAsync = flow(function*() {
+    const updateRecordAsync = flow(function* () {
       try {
         if (self.currentEditingRecord) {
           yield updateSingleRecord({
@@ -91,15 +106,32 @@ export const EditFlowStoreModel = types
             temperature: self.currentEditingRecord.temperature,
             sleep: self.currentEditingRecord.sleep,
             toiletPain: self.currentEditingRecord.toiletPain,
-            toiletType: self.currentEditingRecord.toiletType
+            toiletType: self.currentEditingRecord.toiletType,
           });
         } else {
-          console.error("current editting record doesn't exist!")
+          console.error("current editting record doesn't exist!");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     });
 
-    return { fetchTimelineRecordsAsync, updateRecordAsync, setCurrentEditingRecordFetchAsync };
-  })
+    const deleteRecord = flow(function* (id: number) {
+      try {
+        if (id) {
+          yield deleteRecordDB(id);
+        } else {
+          console.error("current deleting record doesn't exist!");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    return {
+      fetchTimelineRecordsAsync,
+      updateRecordAsync,
+      setCurrentEditingRecordFetchAsync,
+      deleteRecord,
+    };
+  });

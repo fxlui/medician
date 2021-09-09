@@ -40,6 +40,9 @@ export const OverviewStoreModel = types
     getCurrentRecordsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRecords)];
     },
+    getCurrentSubAreas: () => {
+      return [...getSnapshot(self.currentCollectionRecords)].map(item => item.subArea);
+    },
     getCurrentRoutinesSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRoutines)];
     },
@@ -92,6 +95,7 @@ export const OverviewStoreModel = types
                 notes: item.notes,
                 time: new Date(item.eventTime),
                 type: item.type,
+                alertId: item.alertId,
               })
             )
           );
@@ -104,6 +108,7 @@ export const OverviewStoreModel = types
                 doctor: item.doctor,
                 complete: item.completed,
                 notes: item.notes,
+                alertId: item.alertId,
               })
             )
           );

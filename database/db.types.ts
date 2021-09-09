@@ -5,6 +5,7 @@ export interface SQLAppointmentsReturnType {
   notes: string;
   completed: number;
   eventTime: number;
+  alertId: number;
 }
 
 export interface SQLAlertReturnType {
@@ -14,6 +15,12 @@ export interface SQLAlertReturnType {
   time: number;
   eventTime: number;
   completed: number;
+  systemId: string;
+}
+
+export interface SQLAlertIDsType {
+  appointmentId: number;
+  routineId: number;
 }
 
 export interface SQLCollectionReturnType {
@@ -31,6 +38,7 @@ export interface SQLRoutineReturnType {
   notes: string;
   eventTime: number;
   completed: number;
+  alertId: number;
 }
 
 export interface FetchByCollectionResultType {
@@ -50,7 +58,7 @@ export interface SQLRecordReturnType {
   subArea: string;
   severity: number;
   better: string;
-  worse: "",
+  worse: "";
   related: string;
   attempt: string;
   description: string;
@@ -64,19 +72,19 @@ export interface SQLRecordReturnType {
 }
 
 export interface SQLRecordUpdateType {
-  severity: number,
-  better: string,
-  worse: string,
-  related: string,
-  attempt: string,
-  temperature: number,
-  toiletType: number,
-  toiletPain: number,
-  colour: number,
-  dizzy: number,
-  sleep: number,
-  description: string,
-  id: number
+  severity: number;
+  better: string;
+  worse: string;
+  related: string;
+  attempt: string;
+  temperature: number;
+  toiletType: number;
+  toiletPain: number;
+  colour: number;
+  dizzy: number;
+  sleep: number;
+  description: string;
+  id: number;
 }
 
 export interface SQLAttachmentReturnType {

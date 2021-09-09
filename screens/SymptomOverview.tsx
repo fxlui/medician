@@ -20,6 +20,7 @@ import { SimpleRecordSnapshot } from "../models/overview-store";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
+import uniqueBodyAreas from "../assets/uniqueSubAreas.json";
 import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
 import CustomHaptics from "../utils/CustomHaptics";
 
@@ -51,10 +52,13 @@ interface routineTileProps {
   item: SavedRoutineSnapshot;
 }
 
-interface BaseData {
+interface AreaTileProps {
   index: number;
   dataIndex: number;
-  item: SimpleRecordSnapshot;
+  item: {
+    area: string;
+    subArea: string;
+  };
 }
 
 const symptomArr = uniqueSymptoms;
@@ -67,6 +71,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
   const topBackground = colorScheme === "light" ? "white" : "#121212";
   const [displaySymptoms, setDisplaySymptoms] = useState<SymptomItem[]>([]);
   const { overviewStore } = useStores();
+  const currentSubAreas = overviewStore.getCurrentSubAreas();
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
   const areaTileEmoji = (area: string) =>
@@ -78,7 +83,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       ? "💪"
       : area === "Legs"
       ? "🦵"
-      : "";
+      : "?";
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -106,15 +111,16 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
     );
   };
 
-  const renderAreaTile = ({ item, index }: BaseData) => {
+  const renderAreaTile = ({ item, index }: AreaTileProps) => {
     return (
       <TopTile
         emoji={areaTileEmoji(item.area)}
-        title={item.subArea}
+        title={item.subArea === "other" ? "Other" : item.subArea}
         index={index}
         selected={false}
         updater={() => {
-          const currentCollection = overviewStore.getCurrentSelectedCollection();
+          const currentCollection =
+            overviewStore.getCurrentSelectedCollection();
           if (currentCollection) {
             navigation.navigate("Timeline", {
               collectionId: currentCollection.id,
@@ -122,7 +128,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               area: item.subArea,
             });
           } else {
-            Alert.alert("Current colleciotn not found !!!");
+            Alert.alert("Current collection not found.");
           }
         }}
       />
@@ -146,12 +152,14 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id,
+            id: item.alertId,
             title: item.title,
             notes: item.notes,
             type: routineType(item.type),
+            clear: false,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };
@@ -168,19 +176,29 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id,
+            id: item.alertId,
             title: item.doctor,
             notes: item.notes,
             type: HomeTileTypes.Appointment,
+            clear: false,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };
 
   return (
     <SafeView disableTop disableBottom style={styles.container}>
-      <View style={[styles.header, { backgroundColor: topBackground }]}>
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: topBackground },
+          displaySymptoms.length === 0 && {
+            paddingVertical: 0,
+          },
+        ]}
+      >
         <Carousel
           data={displaySymptoms}
           renderItem={renderSymptomTile}
@@ -210,9 +228,25 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         <View style={styles.overflowView}>
           <View style={{ paddingLeft: 25 }}>
             <Text style={styles.name}>Timeline</Text>
+
+            {uniqueBodyAreas.filter((item) =>
+              currentSubAreas.includes(item.subArea)
+            ).length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               style={{ overflow: "visible" }}
-              data={overviewStore.getCurrentRecordsSnapshot()}
+              data={uniqueBodyAreas.filter((item) =>
+                currentSubAreas.includes(item.subArea)
+              )}
               renderItem={renderAreaTile}
               inactiveSlideScale={1}
               vertical={false}
@@ -225,7 +259,19 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
+
             <Text style={styles.name}>Routines</Text>
+            {overviewStore.getCurrentRoutinesSnapshot().length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               data={overviewStore.getCurrentRoutinesSnapshot()}
               renderItem={renderRoutineTile}
@@ -240,7 +286,19 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
+
             <Text style={styles.name}>Appointments</Text>
+            {overviewStore.getCurrentAppointmentsSnapshot().length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               data={overviewStore.getCurrentAppointmentsSnapshot()}
               renderItem={renderAppointmentTile}

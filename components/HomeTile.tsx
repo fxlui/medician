@@ -144,14 +144,17 @@ const Tile: React.FC<HomeTileProps> = ({
               {title}
             </Text>
             {secondTitle ? (
-              <Text style={{ color: textColor, fontSize: 16, opacity: 0.9 }}>
+              <Text
+                style={{ color: textColor, fontSize: 16, opacity: 0.9 }}
+                numberOfLines={1}
+              >
                 {secondTitle}
               </Text>
             ) : null}
             {subTitle ? (
               <Text
                 style={{
-                  marginTop: 2,
+                  marginTop: 3,
                   color: textColor,
                   fontSize: 14,
                   opacity: 0.68,

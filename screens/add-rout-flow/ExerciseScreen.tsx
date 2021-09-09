@@ -21,7 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 import { AddFlowParamList, RootStackParamList } from "../../types";
-import uniqueSymptoms from "../../assets/uniqueSymptoms.json";
+import uniqueSymptomsForExercise from "../../assets/uniqueSymptomsForExercise.json";
 
 import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
@@ -63,7 +63,7 @@ export default function RoutineDetailsScreen({
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
 
-  const symptomArr = uniqueSymptoms;
+  const symptomArr = uniqueSymptomsForExercise;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
@@ -183,10 +183,10 @@ export default function RoutineDetailsScreen({
       }
       progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
-        exerciseName,
+        exerciseName.trim(),
         selectedSymptomType,
         alertMinutesBefore === null ? -1 : alertMinutesBefore,
-        extraNotes
+        extraNotes.trim()
       );
       navigation.navigate("RoutineTimeScreen");
     } else {
@@ -378,7 +378,7 @@ export default function RoutineDetailsScreen({
                   itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}

@@ -12,6 +12,7 @@ import { Entypo } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { useStores } from "../../models/root-store-provider";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
@@ -47,7 +48,8 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
         >
           {route.params.method === "edit" ? (
             <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-              Editing record for MOBX_PAIN at MOBX_AREA
+              Editing record for{' '}
+              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
             </Text>
           ) : null}
           <Text style={styles.greeting}>What was your temperature?</Text>

@@ -10,8 +10,10 @@ import { useStores } from "../models/root-store-provider";
 import useColorScheme from "../hooks/useColorScheme";
 import moment from "moment";
 import uniqueSymptoms from "../assets/uniqueSymptoms.json";
+import toiletSymptoms from "../assets/ToiletSymptoms.json";
 import { PressableBase } from "../components/PressableBase";
 import { Feather } from "@expo/vector-icons";
+import { getEditDescription } from "../utils/ScreenUtils";
 import {
   themeBorderColor,
   themeTextColor,
@@ -20,186 +22,254 @@ import {
 
 type ScreenProps = StackScreenProps<RootStackParamList, "TimelineDetails">;
 
-type addFlowScreenType = [keyof AddFlowParamList, number];
+const getTimeString = (timestamp: number) => {
+  return `${moment(timestamp).format("MMM D")} ${moment().format("HH:mm")}`;
+};
 
+const getDiscomfortEmoji = (severity: number) => {
+  if (severity < 4) {
+    return "😐";
+  } else if (severity < 7) {
+    return "😕";
+  } else if (severity < 10) {
+    return "😖";
+  } else {
+    return "😡";
+  }
+};
 
-const symptomArr = uniqueSymptoms;
+const getDiscomfortText = (severity: number) => {
+  if (severity < 4) {
+    return "Minor discomfort";
+  } else if (severity < 7) {
+    return "Moderate discomfort";
+  } else if (severity < 10) {
+    return "Severe discomfort";
+  } else {
+    return "Unbearable";
+  }
+};
 
-const TimelineDetailsScreen = observer(
-  ({ navigation, route }: ScreenProps) => {
-    const colorScheme = useColorScheme();
-    const textColor =
+const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
+  const colorScheme = useColorScheme();
+  const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
-    const borderColor =
+  const borderColor =
     colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
-    
-    const { editFlowStore : {currentSymptomType, currentEditingRecord } } = useStores();
-    
-    function useEditDirect(symptomType: string): addFlowScreenType {
-      console.log(symptomType)
-      switch (symptomType) {
-        case "pain":
-        case "itchy":
-          navigation.navigate("AddFlow", {
-            screen: "SeverityScreen",
-            params: { method: "edit" }
-          });   // also set progress bar length
-          return ["SeverityScreen", 2];
-        case "hot":
-        case "cold":
-          navigation.navigate("AddFlow", {
-            screen: "TemperatureSelectionScreen",
-            params: { method: "edit" }
-          });
-          return ["TemperatureSelectionScreen", 3];
-        case "toilet":
-          navigation.navigate("AddFlow", {
-            screen: "ToiletScreen",
-            params: { method: "edit" }
-          });
-          return ["ToiletScreen", 3];
-        case "dizzy":
-        case "walk":
-          navigation.navigate("AddFlow", {
-            screen: "DizzyScreen",
-            params: { method: "edit" }
-          });
-          return ["DizzyScreen", 2];
-        case "sleep":
-          navigation.navigate("AddFlow", {
-            screen: "SleepHoursScreen",
-            params: { method: "edit" }
-          });
-          return ["SleepHoursScreen", 3];
-        default:
-          navigation.navigate("AddFlow", {
-            screen: "CustomScreen",
-            params: { method: "edit" }
-          });
-          return ["CustomScreen", 3];
-      }
-    }
 
-    const sectionStyle = StyleSheet.create({
-      section: {
-        marginTop: 10,
-        marginBottom: 10,
-        borderBottomColor: borderColor,
-        borderBottomWidth: 1,
-      },
+  const {
+    progressStore,
+    editFlowStore: { currentSymptomType, currentEditingRecord },
+  } = useStores();
+
+  function useEditDirect(symptomType: string) {
+    progressStore.resetProgress();
+    switch (symptomType) {
+      case "pain":
+      case "itchy":
+        progressStore.setProgressBarLength(3);
+        navigation.navigate("AddFlow", {
+          screen: "SeverityScreen",
+          params: { method: "edit" },
+        }); // also set progress bar length
+        break;
+      case "hot":
+      case "cold":
+        progressStore.setProgressBarLength(5);
+        navigation.navigate("AddFlow", {
+          screen: "TemperatureSelectionScreen",
+          params: { method: "edit" },
+        });
+        break;
+      case "toilet":
+        progressStore.setProgressBarLength(6);
+        navigation.navigate("AddFlow", {
+          screen: "ToiletScreen",
+          params: { method: "edit" },
+        });
+        break;
+      case "dizzy":
+      case "walk":
+        progressStore.setProgressBarLength(4);
+        navigation.navigate("AddFlow", {
+          screen: "DizzyScreen",
+          params: { method: "edit" },
+        });
+        break;
+      case "sleep":
+        progressStore.setProgressBarLength(4);
+        navigation.navigate("AddFlow", {
+          screen: "SleepHoursScreen",
+          params: { method: "edit" },
+        });
+        break;
+      default:
+        progressStore.setProgressBarLength(4);
+        navigation.navigate("AddFlow", {
+          screen: "CustomScreen",
+          params: { method: "edit" },
+        });
+        break;
+    }
+  }
+
+  const sectionStyle = StyleSheet.create({
+    section: {
+      marginTop: 10,
+      marginBottom: 10,
+      borderBottomColor: borderColor,
+      borderBottomWidth: 1,
+    },
+  });
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PressableBase
+          extraProps={{ style: { padding: 5 } }}
+          onPress={() => {
+            // navigate to edit
+            useEditDirect(currentSymptomType);
+            //console.log(route.params.id);
+          }}
+        >
+          <Feather
+            name="edit"
+            size={20}
+            color={textColor}
+            style={{ paddingRight: 10 }}
+          />
+        </PressableBase>
+      ),
     });
-  
-    React.useEffect(() => {
-      navigation.setOptions({
-        headerRight: () => (
-          <PressableBase
-            extraProps={{ style: { padding: 5 } }}
-            onPress={() => {
-              // navigate to edit
-              useEditDirect(currentSymptomType);
-              console.log(route.params.id);
+  }, [navigation]);
+
+  return (
+    <SafeView disableTop style={styles.container}>
+      <ScrollView style={{ paddingHorizontal: 25, paddingTop: 15 }}>
+        <View style={sectionStyle.section}>
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: "500",
+              marginBottom: 20,
             }}
           >
-            <Feather
-              name="edit"
-              size={20}
-              color={textColor}
-              style={{ paddingRight: 10 }}
-            />
-          </PressableBase>
-        ),
-      });
-    }, [navigation]);
-  
-    return (
-      <SafeView disableTop style={styles.container}>
-        <ScrollView style={{ paddingHorizontal: 25, paddingTop: 15 }}>
+            {getEditDescription(
+              currentSymptomType,
+              currentEditingRecord?.subArea
+            )}
+            {"\n"}
+            {currentEditingRecord &&
+              getTimeString(currentEditingRecord.time.getTime())}
+          </Text>
+        </View>
+
+        {currentEditingRecord?.temperature !== 0 && (
           <View style={sectionStyle.section}>
-            <Text
-              style={{
-                fontSize: 22,
-                fontWeight: "500",
-                marginBottom: 20,
-              }}
-            >
-            {symptomArr.find(item => item.type === currentSymptomType)?.title}
-            {currentEditingRecord?.subArea !== "other" && `in${currentEditingRecord?.subArea}`}
-            {"\n"}9 Sep 12:12
+            <Text style={styles.sectionTitle}>Temperature</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.temperature}
             </Text>
           </View>
-  
-          {currentEditingRecord?.temperature !== 0 &&
-            <View style={sectionStyle.section}>
-              <Text style={styles.sectionTitle}>Temperature</Text>
-              <Text style={styles.sectionText}>{currentEditingRecord?.temperature}</Text>
-            </View>
-          }
+        )}
 
-          {currentEditingRecord?.toiletType !== -1 &&
-            <View style={sectionStyle.section}>
-              <Text style={styles.sectionTitle}>Type of Toilet Difficulty</Text>
-              <Text style={styles.sectionText}>
-                {currentEditingRecord?.toiletType === 0 ? "Urination" : "Defecation"}
-              </Text>
-            </View>
-          }
+        {currentEditingRecord?.toiletType !== -1 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Type of Toilet Difficulty</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.toiletType === 0
+                ? "Urination"
+                : "Defecation"}
+            </Text>
+          </View>
+        )}
 
-          {currentEditingRecord?.colour != -1 &&
-            <View style={sectionStyle.section}>
-              <Text style={styles.sectionTitle}>Color of [urine/fecal matter]</Text>
-              <Text style={styles.sectionText}>Blue</Text>
-            </View>
-          }
-  
+        {currentEditingRecord && currentEditingRecord.colour !== -1 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>
+              Color of [urine/fecal matter]
+            </Text>
+            <Text style={styles.sectionText}>
+              {toiletSymptoms.color[currentEditingRecord.colour].name}
+            </Text>
+          </View>
+        )}
+
+        {currentEditingRecord?.dizzy !== -1 && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>
               Is the room or the head spinning?
             </Text>
-            <Text style={styles.sectionText}>Room</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.dizzy === 0 ? "Head" : "Roome"}
+            </Text>
           </View>
-  
+        )}
+        {currentEditingRecord?.sleep !== 0 && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>How long did you sleep?</Text>
-            <Text style={styles.sectionText}>8.5 hrs</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.sleep}
+            </Text>
           </View>
-  
+        )}
+
+        {currentEditingRecord && currentEditingRecord.severity !== 0 && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>Severity</Text>
-            <Text style={styles.sectionText}>😀 Mild discomfort</Text>
+            <Text style={styles.sectionText}>
+              {getDiscomfortEmoji(currentEditingRecord.severity)}{" "}
+              {getDiscomfortText(currentEditingRecord.severity)}
+            </Text>
           </View>
-  
+        )}
+
+        {currentEditingRecord && currentEditingRecord.better !== "" && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>What makes it better?</Text>
-            <Text style={styles.sectionText}>some text here..</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.better}
+            </Text>
           </View>
-  
+        )}
+
+        {currentEditingRecord && currentEditingRecord.worse !== "" && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>What makes it worse?</Text>
-            <Text style={styles.sectionText}>some text here..</Text>
+            <Text style={styles.sectionText}>{currentEditingRecord.worse}</Text>
           </View>
-  
+        )}
+
+        {currentEditingRecord && currentEditingRecord.related !== "" && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>
               What do you think its related to?
             </Text>
-            <Text style={styles.sectionText}>some text here..</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.related}
+            </Text>
           </View>
-  
+        )}
+
+        {currentEditingRecord && currentEditingRecord.attempt !== "" && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>Have you tried anything?</Text>
-            <Text style={styles.sectionText}>some text here..</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.attempt}
+            </Text>
           </View>
-  
+        )}
+        {currentEditingRecord && currentEditingRecord.description !== "" && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>Extra notes</Text>
             <Text style={styles.sectionText}>some text here..</Text>
           </View>
-        </ScrollView>
-      </SafeView>
-    );
-  }
-);
-
+        )}
+      </ScrollView>
+    </SafeView>
+  );
+});
 
 const styles = StyleSheet.create({
   container: {

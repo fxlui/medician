@@ -71,6 +71,14 @@ INSERT INTO alert
 (appointmentId, eventTime, time) values (?, ?, ?)
 `;
 
+export const updateAlertSystemId = `
+UPDATE alert SET systemId = ? WHERE id = ?
+`;
+
+export const updateAlertTimestamp = `
+UPDATE alert SET time = ? WHERE id = ?
+`;
+
 export const getAllCollecitons = `
 SELECT *
 FROM collection
@@ -97,7 +105,8 @@ SELECT
   routine.title,
   routine.notes,
   alert.eventTime,
-  alert.completed
+  alert.completed,
+  alert.id AS alertId
 FROM routine
 JOIN alert ON alert.routineId = routine.id
 WHERE routine.collectionId = ?
@@ -111,7 +120,8 @@ SELECT
   appointment.doctor,
   appointment.notes,
   alert.completed,
-  alert.eventTime
+  alert.eventTime,
+  alert.id AS alertId
 FROM appointment
 JOIN alert ON alert.appointmentId = appointment.id
 WHERE appointment.collectionId = ?
@@ -125,7 +135,8 @@ SELECT
   alert.routineId,
   alert.time,
   alert.eventTime,
-  alert.completed
+  alert.completed,
+  alert.systemId
 FROM alert
 WHERE alert.id = ?
 `;
@@ -138,10 +149,58 @@ SELECT
   routine.title,
   routine.notes,
   routine.duration,
-  routime.sets,
+  routine.sets,
   routine.reps
 FROM routine
 WHERE routine.id = ?
+`;
+
+export const getIDsFromAlert = `
+SELECT
+  alert.appointmentId,
+  alert.routineId
+FROM alert
+WHERE alert.id = ?
+`;
+
+export const setAlertCompleted = `
+UPDATE alert
+SET completed = ?
+WHERE id = ?
+`;
+
+export const setAlertTimeQuery = `
+UPDATE alert
+SET time = ?
+WHERE id = ?
+`;
+
+export const setAlertEventTimeQuery = `
+UPDATE alert
+SET eventTime = ?
+WHERE id = ?
+`;
+
+export const deleteAlertQuery = `
+DELETE FROM alert
+WHERE id = ?
+`;
+
+export const deleteRecordQuery = `
+DELETE FROM entry
+WHERE id = ?
+`;
+
+export const changeRoutineTitle = `
+UPDATE routine
+SET title = ?
+WHERE id = ?
+`;
+
+export const changeRoutineNotes = `
+UPDATE routine
+SET notes = ?
+WHERE id = ?
 `;
 
 export const getAppointmentByID = `
@@ -154,6 +213,18 @@ FROM appointment
 WHERE appointment.id = ?
 `;
 
+export const changeAppointmentDoctor = `
+UPDATE appointment
+SET doctor = ?
+WHERE id = ?
+`;
+
+export const changeAppointmentNotes = `
+UPDATE appointment
+SET notes = ?
+WHERE id = ?
+`;
+
 // removed the time constraints on this
 export const getFutureAppointments = `
 SELECT
@@ -162,7 +233,8 @@ SELECT
   appointment.doctor,
   appointment.notes,
   alert.completed,
-  alert.eventTime
+  alert.eventTime,
+  alert.id AS alertId
 FROM appointment
 JOIN alert ON alert.appointmentId = appointment.id
 WHERE alert.completed = 0
@@ -177,7 +249,8 @@ SELECT
   routine.title,
   routine.notes,
   alert.eventTime,
-  alert.completed
+  alert.completed,
+  alert.id AS alertId
 FROM routine
 JOIN alert ON alert.routineId = routine.id
 WHERE alert.eventTime <= ?
@@ -285,6 +358,7 @@ export const createAlertTable = `
     "time"	INTEGER NOT NULL,
     "eventTime"  INTEGER NOT NULL,
     "completed"	INTEGER NOT NULL DEFAULT 0,
+    "systemId"  TEXT,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
     FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

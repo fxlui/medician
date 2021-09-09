@@ -1,13 +1,15 @@
 import { NavigatorScreenParams } from "@react-navigation/core";
 
 export type RootStackParamList = {
-  Root: undefined;
+  Root: NavigatorScreenParams<BottomTabParamList>;
+  Tutorial: NavigatorScreenParams<TutorialParamList>;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
   Notification: {
     id: number;
     title: string;
     notes: string;
     type: HomeTileTypes;
+    clear: boolean;
   };
   ActionScreen: undefined;
   NotFound: undefined;
@@ -73,6 +75,16 @@ export type AddFlowParamList = {
   MedicationScreen: undefined;
   ExerciseScreen: undefined;
   RoutineTimeScreen: undefined;
+};
+
+export type TutorialParamList = {
+  WelcomeTut: undefined;
+  HomeTut: undefined;
+  ActionTut: undefined;
+  SymptomTut: undefined;
+  RoutineTut: undefined;
+  OverviewTut: undefined;
+  EndingTut: undefined;
 };
 
 export enum HomeTileTypes {

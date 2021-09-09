@@ -19,6 +19,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { PressableBase } from "../../components/PressableBase";
 import { useStores } from "../../models/root-store-provider";
 import { Ionicons } from "@expo/vector-icons";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "DetailsScreen">;
@@ -45,10 +46,13 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
     worse: "",
     related: "",
     attempt: "",
-  }
-  const defaultTexts = route.params.method === "add" ? emptyTexts :
-    editFlowStore.currentEditingRecord ? 
-    editFlowStore.currentEditingRecord.getDetails() : emptyTexts;
+  };
+  const defaultTexts =
+    route.params.method === "add"
+      ? emptyTexts
+      : editFlowStore.currentEditingRecord
+      ? editFlowStore.currentEditingRecord.getDetails()
+      : emptyTexts;
 
   const [currentAnswers, setCurrentAnswers] = React.useState(defaultTexts);
 
@@ -130,17 +134,17 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       }
       if (route.params.method === "add") {
         addFlowStore.currentNewRecord.setRecordDetails(
-          currentAnswers.better,
-          currentAnswers.worse,
-          currentAnswers.related,
-          currentAnswers.attempt
+          currentAnswers.better.trim(),
+          currentAnswers.worse.trim(),
+          currentAnswers.related.trim(),
+          currentAnswers.attempt.trim()
         );
       } else {
         editFlowStore.currentEditingRecord?.updateDetails(
-          currentAnswers.better,
-          currentAnswers.worse,
-          currentAnswers.related,
-          currentAnswers.attempt
+          currentAnswers.better.trim(),
+          currentAnswers.worse.trim(),
+          currentAnswers.related.trim(),
+          currentAnswers.attempt.trim()
         );
       }
       progressStore.goForward();
@@ -192,7 +196,8 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       >
         {route.params.method === "edit" ? (
           <Text style={{ opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+            Editing record for{' '}
+            {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
           </Text>
         ) : null}
         <Text style={styles.greeting}>Please describe what you observe.</Text>

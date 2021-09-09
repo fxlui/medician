@@ -27,11 +27,23 @@ import {
   getAppointmentByID,
   getRoutineByID,
   getSubAreaRecords,
+  updateAlertSystemId,
   updateRecord,
   insertAttachment,
+  getIDsFromAlert,
+  changeRoutineTitle,
+  changeRoutineNotes,
+  changeAppointmentDoctor,
+  changeAppointmentNotes,
+  setAlertCompleted,
+  updateAlertTimestamp,
+  setAlertTimeQuery,
+  setAlertEventTimeQuery,
   getAttachmentbyRecordId,
   deleteAttachmentById,
-  deleteAttachmentByRecordId
+  deleteAttachmentByRecordId,
+  deleteAlertQuery,
+  deleteRecordQuery,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -41,7 +53,8 @@ import {
   SQLAlertReturnType,
   SQLRecordReturnType,
   SQLRecordUpdateType,
-  SQLAttachmentReturnType
+  SQLAlertIDsType,
+  SQLAttachmentReturnType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -118,7 +131,7 @@ export async function addRecord(data: DatabaseEntryType) {
       (tx) => {
         tx.executeSql(insertRecord, data);
         tx.executeSql(getLastInserted("entry"), undefined, (_, { rows }) => {
-          console.log("dbAPI.ts: Added Records: ", rows._array);
+          //console.log("dbAPI.ts: Added Records: ", rows._array);
           resolve();
         });
       },
@@ -145,21 +158,21 @@ export async function getLastRecordId() {
   });
 }
 
-export async function addAttachments(recordId: number, items: { type: string, path: string }[]) {
+export async function addAttachments(
+  recordId: number,
+  items: { type: string; path: string }[]
+) {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
-      tx => {
+      (tx) => {
         if (items.length !== 0) {
-          items.forEach(item => {
-            tx.executeSql(
-              insertAttachment,
-              [recordId, item.type, item.path]
-            );
+          items.forEach((item) => {
+            tx.executeSql(insertAttachment, [recordId, item.type, item.path]);
             tx.executeSql(
               getLastInserted("attachment"),
               undefined,
-              (_, { rows }) => console.log(rows._array)
-            )
+              (_, { rows }) => {} //console.log(rows._array)
+            );
           });
         }
       },
@@ -184,7 +197,7 @@ export async function addAppointment(
             resolve(success.insertId);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -194,10 +207,10 @@ export async function addAppointment(
           getLastInserted("appointment"),
           undefined,
           (_, { rows }) => {
-            console.log("dbAPI.ts: Added Appointments: ", rows._array);
+            //console.log("dbAPI.ts: Added Appointments: ", rows._array);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -226,7 +239,7 @@ export async function addAppointmentAlerts(
               res.push(success.insertId);
             },
             (_, error) => {
-              console.log(error);
+              console.error(error);
               reject(error);
               return true;
             }
@@ -235,13 +248,13 @@ export async function addAppointmentAlerts(
           tx.executeSql(
             getLastInserted("alert"),
             undefined,
-            (_, { rows }) =>
-              console.log(
-                "dbAPI.ts: Added Alerts for Appointments: ",
-                rows._array
-              ),
+            (_, { rows }) => {},
+            // console.log(
+            //   "dbAPI.ts: Added Alerts for Appointments: ",
+            //   rows._array
+            // ),
             (_, error) => {
-              console.log(error);
+              console.error(error);
               reject(error);
               return true;
             }
@@ -250,6 +263,50 @@ export async function addAppointmentAlerts(
       },
       (error) => reject(error),
       () => resolve(res)
+    );
+  });
+}
+
+export async function updateAlertSystemID(alertID: number, systemID: string) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          updateAlertSystemId,
+          [systemID, alertID],
+          (_, success) => {
+            resolve();
+          },
+          (_, error) => {
+            console.error(error);
+            reject(error);
+            return true;
+          }
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function updateAlertTime(alertID: number, timestamp: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          updateAlertTimestamp,
+          [timestamp, alertID],
+          (_, success) => {
+            resolve();
+          },
+          (_, error) => {
+            console.error(error);
+            reject(error);
+            return true;
+          }
+        );
+      },
+      (error) => reject(error)
     );
   });
 }
@@ -270,7 +327,7 @@ export async function addRoutine(
             resolve(success.insertId);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -281,10 +338,10 @@ export async function addRoutine(
           getLastInserted("routine"),
           undefined,
           (_, { rows }) => {
-            console.log("dbAPI.ts: Added routines: ", rows._array);
+            //console.log("dbAPI.ts: Added routines: ", rows._array);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -299,7 +356,7 @@ export async function addRoutine(
             resolve(result.id);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -321,6 +378,7 @@ export async function addRoutineAlert(
     db.transaction(
       (tx) => {
         actualTimes.forEach((time, index) => {
+          //console.log("adding ", time, " to routine ", routineID);
           tx.executeSql(
             insertRoutineAlert,
             [routineID, time, alertTimes[index]],
@@ -328,27 +386,157 @@ export async function addRoutineAlert(
               res.push(success.insertId);
             },
             (_, error) => {
-              console.log(error);
+              console.error(error);
               reject();
               return true;
             }
           );
           // FOR TESTING:
-          tx.executeSql(
-            getLastInserted("alert"),
-            undefined,
-            (_, { rows }) =>
-              console.log("dbAPI.ts: Added Alert for routines: ", rows._array),
-            (_, error) => {
-              console.log(error);
-              reject(error);
-              return true;
-            }
-          );
+          // tx.executeSql(
+          //   getLastInserted("alert"),
+          //   undefined,
+          //   (_, { rows }) =>
+          //     console.log("dbAPI.ts: Added Alert for routines: ", rows._array),
+          //   (_, error) => {
+          //     console.error(error);
+          //     reject(error);
+          //     return true;
+          //   }
+          // );
         });
       },
       (error) => reject(error),
       () => resolve(res)
+    );
+  });
+}
+
+export async function fetchIDsFromAlert(id: number) {
+  return new Promise<SQLAlertIDsType>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(getIDsFromAlert, [id], (_, { rows }) =>
+          resolve(rows._array[0] as SQLAlertIDsType)
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function updateAppointmentOrRoutine(
+  id: number,
+  type: "appointment" | "routine",
+  title: string | undefined,
+  notes: string | undefined
+) {
+  if (title) {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          type === "routine" ? changeRoutineTitle : changeAppointmentDoctor,
+          [title, id],
+          () => {},
+          (_, error) => {
+            console.error(error);
+            return true;
+          }
+        );
+      },
+      (error) => {
+        console.error(error);
+        return true;
+      }
+    );
+  }
+  if (notes) {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          type === "routine" ? changeRoutineNotes : changeAppointmentNotes,
+          [notes, id],
+          () => {},
+          (_, error) => {
+            console.error(error);
+            return true;
+          }
+        );
+      },
+      (error) => {
+        console.error(error);
+        return true;
+      }
+    );
+  }
+}
+
+export async function setAlertTime(id: number, newTime: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(setAlertTimeQuery, [newTime, id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
+}
+
+export async function setAlertEventTime(id: number, newTime: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(setAlertEventTimeQuery, [newTime, id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
+}
+
+export async function setAlertCompletedValue(id: number, completed: number) {
+  //console.log("setting alert ", id, " to ", completed);
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(setAlertCompleted, [completed, id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
+}
+
+export async function deleteAlertDB(id: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(deleteAlertQuery, [id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
+}
+
+export async function deleteRecordDB(id: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(deleteRecordQuery, [id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
     );
   });
 }
@@ -460,7 +648,7 @@ export async function fetchCollectionData(collectionId: number) {
       },
       (error) => reject(error),
       () => {
-        console.log("dbAPI.ts: fetchCollectionData: ", result);
+        //console.log("dbAPI.ts: fetchCollectionData: ", result);
         resolve(result);
       }
     );
@@ -485,14 +673,12 @@ export async function fetchSubAreaRecords(
   });
 }
 
-export async function fetchAttachmentByRecordId (recordId: number) {
+export async function fetchAttachmentByRecordId(recordId: number) {
   return new Promise<SQLAttachmentReturnType[]>((resolve, reject) => {
     db.transaction(
-      tx => {
-        tx.executeSql(
-          getAttachmentbyRecordId,
-          [recordId],
-          (_, { rows }) => resolve(rows._array as SQLAttachmentReturnType[])
+      (tx) => {
+        tx.executeSql(getAttachmentbyRecordId, [recordId], (_, { rows }) =>
+          resolve(rows._array as SQLAttachmentReturnType[])
         );
       },
       (error) => reject(error)
@@ -500,12 +686,10 @@ export async function fetchAttachmentByRecordId (recordId: number) {
   });
 }
 
-export async function updateSingleRecord(
-  data: SQLRecordUpdateType
-) {
+export async function updateSingleRecord(data: SQLRecordUpdateType) {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
-      tx => {
+      (tx) => {
         tx.executeSql(
           updateRecord,
           [
@@ -521,27 +705,22 @@ export async function updateSingleRecord(
             data.dizzy,
             data.sleep,
             data.description,
-            data.id
+            data.id,
           ],
           () => resolve()
-        )
+        );
       },
       (error) => reject(error)
-    )
+    );
   });
 }
 
 export async function deleteAttachmentsId(ids: number[]) {
   return new Promise<void>((resolve, reject) => {
-    db.transaction(
-      tx => {
-        ids.forEach(id => {
-          tx.executeSql(
-            deleteAttachmentById,
-            [id]
-          )
-        })
-      }
-    );
+    db.transaction((tx) => {
+      ids.forEach((id) => {
+        tx.executeSql(deleteAttachmentById, [id]);
+      });
+    });
   });
 }

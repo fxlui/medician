@@ -187,13 +187,13 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         opacity: 0.9,
       });
       addFlowStore.currentNewAppointment.setAppointmentDetails(
-        currentDoctor,
+        currentDoctor.trim(),
         selectedSymptomType,
         alertMinutesBefore,
-        extraNotes
+        extraNotes.trim()
       );
       await addFlowStore.dbInsertAppointment(user.id);
-      navigation.navigate("Root");
+      navigation.navigate("Root", { screen: "HomeScreen"});
     } else {
       nextQuestion();
     }
@@ -395,7 +395,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}

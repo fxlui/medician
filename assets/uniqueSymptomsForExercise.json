@@ -1,0 +1,70 @@
+[
+  {
+    "title": "Other",
+    "type": "more"
+  },
+  {
+    "title": "Pain",
+    "type": "pain"
+  },
+  {
+    "title": "Itchy",
+    "type": "itchy"
+  },
+  {
+    "title": "Hot",
+    "type": "hot"
+  },
+  {
+    "title": "Cold",
+    "type": "cold"
+  },
+  {
+    "title": "Dizzy",
+    "type": "dizzy"
+  },
+  {
+    "title": "Nausea",
+    "type": "nauseous"
+  },
+  {
+    "title": "Sleep Difficulties",
+    "type": "sleep"
+  },
+  {
+    "title": "Toilet Difficulties",
+    "type": "toilet"
+  },
+  {
+    "title": "Breathing Difficulties",
+    "type": "breathe"
+  },
+  {
+    "title": "Hearing Difficulties",
+    "type": "hear"
+  },
+  {
+    "title": "Vision Difficulties",
+    "type": "see"
+  },
+  {
+    "title": "Speech Difficulties",
+    "type": "speak"
+  },
+  {
+    "title": "Walking Difficulties",
+    "type": "walk"
+  },
+  {
+    "title": "Smelling Difficulties",
+    "type": "smell"
+  },
+  {
+    "title": "Smelling Difficulties",
+    "type": "smell"
+  },
+  {
+    "title": "Concentration Difficulties",
+    "type": "brain"
+  }
+]

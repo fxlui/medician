@@ -19,7 +19,6 @@ import { RootStore } from "./models/root-store";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation/Navigation";
-import { initDatabase } from "./database/dbAPI";
 
 import { Text, View } from "./components/Themed";
 import { FontAwesome } from "@expo/vector-icons";
@@ -29,6 +28,7 @@ import { themeTextColor, themeTileColor } from "./constants/Colors";
 import { Asset } from "expo-asset";
 import { Animated, ImageURISource, StyleSheet } from "react-native";
 import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 
 // Instruct SplashScreen not to hide yet, we want to do this manually
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -149,19 +149,14 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      // TODO move following to end of tutorial
-      await initDatabase();
       const store = await setupRootStore();
       setRootStore(store);
-      await SecureStore.setItemAsync("enable_haptics", "true");
     })();
-
     const lockOrientation = async () => {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
     };
-
     const getBioLock = async () => {
       const result = await SecureStore.getItemAsync("enable_bio");
       if (result === "true") {
@@ -174,6 +169,13 @@ export default function App() {
         }
       }
     };
+    Notifications.setNotificationHandler({
+      handleNotification: async (notification) => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    });
     getBioLock();
     lockOrientation();
   }, []);
