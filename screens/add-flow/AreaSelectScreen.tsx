@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { AddFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
@@ -34,6 +34,7 @@ interface bottomBaseData {
 }
 
 const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
+  const { height, width } = useWindowDimensions();
   const [selectedTop, setSelectedTop] = useState(0);
   const [selectedBottom, setSelectedBottom] = useState(0);
   const { addFlowStore } = useStores();
@@ -91,7 +92,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
               }))}
               renderItem={renderTopTile}
               vertical={false}
-              sliderWidth={Dimensions.get("window").width}
+              sliderWidth={width}
               containerCustomStyle={{
                 overflow: "visible",
               }}
@@ -117,7 +118,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
               }))}
               renderItem={renderBottomTile}
               vertical={false}
-              sliderWidth={Dimensions.get("window").width}
+              sliderWidth={width}
               containerCustomStyle={{
                 overflow: "visible",
               }}

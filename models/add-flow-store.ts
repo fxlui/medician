@@ -76,7 +76,6 @@ export const AddFlowStoreModel = types
         );
         const lastRecordId = await getLastRecordId();
         //console.log(lastRecordId);
-        await SecureStore.setItemAsync("new_user", "false");
         await addAttachments(
           lastRecordId,
           self.currentNewRecord.attatchmentPaths.map((item) => ({

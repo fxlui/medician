@@ -3,9 +3,8 @@ import moment from "moment";
 import {
   StyleSheet,
   ScrollView,
-  Button,
   Alert,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -46,6 +45,7 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
 
 export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
+  const { height, width } = useWindowDimensions();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
@@ -107,7 +107,7 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
               marginRight: 25,
               marginTop: 10,
               marginBottom: 10,
-              width: Dimensions.get("window").width - 50,
+              width: width - 50,
             }}
             markedDates={selection.reduce(
               (obj: { [date: string]: any }, v: DateSelection) => {
@@ -186,7 +186,7 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
                         : ["#252525", "#252525"]
                     }
                     style={{
-                      width: Dimensions.get("window").width - 80,
+                      width: width - 80,
                       height: 100,
                       flexDirection: "row",
                       justifyContent: "space-between",

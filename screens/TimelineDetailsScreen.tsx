@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Alert, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Image,
+  useWindowDimensions,
+  Modal,
+} from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -12,13 +19,14 @@ import moment from "moment";
 import uniqueSymptoms from "../assets/uniqueSymptoms.json";
 import toiletSymptoms from "../assets/ToiletSymptoms.json";
 import { PressableBase } from "../components/PressableBase";
-import { Feather } from "@expo/vector-icons";
+import { Entypo, Feather } from "@expo/vector-icons";
 import { getEditDescription } from "../utils/ScreenUtils";
 import {
   themeBorderColor,
   themeTextColor,
   themeTileColor,
 } from "../constants/Colors";
+import TileBase from "../components/TileBase";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "TimelineDetails">;
 
@@ -59,7 +67,11 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
 
   const {
     progressStore,
-    editFlowStore: { currentSymptomType, currentEditingRecord },
+    editFlowStore: {
+      currentSymptomType,
+      currentEditingRecord,
+      currentRecordAttachments,
+    },
   } = useStores();
 
   function useEditDirect(symptomType: string) {
@@ -143,6 +155,55 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
       ),
     });
   }, [navigation]);
+
+  const ModalContainer: React.FC<{ img: string }> = ({ img }) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.7)",
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: "transparent",
+          }}
+        >
+          <Image
+            resizeMode="contain"
+            source={{ uri: img }}
+            style={[
+              {
+                width: width * 0.8,
+                height: height * 0.8,
+              },
+            ]}
+          />
+          <PressableBase
+            onPress={() => setModalVisible(!modalVisible)}
+            extraProps={{
+              style: {
+                alignSelf: "center",
+                padding: 25,
+                zIndex: 200,
+                backgroundColor: "black",
+                borderRadius: 15,
+                marginTop: 20,
+              },
+            }}
+          >
+            <Entypo name="chevron-down" size={35} color="#fff" />
+          </PressableBase>
+        </View>
+      </View>
+    );
+  };
+
+  const { height, width } = useWindowDimensions();
+  const [currentMedia, setCurrentMedia] = React.useState<string>();
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   return (
     <SafeView disableTop style={styles.container}>
@@ -263,10 +324,67 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
         {currentEditingRecord && currentEditingRecord.description !== "" && (
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>Extra notes</Text>
-            <Text style={styles.sectionText}>some text here..</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.description}
+            </Text>
           </View>
         )}
+
+        {currentEditingRecord &&
+        currentRecordAttachments &&
+        currentRecordAttachments.length > 0 ? (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Photos</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                marginBottom: 20,
+              }}
+            >
+              {currentRecordAttachments.map((item, index) => (
+                <TileBase
+                  key={index}
+                  gradient={
+                    colorScheme === "light"
+                      ? ["#fff", "#fff"]
+                      : ["#252525", "#252525"]
+                  }
+                  style={{
+                    width: width - 80,
+                    height: 150,
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 0,
+                  }}
+                  onClick={() => {
+                    setCurrentMedia(item.uri);
+                    setModalVisible(true);
+                  }}
+                >
+                  <Image
+                    source={{ uri: item.uri }}
+                    style={{
+                      width: width - 100,
+                      height: 130,
+                      borderRadius: 10,
+                    }}
+                  />
+                </TileBase>
+              ))}
+            </View>
+          </View>
+        ) : null}
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {}}
+      >
+        <ModalContainer img={currentMedia!} />
+      </Modal>
     </SafeView>
   );
 });

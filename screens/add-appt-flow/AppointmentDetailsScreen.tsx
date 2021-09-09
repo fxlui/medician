@@ -2,11 +2,11 @@ import React from "react";
 import {
   StyleSheet,
   ScrollView,
-  Dimensions,
   TextInput,
   KeyboardAvoidingView,
   Animated,
   Alert,
+  useWindowDimensions,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -52,6 +52,7 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
+  const { height, width } = useWindowDimensions();
   const { addFlowStore, user } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
@@ -193,7 +194,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         extraNotes.trim()
       );
       await addFlowStore.dbInsertAppointment(user.id);
-      navigation.navigate("Root", { screen: "HomeScreen"});
+      navigation.navigate("Root", { screen: "HomeScreen" });
     } else {
       nextQuestion();
     }
@@ -272,7 +273,14 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
           flex: 1,
         }}
       >
-        <Text style={styles.greeting}>
+        <Text
+          style={[
+            styles.greeting,
+            {
+              maxWidth: width - 120,
+            },
+          ]}
+        >
           Please tell me more about your appointment.
         </Text>
         <ScrollView
@@ -383,7 +391,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   data={symptomArr}
                   renderItem={renderTopTile}
                   vertical={false}
-                  sliderWidth={Dimensions.get("window").width}
+                  sliderWidth={width}
                   containerCustomStyle={{
                     overflow: "visible",
                   }}
@@ -510,7 +518,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "600",
     marginTop: 15,
-    maxWidth: Dimensions.get("window").width - 120,
     marginBottom: 20,
   },
   question: {

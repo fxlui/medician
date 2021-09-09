@@ -2,11 +2,11 @@ import React from "react";
 import {
   StyleSheet,
   ScrollView,
-  Dimensions,
   TextInput,
   KeyboardAvoidingView,
   Animated,
   Alert,
+  useWindowDimensions,
 } from "react-native";
 
 import { StackScreenProps } from "@react-navigation/stack";
@@ -27,6 +27,7 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "DetailsScreen">;
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
+  const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
   const { addFlowStore, progressStore, editFlowStore } = useStores();
   const textColor =
@@ -196,11 +197,23 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       >
         {route.params.method === "edit" ? (
           <Text style={{ opacity: 0.7 }}>
-            Editing record for{' '}
-            {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
+            Editing record for{" "}
+            {getEditDescription(
+              editFlowStore.currentSymptomType,
+              editFlowStore.currentEditingRecord?.subArea
+            )}
           </Text>
         ) : null}
-        <Text style={styles.greeting}>Please describe what you observe.</Text>
+        <Text
+          style={[
+            styles.greeting,
+            {
+              maxWidth: width - 100,
+            },
+          ]}
+        >
+          Please describe what you observe.
+        </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -394,7 +407,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "600",
     marginTop: 15,
-    maxWidth: Dimensions.get("window").width - 100,
     marginBottom: 20,
   },
   question: {
