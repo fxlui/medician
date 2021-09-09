@@ -20,8 +20,6 @@ import {
 
 type ScreenProps = StackScreenProps<RootStackParamList, "TimelineDetails">;
 
-type addFlowScreenType = [keyof AddFlowParamList, number];
-
 const symptomArr = uniqueSymptoms;
 
 const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
@@ -71,18 +69,19 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
         });
         break;
       case "sleep":
-        progressStore.setProgressBarLength(5);
+        progressStore.setProgressBarLength(4);
         navigation.navigate("AddFlow", {
           screen: "SleepHoursScreen",
           params: { method: "edit" },
         });
         break;
       default:
+        progressStore.setProgressBarLength(4);
         navigation.navigate("AddFlow", {
           screen: "CustomScreen",
           params: { method: "edit" },
         });
-        return ["CustomScreen", 3];
+        break;
     }
   }
 

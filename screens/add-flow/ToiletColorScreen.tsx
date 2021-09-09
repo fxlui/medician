@@ -9,7 +9,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import { useStores } from "../../models/root-store-provider";
-
+import { getEditDescription } from "../../utils/ScreenUtils";
 import Carousel from "react-native-snap-carousel";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { observer } from "mobx-react-lite";
@@ -84,8 +84,11 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
       <SafeView style={styles.container} disableTop>
         {route.params.method === "edit" ? (
           <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for {editFlowStore.currentSymptomType} at{" "}
-            {editFlowStore.currentEditingRecord?.subArea}
+            Editing record for{" "}
+            {getEditDescription(
+              editFlowStore.currentSymptomType,
+              editFlowStore.currentEditingRecord?.subArea
+            )}
           </Text>
         ) : null}
         <Text style={styles.greeting}>What colour is it?</Text>

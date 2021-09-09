@@ -10,7 +10,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { useStores } from "../../models/root-store-provider";
 import { AddFlowParamList, RootStackParamList } from "../../types";
-
+import { getEditDescription } from "../../utils/ScreenUtils";
 import { Entypo } from "@expo/vector-icons";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
@@ -43,7 +43,8 @@ const SleepHoursScreen = observer(
           >
             {route.params.method === "edit" ? (
               <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-                Editing record for MOBX_PAIN at MOBX_AREA
+                Editing record for{' '}
+                {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
               </Text>
             ) : null}
             <Text style={styles.greeting}>How long did you sleep?</Text>
