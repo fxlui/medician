@@ -70,18 +70,15 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
   // Notification Stuff :D
   const lastNotificationResponse = Notifications.useLastNotificationResponse();
   React.useEffect(() => {
-    console.log("Last");
     if (
       lastNotificationResponse &&
       lastNotificationResponse.notification.request.content.data.id &&
       lastNotificationResponse.actionIdentifier ===
         Notifications.DEFAULT_ACTION_IDENTIFIER
     ) {
-      console.log("Last checkpoint 1");
       const notification = lastNotificationResponse.notification;
       const idNum = parseInt(`${notification.request.content.data.id}`);
       if (notification.request.content.data.id && !isNaN(idNum)) {
-        console.log("Last checkpoint 2");
         navigation.navigate("Notification", {
           id: notification.request.content.data.id as number,
           title: notification.request.content.data.name as string,
@@ -94,12 +91,10 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
   }, [lastNotificationResponse]);
 
   React.useEffect(() => {
-    console.log("Now");
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
         const idNum = parseInt(`${notification.request.content.data.id}`);
         if (notification.request.content.data.id && !isNaN(idNum)) {
-          console.log("Now checkpoint 1");
           const checkStatus = async () => {
             const status = await SecureStore.getItemAsync("last_alert_id");
             console.log(status);
@@ -107,7 +102,6 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
               // handled before
               return;
             } else {
-              console.log("Now checkpoint 2");
               await SecureStore.setItemAsync(
                 "last_alert_id",
                 `${notification.request.identifier}`
