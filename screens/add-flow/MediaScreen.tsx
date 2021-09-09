@@ -406,7 +406,7 @@ const MediaScreen = observer(
               await addFlowStore.dbInsertRecord(user.id);
             } else {
               // TODO handle edit flow
-              await editFlowStore.updateRecordAsync()
+              await editFlowStore.updateRecordAsync();
             }
             Toast.show(
               <TickToast

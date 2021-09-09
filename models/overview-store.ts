@@ -40,6 +40,9 @@ export const OverviewStoreModel = types
     getCurrentRecordsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRecords)];
     },
+    getCurrentSubAreas: () => {
+      return [...getSnapshot(self.currentCollectionRecords)].map(item => item.subArea);
+    },
     getCurrentRoutinesSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRoutines)];
     },

@@ -33,44 +33,49 @@ const TimelineDetailsScreen = observer(
     const borderColor =
     colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
     
-    const { editFlowStore : {currentSymptomType, currentEditingRecord } } = useStores();
+    const { progressStore, editFlowStore : {currentSymptomType, currentEditingRecord } } = useStores();
     
-    function useEditDirect(symptomType: string): addFlowScreenType {
-      console.log(symptomType)
+    function useEditDirect(symptomType: string) {
+      progressStore.resetProgress();
       switch (symptomType) {
         case "pain":
         case "itchy":
+          progressStore.setProgressBarLength(3);
           navigation.navigate("AddFlow", {
             screen: "SeverityScreen",
             params: { method: "edit" }
           });   // also set progress bar length
-          return ["SeverityScreen", 2];
+          break;
         case "hot":
         case "cold":
+          progressStore.setProgressBarLength(5);
           navigation.navigate("AddFlow", {
             screen: "TemperatureSelectionScreen",
             params: { method: "edit" }
           });
-          return ["TemperatureSelectionScreen", 3];
+          break;
         case "toilet":
+          progressStore.setProgressBarLength(6);
           navigation.navigate("AddFlow", {
             screen: "ToiletScreen",
             params: { method: "edit" }
           });
-          return ["ToiletScreen", 3];
+          break;
         case "dizzy":
         case "walk":
+          progressStore.setProgressBarLength(4);
           navigation.navigate("AddFlow", {
             screen: "DizzyScreen",
             params: { method: "edit" }
           });
-          return ["DizzyScreen", 2];
+          break;
         case "sleep":
+          progressStore.setProgressBarLength(5);
           navigation.navigate("AddFlow", {
             screen: "SleepHoursScreen",
             params: { method: "edit" }
           });
-          return ["SleepHoursScreen", 3];
+          break;
         default:
           navigation.navigate("AddFlow", {
             screen: "CustomScreen",

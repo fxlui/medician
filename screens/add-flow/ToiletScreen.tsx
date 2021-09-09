@@ -72,7 +72,8 @@ const ToiletScreen = observer(
               } else {
                 editFlowStore.currentEditingRecord?.updateRecordToiletType(
                   pee && poo ? 2 : pee ? 0 : poo ? 1 : -1
-                )
+                );
+                progressStore.goForward();
               }
               navigation.navigate("ToiletPainScreen", route.params);
             }

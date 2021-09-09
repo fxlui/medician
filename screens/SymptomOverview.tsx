@@ -20,6 +20,7 @@ import { SimpleRecordSnapshot } from "../models/overview-store";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
+import uniqueBodyAreas from "../assets/uniqueSubAreas.json"
 import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
 import CustomHaptics from "../utils/CustomHaptics";
 
@@ -51,10 +52,13 @@ interface routineTileProps {
   item: SavedRoutineSnapshot;
 }
 
-interface BaseData {
+interface AreaTileProps {
   index: number;
   dataIndex: number;
-  item: SimpleRecordSnapshot;
+  item: {
+    area: string;
+    subArea: string
+  }
 }
 
 const symptomArr = uniqueSymptoms;
@@ -67,6 +71,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
   const topBackground = colorScheme === "light" ? "white" : "#121212";
   const [displaySymptoms, setDisplaySymptoms] = useState<SymptomItem[]>([]);
   const { overviewStore } = useStores();
+  const currentSubAreas = overviewStore.getCurrentSubAreas();
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
   const areaTileEmoji = (area: string) =>
@@ -106,7 +111,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
     );
   };
 
-  const renderAreaTile = ({ item, index }: BaseData) => {
+  const renderAreaTile = ({ item, index }: AreaTileProps) => {
     return (
       <TopTile
         emoji={areaTileEmoji(item.area)}
@@ -212,7 +217,9 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
             <Text style={styles.name}>Timeline</Text>
             <Carousel
               style={{ overflow: "visible" }}
-              data={overviewStore.getCurrentRecordsSnapshot()}
+              data={uniqueBodyAreas.filter(
+                item => currentSubAreas.includes(item.subArea)
+              )}
               renderItem={renderAreaTile}
               inactiveSlideScale={1}
               vertical={false}
