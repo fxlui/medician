@@ -73,8 +73,8 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
       ) {
         navigation.navigate("Notification", {
           id: lastNotificationResponse.notification.request.content.data
-            .id as string,
-          name: lastNotificationResponse.notification.request.content.data
+            .id as number,
+          title: lastNotificationResponse.notification.request.content.data
             .name as string,
           notes: lastNotificationResponse.notification.request.content.data
             .notes as string,
@@ -111,8 +111,8 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                 `${notification.request.content.data.id}`
               );
               navigation.navigate("Notification", {
-                id: notification.request.content.data.id as string,
-                name: notification.request.content.data.name as string,
+                id: notification.request.content.data.id as number,
+                title: notification.request.content.data.name as string,
                 notes: notification.request.content.data.notes as string,
                 type: notification.request.content.data.type as HomeTileTypes,
               });
@@ -142,8 +142,8 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.title,
+            id: item.id,
+            title: item.title,
             notes: item.notes,
             type: routineType(item.type),
           });
@@ -165,8 +165,8 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.doctor,
+            id: item.id,
+            title: item.doctor,
             notes: item.notes,
             type: HomeTileTypes.Appointment,
           });

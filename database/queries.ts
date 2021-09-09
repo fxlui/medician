@@ -12,6 +12,11 @@ INSERT INTO entry
 values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
+export const insertAttachment = `
+INSERT INTO attachment
+(entryId, type, path) VALUES (?, ?, ?)
+`;
+
 export const updateRecord = `
 UPDATE entry
 SET severity = ?,
@@ -165,7 +170,7 @@ ORDER BY alert.eventTime
 `;
 
 export function getLastInserted(
-  table: "entry" | "appointment" | "routine" | "alert"
+  table: "entry" | "appointment" | "routine" | "alert" | "attachment"
 ) {
   return `
   SELECT *

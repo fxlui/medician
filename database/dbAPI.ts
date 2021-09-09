@@ -27,7 +27,8 @@ import {
   getAppointmentByID,
   getRoutineByID,
   getSubAreaRecords,
-  updateRecord
+  updateRecord,
+  insertAttachment
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -133,6 +134,28 @@ export async function getLastRecordId() {
           const result = rows._array[0] as { id: number };
           resolve(result.id);
         });
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function addAttachments(recordId: number, items: { type: string, path: string }[]) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        items.forEach(item => {
+          tx.executeSql(
+            insertAttachment,
+            [recordId, item.type, item.path],
+            () => resolve()
+          );
+          tx.executeSql(
+            getLastInserted("attachment"),
+            undefined,
+            (_, { rows }) => console.log(rows._array)
+          )
+        })
       },
       (error) => reject(error)
     );

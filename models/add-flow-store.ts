@@ -7,6 +7,7 @@ import {
   addAppointmentAlerts,
   addRoutine,
   addAppointment,
+  addAttachments
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
 import { RoutineModel } from "./routine";
@@ -72,7 +73,15 @@ export const AddFlowStoreModel = types
             )
         );
         const lastRecordId = await getLastRecordId();
-        console.log(lastRecordId);
+        await addAttachments(
+          lastRecordId,
+          self.currentNewRecord.attatchmentPaths.map(
+            item => ({
+              type: item.type,
+              path: item.uri
+            })
+          )
+        );
       } catch (error) {
         console.error("Insert record into database failed: ", error);
       }

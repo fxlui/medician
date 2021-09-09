@@ -34,7 +34,7 @@ const getGradient = (type: HomeTileTypes) => {
 const NotificationScreen = ({
   navigation,
   route: {
-    params: { id, type, name, notes },
+    params: { id, type, title, notes },
   },
 }: ScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -77,7 +77,7 @@ const NotificationScreen = ({
       </View>
       <View style={styles.centerView}>
         <Icon name={iconType} props={{ fill: "#fff", width: 80, height: 80 }} />
-        <Text style={[styles.name]}>{name}</Text>
+        <Text style={[styles.name]}>{title}</Text>
         <Text style={[styles.notes]}>{notes}</Text>
       </View>
       <View style={styles.bottomGroup}>
