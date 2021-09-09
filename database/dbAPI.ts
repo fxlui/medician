@@ -144,20 +144,22 @@ export async function addAttachments(recordId: number, items: { type: string, pa
   return new Promise<void>((resolve, reject) => {
     db.transaction(
       tx => {
-        items.forEach(item => {
-          tx.executeSql(
-            insertAttachment,
-            [recordId, item.type, item.path],
-            () => resolve()
-          );
-          tx.executeSql(
-            getLastInserted("attachment"),
-            undefined,
-            (_, { rows }) => console.log(rows._array)
-          )
-        })
+        if (items.length !== 0) {
+          items.forEach(item => {
+            tx.executeSql(
+              insertAttachment,
+              [recordId, item.type, item.path]
+            );
+            tx.executeSql(
+              getLastInserted("attachment"),
+              undefined,
+              (_, { rows }) => console.log(rows._array)
+            )
+          });
+        }
       },
-      (error) => reject(error)
+      (error) => reject(error),
+      () => resolve()
     );
   });
 }
