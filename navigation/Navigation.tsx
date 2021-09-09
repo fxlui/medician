@@ -50,8 +50,8 @@ function RootNavigator() {
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      <RootStack.Screen name="Root" component={TutorialNavigator} />
-      {/* <RootStack.Screen name="Root" component={BottomTabNavigator} /> */}
+      <RootStack.Screen name="Tutorial" component={TutorialNavigator} />
+      <RootStack.Screen name="Root" component={BottomTabNavigator} />
       <RootStack.Screen
         name="Notification"
         component={NotificationScreen}
