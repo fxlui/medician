@@ -30,6 +30,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 import Toast from "react-native-root-toast";
 import TickToast from "../../components/TickToast";
+import { observer } from "mobx-react-lite";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { PressableBase } from "../../components/PressableBase";
 
@@ -104,19 +105,25 @@ interface Media {
   type: string | undefined;
 }
 
-export default function MediaScreen({ navigation, route }: ScreenProps) {
+const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+  const { user, addFlowStore, editFlowStore } = useStores();
 
-  const defaultImagesList = route.params.method === "add" ? [] : []; // TODO read from store
+  const defaultImagesList =
+    route.params.method === "add"
+      ? []
+      : editFlowStore.currentRecordAttachments.map((item) => ({
+          uri: item.uri,
+          type: item.type,
+        }));
+
   const [images, setImages] = React.useState<Media[]>(defaultImagesList);
   const [currentMedia, setCurrentMedia] = React.useState<Media>();
   const [modalVisible, setModalVisible] = React.useState(false);
-
-  const { user, addFlowStore, editFlowStore } = useStores();
 
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
@@ -125,7 +132,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
-    //console.log(result);
+    console.log(result);
     if (!result.cancelled) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
@@ -147,7 +154,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
-    //console.log(result);
+    console.log(result);
     if (!result.cancelled) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
@@ -177,14 +184,14 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
           }}
         >
           {img.type === "video" /*<VideoPlayer
-              videoProps={{
-                shouldPlay: true,
-                resizeMode: Video.RESIZE_MODE_CONTAIN,
-                source: {
-                  uri: img.uri!,
-                },
-              }}
-            />*/ ? null : (
+                videoProps={{
+                  shouldPlay: true,
+                  resizeMode: Video.RESIZE_MODE_CONTAIN,
+                  source: {
+                    uri: img.uri!,
+                  },
+                }}
+              />*/ ? null : (
             <Image
               resizeMode="contain"
               source={{ uri: img.uri }}
@@ -393,7 +400,17 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
         left={() => navigation.pop()}
         right={async () => {
           if (route.params.method === "add") {
-            addFlowStore.currentNewRecord.setRecordAttachments(images);
+            const paths = images
+              .map((image) => image.uri)
+              .filter((uri) => uri !== undefined) as string[];
+            const savedPaths = await Promise.all(
+              paths.map((path) => moveToFileSystem(path))
+            );
+            const finalImages = images.map((item, index) => ({
+              type: item.type,
+              uri: savedPaths[index],
+            }));
+            addFlowStore.currentNewRecord.setRecordAttachments(finalImages);
             await addFlowStore.dbInsertRecord(user.id);
           } else {
             // TODO handle edit flow
@@ -424,7 +441,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
       ></AddFlowNavBar>
     </SafeView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -440,3 +457,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+
+export default MediaScreen;

@@ -40,6 +40,9 @@ export const OverviewStoreModel = types
     getCurrentRecordsSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRecords)];
     },
+    getCurrentSubAreas: () => {
+      return [...getSnapshot(self.currentCollectionRecords)].map(item => item.subArea);
+    },
     getCurrentRoutinesSnapshot: () => {
       return [...getSnapshot(self.currentCollectionRoutines)];
     },
@@ -53,11 +56,6 @@ export const OverviewStoreModel = types
     },
   }))
   .actions((self) => ({
-    checkCurrentData: () => {
-      console.log(self.getCurrentRecordsSnapshot());
-      console.log(self.getCurrentRoutinesSnapshot());
-      console.log(self.getCurrentAppointmentsSnapshot());
-    },
     setSelectedCollection: (symptomType: string) => {
       self.selectedCollectionId = self.collections.find(
         (item) => item.type === symptomType

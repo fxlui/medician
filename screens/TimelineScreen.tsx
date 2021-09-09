@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Alert } from "react-native";
 import { Text, View } from "../components/Themed";
 import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList, AddFlowParamList } from "../types";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
 import Timeline from "react-native-timeline-flatlist";
@@ -15,6 +15,7 @@ import { SavedRecordSnapshot } from "../models/record";
 import { themeTextColor, themeTileColor } from "../constants/Colors";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Timeline">;
+type addFlowScreenType = [keyof AddFlowParamList, number];
 
 interface timelineItemType {
   id: number;
@@ -55,6 +56,51 @@ const TimelineScreen = observer(({ navigation, route }: ScreenProps) => {
   
     const { editFlowStore } = useStores();
     const [timelineRecords, setTimelineRecords] = useState<SavedRecordSnapshot[]>([]);
+
+    function useEditDirect(symptomType: string): addFlowScreenType {
+      console.log(symptomType)
+      switch (symptomType) {
+        case "pain":
+        case "itchy":
+          navigation.navigate("AddFlow", {
+            screen: "SeverityScreen",
+            params: { method: "edit" }
+          });   // also set progress bar length
+          return ["SeverityScreen", 2];
+        case "hot":
+        case "cold":
+          navigation.navigate("AddFlow", {
+            screen: "TemperatureSelectionScreen",
+            params: { method: "edit" }
+          });
+          return ["TemperatureSelectionScreen", 3];
+        case "toilet":
+          navigation.navigate("AddFlow", {
+            screen: "ToiletScreen",
+            params: { method: "edit" }
+          });
+          return ["ToiletScreen", 3];
+        case "dizzy":
+        case "walk":
+          navigation.navigate("AddFlow", {
+            screen: "DizzyScreen",
+            params: { method: "edit" }
+          });
+          return ["DizzyScreen", 2];
+        case "sleep":
+          navigation.navigate("AddFlow", {
+            screen: "SleepHoursScreen",
+            params: { method: "edit" }
+          });
+          return ["SleepHoursScreen", 3];
+        default:
+          navigation.navigate("AddFlow", {
+            screen: "CustomScreen",
+            params: { method: "edit" }
+          });
+          return ["CustomScreen", 3];
+      }
+    }
   
     useEffect(() => {
       const unsubscribe = navigation.addListener("focus",
@@ -103,14 +149,15 @@ const TimelineScreen = observer(({ navigation, route }: ScreenProps) => {
                 cancelButtonIndex: 3,
                 destructiveButtonIndex: 2,
               },
-              (selection) => {
+              async (selection) => {
                 if (selection === 0) {
-                  editFlowStore.setCurrentEditingRecord(item.id, route.params.type);
+                  await editFlowStore.setCurrentEditingRecordFetchAsync(item.id, route.params.type);
                   navigation.navigate("TimelineDetails", {
                     id: item.id
                   });
                 } else if (selection === 1) {
-                  editFlowStore.setCurrentEditingRecord(item.id, route.params.type);
+                  await editFlowStore.setCurrentEditingRecordFetchAsync(item.id, route.params.type);
+                  useEditDirect(editFlowStore.currentSymptomType);
                 } else if (selection === 2) {
                   Alert.alert(
                     "Delete",

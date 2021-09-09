@@ -39,6 +39,9 @@ import {
   updateAlertTimestamp,
   setAlertTimeQuery,
   setAlertEventTimeQuery,
+  getAttachmentbyRecordId,
+  deleteAttachmentById,
+  deleteAttachmentByRecordId,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -49,6 +52,7 @@ import {
   SQLRecordReturnType,
   SQLRecordUpdateType,
   SQLAlertIDsType,
+  SQLAttachmentReturnType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -69,6 +73,7 @@ export async function initDatabase() {
         tx.executeSql(`DROP TABLE IF EXISTS treatment`);
         tx.executeSql(`DROP TABLE IF EXISTS routine`);
         tx.executeSql(`DROP TABLE IF EXISTS alert`);
+        tx.executeSql(`DROP TABLE IF EXISTS attachment`);
         tx.executeSql(createUserTable);
         tx.executeSql(createRecordTable);
         tx.executeSql(createCollectionTable);
@@ -638,6 +643,19 @@ export async function fetchSubAreaRecords(
   });
 }
 
+export async function fetchAttachmentByRecordId(recordId: number) {
+  return new Promise<SQLAttachmentReturnType[]>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(getAttachmentbyRecordId, [recordId], (_, { rows }) =>
+          resolve(rows._array as SQLAttachmentReturnType[])
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
 export async function updateSingleRecord(data: SQLRecordUpdateType) {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
@@ -664,5 +682,15 @@ export async function updateSingleRecord(data: SQLRecordUpdateType) {
       },
       (error) => reject(error)
     );
+  });
+}
+
+export async function deleteAttachmentsId(ids: number[]) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction((tx) => {
+      ids.forEach((id) => {
+        tx.executeSql(deleteAttachmentById, [id]);
+      });
+    });
   });
 }
