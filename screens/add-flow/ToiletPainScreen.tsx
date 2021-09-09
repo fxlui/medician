@@ -7,6 +7,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../models/root-store-provider";
 import { StackScreenProps } from "@react-navigation/stack";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletPainScreen">;
@@ -18,7 +19,6 @@ const ToiletPainScreen = observer(
     const defaultSelection = route.params.method === "add" ? null :
     !editFlowStore.currentEditingRecord ? null :
     editFlowStore.currentEditingRecord.toiletPain === 0 ? false : true;
-    console.log(defaultSelection)
     const [pain, setPain] = useState<boolean | null>(defaultSelection);
   
     return (
@@ -26,7 +26,8 @@ const ToiletPainScreen = observer(
         <View style={{ flex: 1 }}>
           {route.params.method === "edit" ? (
             <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-              Editing record for MOBX_PAIN at MOBX_AREA
+              Editing record for{' '}
+              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
             </Text>
           ) : null}
           <Text style={styles.greeting}>Does it hurt?</Text>

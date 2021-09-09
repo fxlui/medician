@@ -15,7 +15,6 @@ import { SavedRecordSnapshot } from "../models/record";
 import { themeTextColor, themeTileColor } from "../constants/Colors";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Timeline">;
-type addFlowScreenType = [keyof AddFlowParamList, number];
 
 interface timelineItemType {
   id: number;
@@ -54,51 +53,57 @@ const getTimeString = (timestamp: number) => {
 
 const TimelineScreen = observer(({ navigation, route }: ScreenProps) => {
   
-    const { editFlowStore } = useStores();
+    const { editFlowStore, progressStore } = useStores();
     const [timelineRecords, setTimelineRecords] = useState<SavedRecordSnapshot[]>([]);
 
-    function useEditDirect(symptomType: string): addFlowScreenType {
-      console.log(symptomType)
+    function useEditDirect(symptomType: string) {
+      progressStore.resetProgress();
       switch (symptomType) {
         case "pain":
         case "itchy":
+          progressStore.setProgressBarLength(3);
           navigation.navigate("AddFlow", {
             screen: "SeverityScreen",
             params: { method: "edit" }
           });   // also set progress bar length
-          return ["SeverityScreen", 2];
+          break;
         case "hot":
         case "cold":
+          progressStore.setProgressBarLength(5);
           navigation.navigate("AddFlow", {
             screen: "TemperatureSelectionScreen",
             params: { method: "edit" }
           });
-          return ["TemperatureSelectionScreen", 3];
+          break;
         case "toilet":
+          progressStore.setProgressBarLength(6);
           navigation.navigate("AddFlow", {
             screen: "ToiletScreen",
             params: { method: "edit" }
           });
-          return ["ToiletScreen", 3];
+          break;
         case "dizzy":
         case "walk":
+          progressStore.setProgressBarLength(4);
           navigation.navigate("AddFlow", {
             screen: "DizzyScreen",
             params: { method: "edit" }
           });
-          return ["DizzyScreen", 2];
+          break;
         case "sleep":
+          progressStore.setProgressBarLength(4);
           navigation.navigate("AddFlow", {
             screen: "SleepHoursScreen",
             params: { method: "edit" }
           });
-          return ["SleepHoursScreen", 3];
+          break;
         default:
+          progressStore.setProgressBarLength(4);
           navigation.navigate("AddFlow", {
             screen: "CustomScreen",
             params: { method: "edit" }
           });
-          return ["CustomScreen", 3];
+          break;
       }
     }
   

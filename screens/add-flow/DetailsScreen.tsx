@@ -19,6 +19,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { PressableBase } from "../../components/PressableBase";
 import { useStores } from "../../models/root-store-provider";
 import { Ionicons } from "@expo/vector-icons";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "DetailsScreen">;
@@ -192,7 +193,8 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       >
         {route.params.method === "edit" ? (
           <Text style={{ opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+            Editing record for{' '}
+            {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
           </Text>
         ) : null}
         <Text style={styles.greeting}>Please describe what you observe.</Text>

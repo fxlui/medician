@@ -31,6 +31,7 @@ import { themeTextColor, themeTileColor } from "../../constants/Colors";
 import Toast from "react-native-root-toast";
 import TickToast from "../../components/TickToast";
 import { observer } from "mobx-react-lite";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { PressableBase } from "../../components/PressableBase";
 
@@ -224,7 +225,8 @@ const MediaScreen = observer(
       <SafeView style={styles.container} disableTop>
         {route.params.method === "edit" ? (
           <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+            Editing record for{' '}
+            {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
           </Text>
         ) : null}
         <Text style={styles.greeting}>

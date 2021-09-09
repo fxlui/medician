@@ -9,6 +9,7 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import { useStores } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = CompositeScreenProps<
@@ -31,7 +32,8 @@ const TemperatureSelectionScreen = observer(
         <View style={{ flex: 1 }}>
           {route.params.method === "edit" ? (
             <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-              Editing record for MOBX_PAIN at MOBX_AREA
+              Editing record for{' '}
+              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
             </Text>
           ) : null}
           <Text style={styles.greeting}>

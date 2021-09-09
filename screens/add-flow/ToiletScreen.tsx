@@ -8,6 +8,7 @@ import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { useStores } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
 import { StackScreenProps } from "@react-navigation/stack";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletScreen">;
@@ -32,7 +33,8 @@ const ToiletScreen = observer(
         <View style={{ flex: 1 }}>
           {route.params.method === "edit" ? (
             <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-              Editing record for MOBX_PAIN at MOBX_AREA
+              Editing record for{' '}
+              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
             </Text>
           ) : null}
           <Text style={styles.greeting}>Please select all that applies.</Text>
