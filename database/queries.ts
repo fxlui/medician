@@ -12,6 +12,24 @@ INSERT INTO entry
 values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
+export const updateRecord = `
+UPDATE entry
+SET severity = ?,
+    better = ?,
+    worse = ?,
+    related = ?,
+    attempt = ?,
+    temperature = ?,
+    toiletType = ?,
+    toiletPain = ?,
+    colour = ?,
+    dizzy = ?,
+    sleep = ?,
+    description = ?
+WHERE entry.id = ?
+LIMIT 1
+`;
+
 export const insertAppointment = `
 INSERT INTO appointment
 (collectionId, doctor, notes) values (?, ?, ?)

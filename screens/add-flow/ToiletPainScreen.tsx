@@ -4,63 +4,70 @@ import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
-
+import { observer } from "mobx-react-lite";
 import { useStores } from "../../models/root-store-provider";
 import { StackScreenProps } from "@react-navigation/stack";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletPainScreen">;
 
-const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
-  const defaultSelection = route.params.method === "add" ? null : true; // TODO read from store
-  const [pain, setPain] = useState<boolean | null>(defaultSelection);
-  const { addFlowStore, progressStore } = useStores();
-
-  return (
-    <SafeView style={styles.container} disableTop>
-      <View style={{ flex: 1 }}>
-        {route.params.method === "edit" ? (
-          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
-          </Text>
-        ) : null}
-        <Text style={styles.greeting}>Does it hurt?</Text>
-        <View style={styles.child}>
-          <SelectionTile
-            title="Yes"
-            selected={pain}
-            onPress={() => setPain(true)}
-            extraStyles={{
-              marginBottom: 40,
-            }}
-          />
-          <SelectionTile
-            title="No"
-            selected={pain === null ? null : !pain}
-            onPress={() => setPain(false)}
-          />
+const ToiletPainScreen = observer(
+  ({ navigation, route }: ScreenProps) => {
+    const { addFlowStore, progressStore, editFlowStore } = useStores();
+    console.log(editFlowStore.currentEditingRecord?.toiletPain)
+    const defaultSelection = route.params.method === "add" ? null :
+    !editFlowStore.currentEditingRecord ? null :
+    editFlowStore.currentEditingRecord.toiletPain === 0 ? false : true;
+    console.log(defaultSelection)
+    const [pain, setPain] = useState<boolean | null>(defaultSelection);
+  
+    return (
+      <SafeView style={styles.container} disableTop>
+        <View style={{ flex: 1 }}>
+          {route.params.method === "edit" ? (
+            <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+              Editing record for MOBX_PAIN at MOBX_AREA
+            </Text>
+          ) : null}
+          <Text style={styles.greeting}>Does it hurt?</Text>
+          <View style={styles.child}>
+            <SelectionTile
+              title="Yes"
+              selected={pain}
+              onPress={() => setPain(true)}
+              extraStyles={{
+                marginBottom: 40,
+              }}
+            />
+            <SelectionTile
+              title="No"
+              selected={pain === null ? null : !pain}
+              onPress={() => setPain(false)}
+            />
+          </View>
         </View>
-      </View>
-      <AddFlowNavBar
-        preventRightDefault
-        left={() => navigation.pop()}
-        right={() => {
-          if (pain === null) {
-            Alert.alert("No Selection", "You need to select an option first.");
-          } else {
-            if (route.params.method === "add") {
-              addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
-              progressStore.goForward();
+        <AddFlowNavBar
+          preventRightDefault
+          left={() => navigation.pop()}
+          right={() => {
+            if (pain === null) {
+              Alert.alert("No Selection", "You need to select an option first.");
             } else {
-              // TODO handle edit
+              if (route.params.method === "add") {
+                addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
+              } else {
+                console.log(pain ? 1 : 0)
+                editFlowStore.currentEditingRecord?.updateRecordToiletPain(pain ? 1 : 0);
+              }
+              progressStore.goForward();
+              navigation.navigate("ToiletColorScreen", route.params);
             }
-            navigation.navigate("ToiletColorScreen", route.params);
-          }
-        }}
-      />
-    </SafeView>
-  );
-};
+          }}
+        />
+      </SafeView>
+    );
+  }
+)
 
 const styles = StyleSheet.create({
   container: {

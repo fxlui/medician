@@ -27,6 +27,7 @@ import {
   getAppointmentByID,
   getRoutineByID,
   getSubAreaRecords,
+  updateRecord
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -35,6 +36,7 @@ import {
   FetchByCollectionResultType,
   SQLAlertReturnType,
   SQLRecordReturnType,
+  SQLRecordUpdateType
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -450,5 +452,36 @@ export async function fetchSubAreaRecords(
       },
       (error) => reject(error)
     );
+  });
+}
+
+export async function updateSingleRecord(
+  data: SQLRecordUpdateType
+) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          updateRecord,
+          [
+            data.severity,
+            data.better,
+            data.worse,
+            data.related,
+            data.attempt,
+            data.temperature,
+            data.toiletType,
+            data.toiletPain,
+            data.colour,
+            data.dizzy,
+            data.sleep,
+            data.description,
+            data.id
+          ],
+          () => resolve()
+        )
+      },
+      (error) => reject(error)
+    )
   });
 }

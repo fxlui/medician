@@ -12,6 +12,7 @@ import { useStores } from "../../models/root-store-provider";
 
 import Carousel from "react-native-snap-carousel";
 import CustomHaptics from "../../utils/CustomHaptics";
+import { observer } from "mobx-react-lite";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "ToiletColorScreen">,
@@ -45,83 +46,88 @@ interface baseData {
   };
 }
 
-const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation, route }) => {
-  const defaultSelection = route.params.method === "add" ? 0 : 1; // TODO read from store
-  const [selected, setSelected] = useState(defaultSelection);
-
-  const tileRef = React.createRef<Carousel<{ emoji: string; title: string }>>();
-  const { addFlowStore } = useStores();
-
-  const renderTile = ({ item, index }: baseData) => {
-    return (
-      <TopTile
-        emoji={item.emoji}
-        title={item.title}
-        style={{
-          marginRight: 15,
-        }}
-        index={index}
-        selected={selected === index}
-        updater={() => {
-          tileRef.current?.snapToItem(index);
-        }}
-        colorTile
-      />
-    );
-  };
-
-  return (
-    <SafeView style={styles.container} disableTop>
-      {route.params.method === "edit" ? (
-        <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-          Editing record for MOBX_PAIN at MOBX_AREA
-        </Text>
-      ) : null}
-      <Text style={styles.greeting}>What colour is it?</Text>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 9,
-        }}
-      >
-        <Carousel
-          data={DATA}
-          renderItem={renderTile}
-          vertical={false}
-          sliderWidth={Dimensions.get("window").width}
-          containerCustomStyle={{
-            paddingVertical: 150,
-            overflow: "visible",
+const ToiletColorScreen: React.FC<ScreenProps> = observer(
+  ({ navigation, route }) => {
+    const { addFlowStore, editFlowStore } = useStores();
+    const defaultSelection = route.params.method === "add" ? 0 :
+    !editFlowStore.currentEditingRecord ? 0 :
+    editFlowStore.currentEditingRecord.toiletType === -1 ? 0 : 
+    editFlowStore.currentEditingRecord.toiletType;
+    const [selected, setSelected] = useState(defaultSelection);
+  
+    const tileRef = React.createRef<Carousel<{ emoji: string; title: string }>>();
+  
+    const renderTile = ({ item, index }: baseData) => {
+      return (
+        <TopTile
+          emoji={item.emoji}
+          title={item.title}
+          style={{
+            marginRight: 15,
           }}
-          contentContainerCustomStyle={{
-            justifyContent: "center",
-            alignItems: "flex-start",
-            overflow: "visible",
+          index={index}
+          selected={selected === index}
+          updater={() => {
+            tileRef.current?.snapToItem(index);
           }}
-          itemWidth={150}
-          inactiveSlideOpacity={0.8}
-          onScrollIndexChanged={(index) => {
-            setSelected(index);
-            CustomHaptics("light");
-          }}
-          ref={tileRef}
+          colorTile
         />
-      </View>
-      <AddFlowNavBar
-        left={() => navigation.pop()}
-        right={() => {
-          if (route.params.method === "add") {
-            addFlowStore.currentNewRecord.setRecordColor(selected);
-          } else {
-            // TODO handle edit
-          }
-          navigation.navigate("SeverityScreen", route.params);
-        }}
-      />
-    </SafeView>
-  );
-};
+      );
+    };
+  
+    return (
+      <SafeView style={styles.container} disableTop>
+        {route.params.method === "edit" ? (
+          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+            Editing record for MOBX_PAIN at MOBX_AREA
+          </Text>
+        ) : null}
+        <Text style={styles.greeting}>What colour is it?</Text>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 9,
+          }}
+        >
+          <Carousel
+            data={DATA}
+            renderItem={renderTile}
+            vertical={false}
+            sliderWidth={Dimensions.get("window").width}
+            containerCustomStyle={{
+              paddingVertical: 150,
+              overflow: "visible",
+            }}
+            contentContainerCustomStyle={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+              overflow: "visible",
+            }}
+            itemWidth={150}
+            inactiveSlideOpacity={0.8}
+            onScrollIndexChanged={(index) => {
+              setSelected(index);
+              CustomHaptics("light");
+            }}
+            ref={tileRef}
+          />
+        </View>
+        <AddFlowNavBar
+          left={() => navigation.pop()}
+          right={() => {
+            if (route.params.method === "add") {
+              addFlowStore.currentNewRecord.setRecordColor(selected);
+            } else {
+              editFlowStore.currentEditingRecord?.updateRecordColor(selected)
+            }
+            navigation.navigate("SeverityScreen", route.params);
+          }}
+        />
+      </SafeView>
+    );
+  }
+)
 
 const styles = StyleSheet.create({
   container: {

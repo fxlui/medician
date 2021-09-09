@@ -84,7 +84,7 @@ export const RecordModel = types
     },
     setRecordDescription: (description: string) => {
       self.description = description;
-    },
+    }
   }));
 
   export const SavedRecordModel = types
@@ -106,7 +106,49 @@ export const RecordModel = types
       dizzy: types.optional(types.integer, -1),
       sleep: types.optional(types.number, 0),
       description: types.optional(types.string, "")
-    });
+    })
+    .views(self => ({
+      getDetails: () => {
+        return {
+          better: self.better,
+          worse: self.worse,
+          related: self.related,
+          attempt: self.attempt
+        }
+      }
+    }))
+    .actions(self => ({
+      updateSeverity: (severity: number) => {
+        self.severity = severity;
+      },
+      updateDetails: (better: string, worse: string, related: string, attempt: string) => {
+        self.better = better;
+        self.worse = worse;
+        self.related = related;
+        self.attempt = attempt;
+      },
+      updateRecordTemperature: (temperature: number) => {
+        self.temperature = temperature;
+      },
+      updateRecordToiletType: (type: number) => {
+        self.toiletType = type;
+      },
+      updateRecordToiletPain: (pain: number) => {
+        self.toiletPain = pain;
+      },
+      updateRecordColor: (color: number) => {
+        self.colour = color;
+      },
+      updateRecordDizzy: (dizzy: number) => {
+        self.dizzy = dizzy;
+      },
+      updateRecordSleep: (hours: number) => {
+        self.sleep = hours;
+      },
+      updateRecordDescription: (description: string) => {
+        self.description = description;
+      },
+    }));
 
 type RecordType = Instance<typeof RecordModel>;
 export interface Record extends RecordType {};

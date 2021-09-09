@@ -116,7 +116,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
   const [currentMedia, setCurrentMedia] = React.useState<Media>();
   const [modalVisible, setModalVisible] = React.useState(false);
 
-  const { user, addFlowStore } = useStores();
+  const { user, addFlowStore, editFlowStore } = useStores();
 
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
@@ -397,6 +397,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
             await addFlowStore.dbInsertRecord(user.id);
           } else {
             // TODO handle edit flow
+            await editFlowStore.updateRecordAsync()
           }
           Toast.show(
             <TickToast

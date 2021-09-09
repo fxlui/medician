@@ -26,12 +26,16 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+  const { addFlowStore, editFlowStore } = useStores();
 
-  const defaultTemperature = route.params.method === "add" ? 37.0 : 36.5; // TODO Read from store
+  const defaultTemperature = route.params.method === "add" ? 37.0 :
+    !editFlowStore.currentEditingRecord ? 36.5 :
+    editFlowStore.currentEditingRecord.temperature === 0 ? 37.0 :
+    editFlowStore.currentEditingRecord.temperature
+    
   // !! important, data from store could be null so need to have fallback default value
   const [temperature, setTemperature] = useState(defaultTemperature);
   const [unit, setUnit] = useState("C");
-  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -126,7 +130,8 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
             addFlowStore.currentNewRecord.setRecordTemperature(temperature);
             navigation.navigate("AreaSelectScreen");
           } else {
-            // TODO handle edit
+            editFlowStore.currentEditingRecord?.updateRecordTemperature(temperature);
+            navigation.navigate("SeverityScreen", route.params);
           }
         }}
       />

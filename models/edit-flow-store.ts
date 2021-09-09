@@ -6,7 +6,7 @@ import {
   Instance,
   SnapshotOut,
 } from "mobx-state-tree";
-import { fetchSubAreaRecords } from "../database/dbAPI";
+import { fetchSubAreaRecords, updateSingleRecord } from "../database/dbAPI";
 import { SQLRecordReturnType } from "../database/db.types";
 import { SavedRecordModel } from "./record";
 
@@ -62,5 +62,31 @@ export const EditFlowStoreModel = types
       }
     });
 
-    return { fetchTimelineRecordsAsync };
+    const updateRecordAsync = flow(function*() {
+      try {
+        if (self.currentEditingRecord) {
+          yield updateSingleRecord({
+            id: self.currentEditingRecord.id,
+            severity: self.currentEditingRecord.severity,
+            better: self.currentEditingRecord.better,
+            worse: self.currentEditingRecord.worse,
+            related: self.currentEditingRecord.related,
+            attempt: self.currentEditingRecord.attempt,
+            colour: self.currentEditingRecord.colour,
+            description: self.currentEditingRecord.description,
+            dizzy: self.currentEditingRecord.dizzy,
+            temperature: self.currentEditingRecord.temperature,
+            sleep: self.currentEditingRecord.sleep,
+            toiletPain: self.currentEditingRecord.toiletPain,
+            toiletType: self.currentEditingRecord.toiletType
+          });
+        } else {
+          console.error("current editting record doesn't exist!")
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    return { fetchTimelineRecordsAsync, updateRecordAsync };
   })

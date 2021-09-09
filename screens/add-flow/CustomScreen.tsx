@@ -20,6 +20,7 @@ import { AddFlowParamList, RootStackParamList } from "../../types";
 import { PressableBase } from "../../components/PressableBase";
 import { useStores } from "../../models/root-store-provider";
 import { Ionicons } from "@expo/vector-icons";
+import { observer } from "mobx-react-lite";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<
@@ -29,120 +30,125 @@ type ScreenProps = CompositeScreenProps<
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-export default function CustomScreen({ navigation, route }: ScreenProps) {
-  const colorScheme = useColorScheme();
-  const textColor =
-    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
-  const tileColor =
-    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
-
-  const [inputFocused, setInputFocused] = React.useState(false);
-
-  const defaultText = route.params.method === "add" ? "" : "MOBX HERE"; //TODO: get from store
-  const [currentText, setCurrentText] = React.useState(defaultText);
-
-  const inputRef = React.useRef<TextInput>(null);
-  const { addFlowStore } = useStores();
-
-  const handleNavigation = () => {
-    if (currentText === "") {
-      Alert.alert("Please enter your symptoms.");
-      return;
-    }
-    if (route.params.method === "add") {
-      addFlowStore.currentNewRecord.setRecordDescription(currentText);
-    } else {
-      // TODO handle edit
-    }
-    navigation.navigate("SeverityScreen", route.params);
-  };
-
-  return (
-    <SafeView style={styles.container} disableTop>
-      <View
-        style={{
-          paddingLeft: 30,
-          flex: 1,
-        }}
-      >
-        {route.params.method === "edit" ? (
-          <Text style={{ opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
-          </Text>
-        ) : null}
-        <Text style={styles.greeting}>Please describe what you observe.</Text>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 200,
-          }}
-        >
-          <View style={styles.qna}>
-            <Text style={styles.answer}>{currentText}</Text>
-          </View>
-        </ScrollView>
-        <KeyboardAvoidingView
-          behavior="position"
+const CustomScreen = observer(
+  ({ navigation, route }: ScreenProps) => {
+    const colorScheme = useColorScheme();
+    const textColor =
+      colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+    const tileColor =
+      colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+    const { addFlowStore, editFlowStore } = useStores();
+  
+    const [inputFocused, setInputFocused] = React.useState(false);
+  
+    const defaultText = route.params.method === "add" ? "" :
+    !editFlowStore.currentEditingRecord ? "" :
+    editFlowStore.currentEditingRecord.description;
+    const [currentText, setCurrentText] = React.useState(defaultText);
+  
+    const inputRef = React.useRef<TextInput>(null);
+  
+    const handleNavigation = () => {
+      if (currentText === "") {
+        Alert.alert("Please enter your symptoms.");
+        return;
+      }
+      if (route.params.method === "add") {
+        addFlowStore.currentNewRecord.setRecordDescription(currentText);
+      } else {
+        editFlowStore.currentEditingRecord?.updateRecordDescription(currentText);
+      }
+      navigation.navigate("SeverityScreen", route.params);
+    };
+  
+    return (
+      <SafeView style={styles.container} disableTop>
+        <View
           style={{
-            paddingRight: 30,
+            paddingLeft: 30,
+            flex: 1,
           }}
         >
-          <View
-            style={{
-              backgroundColor: tileColor,
-              borderRadius: 16,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.1,
-              shadowRadius: 9,
-              elevation: 5,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignSelf: "center",
-              marginBottom: inputFocused ? 160 : 85,
+          {route.params.method === "edit" ? (
+            <Text style={{ opacity: 0.7 }}>
+              Editing record for MOBX_PAIN at MOBX_AREA
+            </Text>
+          ) : null}
+          <Text style={styles.greeting}>Please describe what you observe.</Text>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 200,
             }}
           >
-            <AnimatedTextInput
-              ref={inputRef}
-              placeholder={"Type in your response here..."}
-              placeholderTextColor="lightgrey"
+            <View style={styles.qna}>
+              <Text style={styles.answer}>{currentText}</Text>
+            </View>
+          </ScrollView>
+          <KeyboardAvoidingView
+            behavior="position"
+            style={{
+              paddingRight: 30,
+            }}
+          >
+            <View
               style={{
-                padding: 20,
-                flex: 8,
-                fontSize: 16,
-                marginTop: 20,
-                maxHeight: 125,
-                color: textColor,
+                backgroundColor: tileColor,
+                borderRadius: 16,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.1,
+                shadowRadius: 9,
+                elevation: 5,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignSelf: "center",
+                marginBottom: inputFocused ? 160 : 85,
               }}
-              multiline={true}
-              value={currentText}
-              onFocus={() => setInputFocused(true)}
-              onBlur={() => setInputFocused(false)}
-              onChangeText={(text) => setCurrentText(text)}
-            />
-            <PressableBase
-              extraProps={{
-                style: {
-                  flex: 2,
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
-              }}
-              onPress={handleNavigation}
             >
-              <Ionicons name="ios-send" size={20} color={textColor} />
-            </PressableBase>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
-      <AddFlowNavBar
-        left={() => navigation.pop()}
-        right={handleNavigation}
-      ></AddFlowNavBar>
-    </SafeView>
-  );
-}
+              <AnimatedTextInput
+                ref={inputRef}
+                placeholder={"Type in your response here..."}
+                placeholderTextColor="lightgrey"
+                style={{
+                  padding: 20,
+                  flex: 8,
+                  fontSize: 16,
+                  marginTop: 20,
+                  maxHeight: 125,
+                  color: textColor,
+                }}
+                multiline={true}
+                value={currentText}
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
+                onChangeText={(text) => setCurrentText(text)}
+              />
+              <PressableBase
+                extraProps={{
+                  style: {
+                    flex: 2,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                }}
+                onPress={handleNavigation}
+              >
+                <Ionicons name="ios-send" size={20} color={textColor} />
+              </PressableBase>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+        <AddFlowNavBar
+          left={() => navigation.pop()}
+          right={handleNavigation}
+        ></AddFlowNavBar>
+      </SafeView>
+    );
+  }
+);
+
 
 const styles = StyleSheet.create({
   container: {
@@ -168,3 +174,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+
+export default CustomScreen;
