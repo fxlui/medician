@@ -103,7 +103,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
       >
         <Text style={styles.greeting}>When did it occur?</Text>
         <Text style={styles.greetingSub}>
-          You can select multiple dates and times.
+          You can select multiple dates and times by tapping on the dates.
         </Text>
         <View
           style={{
@@ -279,5 +279,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     paddingLeft: 30,
     opacity: 0.5,
+    maxWidth: "85%",
   },
 });
