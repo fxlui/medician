@@ -3,13 +3,13 @@ import {
   fetchSubAreaRecords,
   updateSingleRecord,
   fetchAttachmentByRecordId,
+  deleteRecordDB,
 } from "../database/dbAPI";
 import {
   SQLRecordReturnType,
   SQLAttachmentReturnType,
 } from "../database/db.types";
 import { SavedRecordModel } from "./record";
-
 const AttachmentModel = types.model({
   id: types.identifierNumber,
   type: types.string,
@@ -116,9 +116,22 @@ export const EditFlowStoreModel = types
       }
     });
 
+    const deleteRecord = flow(function* (id: number) {
+      try {
+        if (id) {
+          yield deleteRecordDB(id);
+        } else {
+          console.error("current deleting record doesn't exist!");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
     return {
       fetchTimelineRecordsAsync,
       updateRecordAsync,
       setCurrentEditingRecordFetchAsync,
+      deleteRecord,
     };
   });

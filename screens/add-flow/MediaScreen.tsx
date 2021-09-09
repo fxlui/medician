@@ -388,9 +388,7 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
+        onRequestClose={() => {}}
       >
         <ModalContainer img={currentMedia!} />
       </Modal>

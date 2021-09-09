@@ -194,7 +194,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         style={[
           styles.header,
           { backgroundColor: topBackground },
-          displaySymptoms && {
+          displaySymptoms.length === 0 && {
             paddingVertical: 0,
           },
         ]}
