@@ -49,25 +49,22 @@ export default function Navigation({
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
-const RootNavigator = observer(
-  () => {
-    const colorScheme = useColorScheme();
-    const textColor =
-      colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
-  
+const RootNavigator = observer(() => {
+  const colorScheme = useColorScheme();
+  const textColor =
+    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  const { isNewUser } = useStores();
 
-    const { isNewUser } = useStores();
-  
-    React.useEffect(() => {
-      const checkNewUser = async () => {
-        const newUser = await AsyncStorage.getItem("@tutorialPassed");
-        console.log(newUser);
-        if (newUser) {
-          isNewUser.finishTutorial()
-        }
-      };
-      checkNewUser();
-    }, []);
+  React.useEffect(() => {
+    const checkNewUser = async () => {
+      const newUser = await AsyncStorage.getItem("@tutorialPassed");
+      console.log(newUser);
+      if (newUser) {
+        isNewUser.finishTutorial();
+      }
+    };
+    checkNewUser();
+  }, []);
 
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
@@ -172,4 +169,4 @@ const RootNavigator = observer(
       />
     </RootStack.Navigator>
   );
-}
+});
