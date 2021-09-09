@@ -69,13 +69,13 @@ export async function initDatabase() {
   return new Promise<void>((resolve, reject) => {
     db.transaction(
       (tx) => {
-        tx.executeSql(`DROP TABLE IF EXISTS entry`);
-        tx.executeSql(`DROP TABLE IF EXISTS collection`);
-        tx.executeSql(`DROP TABLE IF EXISTS appointment`);
-        tx.executeSql(`DROP TABLE IF EXISTS treatment`);
-        tx.executeSql(`DROP TABLE IF EXISTS routine`);
-        tx.executeSql(`DROP TABLE IF EXISTS alert`);
-        tx.executeSql(`DROP TABLE IF EXISTS attachment`);
+        // tx.executeSql(`DROP TABLE IF EXISTS entry`);
+        // tx.executeSql(`DROP TABLE IF EXISTS collection`);
+        // tx.executeSql(`DROP TABLE IF EXISTS appointment`);
+        // tx.executeSql(`DROP TABLE IF EXISTS treatment`);
+        // tx.executeSql(`DROP TABLE IF EXISTS routine`);
+        // tx.executeSql(`DROP TABLE IF EXISTS alert`);
+        // tx.executeSql(`DROP TABLE IF EXISTS attachment`);
         tx.executeSql(createUserTable);
         tx.executeSql(createRecordTable);
         tx.executeSql(createCollectionTable);

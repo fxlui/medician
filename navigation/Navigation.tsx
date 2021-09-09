@@ -28,7 +28,8 @@ import useColorScheme from "../hooks/useColorScheme";
 import { PressableBase } from "../components/PressableBase";
 import { themeTextColor } from "../constants/Colors";
 import AppLoading from "expo-app-loading";
-
+import { observer } from "mobx-react-lite";
+import { useStores } from "../models/root-store-provider";
 import WelcomeTut from "../screens/tutorial/WelcomeTut";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -48,137 +49,134 @@ export default function Navigation({
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
-  const colorScheme = useColorScheme();
-  const textColor =
-    colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+const RootNavigator = observer(
+  () => {
+    const colorScheme = useColorScheme();
+    const textColor =
+      colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+  
 
-  const [newUser, setNewUser] = React.useState<boolean | undefined>();
+    const { isNewUser } = useStores();
+  
+    React.useEffect(() => {
+      const checkNewUser = async () => {
+        const newUser = await AsyncStorage.getItem("@tutorialPassed");
+        console.log(newUser);
+        if (newUser) {
+          isNewUser.finishTutorial()
+        }
+      };
+      checkNewUser();
+    }, []);
 
-  React.useEffect(() => {
-    const checkNewUser = async () => {
-      const newUser = await AsyncStorage.getItem("@new_user");
-      console.log(newUser);
-      if (newUser) {
-        setNewUser(false);
-      } else {
-        setNewUser(true);
-      }
-    };
-    checkNewUser();
-  }, []);
-
-  if (newUser === undefined) {
-    return <AppLoading />;
+    return (
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {isNewUser.isNewUser ? (
+          <RootStack.Screen name="Tutorial" component={WelcomeTut} />
+        ) : (
+          <>
+            <RootStack.Screen name="Root" component={BottomTabNavigator} />
+            <RootStack.Screen
+              name="Notification"
+              component={NotificationScreen}
+              options={{ ...TransitionPresets.ModalSlideFromBottomIOS }}
+            />
+            <RootStack.Screen
+              name="ActionScreen"
+              component={ActionScreen}
+              options={{
+                headerShown: false,
+                ...TransitionPresets.ModalSlideFromBottomIOS,
+                cardShadowEnabled: true,
+                gestureEnabled: false,
+              }}
+            />
+            <RootStack.Screen
+              name="AddFlow"
+              component={AddFlowNavigator}
+              options={{ headerShown: false, cardShadowEnabled: true }}
+            />
+            <RootStack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerShown: true,
+                cardShadowEnabled: true,
+                headerBackTitleVisible: false,
+                headerBackImage: () => (
+                  <Ionicons
+                    name="chevron-back"
+                    size={24}
+                    color={textColor}
+                    style={{ paddingLeft: 10 }}
+                  />
+                ),
+                headerStyle: {
+                  borderWidth: 0,
+                  height: 100,
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                },
+              }}
+            />
+            <RootStack.Screen
+              name="Timeline"
+              component={TimelineScreen}
+              options={{
+                headerShown: true,
+                cardShadowEnabled: true,
+                headerBackTitleVisible: false,
+                headerBackImage: () => (
+                  <Ionicons
+                    name="chevron-back"
+                    size={24}
+                    color={textColor}
+                    style={{ paddingLeft: 10 }}
+                  />
+                ),
+                headerStyle: {
+                  borderWidth: 0,
+                  height: 100,
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                },
+              }}
+            />
+            <RootStack.Screen
+              name="TimelineDetails"
+              component={TimelineDetailsScreen}
+              options={{
+                title: "Details",
+                headerShown: true,
+                cardShadowEnabled: true,
+                headerBackTitleVisible: false,
+                headerBackImage: () => (
+                  <Ionicons
+                    name="chevron-back"
+                    size={24}
+                    color={textColor}
+                    style={{ paddingLeft: 10 }}
+                  />
+                ),
+                headerStyle: {
+                  borderWidth: 0,
+                  height: 100,
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                },
+              }}
+            />
+            <RootStack.Screen
+              name="NotFound"
+              component={NotFoundScreen}
+              options={{ title: "Oops!" }}
+            />
+          </>
+        )}
+      </RootStack.Navigator>
+    );
   }
-
-  return (
-    <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      {newUser ? (
-        <RootStack.Screen name="Tutorial" component={WelcomeTut} />
-      ) : (
-        <>
-          <RootStack.Screen name="Root" component={BottomTabNavigator} />
-          <RootStack.Screen
-            name="Notification"
-            component={NotificationScreen}
-            options={{ ...TransitionPresets.ModalSlideFromBottomIOS }}
-          />
-          <RootStack.Screen
-            name="ActionScreen"
-            component={ActionScreen}
-            options={{
-              headerShown: false,
-              ...TransitionPresets.ModalSlideFromBottomIOS,
-              cardShadowEnabled: true,
-              gestureEnabled: false,
-            }}
-          />
-          <RootStack.Screen
-            name="AddFlow"
-            component={AddFlowNavigator}
-            options={{ headerShown: false, cardShadowEnabled: true }}
-          />
-          <RootStack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              headerShown: true,
-              cardShadowEnabled: true,
-              headerBackTitleVisible: false,
-              headerBackImage: () => (
-                <Ionicons
-                  name="chevron-back"
-                  size={24}
-                  color={textColor}
-                  style={{ paddingLeft: 10 }}
-                />
-              ),
-              headerStyle: {
-                borderWidth: 0,
-                height: 100,
-              },
-              headerTitleStyle: {
-                fontSize: 18,
-              },
-            }}
-          />
-          <RootStack.Screen
-            name="Timeline"
-            component={TimelineScreen}
-            options={{
-              headerShown: true,
-              cardShadowEnabled: true,
-              headerBackTitleVisible: false,
-              headerBackImage: () => (
-                <Ionicons
-                  name="chevron-back"
-                  size={24}
-                  color={textColor}
-                  style={{ paddingLeft: 10 }}
-                />
-              ),
-              headerStyle: {
-                borderWidth: 0,
-                height: 100,
-              },
-              headerTitleStyle: {
-                fontSize: 18,
-              },
-            }}
-          />
-          <RootStack.Screen
-            name="TimelineDetails"
-            component={TimelineDetailsScreen}
-            options={{
-              title: "Details",
-              headerShown: true,
-              cardShadowEnabled: true,
-              headerBackTitleVisible: false,
-              headerBackImage: () => (
-                <Ionicons
-                  name="chevron-back"
-                  size={24}
-                  color={textColor}
-                  style={{ paddingLeft: 10 }}
-                />
-              ),
-              headerStyle: {
-                borderWidth: 0,
-                height: 100,
-              },
-              headerTitleStyle: {
-                fontSize: 18,
-              },
-            }}
-          />
-          <RootStack.Screen
-            name="NotFound"
-            component={NotFoundScreen}
-            options={{ title: "Oops!" }}
-          />
-        </>
-      )}
-    </RootStack.Navigator>
-  );
-}
+)

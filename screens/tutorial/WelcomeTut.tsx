@@ -14,6 +14,7 @@ import { Symptom } from "../../assets/images/Symptom";
 import { Routine } from "../../assets/images/Routine";
 import { Overview } from "../../assets/images/Overview";
 import { themeTileColor } from "../../constants/Colors";
+import { useStores } from "../../models/root-store-provider";
 import SafeView from "../../components/SafeView";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -260,11 +261,15 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
+  const { isNewUser } = useStores();
+
   const finish = () => {
     CustomHaptics("light");
     const setNewUser = async () => {
       await initDatabase();
-      await AsyncStorage.setItem("@storage_Key", "true");
+      await AsyncStorage.setItem("@tutorialPassed", "true");
+      isNewUser.finishTutorial();
+      navigation.navigate("Root", { screen: "HomeScreen"});
     };
     setNewUser();
   };
