@@ -4,8 +4,8 @@ export type RootStackParamList = {
   Root: undefined;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
   Notification: {
-    id: string;
-    name: string;
+    id: number;
+    title: string;
     notes: string;
     type: HomeTileTypes;
   };

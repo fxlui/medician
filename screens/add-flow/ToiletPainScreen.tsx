@@ -4,17 +4,26 @@ import { AddFlowParamList } from "../../types";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
-
+import { observer } from "mobx-react-lite";
 import { useStores } from "../../models/root-store-provider";
 import { StackScreenProps } from "@react-navigation/stack";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = StackScreenProps<AddFlowParamList, "ToiletPainScreen">;
 
-const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
-  const defaultSelection = route.params.method === "add" ? null : true; // TODO read from store
+const ToiletPainScreen = observer(({ navigation, route }: ScreenProps) => {
+  const { addFlowStore, progressStore, editFlowStore } = useStores();
+  console.log(editFlowStore.currentEditingRecord?.toiletPain);
+  const defaultSelection =
+    route.params.method === "add"
+      ? null
+      : !editFlowStore.currentEditingRecord
+      ? null
+      : editFlowStore.currentEditingRecord.toiletPain === 0
+      ? false
+      : true;
+  console.log(defaultSelection);
   const [pain, setPain] = useState<boolean | null>(defaultSelection);
-  const { addFlowStore } = useStores();
 
   return (
     <SafeView style={styles.container} disableTop>
@@ -50,10 +59,13 @@ const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
           } else {
             if (route.params.method === "add") {
               addFlowStore.currentNewRecord.setRecordToiletPain(pain ? 1 : 0);
-              addFlowStore.goForward();
             } else {
-              // TODO handle edit
+              console.log(pain ? 1 : 0);
+              editFlowStore.currentEditingRecord?.updateRecordToiletPain(
+                pain ? 1 : 0
+              );
             }
+            progressStore.goForward();
             if (addFlowStore.currentNewRecord.toiletType === 0) {
               navigation.navigate("SeverityScreen", route.params);
             } else {
@@ -64,7 +76,7 @@ const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
       />
     </SafeView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

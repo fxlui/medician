@@ -8,6 +8,7 @@ import {
   addRoutine,
   addAppointment,
   updateAlertSystemID,
+  addAttachments,
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
 import { RoutineModel } from "./routine";
@@ -28,27 +29,9 @@ export const AddFlowStoreModel = types
     currentNewRecord: types.optional(RecordModel, {}),
     currentNewRoutine: types.optional(RoutineModel, {}),
     currentNewAppointment: types.optional(AppointmentModel, {}),
-    progressLength: types.optional(types.integer, 1),
-    currentProgress: types.optional(types.integer, 1),
   })
   // Synchronous actions defined here
   .actions((self) => ({
-    setProgressBarLength: (length: number) => {
-      self.progressLength = length;
-    },
-    goBack: () => {
-      if (self.currentProgress != 1) {
-        self.currentProgress -= 1;
-      }
-    },
-    goForward: () => {
-      if (self.currentProgress != self.progressLength) {
-        self.currentProgress += 1;
-      }
-    },
-    resetProgress: () => {
-      self.currentProgress = 1;
-    },
     resetAddFlow: () => {
       self.currentNewRecord = RecordModel.create();
     },
@@ -94,6 +77,13 @@ export const AddFlowStoreModel = types
         const lastRecordId = await getLastRecordId();
         console.log(lastRecordId);
         await SecureStore.setItemAsync("new_user", "false");
+        await addAttachments(
+          lastRecordId,
+          self.currentNewRecord.attatchmentPaths.map((item) => ({
+            type: item.type,
+            path: item.uri,
+          }))
+        );
       } catch (error) {
         console.error("Insert record into database failed: ", error);
       }

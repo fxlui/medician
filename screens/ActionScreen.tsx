@@ -32,7 +32,7 @@ const greetingTextFromTime = () => {
 };
 
 export default function ActionScreen({ navigation }: ScreenProps) {
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   return (
     <SafeView>
@@ -74,9 +74,9 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               subtitle={"Appointment"}
               style={{ marginRight: 30 }}
               onPress={() => {
-                addFlowStore.resetProgress();
+                progressStore.resetProgress();
                 addFlowStore.resetAppointment();
-                addFlowStore.setProgressBarLength(2);
+                progressStore.setProgressBarLength(2);
                 navigation.navigate("AddFlow", {
                   screen: "AppointmentTimeScreen",
                 });
@@ -86,9 +86,9 @@ export default function ActionScreen({ navigation }: ScreenProps) {
               title={"Add"}
               subtitle={"Routine"}
               onPress={() => {
-                addFlowStore.resetProgress();
+                progressStore.resetProgress();
                 addFlowStore.resetRoutine();
-                addFlowStore.setProgressBarLength(3);
+                progressStore.setProgressBarLength(3);
                 navigation.navigate("AddFlow", {
                   screen: "RoutineSelectScreen",
                 });

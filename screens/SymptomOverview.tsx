@@ -146,8 +146,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.title,
+            id: item.id,
+            title: item.title,
             notes: item.notes,
             type: routineType(item.type),
           });
@@ -168,8 +168,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.doctor,
+            id: item.id,
+            title: item.doctor,
             notes: item.notes,
             type: HomeTileTypes.Appointment,
           });

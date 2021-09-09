@@ -8,7 +8,7 @@ import { StyleSheet } from "react-native";
 export const ProgressBar = observer(
   () => {
     const colorScheme = useColorScheme();
-    const { addFlowStore } = useStores();
+    const { progressStore } = useStores();
 
     return (
       <View style={styles.container}>
@@ -20,7 +20,7 @@ export const ProgressBar = observer(
         >
           <View style={[
             styles.progressBar,
-            { width: (addFlowStore.currentProgress / addFlowStore.progressLength) * 95 }
+            { width: (progressStore.currentProgress / progressStore.progressLength) * 95 }
           ]} />
         </View>
       </View>

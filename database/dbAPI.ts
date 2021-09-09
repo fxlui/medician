@@ -28,6 +28,8 @@ import {
   getRoutineByID,
   getSubAreaRecords,
   updateAlertSystemId,
+  updateRecord,
+  insertAttachment,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -36,6 +38,7 @@ import {
   FetchByCollectionResultType,
   SQLAlertReturnType,
   SQLRecordReturnType,
+  SQLRecordUpdateType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -134,6 +137,30 @@ export async function getLastRecordId() {
         });
       },
       (error) => reject(error)
+    );
+  });
+}
+
+export async function addAttachments(
+  recordId: number,
+  items: { type: string; path: string }[]
+) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        if (items.length !== 0) {
+          items.forEach((item) => {
+            tx.executeSql(insertAttachment, [recordId, item.type, item.path]);
+            tx.executeSql(
+              getLastInserted("attachment"),
+              undefined,
+              (_, { rows }) => console.log(rows._array)
+            );
+          });
+        }
+      },
+      (error) => reject(error),
+      () => resolve()
     );
   });
 }
@@ -469,6 +496,35 @@ export async function fetchSubAreaRecords(
           getSubAreaRecords,
           [collectionId, subArea],
           (_, { rows }) => resolve(rows._array as SQLRecordReturnType[])
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function updateSingleRecord(data: SQLRecordUpdateType) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          updateRecord,
+          [
+            data.severity,
+            data.better,
+            data.worse,
+            data.related,
+            data.attempt,
+            data.temperature,
+            data.toiletType,
+            data.toiletPain,
+            data.colour,
+            data.dizzy,
+            data.sleep,
+            data.description,
+            data.id,
+          ],
+          () => resolve()
         );
       },
       (error) => reject(error)

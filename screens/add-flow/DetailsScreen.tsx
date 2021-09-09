@@ -27,6 +27,7 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
   const colorScheme = useColorScheme();
+  const { addFlowStore, progressStore, editFlowStore } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const tileColor =
@@ -39,21 +40,19 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
+  const emptyTexts = {
+    better: "",
+    worse: "",
+    related: "",
+    attempt: "",
+  }
+  const defaultTexts = route.params.method === "add" ? emptyTexts :
+    editFlowStore.currentEditingRecord ? 
+    editFlowStore.currentEditingRecord.getDetails() : emptyTexts;
 
-  const defaultBetterText = route.params.method === "add" ? "" : "MOBX HERE"; //TODO: get from store
-  const defaultWorseText = route.params.method === "add" ? "" : "MOBX HERE"; //TODO: get from store
-  const defaultRelatedText = route.params.method === "add" ? "" : "MOBX HERE"; //TODO: get from store
-  const defaultAttemptText = route.params.method === "add" ? "" : "MOBX HERE"; //TODO: get from store
-
-  const [currentAnswers, setCurrentAnswers] = React.useState({
-    better: defaultBetterText,
-    worse: defaultWorseText,
-    related: defaultRelatedText,
-    attempt: defaultAttemptText,
-  });
+  const [currentAnswers, setCurrentAnswers] = React.useState(defaultTexts);
 
   const inputRef = React.useRef<TextInput>(null);
-  const { addFlowStore } = useStores();
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -129,13 +128,22 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
         setInputFocused(false);
         return;
       }
-      addFlowStore.currentNewRecord.setRecordDetails(
-        currentAnswers.better,
-        currentAnswers.worse,
-        currentAnswers.related,
-        currentAnswers.attempt
-      );
-      addFlowStore.goForward();
+      if (route.params.method === "add") {
+        addFlowStore.currentNewRecord.setRecordDetails(
+          currentAnswers.better,
+          currentAnswers.worse,
+          currentAnswers.related,
+          currentAnswers.attempt
+        );
+      } else {
+        editFlowStore.currentEditingRecord?.updateDetails(
+          currentAnswers.better,
+          currentAnswers.worse,
+          currentAnswers.related,
+          currentAnswers.attempt
+        );
+      }
+      progressStore.goForward();
       navigation.navigate("MediaScreen", route.params);
     } else {
       nextQuestion();
@@ -161,7 +169,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
           {
             text: "Yes",
             onPress: () => {
-              addFlowStore.goBack();
+              progressStore.goBack();
               navigation.pop();
             },
           },
@@ -169,7 +177,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
         { cancelable: false }
       );
     } else {
-      addFlowStore.goBack();
+      progressStore.goBack();
       navigation.pop();
     }
   };

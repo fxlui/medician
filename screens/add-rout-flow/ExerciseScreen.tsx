@@ -82,7 +82,7 @@ export default function RoutineDetailsScreen({
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   const getQuestion = (question: number) => {
     switch (question) {
@@ -181,7 +181,7 @@ export default function RoutineDetailsScreen({
         };
         getStatus();
       }
-      addFlowStore.goForward();
+      progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
         exerciseName,
         selectedSymptomType,
@@ -431,7 +431,7 @@ export default function RoutineDetailsScreen({
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
-                addFlowStore.goBack();
+                progressStore.goBack();
                 navigation.pop();
                 break;
               case 0:
@@ -475,7 +475,7 @@ export default function RoutineDetailsScreen({
                 break;
             }
           } else {
-            addFlowStore.goBack();
+            progressStore.goBack();
             navigation.pop();
           }
         }}

@@ -62,3 +62,19 @@ export interface SQLRecordReturnType {
   toiletPain: number;
   toiletType: number;
 }
+
+export interface SQLRecordUpdateType {
+  severity: number,
+  better: string,
+  worse: string,
+  related: string,
+  attempt: string,
+  temperature: number,
+  toiletType: number,
+  toiletPain: number,
+  colour: number,
+  dizzy: number,
+  sleep: number,
+  description: string,
+  id: number
+}
