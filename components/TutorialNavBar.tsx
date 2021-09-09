@@ -67,8 +67,13 @@ const TutorialNavBar: React.FC<{
           }}
         >
           { hideLeft ? 
-            // <View style={{width: "28p"}}/>  
-            null
+            <View style={{
+              width: 28,
+              padding: 32.5,
+              paddingLeft: 80,
+              paddingRight: 55,
+            }}/>  
+            
           :
             <PressableBase
               extraProps={{
