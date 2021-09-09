@@ -34,6 +34,7 @@ import TickToast from "../../components/TickToast";
 
 import RegisterNotification from "../../utils/RegisterNotification";
 import * as Notifications from "expo-notifications";
+import { allowsNotificationsAsync } from "../../utils/CheckPermission";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
@@ -159,14 +160,8 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
       if (alertMinutesBefore !== -1) {
         RegisterNotification();
         const getStatus = async () => {
-          const settings = await Notifications.getPermissionsAsync();
-          if (
-            !(
-              settings.granted ||
-              settings.ios?.status ===
-                Notifications.IosAuthorizationStatus.PROVISIONAL
-            )
-          ) {
+          const status = await allowsNotificationsAsync();
+          if (!status) {
             Alert.alert(
               "Missing Permissions",
               "To receive notifications, please enable notifications in your settings."
