@@ -28,7 +28,8 @@ import {
   getRoutineByID,
   getSubAreaRecords,
   updateRecord,
-  insertAttachment
+  insertAttachment,
+  getAttachmentbyRecordId
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -37,7 +38,8 @@ import {
   FetchByCollectionResultType,
   SQLAlertReturnType,
   SQLRecordReturnType,
-  SQLRecordUpdateType
+  SQLRecordUpdateType,
+  SQLAttachmentReturnType
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -58,6 +60,7 @@ export async function initDatabase() {
         tx.executeSql(`DROP TABLE IF EXISTS treatment`);
         tx.executeSql(`DROP TABLE IF EXISTS routine`);
         tx.executeSql(`DROP TABLE IF EXISTS alert`);
+        tx.executeSql(`DROP TABLE IF EXISTS attachment`);
         tx.executeSql(createUserTable);
         tx.executeSql(createRecordTable);
         tx.executeSql(createCollectionTable);
@@ -473,6 +476,21 @@ export async function fetchSubAreaRecords(
           getSubAreaRecords,
           [collectionId, subArea],
           (_, { rows }) => resolve(rows._array as SQLRecordReturnType[])
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function fetchAttachmentByRecordId (recordId: number) {
+  return new Promise<SQLAttachmentReturnType[]>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          getAttachmentbyRecordId,
+          [recordId],
+          (_, { rows }) => resolve(rows._array as SQLAttachmentReturnType[])
         );
       },
       (error) => reject(error)

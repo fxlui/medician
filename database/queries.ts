@@ -17,6 +17,12 @@ INSERT INTO attachment
 (entryId, type, path) VALUES (?, ?, ?)
 `;
 
+export const getAttachmentbyRecordId = `
+SELECT *
+FROM attachment
+WHERE attachment.entryId = ?
+`;
+
 export const updateRecord = `
 UPDATE entry
 SET severity = ?,

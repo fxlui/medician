@@ -103,14 +103,14 @@ const TimelineScreen = observer(({ navigation, route }: ScreenProps) => {
                 cancelButtonIndex: 3,
                 destructiveButtonIndex: 2,
               },
-              (selection) => {
+              async (selection) => {
                 if (selection === 0) {
-                  editFlowStore.setCurrentEditingRecord(item.id, route.params.type);
+                  await editFlowStore.setCurrentEditingRecordFetchAsync(item.id, route.params.type);
                   navigation.navigate("TimelineDetails", {
                     id: item.id
                   });
                 } else if (selection === 1) {
-                  editFlowStore.setCurrentEditingRecord(item.id, route.params.type);
+                  await editFlowStore.setCurrentEditingRecordFetchAsync(item.id, route.params.type);
                 } else if (selection === 2) {
                   Alert.alert(
                     "Delete",

@@ -78,3 +78,10 @@ export interface SQLRecordUpdateType {
   description: string,
   id: number
 }
+
+export interface SQLAttachmentReturnType {
+  id: number;
+  entryId: number;
+  path: string;
+  type: string;
+}

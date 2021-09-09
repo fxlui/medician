@@ -2,37 +2,50 @@ import {
   types,
   cast,
   flow,
-  getSnapshot,
-  Instance,
-  SnapshotOut,
+  getSnapshot
 } from "mobx-state-tree";
-import { fetchSubAreaRecords, updateSingleRecord } from "../database/dbAPI";
-import { SQLRecordReturnType } from "../database/db.types";
+import { fetchSubAreaRecords, updateSingleRecord, fetchAttachmentByRecordId } from "../database/dbAPI";
+import { SQLRecordReturnType, SQLAttachmentReturnType } from "../database/db.types";
 import { SavedRecordModel } from "./record";
+
+const AttachmentModel = types
+  .model({
+    id: types.identifierNumber,
+    type: types.string,
+    uri: types.string
+  });
 
 export const EditFlowStoreModel = types
   .model("EditFlowStore", {
     timelineRecords: types.array(SavedRecordModel),
     currentSymptomType: types.optional(types.string, ""),
-    currentEditingRecord: types.maybe(SavedRecordModel)
+    currentEditingRecord: types.maybe(SavedRecordModel),
+    currentRecordAttachments: types.array(AttachmentModel)
   })
   .views(self => ({
     getTimelineRecordsSnapshot: () => {
       return getSnapshot(self.timelineRecords);
     }
   }))
-  .actions(self => ({
-    setCurrentEditingRecord: (recordId: number, symptomType: string) => {
+  .actions(self => {
+    const setCurrentEditingRecordFetchAsync = flow(function*(recordId: number, symptomType: string) {
       self.currentSymptomType = symptomType;
       const record = self.timelineRecords.find(item => item.id === recordId);
       if (record) {
         self.currentEditingRecord = cast(getSnapshot(record));
+        const results: SQLAttachmentReturnType[] = yield fetchAttachmentByRecordId(record.id);
+        self.currentRecordAttachments = cast(results.map(
+          item => AttachmentModel.create({
+            id: item.id,
+            type: item.type,
+            uri: item.path
+          })
+        ));
       } else {
         console.error("Error setCurrentEditingRecord, recordId not found");
       }
-    }
-  }))
-  .actions(self => {
+    });
+
     const fetchTimelineRecordsAsync = flow(function*(collectionId: number, subArea: string) {
       try {
         const result :SQLRecordReturnType[] = yield fetchSubAreaRecords(collectionId, subArea);
@@ -88,5 +101,5 @@ export const EditFlowStoreModel = types
       }
     });
 
-    return { fetchTimelineRecordsAsync, updateRecordAsync };
+    return { fetchTimelineRecordsAsync, updateRecordAsync, setCurrentEditingRecordFetchAsync };
   })
