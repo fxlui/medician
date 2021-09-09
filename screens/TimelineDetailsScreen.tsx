@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions, Alert, ScrollView } from "react-native";
+import { StyleSheet, Alert, ScrollView } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
-import { CompositeScreenProps } from "@react-navigation/core";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
-import { HomeTileTypes } from "../types";
-import { BottomTabParamList, RootStackParamList } from "../types";
+import { RootStackParamList, AddFlowParamList } from "../types";
 
 import { observer } from "mobx-react-lite";
 import { useStores } from "../models/root-store-provider";
 import useColorScheme from "../hooks/useColorScheme";
-import TileBase, { TileSize } from "../components/TileBase";
 import moment from "moment";
+import uniqueSymptoms from "../assets/uniqueSymptoms.json";
+import toiletSymptoms from "../assets/ToiletSymptoms.json";
 import { PressableBase } from "../components/PressableBase";
 import { Feather } from "@expo/vector-icons";
+import { getEditDescription } from "../utils/ScreenUtils";
 import {
   themeBorderColor,
   themeTextColor,
@@ -23,17 +22,96 @@ import {
 
 type ScreenProps = StackScreenProps<RootStackParamList, "TimelineDetails">;
 
-const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
+const getTimeString = (timestamp: number) => {
+  return `${moment(timestamp).format("MMM D")} ${moment().format("HH:mm")}`;
+};
+
+const getDiscomfortEmoji = (severity: number) => {
+  if (severity < 4) {
+    return "😐";
+  } else if (severity < 7) {
+    return "😕";
+  } else if (severity < 10) {
+    return "😖";
+  } else {
+    return "😡";
+  }
+};
+
+const getDiscomfortText = (severity: number) => {
+  if (severity < 4) {
+    return "Minor discomfort";
+  } else if (severity < 7) {
+    return "Moderate discomfort";
+  } else if (severity < 10) {
+    return "Severe discomfort";
+  } else {
+    return "Unbearable";
+  }
+};
+
+const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
   const colorScheme = useColorScheme();
-  const lineColor = colorScheme === "light" ? "#E9E9E9" : "#333";
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
-  const tileColor =
-    colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
   const borderColor =
     colorScheme === "light" ? themeBorderColor.light : themeBorderColor.dark;
 
-  const entryID = route.params.id;
+  const {
+    progressStore,
+    editFlowStore: { currentSymptomType, currentEditingRecord },
+  } = useStores();
+
+  function useEditDirect(symptomType: string) {
+    progressStore.resetProgress();
+    switch (symptomType) {
+      case "pain":
+      case "itchy":
+        progressStore.setProgressBarLength(3);
+        navigation.navigate("AddFlow", {
+          screen: "SeverityScreen",
+          params: { method: "edit" },
+        }); // also set progress bar length
+        break;
+      case "hot":
+      case "cold":
+        progressStore.setProgressBarLength(5);
+        navigation.navigate("AddFlow", {
+          screen: "TemperatureSelectionScreen",
+          params: { method: "edit" },
+        });
+        break;
+      case "toilet":
+        progressStore.setProgressBarLength(6);
+        navigation.navigate("AddFlow", {
+          screen: "ToiletScreen",
+          params: { method: "edit" },
+        });
+        break;
+      case "dizzy":
+      case "walk":
+        progressStore.setProgressBarLength(4);
+        navigation.navigate("AddFlow", {
+          screen: "DizzyScreen",
+          params: { method: "edit" },
+        });
+        break;
+      case "sleep":
+        progressStore.setProgressBarLength(4);
+        navigation.navigate("AddFlow", {
+          screen: "SleepHoursScreen",
+          params: { method: "edit" },
+        });
+        break;
+      default:
+        progressStore.setProgressBarLength(4);
+        navigation.navigate("AddFlow", {
+          screen: "CustomScreen",
+          params: { method: "edit" },
+        });
+        break;
+    }
+  }
 
   const sectionStyle = StyleSheet.create({
     section: {
@@ -51,7 +129,8 @@ const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
           extraProps={{ style: { padding: 5 } }}
           onPress={() => {
             // navigate to edit
-            console.log(route.params.id);
+            useEditDirect(currentSymptomType);
+            //console.log(route.params.id);
           }}
         >
           <Feather
@@ -76,72 +155,121 @@ const TimelineDetailsScreen = ({ navigation, route }: ScreenProps) => {
               marginBottom: 20,
             }}
           >
-            Pain in Head{"\n"}9 Sep 12:12
+            {getEditDescription(
+              currentSymptomType,
+              currentEditingRecord?.subArea
+            )}
+            {"\n"}
+            {currentEditingRecord &&
+              getTimeString(currentEditingRecord.time.getTime())}
           </Text>
         </View>
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Temperature</Text>
-          <Text style={styles.sectionText}>😀 Mild discomfort</Text>
-        </View>
+        {currentEditingRecord?.temperature !== 0 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Temperature</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.temperature}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Type of Toilet Difficulty</Text>
-          <Text style={styles.sectionText}>Urination/Defecation</Text>
-        </View>
+        {currentEditingRecord?.toiletType !== -1 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Type of Toilet Difficulty</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.toiletType === 0
+                ? "Urination"
+                : "Defecation"}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Color of [urine/fecal matter]</Text>
-          <Text style={styles.sectionText}>Blue</Text>
-        </View>
+        {currentEditingRecord && currentEditingRecord.colour !== -1 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>
+              Color of [urine/fecal matter]
+            </Text>
+            <Text style={styles.sectionText}>
+              {toiletSymptoms.color[currentEditingRecord.colour].name}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>
-            Is the room or the head spinning?
-          </Text>
-          <Text style={styles.sectionText}>Room</Text>
-        </View>
+        {currentEditingRecord?.dizzy !== -1 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>
+              Is the room or the head spinning?
+            </Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.dizzy === 0 ? "Head" : "Roome"}
+            </Text>
+          </View>
+        )}
+        {currentEditingRecord?.sleep !== 0 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>How long did you sleep?</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord?.sleep}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>How long did you sleep?</Text>
-          <Text style={styles.sectionText}>8.5 hrs</Text>
-        </View>
+        {currentEditingRecord && currentEditingRecord.severity !== 0 && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Severity</Text>
+            <Text style={styles.sectionText}>
+              {getDiscomfortEmoji(currentEditingRecord.severity)}{" "}
+              {getDiscomfortText(currentEditingRecord.severity)}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Severity</Text>
-          <Text style={styles.sectionText}>😀 Mild discomfort</Text>
-        </View>
+        {currentEditingRecord && currentEditingRecord.better !== "" && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>What makes it better?</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.better}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>What makes it better?</Text>
-          <Text style={styles.sectionText}>some text here..</Text>
-        </View>
+        {currentEditingRecord && currentEditingRecord.worse !== "" && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>What makes it worse?</Text>
+            <Text style={styles.sectionText}>{currentEditingRecord.worse}</Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>What makes it worse?</Text>
-          <Text style={styles.sectionText}>some text here..</Text>
-        </View>
+        {currentEditingRecord && currentEditingRecord.related !== "" && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>
+              What do you think its related to?
+            </Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.related}
+            </Text>
+          </View>
+        )}
 
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>
-            What do you think its related to?
-          </Text>
-          <Text style={styles.sectionText}>some text here..</Text>
-        </View>
-
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Have you tried anything?</Text>
-          <Text style={styles.sectionText}>some text here..</Text>
-        </View>
-
-        <View style={sectionStyle.section}>
-          <Text style={styles.sectionTitle}>Extra notes</Text>
-          <Text style={styles.sectionText}>some text here..</Text>
-        </View>
+        {currentEditingRecord && currentEditingRecord.attempt !== "" && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Have you tried anything?</Text>
+            <Text style={styles.sectionText}>
+              {currentEditingRecord.attempt}
+            </Text>
+          </View>
+        )}
+        {currentEditingRecord && currentEditingRecord.description !== "" && (
+          <View style={sectionStyle.section}>
+            <Text style={styles.sectionTitle}>Extra notes</Text>
+            <Text style={styles.sectionText}>some text here..</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

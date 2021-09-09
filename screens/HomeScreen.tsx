@@ -27,6 +27,9 @@ import {
 } from "../utils/NaturalTexts";
 import { themeTextColor } from "../constants/Colors";
 
+import * as Notifications from "expo-notifications";
+import * as SecureStore from "expo-secure-store";
+
 interface appointmentTileProps {
   index: number;
   dataIndex: number;
@@ -52,6 +55,61 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
 
+  // Notification Stuff :D
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+  React.useEffect(() => {
+    if (
+      lastNotificationResponse &&
+      lastNotificationResponse.notification.request.content.data.id &&
+      lastNotificationResponse.actionIdentifier ===
+        Notifications.DEFAULT_ACTION_IDENTIFIER
+    ) {
+      const notification = lastNotificationResponse.notification;
+      const idNum = parseInt(`${notification.request.content.data.id}`);
+      if (notification.request.content.data.id && !isNaN(idNum)) {
+        navigation.navigate("Notification", {
+          id: notification.request.content.data.id as number,
+          title: notification.request.content.data.name as string,
+          notes: notification.request.content.data.notes as string,
+          type: notification.request.content.data.type as HomeTileTypes,
+          clear: true,
+        });
+      }
+    }
+  }, [lastNotificationResponse]);
+
+  React.useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        const idNum = parseInt(`${notification.request.content.data.id}`);
+        if (notification.request.content.data.id && !isNaN(idNum)) {
+          const checkStatus = async () => {
+            const status = await SecureStore.getItemAsync("last_alert_id");
+            console.log(status);
+            if (status === `${notification.request.identifier}`) {
+              // handled before
+              return;
+            } else {
+              await SecureStore.setItemAsync(
+                "last_alert_id",
+                `${notification.request.identifier}`
+              );
+              navigation.navigate("Notification", {
+                id: notification.request.content.data.id as number,
+                title: notification.request.content.data.name as string,
+                notes: notification.request.content.data.notes as string,
+                type: notification.request.content.data.type as HomeTileTypes,
+                clear: true,
+              });
+            }
+          };
+          checkStatus();
+        }
+      }
+    );
+    return () => subscription.remove();
+  }, []);
+
   const renderRoutineTile = ({ item, index }: routineTileProps) => {
     return (
       <HomeTile
@@ -69,10 +127,11 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.title,
+            id: item.alertId,
+            title: item.title,
             notes: item.notes,
             type: routineType(item.type),
+            clear: false,
           });
         }}
         overDue={item.time < Date.now()}
@@ -92,10 +151,11 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.doctor,
-            notes: item.doctor,
+            id: item.alertId,
+            title: item.doctor,
+            notes: item.notes,
             type: HomeTileTypes.Appointment,
+            clear: false,
           });
         }}
         overDue={item.time < Date.now()}
@@ -128,6 +188,16 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             </PressableBase>
           </View>
           <Text style={styles.name}>Medication</Text>
+          <Text
+            style={{
+              marginLeft: 5,
+              marginTop: -12.5,
+              marginBottom: 15,
+              opacity: 0.7,
+            }}
+          >
+            Next Two Weeks
+          </Text>
           <Carousel
             style={{ overflow: "visible" }}
             data={homeScreenStore.getRecentMedications()}
@@ -138,7 +208,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
+            itemWidth={170}
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
@@ -146,6 +216,16 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             }}
           />
           <Text style={styles.name}>Exercise</Text>
+          <Text
+            style={{
+              marginLeft: 5,
+              marginTop: -12.5,
+              marginBottom: 15,
+              opacity: 0.7,
+            }}
+          >
+            Next Two Weeks
+          </Text>
           <Carousel
             data={homeScreenStore.getRecentExercises()}
             renderItem={renderRoutineTile}
@@ -155,7 +235,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
+            itemWidth={170}
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {
@@ -172,7 +252,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             containerCustomStyle={{
               overflow: "visible",
             }}
-            itemWidth={165}
+            itemWidth={170}
             inactiveSlideOpacity={1}
             inactiveSlideScale={0.975}
             onScrollIndexChanged={() => {

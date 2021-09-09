@@ -40,7 +40,7 @@ import RoutineTimeScreen from "../screens/add-rout-flow/RoutineTimeScreen";
 const AddFlowStack = createStackNavigator<AddFlowParamList>();
 
 const AddFlowNavigator = () => {
-  const { addFlowStore } = useStores();
+  const { progressStore } = useStores();
   return (
     <AddFlowStack.Navigator
       initialRouteName="SymptomsScreen"
@@ -51,7 +51,7 @@ const AddFlowNavigator = () => {
       }}
       screenListeners={() => ({
         gestureEnd: () => {
-          addFlowStore.goBack();
+          progressStore.goBack();
         },
       })}
     >

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Alert } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import { CompositeScreenProps } from "@react-navigation/core";
@@ -20,7 +20,9 @@ import { SimpleRecordSnapshot } from "../models/overview-store";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
+import uniqueBodyAreas from "../assets/uniqueSubAreas.json";
 import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
+import CustomHaptics from "../utils/CustomHaptics";
 
 type ScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, "HomeScreen">,
@@ -50,30 +52,14 @@ interface routineTileProps {
   item: SavedRoutineSnapshot;
 }
 
-interface BaseData {
+interface AreaTileProps {
   index: number;
   dataIndex: number;
-  item: SimpleRecordSnapshot;
+  item: {
+    area: string;
+    subArea: string;
+  };
 }
-
-const AREA_DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "Head",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Abdomen",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e26d72",
-    title: "Feet",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145ee26d72",
-    title: "Fourth Item",
-  },
-];
 
 const symptomArr = uniqueSymptoms;
 
@@ -85,6 +71,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
   const topBackground = colorScheme === "light" ? "white" : "#121212";
   const [displaySymptoms, setDisplaySymptoms] = useState<SymptomItem[]>([]);
   const { overviewStore } = useStores();
+  const currentSubAreas = overviewStore.getCurrentSubAreas();
   const routineType = (dbType: number) =>
     dbType === 0 ? HomeTileTypes.Medication : HomeTileTypes.Exercise;
   const areaTileEmoji = (area: string) =>
@@ -96,7 +83,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       ? "💪"
       : area === "Legs"
       ? "🦵"
-      : "";
+      : "?";
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -106,9 +93,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       );
       setDisplaySymptoms(fetchedCollections);
       if (fetchedCollections.length === 0) return;
-      await overviewStore.fetchCollectionDataAsync(
-        fetchedCollections[symptomSelected].type
-      );
+      await overviewStore.fetchCollectionDataAsync();
     });
     return unsubscribe;
   }, []);
@@ -126,14 +111,26 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
     );
   };
 
-  const renderAreaTile = ({ item, index }: BaseData) => {
+  const renderAreaTile = ({ item, index }: AreaTileProps) => {
     return (
       <TopTile
         emoji={areaTileEmoji(item.area)}
-        title={item.subArea}
+        title={item.subArea === "other" ? "Other" : item.subArea}
         index={index}
         selected={false}
-        updater={() => {}}
+        updater={() => {
+          const currentCollection =
+            overviewStore.getCurrentSelectedCollection();
+          if (currentCollection) {
+            navigation.navigate("Timeline", {
+              collectionId: currentCollection.id,
+              type: currentCollection.type,
+              area: item.subArea,
+            });
+          } else {
+            Alert.alert("Current collection not found.");
+          }
+        }}
       />
     );
   };
@@ -155,12 +152,14 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.title,
+            id: item.alertId,
+            title: item.title,
             notes: item.notes,
             type: routineType(item.type),
+            clear: false,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };
@@ -177,23 +176,34 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id.toString(),
-            name: item.doctor,
-            notes: item.doctor,
+            id: item.alertId,
+            title: item.doctor,
+            notes: item.notes,
             type: HomeTileTypes.Appointment,
+            clear: false,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };
 
   return (
     <SafeView disableTop disableBottom style={styles.container}>
-      <View style={[styles.header, { backgroundColor: topBackground }]}>
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: topBackground },
+          displaySymptoms.length === 0 && {
+            paddingVertical: 0,
+          },
+        ]}
+      >
         <Carousel
           data={displaySymptoms}
           renderItem={renderSymptomTile}
           vertical={false}
+          firstItem={0}
           sliderWidth={Dimensions.get("window").width}
           containerCustomStyle={{
             overflow: "visible",
@@ -203,13 +213,13 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
             alignItems: "flex-start",
             overflow: "visible",
           }}
-          itemWidth={150}
+          itemWidth={165}
           inactiveSlideOpacity={0.8}
           onScrollIndexChanged={async (index) => {
+            CustomHaptics("light");
             setSymptomSelected(index);
-            await overviewStore.fetchCollectionDataAsync(
-              displaySymptoms[index].type
-            );
+            overviewStore.setSelectedCollection(displaySymptoms[index].type);
+            await overviewStore.fetchCollectionDataAsync();
           }}
           ref={topRef}
         />
@@ -218,9 +228,25 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         <View style={styles.overflowView}>
           <View style={{ paddingLeft: 25 }}>
             <Text style={styles.name}>Timeline</Text>
+
+            {uniqueBodyAreas.filter((item) =>
+              currentSubAreas.includes(item.subArea)
+            ).length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               style={{ overflow: "visible" }}
-              data={overviewStore.getCurrentRecordsSnapshot()}
+              data={uniqueBodyAreas.filter((item) =>
+                currentSubAreas.includes(item.subArea)
+              )}
               renderItem={renderAreaTile}
               inactiveSlideScale={1}
               vertical={false}
@@ -229,11 +255,23 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               containerCustomStyle={{
                 overflow: "visible",
               }}
-              itemWidth={165}
+              itemWidth={170}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
+
             <Text style={styles.name}>Routines</Text>
+            {overviewStore.getCurrentRoutinesSnapshot().length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               data={overviewStore.getCurrentRoutinesSnapshot()}
               renderItem={renderRoutineTile}
@@ -244,11 +282,23 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               containerCustomStyle={{
                 overflow: "visible",
               }}
-              itemWidth={165}
+              itemWidth={170}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
+
             <Text style={styles.name}>Appointments</Text>
+            {overviewStore.getCurrentAppointmentsSnapshot().length === 0 ? (
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -10,
+                  opacity: 0.7,
+                }}
+              >
+                Nothing here yet
+              </Text>
+            ) : null}
             <Carousel
               data={overviewStore.getCurrentAppointmentsSnapshot()}
               renderItem={renderAppointmentTile}
@@ -259,7 +309,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               containerCustomStyle={{
                 overflow: "visible",
               }}
-              itemWidth={165}
+              itemWidth={170}
               inactiveSlideOpacity={1}
               onScrollIndexChanged={() => {}}
             />
@@ -279,8 +329,7 @@ const styles = StyleSheet.create({
     paddingBottom: 155,
   },
   header: {
-    paddingBottom: 30,
-    paddingTop: 10,
+    paddingVertical: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 8,

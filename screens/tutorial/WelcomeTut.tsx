@@ -8,7 +8,6 @@ import PagerView from "react-native-pager-view";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import CustomHaptics from "../../utils/CustomHaptics";
-import { CompositeScreenProps } from "@react-navigation/core";
 import { Home } from "../../assets/images/Home";
 import { Action } from "../../assets/images/Action";
 import { Symptom } from "../../assets/images/Symptom";
@@ -17,10 +16,10 @@ import { Overview } from "../../assets/images/Overview";
 import { themeTileColor } from "../../constants/Colors";
 import SafeView from "../../components/SafeView";
 
-type ScreenProps = CompositeScreenProps<
-  StackScreenProps<TutorialParamList, "HomeTut">,
-  StackScreenProps<RootStackParamList, "Root">
->;
+import * as SecureStore from "expo-secure-store";
+import { initDatabase } from "../../database/dbAPI";
+
+type ScreenProps = StackScreenProps<RootStackParamList, "Tutorial">;
 
 const OverviewTut: React.FC<{ key: number }> = ({ key }) => {
   return (
@@ -262,8 +261,13 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
   const finish = () => {
-    navigation.navigate("Root");
     CustomHaptics("light");
+    const setNewUser = async () => {
+      await initDatabase();
+      await SecureStore.setItemAsync("new_user", "true");
+      navigation.navigate("Root", { screen: "HomeScreen" });
+    };
+    setNewUser();
   };
 
   const EndingTut: React.FC<{ key: number }> = ({ key }) => (

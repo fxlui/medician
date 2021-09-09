@@ -84,18 +84,71 @@ export const RecordModel = types
     },
     setRecordDescription: (description: string) => {
       self.description = description;
-    },
+    }
   }));
 
-/**
- * The Saved Record model.
- * This should be used when fetching existing record from db.
- */
-export const SavedRecordModel = RecordModel
-  .props({
-    id: types.identifierNumber,
-    collectionId: types.integer,
-  });
+  export const SavedRecordModel = types
+    .model("SavedRecordModel", {
+      id: types.identifierNumber,
+      collectionId: types.integer,
+      time: types.Date,
+      severity: types.optional(types.integer, 0),
+      area: types.optional(types.string, "other"),
+      subArea: types.optional(types.string, "other"),
+      better: types.optional(types.string, ""),
+      worse: types.optional(types.string, ""),
+      related: types.optional(types.string, ""),
+      attempt: types.optional(types.string, ""),
+      temperature: types.optional(types.number, 0),
+      toiletType: types.optional(types.integer, -1),
+      toiletPain: types.optional(types.integer, -1),
+      colour: types.optional(types.integer, -1),
+      dizzy: types.optional(types.integer, -1),
+      sleep: types.optional(types.number, 0),
+      description: types.optional(types.string, "")
+    })
+    .views(self => ({
+      getDetails: () => {
+        return {
+          better: self.better,
+          worse: self.worse,
+          related: self.related,
+          attempt: self.attempt
+        }
+      }
+    }))
+    .actions(self => ({
+      updateSeverity: (severity: number) => {
+        self.severity = severity;
+      },
+      updateDetails: (better: string, worse: string, related: string, attempt: string) => {
+        self.better = better;
+        self.worse = worse;
+        self.related = related;
+        self.attempt = attempt;
+      },
+      updateRecordTemperature: (temperature: number) => {
+        self.temperature = temperature;
+      },
+      updateRecordToiletType: (type: number) => {
+        self.toiletType = type;
+      },
+      updateRecordToiletPain: (pain: number) => {
+        self.toiletPain = pain;
+      },
+      updateRecordColor: (color: number) => {
+        self.colour = color;
+      },
+      updateRecordDizzy: (dizzy: number) => {
+        self.dizzy = dizzy;
+      },
+      updateRecordSleep: (hours: number) => {
+        self.sleep = hours;
+      },
+      updateRecordDescription: (description: string) => {
+        self.description = description;
+      },
+    }));
 
 type RecordType = Instance<typeof RecordModel>;
 export interface Record extends RecordType {};

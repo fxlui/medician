@@ -32,6 +32,9 @@ import { themeTextColor, themeTileColor } from "../../constants/Colors";
 import Toast from "react-native-root-toast";
 import TickToast from "../../components/TickToast";
 
+import RegisterNotification from "../../utils/RegisterNotification";
+import * as Notifications from "expo-notifications";
+
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "AppointmentDetailsScreen">,
   StackScreenProps<RootStackParamList>
@@ -152,6 +155,25 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         );
         return;
       }
+      if (alertMinutesBefore !== -1) {
+        RegisterNotification();
+        const getStatus = async () => {
+          const settings = await Notifications.getPermissionsAsync();
+          if (
+            !(
+              settings.granted ||
+              settings.ios?.status ===
+                Notifications.IosAuthorizationStatus.PROVISIONAL
+            )
+          ) {
+            Alert.alert(
+              "Missing Permissions",
+              "To receive notifications, please enable notifications in your settings."
+            );
+          }
+        };
+        getStatus();
+      }
       Toast.show(<TickToast message={`Appointment Added`} />, {
         duration: Toast.durations.SHORT,
         position: Toast.positions.CENTER,
@@ -165,12 +187,13 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         opacity: 0.9,
       });
       addFlowStore.currentNewAppointment.setAppointmentDetails(
-        currentDoctor,
+        currentDoctor.trim(),
         selectedSymptomType,
-        alertMinutesBefore
+        alertMinutesBefore,
+        extraNotes.trim()
       );
       await addFlowStore.dbInsertAppointment(user.id);
-      navigation.navigate("Root");
+      navigation.navigate("Root", { screen: "HomeScreen"});
     } else {
       nextQuestion();
     }
@@ -183,6 +206,9 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
       <OverviewSymptomTile
         title={item.title}
         index={index}
+        style={{
+          marginLeft: 5,
+        }}
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
@@ -366,10 +392,10 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                     alignItems: "flex-end",
                     overflow: "visible",
                   }}
-                  itemWidth={150}
+                  itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}

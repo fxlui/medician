@@ -7,12 +7,12 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
+
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
 import { RootStackParamList } from "../types";
 import AddFlowNavigator from "./AddFlowNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
-import TutorialNavigator from "./TutorialNavigator";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import NotificationScreen from "../screens/Notification";
 import ActionScreen from "../screens/ActionScreen";
@@ -27,6 +27,9 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import useColorScheme from "../hooks/useColorScheme";
 import { PressableBase } from "../components/PressableBase";
 import { themeTextColor } from "../constants/Colors";
+
+import WelcomeTut from "../screens/tutorial/WelcomeTut";
+import * as SecureStore from "expo-secure-store";
 
 export default function Navigation({
   colorScheme,
@@ -48,9 +51,25 @@ function RootNavigator() {
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
+
+  const [newUser, setNewUser] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkNewUser = async () => {
+      const newUser = await SecureStore.getItemAsync("new_user");
+      console.log(newUser);
+      if (newUser) {
+        setNewUser(true);
+      }
+    };
+    checkNewUser();
+  }, []);
+
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      <RootStack.Screen name="Tutorial" component={TutorialNavigator} />
+      {newUser ? (
+        <RootStack.Screen name="Tutorial" component={WelcomeTut} />
+      ) : null}
       <RootStack.Screen name="Root" component={BottomTabNavigator} />
       <RootStack.Screen
         name="Notification"

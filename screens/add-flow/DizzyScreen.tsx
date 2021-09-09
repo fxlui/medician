@@ -4,9 +4,10 @@ import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 import SelectionTile from "../../components/SelectionTile";
-
+import { observer } from "mobx-react-lite";
 import { useStores } from "../../models/root-store-provider";
 import { StackScreenProps } from "@react-navigation/stack";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 
@@ -15,58 +16,63 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const DizzyScreen = ({ navigation, route }: ScreenProps) => {
-  const defaultDizzyState = route.params.method === "add" ? null : false; // TODO read from store
-  const [value, setValue] = useState<boolean | null>(defaultDizzyState);
-  const { addFlowStore } = useStores();
-
-  return (
-    <SafeView style={styles.container} disableTop>
-      <View style={{ flex: 1 }}>
-        {route.params.method === "edit" ? (
-          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+const DizzyScreen =  observer(
+  ({ navigation, route }: ScreenProps) => {
+    const { addFlowStore, progressStore, editFlowStore } = useStores();
+    const defaultDizzyState = route.params.method === "add" ? null : 
+    !editFlowStore.currentEditingRecord ? null :
+    editFlowStore.currentEditingRecord.dizzy === 0 ? true : false;
+    const [value, setValue] = useState<boolean | null>(defaultDizzyState);
+  
+    return (
+      <SafeView style={styles.container} disableTop>
+        <View style={{ flex: 1 }}>
+          {route.params.method === "edit" ? (
+            <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+              Editing record for{' '}
+              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
+            </Text>
+          ) : null}
+          <Text style={styles.greeting}>
+            Is your head spinning or the room spinning?
           </Text>
-        ) : null}
-        <Text style={styles.greeting}>
-          Is your head spinning or the room spinning?
-        </Text>
-        <View style={styles.child}>
-          <SelectionTile
-            title="Head"
-            selected={value}
-            onPress={() => setValue(true)}
-            extraStyles={{
-              marginBottom: 40,
-            }}
-          />
-          <SelectionTile
-            title="Room"
-            selected={value === null ? null : !value}
-            onPress={() => setValue(false)}
-          />
+          <View style={styles.child}>
+            <SelectionTile
+              title="Head"
+              selected={value}
+              onPress={() => setValue(true)}
+              extraStyles={{
+                marginBottom: 40,
+              }}
+            />
+            <SelectionTile
+              title="Room"
+              selected={value === null ? null : !value}
+              onPress={() => setValue(false)}
+            />
+          </View>
         </View>
-      </View>
-      <AddFlowNavBar
-        preventRightDefault
-        left={() => navigation.pop()}
-        right={() => {
-          if (value === null) {
-            Alert.alert("No Selection", "You need to select an option first.");
-          } else {
-            if (route.params.method === "add") {
-              addFlowStore.goForward();
-              addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
+        <AddFlowNavBar
+          preventRightDefault
+          left={() => navigation.pop()}
+          right={() => {
+            if (value === null) {
+              Alert.alert("No Selection", "You need to select an option first.");
             } else {
-              // TODO handle edit
+              if (route.params.method === "add") {
+                addFlowStore.currentNewRecord.setRecordDizzy(value ? 0 : 1);
+              } else {
+                editFlowStore.currentEditingRecord?.updateRecordDizzy(value ? 0 : 1);
+              }
+              progressStore.goForward();
+              navigation.navigate("SeverityScreen", route.params);
             }
-            navigation.navigate("SeverityScreen", route.params);
-          }
-        }}
-      />
-    </SafeView>
-  );
-};
+          }}
+        />
+      </SafeView>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

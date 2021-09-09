@@ -12,24 +12,71 @@ INSERT INTO entry
 values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
+export const insertAttachment = `
+INSERT INTO attachment
+(entryId, type, path) VALUES (?, ?, ?)
+`;
+
+export const deleteAttachmentById = `
+DELETE FROM attachment
+WHERE attachment.id = ?
+`;
+
+export const deleteAttachmentByRecordId = `
+DELETE FROM attachment
+WHERE attachment.entryId = ?
+`;
+
+export const getAttachmentbyRecordId = `
+SELECT *
+FROM attachment
+WHERE attachment.entryId = ?
+`;
+
+export const updateRecord = `
+UPDATE entry
+SET severity = ?,
+    better = ?,
+    worse = ?,
+    related = ?,
+    attempt = ?,
+    temperature = ?,
+    toiletType = ?,
+    toiletPain = ?,
+    colour = ?,
+    dizzy = ?,
+    sleep = ?,
+    description = ?
+WHERE entry.id = ?
+LIMIT 1
+`;
+
 export const insertAppointment = `
 INSERT INTO appointment
-(collectionId, doctor, time, notes) values (?, ?, ?, ?)
+(collectionId, doctor, notes) values (?, ?, ?)
 `;
 
 export const insertRoutine = `
 INSERT INTO routine
-(type, collectionId, title, notes, time) values (?, ?, ?, ?, ?)
+(type, collectionId, title, notes) values (?, ?, ?, ?)
 `;
 
 export const insertRoutineAlert = `
 INSERT INTO alert
-(routineId, time) values (?, ?)
+(routineId, eventTime, time) values (?, ?, ?)
 `;
 
 export const insertAppointmentAlert = `
 INSERT INTO alert
-(appointmentId, time) values (?, ?)
+(appointmentId, eventTime, time) values (?, ?, ?)
+`;
+
+export const updateAlertSystemId = `
+UPDATE alert SET systemId = ? WHERE id = ?
+`;
+
+export const updateAlertTimestamp = `
+UPDATE alert SET time = ? WHERE id = ?
 `;
 
 export const getAllCollecitons = `
@@ -43,34 +90,176 @@ FROM entry
 WHERE entry.collectionId = ?
 `;
 
-export const getRoutinesbyCollection = `
+export const getSubAreaRecords = `
 SELECT *
+FROM entry
+WHERE entry.collectionId = ?
+AND entry.subArea = ?
+`;
+
+export const getRoutinesbyCollection = `
+SELECT 
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  alert.eventTime,
+  alert.completed,
+  alert.id AS alertId
 FROM routine
+JOIN alert ON alert.routineId = routine.id
 WHERE routine.collectionId = ?
+ORDER BY alert.eventTime
 `;
 
 export const getAppointmentsByCollection = `
-SELECT *
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes,
+  alert.completed,
+  alert.eventTime,
+  alert.id AS alertId
 FROM appointment
+JOIN alert ON alert.appointmentId = appointment.id
 WHERE appointment.collectionId = ?
+ORDER BY alert.eventTime
 `;
 
-export const getRecentAppointments = `
-SELECT *
+export const getAlertByID = `
+SELECT
+  alert.id,
+  alert.appointmentId,
+  alert.routineId,
+  alert.time,
+  alert.eventTime,
+  alert.completed,
+  alert.systemId
+FROM alert
+WHERE alert.id = ?
+`;
+
+export const getRoutineByID = `
+SELECT
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  routine.duration,
+  routine.sets,
+  routine.reps
+FROM routine
+WHERE routine.id = ?
+`;
+
+export const getIDsFromAlert = `
+SELECT
+  alert.appointmentId,
+  alert.routineId
+FROM alert
+WHERE alert.id = ?
+`;
+
+export const setAlertCompleted = `
+UPDATE alert
+SET completed = ?
+WHERE id = ?
+`;
+
+export const setAlertTimeQuery = `
+UPDATE alert
+SET time = ?
+WHERE id = ?
+`;
+
+export const setAlertEventTimeQuery = `
+UPDATE alert
+SET eventTime = ?
+WHERE id = ?
+`;
+
+export const deleteAlertQuery = `
+DELETE FROM alert
+WHERE id = ?
+`;
+
+export const deleteRecordQuery = `
+DELETE FROM entry
+WHERE id = ?
+`;
+
+export const changeRoutineTitle = `
+UPDATE routine
+SET title = ?
+WHERE id = ?
+`;
+
+export const changeRoutineNotes = `
+UPDATE routine
+SET notes = ?
+WHERE id = ?
+`;
+
+export const getAppointmentByID = `
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes
 FROM appointment
-WHERE appointment.time <= ?
-AND appointment.complete = 0
+WHERE appointment.id = ?
+`;
+
+export const changeAppointmentDoctor = `
+UPDATE appointment
+SET doctor = ?
+WHERE id = ?
+`;
+
+export const changeAppointmentNotes = `
+UPDATE appointment
+SET notes = ?
+WHERE id = ?
+`;
+
+// removed the time constraints on this
+export const getFutureAppointments = `
+SELECT
+  appointment.id,
+  appointment.collectionId,
+  appointment.doctor,
+  appointment.notes,
+  alert.completed,
+  alert.eventTime,
+  alert.id AS alertId
+FROM appointment
+JOIN alert ON alert.appointmentId = appointment.id
+WHERE alert.completed = 0
+ORDER BY alert.eventTime
 `;
 
 export const getRecentRoutines = `
-SELECT *
+SELECT 
+  routine.id,
+  routine.collectionId,
+  routine.type,
+  routine.title,
+  routine.notes,
+  alert.eventTime,
+  alert.completed,
+  alert.id AS alertId
 FROM routine
-WHERE routine.time <= ?
-AND routine.complete = 0
+JOIN alert ON alert.routineId = routine.id
+WHERE alert.eventTime <= ?
+AND alert.completed = 0
+ORDER BY alert.eventTime
 `;
 
 export function getLastInserted(
-  table: "entry" | "appointment" | "routine" | "alert"
+  table: "entry" | "appointment" | "routine" | "alert" | "attachment"
 ) {
   return `
   SELECT *
@@ -140,9 +329,7 @@ export const createAppointmentTable = `
     "id"	INTEGER NOT NULL UNIQUE,
     "collectionId"	INTEGER,
     "doctor"	TEXT,
-    "time"	INTEGER NOT NULL,
     "notes"  TEXT,
-    "complete"	INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY("id" AUTOINCREMENT),
     FOREIGN KEY("collectionId") REFERENCES "collection"("id")
   )
@@ -155,8 +342,9 @@ export const createRoutineTable = `
     "type"	INTEGER NOT NULL,
     "title" TEXT,
     "notes"	TEXT,
-    "time"	INTEGER NOT NULL,
-    "complete"	INTEGER NOT NULL DEFAULT 0,
+    "duration"  INTEGER,
+    "sets" INTEGER,
+    "reps" INTEGER,
     FOREIGN KEY("collectionId") REFERENCES "collection"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)
   )
@@ -168,7 +356,9 @@ export const createAlertTable = `
     "appointmentId"	INTEGER,
     "routineId"	INTEGER,
     "time"	INTEGER NOT NULL,
-    "dismissed"	INTEGER NOT NULL DEFAULT 0,
+    "eventTime"  INTEGER NOT NULL,
+    "completed"	INTEGER NOT NULL DEFAULT 0,
+    "systemId"  TEXT,
     FOREIGN KEY("appointmentId") REFERENCES "appointment"("id"),
     FOREIGN KEY("routineId") REFERENCES "routine"("id"),
     PRIMARY KEY("id" AUTOINCREMENT)

@@ -42,7 +42,7 @@ const dateInSelection = (day: DateObject, list: DateSelection[]) => {
 export default function TimeSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const [selection, setSelection] = React.useState<DateSelection[]>([]);
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   React.useEffect(() => {
     const now = new Date();
@@ -103,7 +103,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
       >
         <Text style={styles.greeting}>When did it occur?</Text>
         <Text style={styles.greetingSub}>
-          You can select multiple dates and times.
+          You can select multiple dates and times by tapping on the dates.
         </Text>
         <View
           style={{
@@ -133,15 +133,29 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
             )}
             onDayPress={(day) => {
               const now = moment();
-              setSelection((prev) => [
-                ...prev,
-                {
-                  dateobj: day,
-                  date: moment(
-                    `${day.dateString} ${now.format("HH:mm:ss.SSSSSSSSSSSS")}`
-                  ).toDate(),
-                },
-              ]);
+              const newDate = moment(
+                `${day.dateString} ${now.format("HH:mm")}:00`
+              ).toDate();
+              let update = true;
+              selection.forEach((item) => {
+                if (item.date.getTime() === newDate.getTime()) {
+                  update = false;
+                  Alert.alert(
+                    "Existing time",
+                    "You have already selected this time. Please select another time or change the existing time."
+                  );
+                }
+              });
+              if (update)
+                setSelection((prev) => {
+                  return [
+                    ...prev,
+                    {
+                      dateobj: day,
+                      date: newDate,
+                    },
+                  ];
+                });
             }}
             theme={{
               backgroundColor: "transparent",
@@ -231,7 +245,7 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
         right={
           selection.length > 0
             ? () => {
-                addFlowStore.goForward();
+                progressStore.goForward();
                 addFlowStore.currentNewRecord.setRecordTime(
                   selection.map((item) => item.date)
                 );
@@ -265,5 +279,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     paddingLeft: 30,
     opacity: 0.5,
+    maxWidth: "85%",
   },
 });

@@ -22,16 +22,16 @@ export default function RoutineSelectScreen({ navigation }: ScreenProps) {
   const colorScheme = useColorScheme();
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   const handleSelectMedication = () => {
-    addFlowStore.goForward();
+    progressStore.goForward();
     navigation.navigate("MedicationScreen");
     addFlowStore.currentNewRoutine.setRoutineType(0);
   };
 
   const handleSelectExercise = () => {
-    addFlowStore.goForward();
+    progressStore.goForward();
     navigation.navigate("ExerciseScreen");
     addFlowStore.currentNewRoutine.setRoutineType(1);
   };

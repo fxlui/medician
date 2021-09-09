@@ -49,7 +49,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
       <TopTile
         title={item.text}
         style={{
-          marginRight: 15,
+          marginLeft: 5,
         }}
         index={index}
         emoji={item.emoji}
@@ -66,7 +66,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
       <BottomTile
         title={item.text}
         style={{
-          marginRight: 15,
+          marginLeft: 5,
         }}
         index={index}
         selected={selectedBottom === index}
@@ -100,7 +100,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
                 alignItems: "flex-end",
                 overflow: "visible",
               }}
-              itemWidth={150}
+              itemWidth={160}
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
                 setSelectedTop(index);
@@ -128,7 +128,7 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
                 marginTop: 50,
                 marginBottom: 60,
               }}
-              itemWidth={150}
+              itemWidth={160}
               inactiveSlideOpacity={0.8}
               onScrollIndexChanged={(index) => {
                 setSelectedBottom(index);

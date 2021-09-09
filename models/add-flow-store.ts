@@ -1,20 +1,23 @@
-import {
-  types,
-  Instance,
-  SnapshotOut,
-} from "mobx-state-tree";
+import { types, Instance, SnapshotOut } from "mobx-state-tree";
 import {
   addRecord,
-  addRoutines,
   addCollection,
   getLastRecordId,
-  addAppointments,
   addRoutineAlert,
-  addAppointmentAlerts
+  addAppointmentAlerts,
+  addRoutine,
+  addAppointment,
+  updateAlertSystemID,
+  addAttachments,
 } from "../database/dbAPI";
 import { AppointmentModel } from "./appointment";
 import { RoutineModel } from "./routine";
 import { RecordModel } from "./record";
+
+import * as Notifications from "expo-notifications";
+import * as SecureStore from "expo-secure-store";
+import moment from "moment";
+import { HomeTileTypes } from "../types";
 
 /**
  * The Add Flow Store model.
@@ -25,28 +28,10 @@ export const AddFlowStoreModel = types
   .model("AddFlowStore", {
     currentNewRecord: types.optional(RecordModel, {}),
     currentNewRoutine: types.optional(RoutineModel, {}),
-    currentNewAppointment: types.optional(AppointmentModel, {}), 
-    progressLength: types.optional(types.integer, 1),
-    currentProgress: types.optional(types.integer, 1),
+    currentNewAppointment: types.optional(AppointmentModel, {}),
   })
   // Synchronous actions defined here
   .actions((self) => ({
-    setProgressBarLength: (length: number) => {
-      self.progressLength = length;
-    },
-    goBack: () => {
-      if (self.currentProgress != 1) {
-        self.currentProgress -= 1;
-      }
-    },
-    goForward: () => {
-      if (self.currentProgress != self.progressLength) {
-        self.currentProgress += 1;
-      }
-    },
-    resetProgress: () => {
-      self.currentProgress = 1;
-    },
     resetAddFlow: () => {
       self.currentNewRecord = RecordModel.create();
     },
@@ -55,89 +40,198 @@ export const AddFlowStoreModel = types
     },
     resetRoutine: () => {
       self.currentNewRoutine = RoutineModel.create();
-    }
+    },
   }))
   // Asynchronous actions defined here
   .actions((self) => ({
     dbInsertRecord: async (userId: number) => {
       try {
-        const collectionId = await addCollection(userId, self.currentNewRecord.type);
+        const collectionId = await addCollection(
+          userId,
+          self.currentNewRecord.type
+        );
         await Promise.all(
           self.currentNewRecord
-          .getSortedTimes()
-          .map(
-          time => addRecord([
-            collectionId,
-            time,
-            self.currentNewRecord.severity,
-            self.currentNewRecord.area,
-            self.currentNewRecord.subArea,
-            self.currentNewRecord.better,
-            self.currentNewRecord.worse,
-            self.currentNewRecord.related,
-            self.currentNewRecord.attempt,
-            self.currentNewRecord.temperature,
-            self.currentNewRecord.toiletType,
-            self.currentNewRecord.toiletPain,
-            self.currentNewRecord.colour,
-            self.currentNewRecord.dizzy,
-            self.currentNewRecord.sleep,
-            self.currentNewRecord.description
-          ])
-        ));
+            .getSortedTimes()
+            .map((time) =>
+              addRecord([
+                collectionId,
+                time,
+                self.currentNewRecord.severity,
+                self.currentNewRecord.area,
+                self.currentNewRecord.subArea,
+                self.currentNewRecord.better,
+                self.currentNewRecord.worse,
+                self.currentNewRecord.related,
+                self.currentNewRecord.attempt,
+                self.currentNewRecord.temperature,
+                self.currentNewRecord.toiletType,
+                self.currentNewRecord.toiletPain,
+                self.currentNewRecord.colour,
+                self.currentNewRecord.dizzy,
+                self.currentNewRecord.sleep,
+                self.currentNewRecord.description,
+              ])
+            )
+        );
         const lastRecordId = await getLastRecordId();
-        console.log(lastRecordId);
+        //console.log(lastRecordId);
+        await SecureStore.setItemAsync("new_user", "false");
+        await addAttachments(
+          lastRecordId,
+          self.currentNewRecord.attatchmentPaths.map((item) => ({
+            type: item.type,
+            path: item.uri,
+          }))
+        );
       } catch (error) {
-        console.error("Insert record into database failed: ", error)
+        console.error("Insert record into database failed: ", error);
       }
     },
     dbInsertAppointment: async (userId: number) => {
       try {
         const collectionId = await addCollection(
-          userId, self.currentNewAppointment.symptomType
+          userId,
+          self.currentNewAppointment.symptomType
         );
-        console.log("collection id:", collectionId);
-        const insertedAppointmentIDs = await addAppointments(
+        //console.log("collection id:", collectionId);
+        const insertedAppointmentID = await addAppointment(
           collectionId,
           self.currentNewAppointment.doctor,
-          self.currentNewAppointment.getSortedTimes()
-        )
-        console.log("insertedAppointmentIDs", insertedAppointmentIDs);
-        await addAppointmentAlerts(
-          insertedAppointmentIDs,
+          self.currentNewAppointment.notes
+        );
+        //console.log("insertedAppointmentID", addAppointment);
+
+        const alertIDs = await addAppointmentAlerts(
+          insertedAppointmentID,
+          self.currentNewAppointment.getSortedTimes(),
           self.currentNewAppointment.alert
         );
-      } catch(error) {
+        //console.log(alertIDs);
+
+        // Registering notifications
+        // title: `Appointment for ${self.currentNewAppointment.symptomType}: ${self.currentNewAppointment.doctor}`,
+        const notificationPromises = self.currentNewAppointment
+          .getSortedTimes()
+          .map(async (timestamp, index) => {
+            if (timestamp > self.currentNewAppointment.alert[index]) {
+              return "";
+            }
+            return Notifications.scheduleNotificationAsync({
+              content: {
+                title: `Appointment with ${self.currentNewAppointment.doctor}`,
+                subtitle: moment(timestamp).format("lll"),
+                body:
+                  self.currentNewAppointment.notes.substring(0, 97) +
+                  (self.currentNewAppointment.notes.length > 97 ? "..." : ""),
+                sound: true,
+                badge: 1,
+                data: {
+                  id: alertIDs[index],
+                  name: self.currentNewAppointment.doctor,
+                  notes: self.currentNewAppointment.notes,
+                  type: HomeTileTypes.Appointment,
+                },
+              },
+              trigger: new Date(self.currentNewAppointment.alert[index]),
+            });
+          });
+
+        const systemIds = await Promise.all(notificationPromises);
+        alertIDs.forEach(async (alertID, index) => {
+          console.log(
+            "Setting Alert ",
+            alertID,
+            " to have SystemID ",
+            systemIds[index]
+          );
+          await updateAlertSystemID(alertID, systemIds[index]);
+        });
+
+        await SecureStore.setItemAsync("new_user", "false");
+      } catch (error) {
         console.warn(error);
       }
     },
     dbInsertRoutine: async (userId: number) => {
       try {
-        console.log("routine times: ", self.currentNewRoutine.getSortedTimes())
+        //console.log("routine times: ", self.currentNewRoutine.getSortedTimes());
         const collectionId = await addCollection(
-          userId, self.currentNewRoutine.symptomType
+          userId,
+          self.currentNewRoutine.symptomType
         );
-        console.log("collection id:", collectionId);
-        console.log("notes: ", self.currentNewRoutine.notes)
-        const insertedRoutineIDs = await addRoutines(
+        //console.log("collection id:", collectionId);
+        //console.log("notes: ", self.currentNewRoutine.notes);
+        const insertedRoutineID = await addRoutine(
           collectionId,
           self.currentNewRoutine.type,
           self.currentNewRoutine.title,
-          self.currentNewRoutine.notes,
-          self.currentNewRoutine.getSortedTimes()
-        )
-        console.log("insertedRoutineIDs", insertedRoutineIDs);
-        await addRoutineAlert(
-          insertedRoutineIDs,
+          self.currentNewRoutine.notes
+        );
+
+        const alertIDs = await addRoutineAlert(
+          insertedRoutineID,
+          self.currentNewRoutine.getSortedTimes(),
           self.currentNewRoutine.alert
         );
+
+        // Registering notifications
+        const notificationPromises = self.currentNewRoutine
+          .getSortedTimes()
+          .map(async (timestamp, index) => {
+            if (timestamp > self.currentNewRoutine.alert[index]) {
+              console.log("timestamp: ", timestamp);
+              console.log("alert: ", self.currentNewRoutine.alert[index]);
+              return "";
+            }
+            return Notifications.scheduleNotificationAsync({
+              content: {
+                title: `${
+                  self.currentNewRoutine.type === 0 ? "Medication" : "Exercise"
+                }: ${self.currentNewRoutine.title}`,
+                subtitle:
+                  self.currentNewRoutine.type === 0
+                    ? self.currentNewRoutine.notes
+                    : moment(timestamp).format("lll"),
+                body:
+                  self.currentNewRoutine.type === 0
+                    ? moment(timestamp).format("lll")
+                    : self.currentNewRoutine.notes.substring(0, 97) +
+                      (self.currentNewRoutine.notes.length > 97 ? "..." : ""),
+                sound: true,
+                badge: 1,
+                data: {
+                  id: alertIDs[index],
+                  name: self.currentNewRoutine.title,
+                  notes: self.currentNewRoutine.notes,
+                  type:
+                    self.currentNewRoutine.type === 0
+                      ? HomeTileTypes.Medication
+                      : HomeTileTypes.Exercise,
+                },
+              },
+              trigger: new Date(self.currentNewRoutine.alert[index]),
+            });
+          });
+
+        const systemIds = await Promise.all(notificationPromises);
+        alertIDs.forEach(async (alertID, index) => {
+          console.log(
+            "Setting Alert ",
+            alertID,
+            " to have SystemID ",
+            systemIds[index]
+          );
+          await updateAlertSystemID(alertID, systemIds[index]);
+        });
+        await SecureStore.setItemAsync("new_user", "false");
       } catch (error) {
-        console.warn(error)
+        console.warn(error);
       }
-    }
+    },
   }));
 
 type AddFlowStoreType = Instance<typeof AddFlowStoreModel>;
-export interface AddFlowStore extends AddFlowStoreType {};
+export interface AddFlowStore extends AddFlowStoreType {}
 type AddFlowStoreSnapshotType = SnapshotOut<typeof AddFlowStoreModel>;
-export interface AddFlowStoreSnapshot extends AddFlowStoreSnapshotType {};
+export interface AddFlowStoreSnapshot extends AddFlowStoreSnapshotType {}

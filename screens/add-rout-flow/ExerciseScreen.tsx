@@ -21,7 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 import { AddFlowParamList, RootStackParamList } from "../../types";
-import uniqueSymptoms from "../../assets/uniqueSymptoms.json";
+import uniqueSymptomsForExercise from "../../assets/uniqueSymptomsForExercise.json";
 
 import OverviewSymptomTile from "../../components/OverviewSymptomTile";
 import Carousel from "react-native-snap-carousel";
@@ -29,6 +29,9 @@ import { Picker } from "@react-native-picker/picker";
 import { useStores } from "../../models/root-store-provider";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
+
+import RegisterNotification from "../../utils/RegisterNotification";
+import * as Notifications from "expo-notifications";
 
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "ExerciseScreen">,
@@ -60,7 +63,7 @@ export default function RoutineDetailsScreen({
   const animatedOpacityQ3 = React.useRef(new Animated.Value(0.5)).current;
   const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
 
-  const symptomArr = uniqueSymptoms;
+  const symptomArr = uniqueSymptomsForExercise;
 
   const [inputFocused, setInputFocused] = React.useState(false);
   const [currentText, setCurrentText] = React.useState("");
@@ -79,7 +82,7 @@ export default function RoutineDetailsScreen({
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   const getQuestion = (question: number) => {
     switch (question) {
@@ -127,6 +130,7 @@ export default function RoutineDetailsScreen({
           useNativeDriver: false,
         }).start();
         setCurrentQuestion(2);
+        setInputFocused(false);
         break;
       case 2:
         Animated.timing(animatedOpacityQ3, {
@@ -139,6 +143,7 @@ export default function RoutineDetailsScreen({
           duration: 300,
           useNativeDriver: false,
         }).start();
+        setInputFocused(false);
         setCurrentQuestion(3);
         break;
       default:
@@ -157,12 +162,31 @@ export default function RoutineDetailsScreen({
         );
         return;
       }
-      addFlowStore.goForward();
+      if (alertMinutesBefore !== -1) {
+        RegisterNotification();
+        const getStatus = async () => {
+          const settings = await Notifications.getPermissionsAsync();
+          if (
+            !(
+              settings.granted ||
+              settings.ios?.status ===
+                Notifications.IosAuthorizationStatus.PROVISIONAL
+            )
+          ) {
+            Alert.alert(
+              "Missing Permissions",
+              "To receive notifications, please enable notifications in your settings."
+            );
+          }
+        };
+        getStatus();
+      }
+      progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
-        exerciseName,
+        exerciseName.trim(),
         selectedSymptomType,
         alertMinutesBefore === null ? -1 : alertMinutesBefore,
-        extraNotes
+        extraNotes.trim()
       );
       navigation.navigate("RoutineTimeScreen");
     } else {
@@ -175,6 +199,9 @@ export default function RoutineDetailsScreen({
       <OverviewSymptomTile
         title={item.title}
         index={index}
+        style={{
+          marginLeft: 5,
+        }}
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
@@ -348,10 +375,10 @@ export default function RoutineDetailsScreen({
                     alignItems: "flex-end",
                     overflow: "visible",
                   }}
-                  itemWidth={150}
+                  itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
@@ -404,7 +431,7 @@ export default function RoutineDetailsScreen({
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
-                addFlowStore.goBack();
+                progressStore.goBack();
                 navigation.pop();
                 break;
               case 0:
@@ -448,7 +475,7 @@ export default function RoutineDetailsScreen({
                 break;
             }
           } else {
-            addFlowStore.goBack();
+            progressStore.goBack();
             navigation.pop();
           }
         }}

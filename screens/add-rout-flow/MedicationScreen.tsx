@@ -30,6 +30,9 @@ import { useStores } from "../../models/root-store-provider";
 import CustomHaptics from "../../utils/CustomHaptics";
 import { themeTextColor, themeTileColor } from "../../constants/Colors";
 
+import RegisterNotification from "../../utils/RegisterNotification";
+import * as Notifications from "expo-notifications";
+
 type ScreenProps = CompositeScreenProps<
   StackScreenProps<AddFlowParamList, "MedicationScreen">,
   StackScreenProps<RootStackParamList>
@@ -67,7 +70,7 @@ export default function RoutineDetailsScreen({
   const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [alertMinutesBefore, setAlertMinutesBefore] =
-    React.useState<Number>(-1);
+    React.useState<number>(-1);
 
   const [medTitle, setMedTitle] = React.useState(""); //medication title
 
@@ -82,13 +85,13 @@ export default function RoutineDetailsScreen({
 
   const [selectedTop, setSelectedTop] = React.useState(0);
   const [selectedSymptom, setSelectedSymptom] = React.useState("");
-  const [selectedSymtomType, setSelectedSymptomType] = React.useState("");
+  const [selectedSymptomType, setSelectedSymptomType] = React.useState("");
   const [extraNotes, setExtraNotes] = React.useState("");
 
   const inputRef = React.useRef<TextInput>(null);
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
 
-  const { addFlowStore } = useStores();
+  const { addFlowStore, progressStore } = useStores();
 
   const getQuestion = (question: Number) => {
     switch (question) {
@@ -187,12 +190,31 @@ export default function RoutineDetailsScreen({
         );
         return;
       }
-      addFlowStore.goForward();
+      if (alertMinutesBefore !== -1) {
+        RegisterNotification();
+        const getStatus = async () => {
+          const settings = await Notifications.getPermissionsAsync();
+          if (
+            !(
+              settings.granted ||
+              settings.ios?.status ===
+                Notifications.IosAuthorizationStatus.PROVISIONAL
+            )
+          ) {
+            Alert.alert(
+              "Missing Permissions",
+              "To receive notifications, please enable notifications in your settings."
+            );
+          }
+        };
+        getStatus();
+      }
+      progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
-        medTitle,
-        selectedSymtomType,
-        selectedTop,
-        dose
+        medTitle.trim(),
+        selectedSymptomType,
+        alertMinutesBefore === null ? -1 : alertMinutesBefore,
+        dose.trim()
       );
       navigation.navigate("RoutineTimeScreen");
     } else {
@@ -205,6 +227,9 @@ export default function RoutineDetailsScreen({
       <OverviewSymptomTile
         title={item.title}
         index={index}
+        style={{
+          marginLeft: 5,
+        }}
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
@@ -394,10 +419,10 @@ export default function RoutineDetailsScreen({
                     alignItems: "flex-end",
                     overflow: "visible",
                   }}
-                  itemWidth={150}
+                  itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
@@ -491,7 +516,7 @@ export default function RoutineDetailsScreen({
             setCurrentQuestion(currentQuestion - 1);
             switch (qNow) {
               case -1:
-                addFlowStore.goBack();
+                progressStore.goBack();
                 navigation.pop();
                 break;
               case 0:
@@ -547,7 +572,7 @@ export default function RoutineDetailsScreen({
                 break;
             }
           } else {
-            addFlowStore.goBack();
+            progressStore.goBack();
             navigation.pop();
           }
         }}

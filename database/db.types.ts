@@ -3,8 +3,24 @@ export interface SQLAppointmentsReturnType {
   collectionId: number;
   doctor: string;
   notes: string;
-  complete: number;
+  completed: number;
+  eventTime: number;
+  alertId: number;
+}
+
+export interface SQLAlertReturnType {
+  id: number;
+  appointmentId: number;
+  routineId: number;
   time: number;
+  eventTime: number;
+  completed: number;
+  systemId: string;
+}
+
+export interface SQLAlertIDsType {
+  appointmentId: number;
+  routineId: number;
 }
 
 export interface SQLCollectionReturnType {
@@ -20,16 +36,60 @@ export interface SQLRoutineReturnType {
   type: number;
   title: string;
   notes: string;
-  time: number;
-  complete: number;
+  eventTime: number;
+  completed: number;
+  alertId: number;
 }
 
 export interface FetchByCollectionResultType {
   records: {
-    id: number,
-    area: string,
-    subArea: string
-  }[],
-  routines: SQLRoutineReturnType[],
-  appointments: SQLAppointmentsReturnType[]
+    id: number;
+    area: string;
+    subArea: string;
+  }[];
+  routines: SQLRoutineReturnType[];
+  appointments: SQLAppointmentsReturnType[];
+}
+
+export interface SQLRecordReturnType {
+  id: number;
+  collectionId: number;
+  area: string;
+  subArea: string;
+  severity: number;
+  better: string;
+  worse: "";
+  related: string;
+  attempt: string;
+  description: string;
+  colour: number;
+  dizzy: number;
+  sleep: number;
+  temperature: number;
+  time: number;
+  toiletPain: number;
+  toiletType: number;
+}
+
+export interface SQLRecordUpdateType {
+  severity: number;
+  better: string;
+  worse: string;
+  related: string;
+  attempt: string;
+  temperature: number;
+  toiletType: number;
+  toiletPain: number;
+  colour: number;
+  dizzy: number;
+  sleep: number;
+  description: string;
+  id: number;
+}
+
+export interface SQLAttachmentReturnType {
+  id: number;
+  entryId: number;
+  path: string;
+  type: string;
 }

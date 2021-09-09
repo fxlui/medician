@@ -8,6 +8,8 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import { useStores } from "../../models/root-store-provider";
+import { observer } from "mobx-react-lite";
+import { getEditDescription } from "../../utils/ScreenUtils";
 import SelectionTile from "../../components/SelectionTile";
 
 type ScreenProps = CompositeScreenProps<
@@ -15,64 +17,73 @@ type ScreenProps = CompositeScreenProps<
   StackScreenProps<RootStackParamList>
 >;
 
-const TemperatureSelectionScreen = ({ navigation, route }: ScreenProps) => {
-  const defaultSelection = route.params.method === "add" ? null : true; // TODO get from store
-  const [measured, setMeasured] = useState<boolean | null>(defaultSelection);
-  const { addFlowStore } = useStores();
+const TemperatureSelectionScreen = observer(
 
-  return (
-    <SafeView style={styles.container} disableTop>
-      <View style={{ flex: 1 }}>
-        {route.params.method === "edit" ? (
-          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+  ({ navigation, route }: ScreenProps) => {
+    const { editFlowStore, progressStore } = useStores();
+    const defaultSelection = 
+      route.params.method === "add" ? null :
+      editFlowStore.currentEditingRecord === undefined ? null :
+      editFlowStore.currentEditingRecord.temperature === 0 ? false : true; // TODO get from store
+    const [measured, setMeasured] = useState<boolean | null>(defaultSelection);
+  
+    return (
+      <SafeView style={styles.container} disableTop>
+        <View style={{ flex: 1 }}>
+          {route.params.method === "edit" ? (
+            <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+              Editing record for{' '}
+              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
+            </Text>
+          ) : null}
+          <Text style={styles.greeting}>
+            Were you able to take your temperature?
           </Text>
-        ) : null}
-        <Text style={styles.greeting}>
-          Were you able to take your temperature?
-        </Text>
-        <View style={styles.child}>
-          <SelectionTile
-            title="Yes"
-            selected={measured}
-            onPress={() => setMeasured(true)}
-            extraStyles={{
-              marginBottom: 40,
-            }}
-          />
-          <SelectionTile
-            title="No"
-            selected={measured === null ? null : !measured}
-            onPress={() => setMeasured(false)}
-          />
+          <View style={styles.child}>
+            <SelectionTile
+              title="Yes"
+              selected={measured}
+              onPress={() => setMeasured(true)}
+              extraStyles={{
+                marginBottom: 40,
+              }}
+            />
+            <SelectionTile
+              title="No"
+              selected={measured === null ? null : !measured}
+              onPress={() => setMeasured(false)}
+            />
+          </View>
         </View>
-      </View>
-      <AddFlowNavBar
-        preventRightDefault
-        left={() => navigation.pop()}
-        right={() => {
-          if (measured === null) {
-            Alert.alert("No Selection", "You need to select an option first.");
-          } else if (measured === true) {
-            if (route.params.method === "add") {
-              addFlowStore.goForward();
+        <AddFlowNavBar
+          preventRightDefault
+          left={() => navigation.pop()}
+          right={() => {
+            if (measured === null) {
+              Alert.alert("No Selection", "You need to select an option first.");
+            } else if (measured === true) {
+              if (route.params.method === "add") {
+                progressStore.goForward();
+              } else {
+                // TODO handle edit
+              }
+              progressStore.goForward();
+              navigation.navigate("TemperatureScreen", route.params);
             } else {
-              // TODO handle edit
+              if (route.params.method === "edit") {
+                editFlowStore.currentEditingRecord?.updateRecordTemperature(0);
+              }
+              progressStore.goForward();
+              progressStore.goForward();
+              progressStore.goForward();
+              navigation.navigate("SeverityScreen", route.params);
             }
-            navigation.navigate("TemperatureScreen", route.params);
-          } else {
-            if (route.params.method === "add") {
-              addFlowStore.goForward();
-            } else {
-              // TODO handle edit
-            }
-            navigation.navigate("SeverityScreen", route.params);
-          }
-        }}
-      />
-    </SafeView>
-  );
-};
+          }}
+        />
+      </SafeView>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
