@@ -153,6 +153,18 @@ SET completed = ?
 WHERE id = ?
 `;
 
+export const setAlertTimeQuery = `
+UPDATE alert
+SET time = ?
+WHERE id = ?
+`;
+
+export const setAlertEventTimeQuery = `
+UPDATE alert
+SET eventTime = ?
+WHERE id = ?
+`;
+
 export const changeRoutineTitle = `
 UPDATE routine
 SET title = ?

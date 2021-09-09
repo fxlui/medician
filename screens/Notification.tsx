@@ -35,6 +35,7 @@ import {
 import CustomHaptics from "../utils/CustomHaptics";
 import moment from "moment";
 
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Notifications from "expo-notifications";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
@@ -102,6 +103,10 @@ const NotificationScreen = ({
   const [currentEventTime, setCurrentEventTime] = React.useState<Date>();
   const [currentCompleted, setCurrentCompleted] = React.useState(false);
 
+  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+  const [editingDate, setEditingDate] = React.useState<Date>();
+  const [isEditingAlert, setIsEditingAlert] = React.useState(false);
+
   const [editing, setEditing] = React.useState(false);
   const handleSave = () => {
     setCurrentTitle(currentTitle.trim());
@@ -113,8 +118,34 @@ const NotificationScreen = ({
         currentTitle,
         currentNotes
       );
+      console.log(currentAlertTime);
+      console.log(currentEventTime);
+      homeScreenStore.updateAlertTimes(
+        currentAlert?.id!,
+        currentEventTime!,
+        currentAlertTime!
+      );
     };
     if (currentAlert) updateDB();
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (newDate: Date) => {
+    if (isEditingAlert && newDate <= new Date()) {
+      Alert.alert("Invalid Time", "Please select a time in the past");
+      return;
+    }
+    if (isEditingAlert) setCurrentAlertTime(newDate);
+    else setCurrentEventTime(newDate);
+    setEditingDate(undefined);
+    hideDatePicker();
   };
 
   const animatedValue = React.useRef(new Animated.Value(0)).current;
@@ -255,6 +286,7 @@ const NotificationScreen = ({
                       },
                     ],
                     backgroundColor: "transparent",
+                    marginBottom: 20,
                   }}
                 >
                   <Icon
@@ -266,11 +298,34 @@ const NotificationScreen = ({
                     }}
                   />
                 </Animated.View>
+                {isDatePickerVisible ? (
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {isEditingAlert
+                      ? "Editing Alert Time"
+                      : "Editing Event Time"}
+                  </Text>
+                ) : null}
+                <Text
+                  style={{
+                    marginTop: 5,
+                    marginBottom: 5,
+                    color: "#fff",
+                    fontSize: 16,
+                  }}
+                >
+                  Title
+                </Text>
                 <TextInput
                   style={[
                     styles.textinput,
                     {
-                      width: Dimensions.get("window").width - 40,
+                      width: Dimensions.get("window").width - 80,
                     },
                   ]}
                   placeholder="Title"
@@ -279,11 +334,21 @@ const NotificationScreen = ({
                   multiline={false}
                   onChangeText={(text) => setCurrentTitle(text)}
                 />
+                <Text
+                  style={{
+                    marginTop: 10,
+                    marginBottom: 5,
+                    color: "#fff",
+                    fontSize: 16,
+                  }}
+                >
+                  Notes
+                </Text>
                 <TextInput
                   style={[
                     styles.textinput,
                     {
-                      width: Dimensions.get("window").width - 40,
+                      width: Dimensions.get("window").width - 80,
                     },
                   ]}
                   placeholder="Notes"
@@ -292,6 +357,111 @@ const NotificationScreen = ({
                   multiline={true}
                   onChangeText={(text) => setCurrentNotes(text)}
                 />
+                <Text
+                  style={{
+                    marginTop: 15,
+                    color: "#fff",
+                    fontSize: 16,
+                  }}
+                >
+                  Event Time
+                </Text>
+                <PressableBase
+                  extraProps={{
+                    style: {
+                      marginTop: 15,
+                      borderRadius: 16,
+                      width: Dimensions.get("window").width - 80,
+                      height: 70,
+                      backgroundColor: "rgb(0,0,0,0.9)",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderWidth:
+                        isDatePickerVisible && !isEditingAlert ? 4 : 2,
+                      borderColor: "lightgrey",
+                      padding: 20,
+                      alignContent: "center",
+                    },
+                  }}
+                  onPress={() => {
+                    setEditingDate(currentEventTime);
+                    setIsEditingAlert(false);
+                    showDatePicker();
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {moment(currentEventTime).format("LLL")}
+                  </Text>
+                </PressableBase>
+
+                <Text
+                  style={{
+                    marginTop: 15,
+                    color: "#fff",
+                    fontSize: 16,
+                  }}
+                >
+                  Alert Time
+                </Text>
+                <PressableBase
+                  extraProps={{
+                    style: {
+                      marginTop: 15,
+                      borderRadius: 16,
+                      width: Dimensions.get("window").width - 80,
+                      height: 70,
+                      backgroundColor: "rgb(0,0,0,0.9)",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderWidth:
+                        isDatePickerVisible && isEditingAlert ? 4 : 2,
+                      borderColor: "lightgrey",
+                      padding: 20,
+                      alignContent: "center",
+                    },
+                  }}
+                  onPress={() => {
+                    if (!currentAlertTime || currentAlertTime.getTime() <= 1) {
+                      setEditingDate(new Date());
+                    } else {
+                      setEditingDate(currentAlertTime);
+                    }
+                    setIsEditingAlert(true);
+                    showDatePicker();
+                  }}
+                >
+                  {!currentAlertTime || currentAlertTime.getTime() <= 1 ? (
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      No Alert Set
+                    </Text>
+                  ) : null}
+                  {!currentAlertTime ||
+                  currentAlertTime.getTime() <= 1 ? null : (
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {moment(currentAlertTime).format("LLL")}
+                    </Text>
+                  )}
+                </PressableBase>
               </ScrollView>
             </KeyboardAvoidingView>
           </>
@@ -327,7 +497,9 @@ const NotificationScreen = ({
               {moment(currentEventTime).format("lll")}
             </Text>
             <Text style={[styles.time, { opacity: 0.7 }]}>
-              {moment(currentAlertTime).format("[Alert at ]lll")}
+              {!currentAlertTime || currentAlertTime!.getTime() <= 1
+                ? "No Alert set"
+                : moment(currentAlertTime).format("[Alert at ]lll")}
             </Text>
           </>
         )}
@@ -418,6 +590,14 @@ const NotificationScreen = ({
           <Entypo name="chevron-down" size={35} color="#fff" />
         </PressableBase>
       </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        date={editingDate}
+        mode="datetime"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        headerTextIOS="Select Time"
+      />
     </LinearGradient>
   );
 };
@@ -522,13 +702,13 @@ const styles = StyleSheet.create({
   },
   textinput: {
     borderColor: "lightgrey",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderWidth: 2,
+    borderRadius: 16,
     padding: 20,
     paddingTop: 20,
     color: "#fff",
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 10,
     maxHeight: 200,
   },
 });

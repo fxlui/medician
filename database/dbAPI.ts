@@ -37,6 +37,8 @@ import {
   changeAppointmentNotes,
   setAlertCompleted,
   updateAlertTimestamp,
+  setAlertTimeQuery,
+  setAlertEventTimeQuery,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -459,6 +461,34 @@ export async function updateAppointmentOrRoutine(
       }
     );
   }
+}
+
+export async function setAlertTime(id: number, newTime: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(setAlertTimeQuery, [newTime, id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
+}
+
+export async function setAlertEventTime(id: number, newTime: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(setAlertEventTimeQuery, [newTime, id], (_) => resolve());
+      },
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
+    );
+  });
 }
 
 export async function setAlertCompletedValue(id: number, completed: number) {
