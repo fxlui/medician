@@ -62,7 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 15,
+    marginTop: 65,
+    marginLeft: 5,
+    marginRight: 15,
     paddingLeft: 30,
   },
   list: {

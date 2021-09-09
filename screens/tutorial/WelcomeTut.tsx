@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     marginLeft: 30,
+    marginTop: 250,    
+    marginRight: 15,
     flexDirection: "column",
     justifyContent: "center"
   },

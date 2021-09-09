@@ -1,25 +1,34 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { TutorialParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import TutorialNavBar from "../../components/TutorialNavBar";
+import { Action } from "../../assets/images/Action";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import CustomHaptics from "../../utils/CustomHaptics";
 
-type ScreenProps = StackScreenProps<TutorialParamList, "WelcomeTut">;
+type ScreenProps = StackScreenProps<TutorialParamList, "SymptomTut">;
 
 const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
 
   return (
     <SafeView style={styles.container} disableTop>
       <View>
-        <Text style={styles.greeting}>Where is the area affected?</Text>
+        <Text style={styles.greeting}>Use these buttons to add 
+appointments and routines</Text>
         <View style={styles.child}>
           <View style={{}}>
-            <Text>Hello</Text>
+            <Image 
+              style={{      
+                width: 295,
+                height: 578,
+                borderRadius: 25,
+              }}
+              source={Action} 
+            />
           </View>
         </View>
       </View>
@@ -27,7 +36,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
         left={() => navigation.pop()}
         right={() => {
           
-          // navigation.navigate("SeverityScreen", { method: "add" });
+          navigation.navigate("SymptomTut");
         }}
       />
     </SafeView>
@@ -48,7 +57,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 15,
+    marginTop: 65,
+    marginLeft: 5,
+    marginRight: 15,
     paddingLeft: 30,
   },
   list: {
