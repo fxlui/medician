@@ -15,6 +15,8 @@ import { View, Text } from "react-native";
 import SafeView from "../components/SafeView";
 import { PressableBase } from "../components/PressableBase";
 import { RootStackParamList, HomeTileTypes } from "../types";
+import { useStores } from "../models/root-store-provider";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
 
@@ -38,6 +40,8 @@ const NotificationScreen = ({
   },
 }: ScreenProps) => {
   const insets = useSafeAreaInsets();
+  const { homeScreenStore } = useStores();
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const iconType =
     type === HomeTileTypes.Appointment
@@ -86,13 +90,33 @@ const NotificationScreen = ({
             label="SNOOZE"
             iconName="Time"
             fillColor={colorTheme}
-            onPress={() => navigation.pop()}
+            onPress={() => {
+              // delete and create new alert
+              showActionSheetWithOptions(
+                {
+                  title: `How long snooze?`,
+                  options: ["5 minutes", "10 minutes", "20 minutes", "Cancel"],
+                  cancelButtonIndex: 3,
+                },
+                (selection) => {
+                  if (selection !== 3)
+                    homeScreenStore.snoozeAlert(
+                      id,
+                      selection === 2 ? 20 : selection * 5
+                    );
+                }
+              );
+              navigation.pop();
+            }}
           />
           <ActionButton
             label="DONE"
             iconName="Checkmark"
             fillColor={colorTheme}
-            onPress={() => navigation.pop()}
+            onPress={() => {
+              homeScreenStore.setAlertCompleted(id, true);
+              navigation.pop();
+            }}
           />
           <ActionButton
             label="IGNORE"

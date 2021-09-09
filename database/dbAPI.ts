@@ -30,6 +30,12 @@ import {
   updateAlertSystemId,
   updateRecord,
   insertAttachment,
+  getIDsFromAlert,
+  changeRoutineTitle,
+  changeRoutineNotes,
+  changeAppointmentDoctor,
+  changeAppointmentNotes,
+  setAlertCompleted,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -39,6 +45,7 @@ import {
   SQLAlertReturnType,
   SQLRecordReturnType,
   SQLRecordUpdateType,
+  SQLAlertIDsType,
 } from "./db.types";
 import { DatabaseEntryType } from "../types";
 
@@ -367,6 +374,78 @@ export async function addRoutineAlert(
       },
       (error) => reject(error),
       () => resolve(res)
+    );
+  });
+}
+
+export async function fetchIDsFromAlert(id: number) {
+  return new Promise<SQLAlertIDsType>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(getIDsFromAlert, [id], (_, { rows }) =>
+          resolve(rows._array[0] as SQLAlertIDsType)
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function updateAppointmentOrRoutine(
+  id: number,
+  type: "appointment" | "routine",
+  title: string | undefined,
+  notes: string | undefined
+) {
+  if (title) {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          type === "routine" ? changeRoutineTitle : changeAppointmentDoctor,
+          [title, id],
+          () => {},
+          (_, error) => {
+            console.log(error);
+            return true;
+          }
+        );
+      },
+      (error) => {
+        console.log(error);
+        return true;
+      }
+    );
+  }
+  if (notes) {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          type === "routine" ? changeRoutineNotes : changeAppointmentNotes,
+          [notes, id],
+          () => {},
+          (_, error) => {
+            console.log(error);
+            return true;
+          }
+        );
+      },
+      (error) => {
+        console.log(error);
+        return true;
+      }
+    );
+  }
+}
+
+export async function setAlertCompletedValue(id: number, completed: boolean) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(setAlertCompleted, [completed ? 1 : 0, id], (_) =>
+          resolve()
+        );
+      },
+      (error) => reject(error)
     );
   });
 }

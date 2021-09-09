@@ -113,7 +113,8 @@ SELECT
   alert.routineId,
   alert.time,
   alert.eventTime,
-  alert.completed
+  alert.completed,
+  alert.systemId
 FROM alert
 WHERE alert.id = ?
 `;
@@ -132,6 +133,32 @@ FROM routine
 WHERE routine.id = ?
 `;
 
+export const getIDsFromAlert = `
+SELECT
+  alert.appointmentId,
+  alert.routineId,
+FROM alert
+WHERE alert.id = ?
+`;
+
+export const setAlertCompleted = `
+UPDATE alert
+SET alert.completed = ?
+WHERE alert.id = ?
+`;
+
+export const changeRoutineTitle = `
+UPDATE routine
+SET routine.title = ?
+WHERE routine.id = ?
+`;
+
+export const changeRoutineNotes = `
+UPDATE routine
+SET routine.notes = ?
+WHERE routine.id = ?
+`;
+
 export const getAppointmentByID = `
 SELECT
   appointment.id,
@@ -139,6 +166,18 @@ SELECT
   appointment.doctor,
   appointment.notes
 FROM appointment
+WHERE appointment.id = ?
+`;
+
+export const changeAppointmentDoctor = `
+UPDATE appointment
+SET appointment.doctor = ?
+WHERE appointment.id = ?
+`;
+
+export const changeAppointmentNotes = `
+UPDATE appointment
+SET appointment.notes = ?
 WHERE appointment.id = ?
 `;
 
