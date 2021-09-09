@@ -29,7 +29,9 @@ import {
   getSubAreaRecords,
   updateRecord,
   insertAttachment,
-  getAttachmentbyRecordId
+  getAttachmentbyRecordId,
+  deleteAttachmentById,
+  deleteAttachmentByRecordId
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -526,5 +528,20 @@ export async function updateSingleRecord(
       },
       (error) => reject(error)
     )
+  });
+}
+
+export async function deleteAttachmentsId(ids: number[]) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      tx => {
+        ids.forEach(id => {
+          tx.executeSql(
+            deleteAttachmentById,
+            [id]
+          )
+        })
+      }
+    );
   });
 }

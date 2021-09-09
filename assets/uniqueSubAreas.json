@@ -1,0 +1,138 @@
+[
+  {
+    "area": "Head",
+    "subArea": "Eyes"
+  },
+  {
+    "area": "Head",
+    "subArea": "Ears"
+  },
+  {
+    "area": "Head",
+    "subArea": "Nose"
+  },
+  {
+    "area": "Head",
+    "subArea": "Mouth"
+  },
+  {
+    "area": "Head",
+    "subArea": "Teeth"
+  },
+  {
+    "area": "Head",
+    "subArea": "Face"
+  },
+  {
+    "area": "Head",
+    "subArea": "Scalp"
+  },
+  {
+    "area": "Head",
+    "subArea": "Brain"
+  },
+  {
+    "area": "Body",
+    "subArea": "Neck"
+  },
+  {
+    "area": "Body",
+    "subArea": "Throat"
+  },
+  {
+    "area": "Body",
+    "subArea": "Chest"
+  },
+  {
+    "area": "Body",
+    "subArea": "Abdomen"
+  },
+  {
+    "area": "Body",
+    "subArea": "Pelvis"
+  },
+  {
+    "area": "Body",
+    "subArea": "Genitals"
+  },
+  {
+    "area": "Body",
+    "subArea": "Buttocks"
+  },
+  {
+    "area": "Body",
+    "subArea": "Back"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Shoulder"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Armpit"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Upper Arm"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Elbow"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Forearm"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Wrist"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Hand"
+  },
+  {
+    "area": "Arms",
+    "subArea": "Fingers"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Thigh"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Hamstring"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Knee"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Back of Knee"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Shin"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Calf"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Ankle"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Foot"
+  },
+  {
+    "area": "Legs",
+    "subArea": "Toes"
+  },
+  {
+    "area": "Other",
+    "subArea": "Not in list"
+  }
+]

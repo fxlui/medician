@@ -17,6 +17,16 @@ INSERT INTO attachment
 (entryId, type, path) VALUES (?, ?, ?)
 `;
 
+export const deleteAttachmentById = `
+DELETE FROM attachment
+WHERE attachment.id = ?
+`;
+
+export const deleteAttachmentByRecordId = `
+DELETE FROM attachment
+WHERE attachment.entryId = ?
+`;
+
 export const getAttachmentbyRecordId = `
 SELECT *
 FROM attachment

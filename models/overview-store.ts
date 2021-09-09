@@ -53,11 +53,6 @@ export const OverviewStoreModel = types
     },
   }))
   .actions((self) => ({
-    checkCurrentData: () => {
-      console.log(self.getCurrentRecordsSnapshot());
-      console.log(self.getCurrentRoutinesSnapshot());
-      console.log(self.getCurrentAppointmentsSnapshot());
-    },
     setSelectedCollection: (symptomType: string) => {
       self.selectedCollectionId = self.collections.find(
         (item) => item.type === symptomType
