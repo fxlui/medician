@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { TutorialParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import TutorialNavBar from "../../components/TutorialNavBar";
+import { Home } from "../../assets/images/Home";
 
 import { StackScreenProps } from "@react-navigation/stack";
-import CustomHaptics from "../../utils/CustomHaptics";
 
 type ScreenProps = StackScreenProps<TutorialParamList, "ActionTut">;
 
@@ -16,10 +16,24 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
   return (
     <SafeView style={styles.container} disableTop>
       <View>
-        <Text style={styles.greeting}>Where is the area affected?</Text>
+        <Text style={styles.greeting}>You will be able to see 👀 all 
+your notifications here</Text>
         <View style={styles.child}>
-          <View style={{}}>
-            <Text>Home</Text>
+          <View style={{justifyContent: "center"}}>
+            <Image 
+              style={{
+                width: 295,
+                height: 578,
+                borderRadius: 25,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.1,
+                shadowRadius: 9,
+                alignSelf: "center",
+                justifyContent: "center"
+              }}
+              source={Home}
+            />
           </View>
         </View>
       </View>
