@@ -20,7 +20,7 @@ import { SimpleRecordSnapshot } from "../models/overview-store";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
 import useColorScheme from "../hooks/useColorScheme";
-import uniqueBodyAreas from "../assets/uniqueSubAreas.json"
+import uniqueBodyAreas from "../assets/uniqueSubAreas.json";
 import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
 import CustomHaptics from "../utils/CustomHaptics";
 
@@ -57,8 +57,8 @@ interface AreaTileProps {
   dataIndex: number;
   item: {
     area: string;
-    subArea: string
-  }
+    subArea: string;
+  };
 }
 
 const symptomArr = uniqueSymptoms;
@@ -83,7 +83,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       ? "💪"
       : area === "Legs"
       ? "🦵"
-      : "";
+      : "?";
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -115,7 +115,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
     return (
       <TopTile
         emoji={areaTileEmoji(item.area)}
-        title={item.subArea}
+        title={item.subArea === "other" ? "Other" : item.subArea}
         index={index}
         selected={false}
         updater={() => {
@@ -128,7 +128,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               area: item.subArea,
             });
           } else {
-            Alert.alert("Current colleciotn not found !!!");
+            Alert.alert("Current collection not found.");
           }
         }}
       />
@@ -222,8 +222,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
             <Text style={styles.name}>Timeline</Text>
             <Carousel
               style={{ overflow: "visible" }}
-              data={uniqueBodyAreas.filter(
-                item => currentSubAreas.includes(item.subArea)
+              data={uniqueBodyAreas.filter((item) =>
+                currentSubAreas.includes(item.subArea)
               )}
               renderItem={renderAreaTile}
               inactiveSlideScale={1}
