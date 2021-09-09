@@ -38,7 +38,7 @@ const CustomScreen = observer(
       colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
     const tileColor =
       colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
-    const { addFlowStore, editFlowStore } = useStores();
+    const { addFlowStore, editFlowStore, progressStore } = useStores();
   
     const [inputFocused, setInputFocused] = React.useState(false);
   
@@ -59,6 +59,7 @@ const CustomScreen = observer(
       } else {
         editFlowStore.currentEditingRecord?.updateRecordDescription(currentText);
       }
+      progressStore.goForward();
       navigation.navigate("SeverityScreen", route.params);
     };
   
@@ -143,6 +144,7 @@ const CustomScreen = observer(
           </KeyboardAvoidingView>
         </View>
         <AddFlowNavBar
+          preventRightDefault
           left={() => navigation.pop()}
           right={handleNavigation}
         ></AddFlowNavBar>

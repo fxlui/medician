@@ -1,7 +1,7 @@
 import { NavigatorScreenParams } from "@react-navigation/core";
 
 export type RootStackParamList = {
-  Root: undefined;
+  Root: NavigatorScreenParams<BottomTabParamList>;
   AddFlow: NavigatorScreenParams<AddFlowParamList>;
   Notification: {
     id: number;

@@ -193,7 +193,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         extraNotes.trim()
       );
       await addFlowStore.dbInsertAppointment(user.id);
-      navigation.navigate("Root");
+      navigation.navigate("Root", { screen: "HomeScreen"});
     } else {
       nextQuestion();
     }

@@ -434,7 +434,7 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
               opacity: 0.9,
             }
           );
-          navigation.navigate("Root");
+          navigation.navigate("Root", { screen: "OverviewScreen" });
         }}
       ></AddFlowNavBar>
     </SafeView>

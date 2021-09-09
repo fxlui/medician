@@ -243,7 +243,7 @@ export default function RoutineTimeScreen({ navigation }: ScreenProps) {
                   },
                   opacity: 0.9,
                 });
-                navigation.navigate("Root");
+                navigation.navigate("Root", { screen: "HomeScreen"});
               }
             : () =>
                 Alert.alert(
