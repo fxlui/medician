@@ -62,6 +62,7 @@ export const SavedRoutineModel = types.model("SavedRoutine", {
   notes: types.string,
   time: types.Date,
   complete: types.integer,
+  alertId: types.integer,
 });
 
 type RoutineType = Instance<typeof RoutineModel>;

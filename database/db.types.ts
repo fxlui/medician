@@ -5,6 +5,7 @@ export interface SQLAppointmentsReturnType {
   notes: string;
   completed: number;
   eventTime: number;
+  alertId: number;
 }
 
 export interface SQLAlertReturnType {
@@ -37,6 +38,7 @@ export interface SQLRoutineReturnType {
   notes: string;
   eventTime: number;
   completed: number;
+  alertId: number;
 }
 
 export interface FetchByCollectionResultType {

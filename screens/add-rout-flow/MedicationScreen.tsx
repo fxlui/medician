@@ -211,10 +211,10 @@ export default function RoutineDetailsScreen({
       }
       progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
-        medTitle,
+        medTitle.trim(),
         selectedSymptomType,
         alertMinutesBefore === null ? -1 : alertMinutesBefore,
-        dose
+        dose.trim()
       );
       navigation.navigate("RoutineTimeScreen");
     } else {

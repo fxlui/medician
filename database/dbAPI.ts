@@ -36,6 +36,7 @@ import {
   changeAppointmentDoctor,
   changeAppointmentNotes,
   setAlertCompleted,
+  updateAlertTimestamp,
 } from "./queries";
 import {
   SQLRoutineReturnType,
@@ -121,7 +122,7 @@ export async function addRecord(data: DatabaseEntryType) {
       (tx) => {
         tx.executeSql(insertRecord, data);
         tx.executeSql(getLastInserted("entry"), undefined, (_, { rows }) => {
-          console.log("dbAPI.ts: Added Records: ", rows._array);
+          //console.log("dbAPI.ts: Added Records: ", rows._array);
           resolve();
         });
       },
@@ -161,7 +162,7 @@ export async function addAttachments(
             tx.executeSql(
               getLastInserted("attachment"),
               undefined,
-              (_, { rows }) => console.log(rows._array)
+              (_, { rows }) => {} //console.log(rows._array)
             );
           });
         }
@@ -187,7 +188,7 @@ export async function addAppointment(
             resolve(success.insertId);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -197,10 +198,10 @@ export async function addAppointment(
           getLastInserted("appointment"),
           undefined,
           (_, { rows }) => {
-            console.log("dbAPI.ts: Added Appointments: ", rows._array);
+            //console.log("dbAPI.ts: Added Appointments: ", rows._array);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -229,7 +230,7 @@ export async function addAppointmentAlerts(
               res.push(success.insertId);
             },
             (_, error) => {
-              console.log(error);
+              console.error(error);
               reject(error);
               return true;
             }
@@ -238,13 +239,13 @@ export async function addAppointmentAlerts(
           tx.executeSql(
             getLastInserted("alert"),
             undefined,
-            (_, { rows }) =>
-              console.log(
-                "dbAPI.ts: Added Alerts for Appointments: ",
-                rows._array
-              ),
+            (_, { rows }) => {},
+            // console.log(
+            //   "dbAPI.ts: Added Alerts for Appointments: ",
+            //   rows._array
+            // ),
             (_, error) => {
-              console.log(error);
+              console.error(error);
               reject(error);
               return true;
             }
@@ -268,7 +269,29 @@ export async function updateAlertSystemID(alertID: number, systemID: string) {
             resolve();
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
+            reject(error);
+            return true;
+          }
+        );
+      },
+      (error) => reject(error)
+    );
+  });
+}
+
+export async function updateAlertTime(alertID: number, timestamp: number) {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          updateAlertTimestamp,
+          [timestamp, alertID],
+          (_, success) => {
+            resolve();
+          },
+          (_, error) => {
+            console.error(error);
             reject(error);
             return true;
           }
@@ -295,7 +318,7 @@ export async function addRoutine(
             resolve(success.insertId);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -306,10 +329,10 @@ export async function addRoutine(
           getLastInserted("routine"),
           undefined,
           (_, { rows }) => {
-            console.log("dbAPI.ts: Added routines: ", rows._array);
+            //console.log("dbAPI.ts: Added routines: ", rows._array);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -324,7 +347,7 @@ export async function addRoutine(
             resolve(result.id);
           },
           (_, error) => {
-            console.log(error);
+            console.error(error);
             reject();
             return true;
           }
@@ -346,6 +369,7 @@ export async function addRoutineAlert(
     db.transaction(
       (tx) => {
         actualTimes.forEach((time, index) => {
+          //console.log("adding ", time, " to routine ", routineID);
           tx.executeSql(
             insertRoutineAlert,
             [routineID, time, alertTimes[index]],
@@ -353,23 +377,23 @@ export async function addRoutineAlert(
               res.push(success.insertId);
             },
             (_, error) => {
-              console.log(error);
+              console.error(error);
               reject();
               return true;
             }
           );
           // FOR TESTING:
-          tx.executeSql(
-            getLastInserted("alert"),
-            undefined,
-            (_, { rows }) =>
-              console.log("dbAPI.ts: Added Alert for routines: ", rows._array),
-            (_, error) => {
-              console.log(error);
-              reject(error);
-              return true;
-            }
-          );
+          // tx.executeSql(
+          //   getLastInserted("alert"),
+          //   undefined,
+          //   (_, { rows }) =>
+          //     console.log("dbAPI.ts: Added Alert for routines: ", rows._array),
+          //   (_, error) => {
+          //     console.error(error);
+          //     reject(error);
+          //     return true;
+          //   }
+          // );
         });
       },
       (error) => reject(error),
@@ -405,13 +429,13 @@ export async function updateAppointmentOrRoutine(
           [title, id],
           () => {},
           (_, error) => {
-            console.log(error);
+            console.error(error);
             return true;
           }
         );
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         return true;
       }
     );
@@ -424,28 +448,30 @@ export async function updateAppointmentOrRoutine(
           [notes, id],
           () => {},
           (_, error) => {
-            console.log(error);
+            console.error(error);
             return true;
           }
         );
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         return true;
       }
     );
   }
 }
 
-export async function setAlertCompletedValue(id: number, completed: boolean) {
+export async function setAlertCompletedValue(id: number, completed: number) {
+  //console.log("setting alert ", id, " to ", completed);
   return new Promise<void>((resolve, reject) => {
     db.transaction(
       (tx) => {
-        tx.executeSql(setAlertCompleted, [completed ? 1 : 0, id], (_) =>
-          resolve()
-        );
+        tx.executeSql(setAlertCompleted, [completed, id], (_) => resolve());
       },
-      (error) => reject(error)
+      (error) => {
+        reject(error);
+        console.error(error);
+      }
     );
   });
 }
@@ -557,7 +583,7 @@ export async function fetchCollectionData(collectionId: number) {
       },
       (error) => reject(error),
       () => {
-        console.log("dbAPI.ts: fetchCollectionData: ", result);
+        //console.log("dbAPI.ts: fetchCollectionData: ", result);
         resolve(result);
       }
     );

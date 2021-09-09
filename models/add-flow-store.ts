@@ -75,7 +75,7 @@ export const AddFlowStoreModel = types
             )
         );
         const lastRecordId = await getLastRecordId();
-        console.log(lastRecordId);
+        //console.log(lastRecordId);
         await SecureStore.setItemAsync("new_user", "false");
         await addAttachments(
           lastRecordId,
@@ -94,27 +94,27 @@ export const AddFlowStoreModel = types
           userId,
           self.currentNewAppointment.symptomType
         );
-        console.log("collection id:", collectionId);
+        //console.log("collection id:", collectionId);
         const insertedAppointmentID = await addAppointment(
           collectionId,
           self.currentNewAppointment.doctor,
           self.currentNewAppointment.notes
         );
-        console.log("insertedAppointmentID", addAppointment);
+        //console.log("insertedAppointmentID", addAppointment);
 
         const alertIDs = await addAppointmentAlerts(
           insertedAppointmentID,
           self.currentNewAppointment.getSortedTimes(),
           self.currentNewAppointment.alert
         );
-        console.log(alertIDs);
+        //console.log(alertIDs);
 
         // Registering notifications
         // title: `Appointment for ${self.currentNewAppointment.symptomType}: ${self.currentNewAppointment.doctor}`,
         const notificationPromises = self.currentNewAppointment
           .getSortedTimes()
           .map(async (timestamp, index) => {
-            if (timestamp === -1) {
+            if (timestamp > self.currentNewAppointment.alert[index]) {
               return "";
             }
             return Notifications.scheduleNotificationAsync({
@@ -139,6 +139,12 @@ export const AddFlowStoreModel = types
 
         const systemIds = await Promise.all(notificationPromises);
         alertIDs.forEach(async (alertID, index) => {
+          console.log(
+            "Setting Alert ",
+            alertID,
+            " to have SystemID ",
+            systemIds[index]
+          );
           await updateAlertSystemID(alertID, systemIds[index]);
         });
 
@@ -149,20 +155,19 @@ export const AddFlowStoreModel = types
     },
     dbInsertRoutine: async (userId: number) => {
       try {
-        console.log("routine times: ", self.currentNewRoutine.getSortedTimes());
+        //console.log("routine times: ", self.currentNewRoutine.getSortedTimes());
         const collectionId = await addCollection(
           userId,
           self.currentNewRoutine.symptomType
         );
-        console.log("collection id:", collectionId);
-        console.log("notes: ", self.currentNewRoutine.notes);
+        //console.log("collection id:", collectionId);
+        //console.log("notes: ", self.currentNewRoutine.notes);
         const insertedRoutineID = await addRoutine(
           collectionId,
           self.currentNewRoutine.type,
           self.currentNewRoutine.title,
           self.currentNewRoutine.notes
         );
-        console.log("insertedRoutineIDs", insertedRoutineID);
 
         const alertIDs = await addRoutineAlert(
           insertedRoutineID,
@@ -174,7 +179,9 @@ export const AddFlowStoreModel = types
         const notificationPromises = self.currentNewRoutine
           .getSortedTimes()
           .map(async (timestamp, index) => {
-            if (timestamp === -1) {
+            if (timestamp > self.currentNewRoutine.alert[index]) {
+              console.log("timestamp: ", timestamp);
+              console.log("alert: ", self.currentNewRoutine.alert[index]);
               return "";
             }
             return Notifications.scheduleNotificationAsync({
@@ -209,6 +216,12 @@ export const AddFlowStoreModel = types
 
         const systemIds = await Promise.all(notificationPromises);
         alertIDs.forEach(async (alertID, index) => {
+          console.log(
+            "Setting Alert ",
+            alertID,
+            " to have SystemID ",
+            systemIds[index]
+          );
           await updateAlertSystemID(alertID, systemIds[index]);
         });
         await SecureStore.setItemAsync("new_user", "false");

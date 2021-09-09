@@ -57,36 +57,6 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
 
   const [newUser, setNewUser] = React.useState(false);
 
-  // Notification Stuff :D
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
-  React.useEffect(() => {
-    if (
-      lastNotificationResponse &&
-      lastNotificationResponse.notification.request.content.data.id &&
-      lastNotificationResponse.actionIdentifier ===
-        Notifications.DEFAULT_ACTION_IDENTIFIER
-    ) {
-      const idNum = parseInt(
-        `${lastNotificationResponse.notification.request.content.data.id}`
-      );
-      if (
-        lastNotificationResponse.notification.request.content.data.id &&
-        !isNaN(idNum)
-      ) {
-        navigation.navigate("Notification", {
-          id: lastNotificationResponse.notification.request.content.data
-            .id as number,
-          title: lastNotificationResponse.notification.request.content.data
-            .name as string,
-          notes: lastNotificationResponse.notification.request.content.data
-            .notes as string,
-          type: lastNotificationResponse.notification.request.content.data
-            .type as HomeTileTypes,
-        });
-      }
-    }
-  }, [lastNotificationResponse]);
-
   React.useEffect(() => {
     const checkNewUser = async () => {
       const newUser = await SecureStore.getItemAsync("new_user");
@@ -95,26 +65,49 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
       }
     };
     checkNewUser();
-    Notifications.setNotificationHandler({
-      handleNotification: async (notification) => ({
-        shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-      }),
-    });
   }, []);
 
+  // Notification Stuff :D
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
   React.useEffect(() => {
+    console.log("Last");
+    if (
+      lastNotificationResponse &&
+      lastNotificationResponse.notification.request.content.data.id &&
+      lastNotificationResponse.actionIdentifier ===
+        Notifications.DEFAULT_ACTION_IDENTIFIER
+    ) {
+      console.log("Last checkpoint 1");
+      const notification = lastNotificationResponse.notification;
+      const idNum = parseInt(`${notification.request.content.data.id}`);
+      if (notification.request.content.data.id && !isNaN(idNum)) {
+        console.log("Last checkpoint 2");
+        navigation.navigate("Notification", {
+          id: notification.request.content.data.id as number,
+          title: notification.request.content.data.name as string,
+          notes: notification.request.content.data.notes as string,
+          type: notification.request.content.data.type as HomeTileTypes,
+          clear: true,
+        });
+      }
+    }
+  }, [lastNotificationResponse]);
+
+  React.useEffect(() => {
+    console.log("Now");
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
         const idNum = parseInt(`${notification.request.content.data.id}`);
         if (notification.request.content.data.id && !isNaN(idNum)) {
+          console.log("Now checkpoint 1");
           const checkStatus = async () => {
             const status = await SecureStore.getItemAsync("last_alert_id");
+            console.log(status);
             if (status === `${notification.request.content.data.id}`) {
               // handled before
               return;
             } else {
+              console.log("Now checkpoint 2");
               await SecureStore.setItemAsync(
                 "last_alert_id",
                 `${notification.request.content.data.id}`
@@ -124,6 +117,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                 title: notification.request.content.data.name as string,
                 notes: notification.request.content.data.notes as string,
                 type: notification.request.content.data.type as HomeTileTypes,
+                clear: true,
               });
             }
           };
@@ -151,10 +145,11 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id,
+            id: item.alertId,
             title: item.title,
             notes: item.notes,
             type: routineType(item.type),
+            clear: false,
           });
         }}
         overDue={item.time < Date.now()}
@@ -174,10 +169,11 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id,
+            id: item.alertId,
             title: item.doctor,
             notes: item.notes,
             type: HomeTileTypes.Appointment,
+            clear: false,
           });
         }}
         overDue={item.time < Date.now()}

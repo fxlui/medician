@@ -125,7 +125,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
-    console.log(result);
+    //console.log(result);
     if (!result.cancelled) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
@@ -147,7 +147,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images, // ALL
       quality: 0.8,
     });
-    console.log(result);
+    //console.log(result);
     if (!result.cancelled) {
       //let newUri = await moveToFileSystem(result.uri);
       const uri = result.uri;
@@ -397,7 +397,7 @@ export default function MediaScreen({ navigation, route }: ScreenProps) {
             await addFlowStore.dbInsertRecord(user.id);
           } else {
             // TODO handle edit flow
-            await editFlowStore.updateRecordAsync()
+            await editFlowStore.updateRecordAsync();
           }
           Toast.show(
             <TickToast

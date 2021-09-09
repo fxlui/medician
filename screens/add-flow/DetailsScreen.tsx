@@ -45,10 +45,13 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
     worse: "",
     related: "",
     attempt: "",
-  }
-  const defaultTexts = route.params.method === "add" ? emptyTexts :
-    editFlowStore.currentEditingRecord ? 
-    editFlowStore.currentEditingRecord.getDetails() : emptyTexts;
+  };
+  const defaultTexts =
+    route.params.method === "add"
+      ? emptyTexts
+      : editFlowStore.currentEditingRecord
+      ? editFlowStore.currentEditingRecord.getDetails()
+      : emptyTexts;
 
   const [currentAnswers, setCurrentAnswers] = React.useState(defaultTexts);
 
@@ -130,17 +133,17 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       }
       if (route.params.method === "add") {
         addFlowStore.currentNewRecord.setRecordDetails(
-          currentAnswers.better,
-          currentAnswers.worse,
-          currentAnswers.related,
-          currentAnswers.attempt
+          currentAnswers.better.trim(),
+          currentAnswers.worse.trim(),
+          currentAnswers.related.trim(),
+          currentAnswers.attempt.trim()
         );
       } else {
         editFlowStore.currentEditingRecord?.updateDetails(
-          currentAnswers.better,
-          currentAnswers.worse,
-          currentAnswers.related,
-          currentAnswers.attempt
+          currentAnswers.better.trim(),
+          currentAnswers.worse.trim(),
+          currentAnswers.related.trim(),
+          currentAnswers.attempt.trim()
         );
       }
       progressStore.goForward();

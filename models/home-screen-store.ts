@@ -22,6 +22,7 @@ import {
   fetchRoutine,
   setAlertCompletedValue,
   updateAlertSystemID,
+  updateAlertTime,
   updateAppointmentOrRoutine,
 } from "../database/dbAPI";
 import { SavedRoutineModel } from "./routine";
@@ -77,6 +78,7 @@ export const HomeScreenStoreModel = types
               doctor: item.doctor,
               time: new Date(item.eventTime),
               notes: item.notes,
+              alertId: item.alertId,
             })
           )
         );
@@ -98,6 +100,7 @@ export const HomeScreenStoreModel = types
               type: item.type,
               time: new Date(item.eventTime),
               complete: item.completed,
+              alertId: item.alertId,
             })
           )
         );
@@ -106,50 +109,84 @@ export const HomeScreenStoreModel = types
       }
     });
 
-    const updateAlertTitle = flow(function* (alertID: number, title: string) {
+    const updateAlertTitleNotes = flow(function* (
+      alertID: number,
+      title: string | undefined,
+      notes: string | undefined
+    ) {
       try {
-        const results: SQLAlertIDsType[] = yield fetchIDsFromAlert(alertID);
-        const appointmentId = results[0].appointmentId;
-        const routineId = results[0].routineId;
+        const result: SQLAlertReturnType = yield fetchAlert(alertID);
+        const appointmentId = result.appointmentId;
+        const routineId = result.routineId;
         if (appointmentId) {
           yield updateAppointmentOrRoutine(
             appointmentId,
             "appointment",
             title,
-            undefined
-          );
-        } else if (routineId) {
-          yield updateAppointmentOrRoutine(
-            routineId,
-            "routine",
-            title,
-            undefined
-          );
-        }
-      } catch (error) {
-        console.warn(error);
-      }
-    });
-
-    const updateAlertNotes = flow(function* (alertID: number, notes: string) {
-      try {
-        const results: SQLAlertIDsType[] = yield fetchIDsFromAlert(alertID);
-        const appointmentId = results[0].appointmentId;
-        const routineId = results[0].routineId;
-        if (appointmentId) {
-          yield updateAppointmentOrRoutine(
-            appointmentId,
-            "appointment",
-            undefined,
             notes
           );
-        } else if (routineId) {
-          yield updateAppointmentOrRoutine(
-            routineId,
-            "routine",
-            undefined,
-            notes
+          const appointment: SQLAppointmentsReturnType = yield fetchAppointment(
+            appointmentId
           );
+          if (!appointment) return;
+          // first cancel old notification
+          yield Notifications.cancelScheduledNotificationAsync(result.systemId);
+          const newSystemID = yield Notifications.scheduleNotificationAsync({
+            content: {
+              title: `Appointment with ${appointment.doctor}`,
+              subtitle: moment(result.eventTime).format("lll"),
+              body:
+                appointment.notes.substring(0, 97) +
+                (appointment.notes.length > 97 ? "..." : ""),
+              sound: true,
+              badge: 1,
+              data: {
+                id: alertID,
+                name: appointment.doctor,
+                notes: appointment.notes,
+                type: HomeTileTypes.Appointment,
+              },
+            },
+            trigger: result.time,
+          });
+          // then update the systemID
+          if (newSystemID) yield updateAlertSystemID(alertID, newSystemID);
+        } else if (routineId) {
+          yield updateAppointmentOrRoutine(routineId, "routine", title, notes);
+          const routine: SQLRoutineReturnType = yield fetchRoutine(routineId);
+          if (!routine) return;
+          // first cancel old notification
+          yield Notifications.cancelScheduledNotificationAsync(result.systemId);
+          const newSystemID = yield Notifications.scheduleNotificationAsync({
+            content: {
+              title: `${routine.type === 0 ? "Medication" : "Exercise"}: ${
+                routine.title
+              }`,
+              subtitle:
+                routine.type === 0
+                  ? routine.notes
+                  : moment(result.eventTime).format("lll"),
+              body:
+                routine.type === 0
+                  ? moment(result.eventTime).format("lll")
+                  : routine.notes.substring(0, 97) +
+                    (routine.notes.length > 97 ? "..." : ""),
+              sound: true,
+              badge: 1,
+              data: {
+                id: alertID,
+                name: routine.title,
+                notes: routine.notes,
+                type:
+                  routine.type === 0
+                    ? HomeTileTypes.Medication
+                    : HomeTileTypes.Exercise,
+              },
+            },
+            trigger: result.time,
+          });
+          // then update the systemID
+          if (newSystemID) yield updateAlertSystemID(alertID, newSystemID);
         }
       } catch (error) {
         console.warn(error);
@@ -161,7 +198,50 @@ export const HomeScreenStoreModel = types
       completed: boolean
     ) {
       try {
-        yield setAlertCompletedValue(alertID, completed);
+        yield setAlertCompletedValue(alertID, completed ? 1 : 0);
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+
+    const getAlertDetails = flow(function* (alertID: number) {
+      try {
+        const results: SQLAlertReturnType = yield fetchAlert(alertID);
+        return results;
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+
+    const getAppointmentDetailsFromAlert = flow(function* (
+      alert: SQLAlertReturnType
+    ) {
+      try {
+        const appointment: SQLAppointmentsReturnType = yield fetchAppointment(
+          alert.appointmentId
+        );
+        if (!appointment) {
+          console.error(
+            "Could not find appointment with id: " + alert.appointmentId
+          );
+        }
+        return appointment;
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+
+    const getRoutineDetailsFromAlert = flow(function* (
+      alert: SQLAlertReturnType
+    ) {
+      try {
+        const routine: SQLRoutineReturnType = yield fetchRoutine(
+          alert.routineId
+        );
+        if (!routine) {
+          console.error("Could not find routine with id: " + alert.routineId);
+        }
+        return routine;
       } catch (error) {
         console.warn(error);
       }
@@ -172,10 +252,18 @@ export const HomeScreenStoreModel = types
       diffInMinutes: number
     ) {
       try {
-        const results: SQLAlertReturnType[] = yield fetchAlert(alertID);
-        const alert = results[0];
-        const newTime = new Date(alert.time + diffInMinutes * 60000);
+        console.log("SNOOZING");
+        const alert: SQLAlertReturnType = yield fetchAlert(alertID);
+        console.log(alert);
+
+        const newTime =
+          alert.time <= 1
+            ? new Date(new Date().getTime() + diffInMinutes * 60000)
+            : new Date(alert.time + diffInMinutes * 60000);
+        console.log(diffInMinutes);
+        console.log(newTime.toString());
         const oldSystemID = alert.systemId;
+        console.log(oldSystemID);
 
         if (alert.appointmentId) {
           const appointment: SQLAppointmentsReturnType = yield fetchAppointment(
@@ -204,7 +292,10 @@ export const HomeScreenStoreModel = types
             },
             trigger: newTime,
           });
-          yield updateAlertSystemID(alertID, newSystemID);
+          // first update the systemID
+          if (newSystemID) yield updateAlertSystemID(alertID, newSystemID);
+          // then update alert time
+          yield updateAlertTime(alertID, newTime.getTime());
         } else if (alert.routineId) {
           const routine: SQLRoutineReturnType = yield fetchRoutine(
             alert.routineId
@@ -240,7 +331,10 @@ export const HomeScreenStoreModel = types
             },
             trigger: newTime,
           });
-          yield updateAlertSystemID(alertID, newSystemID);
+          // first update the systemID
+          if (newSystemID) yield updateAlertSystemID(alertID, newSystemID);
+          // then update alert time
+          yield updateAlertTime(alertID, newTime.getTime());
         }
         yield Notifications.cancelScheduledNotificationAsync(oldSystemID);
       } catch (error) {
@@ -251,10 +345,12 @@ export const HomeScreenStoreModel = types
     return {
       fetchAppointmentsAsync,
       fetchRoutinesAsync,
-      updateAlertTitle,
-      updateAlertNotes,
+      updateAlertTitleNotes,
       setAlertCompleted,
       snoozeAlert,
+      getAlertDetails,
+      getAppointmentDetailsFromAlert,
+      getRoutineDetailsFromAlert,
     };
   });
 

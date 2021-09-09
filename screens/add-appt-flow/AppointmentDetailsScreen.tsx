@@ -187,10 +187,10 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
         opacity: 0.9,
       });
       addFlowStore.currentNewAppointment.setAppointmentDetails(
-        currentDoctor,
+        currentDoctor.trim(),
         selectedSymptomType,
         alertMinutesBefore,
-        extraNotes
+        extraNotes.trim()
       );
       await addFlowStore.dbInsertAppointment(user.id);
       navigation.navigate("Root");

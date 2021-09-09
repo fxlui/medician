@@ -29,6 +29,7 @@ import { themeTextColor, themeTileColor } from "./constants/Colors";
 import { Asset } from "expo-asset";
 import { Animated, ImageURISource, StyleSheet } from "react-native";
 import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 
 // Instruct SplashScreen not to hide yet, we want to do this manually
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -174,6 +175,14 @@ export default function App() {
         }
       }
     };
+    Notifications.setNotificationHandler({
+      handleNotification: async (notification) => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    });
+
     getBioLock();
     lockOrientation();
   }, []);

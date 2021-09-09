@@ -114,7 +114,8 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         index={index}
         selected={false}
         updater={() => {
-          const currentCollection = overviewStore.getCurrentSelectedCollection();
+          const currentCollection =
+            overviewStore.getCurrentSelectedCollection();
           if (currentCollection) {
             navigation.navigate("Timeline", {
               collectionId: currentCollection.id,
@@ -146,12 +147,14 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={routineType(item.type)}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id,
+            id: item.alertId,
             title: item.title,
             notes: item.notes,
             type: routineType(item.type),
+            clear: false,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };
@@ -168,12 +171,14 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
         type={HomeTileTypes.Appointment}
         onPress={() => {
           navigation.push("Notification", {
-            id: item.id,
+            id: item.alertId,
             title: item.doctor,
             notes: item.notes,
             type: HomeTileTypes.Appointment,
+            clear: false,
           });
         }}
+        overDue={item.time < Date.now()}
       />
     );
   };

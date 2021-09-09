@@ -8,6 +8,7 @@ export type RootStackParamList = {
     title: string;
     notes: string;
     type: HomeTileTypes;
+    clear: boolean;
   };
   ActionScreen: undefined;
   NotFound: undefined;

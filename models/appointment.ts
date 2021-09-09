@@ -58,6 +58,7 @@ export const SavedAppointmentModel = types
     doctor: types.optional(types.string, ""),
     time: types.Date,
     notes: types.optional(types.string, ""),
+    alertId: types.integer,
   })
   .actions((self) => ({
     updateNotes: (notes: string) => {

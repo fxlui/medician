@@ -183,10 +183,10 @@ export default function RoutineDetailsScreen({
       }
       progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
-        exerciseName,
+        exerciseName.trim(),
         selectedSymptomType,
         alertMinutesBefore === null ? -1 : alertMinutesBefore,
-        extraNotes
+        extraNotes.trim()
       );
       navigation.navigate("RoutineTimeScreen");
     } else {
