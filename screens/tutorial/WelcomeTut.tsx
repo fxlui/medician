@@ -16,7 +16,7 @@ import { Overview } from "../../assets/images/Overview";
 import { themeTileColor } from "../../constants/Colors";
 import SafeView from "../../components/SafeView";
 
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initDatabase } from "../../database/dbAPI";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Tutorial">;
@@ -264,8 +264,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
     CustomHaptics("light");
     const setNewUser = async () => {
       await initDatabase();
-      await SecureStore.setItemAsync("new_user", "true");
-      navigation.navigate("Root", { screen: "HomeScreen" });
+      await AsyncStorage.setItem("@storage_Key", "true");
     };
     setNewUser();
   };
