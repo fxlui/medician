@@ -30,6 +30,8 @@ import { themeTextColor } from "../constants/Colors";
 import * as Notifications from "expo-notifications";
 import * as SecureStore from "expo-secure-store";
 
+import FillerTile from "../components/FillerTile";
+
 interface appointmentTileProps {
   index: number;
   dataIndex: number;
@@ -201,6 +203,9 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             </PressableBase>
           </View>
           <Text style={styles.name}>Medication</Text>
+
+          <FillerTile />
+
           <Carousel
             style={{ overflow: "visible" }}
             data={homeScreenStore.getRecentMedications()}
@@ -219,6 +224,8 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             }}
           />
           <Text style={styles.name}>Exercise</Text>
+          <FillerTile />
+
           <Carousel
             data={homeScreenStore.getRecentExercises()}
             renderItem={renderRoutineTile}
