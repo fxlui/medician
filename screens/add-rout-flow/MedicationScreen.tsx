@@ -2,11 +2,11 @@ import React from "react";
 import {
   StyleSheet,
   ScrollView,
-  Dimensions,
   TextInput,
   KeyboardAvoidingView,
   Animated,
   Alert,
+  useWindowDimensions,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -52,6 +52,7 @@ export default function RoutineDetailsScreen({
   navigation,
   route,
 }: ScreenProps) {
+  const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
@@ -268,7 +269,14 @@ export default function RoutineDetailsScreen({
           flex: 1,
         }}
       >
-        <Text style={styles.greeting}>
+        <Text
+          style={[
+            styles.greeting,
+            {
+              maxWidth: width - 120,
+            },
+          ]}
+        >
           Please tell me more about your medication.
         </Text>
         <ScrollView
@@ -410,7 +418,7 @@ export default function RoutineDetailsScreen({
                   data={symptomArr}
                   renderItem={renderTopTile}
                   vertical={false}
-                  sliderWidth={Dimensions.get("window").width}
+                  sliderWidth={width}
                   containerCustomStyle={{
                     overflow: "visible",
                   }}
@@ -590,7 +598,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "600",
     marginTop: 15,
-    maxWidth: Dimensions.get("window").width - 120,
     marginBottom: 20,
   },
   question: {

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ScrollView, Alert } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Alert,
+  useWindowDimensions,
+} from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
 import { CompositeScreenProps } from "@react-navigation/core";
@@ -65,6 +70,7 @@ const symptomArr = uniqueSymptoms;
 
 const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
   const colorScheme = useColorScheme();
+  const { height, width } = useWindowDimensions();
   const [symptomSelected, setSymptomSelected] = useState(0);
 
   const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
@@ -204,7 +210,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           renderItem={renderSymptomTile}
           vertical={false}
           firstItem={0}
-          sliderWidth={Dimensions.get("window").width}
+          sliderWidth={width}
           containerCustomStyle={{
             overflow: "visible",
           }}
@@ -250,7 +256,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               renderItem={renderAreaTile}
               inactiveSlideScale={1}
               vertical={false}
-              sliderWidth={Dimensions.get("window").width}
+              sliderWidth={width}
               activeSlideAlignment={"start"}
               containerCustomStyle={{
                 overflow: "visible",
@@ -277,7 +283,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               renderItem={renderRoutineTile}
               inactiveSlideScale={1}
               vertical={false}
-              sliderWidth={Dimensions.get("window").width}
+              sliderWidth={width}
               activeSlideAlignment={"start"}
               containerCustomStyle={{
                 overflow: "visible",
@@ -304,7 +310,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
               renderItem={renderAppointmentTile}
               inactiveSlideScale={1}
               vertical={false}
-              sliderWidth={Dimensions.get("window").width}
+              sliderWidth={width}
               activeSlideAlignment={"start"}
               containerCustomStyle={{
                 overflow: "visible",

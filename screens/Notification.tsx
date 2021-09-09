@@ -4,10 +4,10 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
-  Dimensions,
   Animated,
   Easing,
   KeyboardAvoidingView,
+  useWindowDimensions,
 } from "react-native";
 import React, { FC } from "react";
 import { Entypo, Feather } from "@expo/vector-icons";
@@ -59,6 +59,7 @@ const NotificationScreen = ({
     params: { id, type, title, notes, clear },
   },
 }: ScreenProps) => {
+  const { height, width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const { homeScreenStore } = useStores();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -285,7 +286,7 @@ const NotificationScreen = ({
             <KeyboardAvoidingView
               style={{
                 height: editing ? 600 : 225,
-                width: Dimensions.get("window").width,
+                width: width,
                 paddingBottom: 20,
               }}
             >
@@ -352,7 +353,7 @@ const NotificationScreen = ({
                   style={[
                     styles.textinput,
                     {
-                      width: Dimensions.get("window").width - 80,
+                      width: width - 80,
                     },
                   ]}
                   placeholder="Title"
@@ -375,7 +376,7 @@ const NotificationScreen = ({
                   style={[
                     styles.textinput,
                     {
-                      width: Dimensions.get("window").width - 80,
+                      width: width - 80,
                     },
                   ]}
                   placeholder="Notes"
@@ -398,7 +399,7 @@ const NotificationScreen = ({
                     style: {
                       marginTop: 15,
                       borderRadius: 16,
-                      width: Dimensions.get("window").width - 80,
+                      width: width - 80,
                       height: 70,
                       backgroundColor: "rgb(0,0,0,0.9)",
                       flexDirection: "row",
@@ -442,7 +443,7 @@ const NotificationScreen = ({
                     style: {
                       marginTop: 15,
                       borderRadius: 16,
-                      width: Dimensions.get("window").width - 80,
+                      width: width - 80,
                       height: 70,
                       backgroundColor: "rgb(0,0,0,0.9)",
                       flexDirection: "row",
@@ -497,7 +498,7 @@ const NotificationScreen = ({
             <View
               style={{
                 height: 225,
-                width: Dimensions.get("window").width,
+                width: width,
                 paddingBottom: 20,
               }}
             >

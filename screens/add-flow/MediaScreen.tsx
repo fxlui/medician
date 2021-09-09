@@ -2,11 +2,11 @@ import React from "react";
 import {
   StyleSheet,
   ScrollView,
-  Dimensions,
   Platform,
   Image,
   Alert,
   Modal,
+  useWindowDimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
@@ -106,6 +106,7 @@ interface Media {
 }
 
 const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
+  const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
@@ -197,8 +198,8 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
               source={{ uri: img.uri }}
               style={[
                 {
-                  width: Dimensions.get("window").width * 0.8,
-                  height: Dimensions.get("window").height * 0.8,
+                  width: width * 0.8,
+                  height: height * 0.8,
                 },
               ]}
             />
@@ -230,7 +231,14 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
           Editing record for MOBX_PAIN at MOBX_AREA
         </Text>
       ) : null}
-      <Text style={styles.greeting}>
+      <Text
+        style={[
+          styles.greeting,
+          {
+            maxWidth: width - 100,
+          },
+        ]}
+      >
         Attach any photos{/* or videos*/} here.
       </Text>
       <View
@@ -291,7 +299,7 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
                         : ["#252525", "#252525"]
                     }
                     style={{
-                      width: Dimensions.get("window").width - 80,
+                      width: width - 80,
                       height: 150,
                       flexDirection: "row",
                       justifyContent: "center",
@@ -313,7 +321,7 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
                     <Image
                       source={{ uri: img.uri! }}
                       style={{
-                        width: Dimensions.get("window").width - 100,
+                        width: width - 100,
                         height: 130,
                         borderRadius: 10,
                       }}
@@ -451,7 +459,6 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     fontWeight: "600",
     marginTop: 15,
-    maxWidth: Dimensions.get("window").width - 100,
     marginBottom: 20,
   },
 });

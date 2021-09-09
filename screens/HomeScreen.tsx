@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ScrollView, StyleSheet, Dimensions } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import CustomHaptics from "../utils/CustomHaptics";
 import Carousel from "react-native-snap-carousel";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -31,6 +31,7 @@ import * as Notifications from "expo-notifications";
 import * as SecureStore from "expo-secure-store";
 
 import FillerTile from "../components/FillerTile";
+import { useWindowDimensions } from "react-native";
 
 interface appointmentTileProps {
   index: number;
@@ -50,6 +51,7 @@ type ScreenProps = CompositeScreenProps<
 >;
 
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
+  const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
   const { homeScreenStore } = useStores();
   const textColor =
@@ -190,77 +192,95 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             </PressableBase>
           </View>
           <Text style={styles.name}>Medication</Text>
-          <Text
-            style={{
-              marginLeft: 5,
-              marginTop: -12.5,
-              marginBottom: 15,
-              opacity: 0.7,
-            }}
-          >
-            Next Two Weeks
-          </Text>
-          <Carousel
-            style={{ overflow: "visible" }}
-            data={homeScreenStore.getRecentMedications()}
-            renderItem={renderRoutineTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            itemWidth={170}
-            inactiveSlideOpacity={1}
-            inactiveSlideScale={0.975}
-            onScrollIndexChanged={() => {
-              CustomHaptics("light");
-            }}
-          />
+          {homeScreenStore.getRecentMedications().length === 0 ? (
+            <FillerTile />
+          ) : (
+            <>
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -12.5,
+                  marginBottom: 15,
+                  opacity: 0.7,
+                }}
+              >
+                Next Two Weeks
+              </Text>
+              <Carousel
+                style={{ overflow: "visible" }}
+                data={homeScreenStore.getRecentMedications()}
+                renderItem={renderRoutineTile}
+                vertical={false}
+                sliderWidth={width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={170}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={0.975}
+                onScrollIndexChanged={() => {
+                  CustomHaptics("light");
+                }}
+              />
+            </>
+          )}
+
           <Text style={styles.name}>Exercise</Text>
-          <Text
-            style={{
-              marginLeft: 5,
-              marginTop: -12.5,
-              marginBottom: 15,
-              opacity: 0.7,
-            }}
-          >
-            Next Two Weeks
-          </Text>
-          <Carousel
-            data={homeScreenStore.getRecentExercises()}
-            renderItem={renderRoutineTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            itemWidth={170}
-            inactiveSlideOpacity={1}
-            inactiveSlideScale={0.975}
-            onScrollIndexChanged={() => {
-              CustomHaptics("light");
-            }}
-          />
+          {homeScreenStore.getRecentExercises().length === 0 ? (
+            <FillerTile />
+          ) : (
+            <>
+              <Text
+                style={{
+                  marginLeft: 5,
+                  marginTop: -12.5,
+                  marginBottom: 15,
+                  opacity: 0.7,
+                }}
+              >
+                Next Two Weeks
+              </Text>
+              <Carousel
+                data={homeScreenStore.getRecentExercises()}
+                renderItem={renderRoutineTile}
+                vertical={false}
+                sliderWidth={width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={170}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={0.975}
+                onScrollIndexChanged={() => {
+                  CustomHaptics("light");
+                }}
+              />
+            </>
+          )}
+
           <Text style={styles.name}>Appointment</Text>
-          <Carousel
-            data={homeScreenStore.getRecentAppointments()}
-            renderItem={renderAppointmentTile}
-            vertical={false}
-            sliderWidth={Dimensions.get("window").width}
-            activeSlideAlignment={"start"}
-            containerCustomStyle={{
-              overflow: "visible",
-            }}
-            itemWidth={170}
-            inactiveSlideOpacity={1}
-            inactiveSlideScale={0.975}
-            onScrollIndexChanged={() => {
-              CustomHaptics("light");
-            }}
-          />
+          {homeScreenStore.getRecentAppointments().length === 0 ? (
+            <FillerTile />
+          ) : (
+            <Carousel
+              data={homeScreenStore.getRecentAppointments()}
+              renderItem={renderAppointmentTile}
+              vertical={false}
+              sliderWidth={width}
+              activeSlideAlignment={"start"}
+              containerCustomStyle={{
+                overflow: "visible",
+              }}
+              itemWidth={170}
+              inactiveSlideOpacity={1}
+              inactiveSlideScale={0.975}
+              onScrollIndexChanged={() => {
+                CustomHaptics("light");
+              }}
+            />
+          )}
         </View>
       </ScrollView>
     </SafeView>

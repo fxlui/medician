@@ -1,7 +1,9 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 const TileBase = () => {
+  const { height, width } = useWindowDimensions();
   return (
     <View
       style={{
@@ -12,7 +14,7 @@ const TileBase = () => {
         borderRadius: 16,
         borderWidth: 2,
         height: 155,
-        width: Dimensions.get("window").width - 50,
+        width: width - 50,
       }}
     >
       <View

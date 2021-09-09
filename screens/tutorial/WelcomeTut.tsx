@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, ScrollView, Dimensions } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { TutorialParamList, RootStackParamList } from "../../types";
 import TileBase from "../../components/TileBase";

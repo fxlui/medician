@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import { TopTile } from "../../components/AreaTile";
@@ -48,6 +48,7 @@ interface baseData {
 
 const ToiletColorScreen: React.FC<ScreenProps> = observer(
   ({ navigation, route }) => {
+    const { height, width } = useWindowDimensions();
     const { addFlowStore, editFlowStore } = useStores();
     const defaultSelection =
       route.params.method === "add"
@@ -103,7 +104,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
             data={DATA}
             renderItem={renderTile}
             vertical={false}
-            sliderWidth={Dimensions.get("window").width}
+            sliderWidth={width}
             containerCustomStyle={{
               paddingVertical: 150,
               overflow: "visible",
