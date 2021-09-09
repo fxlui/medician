@@ -84,7 +84,8 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
       <SafeView style={styles.container} disableTop>
         {route.params.method === "edit" ? (
           <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-            Editing record for MOBX_PAIN at MOBX_AREA
+            Editing record for {editFlowStore.currentSymptomType} at{" "}
+            {editFlowStore.currentEditingRecord?.subArea}
           </Text>
         ) : null}
         <Text style={styles.greeting}>What colour is it?</Text>
