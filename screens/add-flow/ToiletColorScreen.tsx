@@ -77,7 +77,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation, route }) => {
           Editing record for MOBX_PAIN at MOBX_AREA
         </Text>
       ) : null}
-      <Text style={styles.greeting}>What colour is it?</Text>
+      <Text style={styles.greeting}>What colour is your fecal matter?</Text>
       <View
         style={{
           justifyContent: "center",
@@ -101,6 +101,9 @@ const ToiletColorScreen: React.FC<ScreenProps> = ({ navigation, route }) => {
           }}
           itemWidth={150}
           inactiveSlideOpacity={0.8}
+          onLayout={() => {
+            tileRef.current?.snapToItem(selected, false, false);
+          }}
           onScrollIndexChanged={(index) => {
             setSelected(index);
             CustomHaptics("light");

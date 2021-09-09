@@ -54,7 +54,11 @@ const ToiletPainScreen = ({ navigation, route }: ScreenProps) => {
             } else {
               // TODO handle edit
             }
-            navigation.navigate("ToiletColorScreen", route.params);
+            if (addFlowStore.currentNewRecord.toiletType === 0) {
+              navigation.navigate("SeverityScreen", route.params);
+            } else {
+              navigation.navigate("ToiletColorScreen", route.params);
+            }
           }
         }}
       />

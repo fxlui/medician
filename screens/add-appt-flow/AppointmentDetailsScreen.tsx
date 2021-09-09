@@ -395,7 +395,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
-                    topRef.current?.snapToItem(selectedTop);
+                    topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
                     setSelectedSymptomType(symptomArr[selectedTop].type);
                   }}
