@@ -5,37 +5,32 @@ import { TutorialParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { TopTile, BottomTile } from "../../components/AreaTile";
 import TutorialNavBar from "../../components/TutorialNavBar";
-import { Action } from "../../assets/images/Action";
+import { Symptom } from "../../assets/images/Symptom";
 
 import { StackScreenProps } from "@react-navigation/stack";
-import CustomHaptics from "../../utils/CustomHaptics";
 
-type ScreenProps = StackScreenProps<TutorialParamList, "EndingTut">;
+type ScreenProps = StackScreenProps<TutorialParamList>;
 
-const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
+const HomeTut: React.FC<ScreenProps> = ({ navigation }) => {
 
   return (
     <SafeView style={styles.container} disableTop>
-      <View>
-        <Text style={styles.greeting}>Any two of these buttons can add an symptom</Text>
-        <View style={styles.child}>
-          <View style={{}}>
+        <Text style={styles.greeting}>Any two of these buttons can
+ be used to add an symptom</Text>
+          <View style={styles.img}>
             <Image 
-              style={{       
+              style={{
                 width: 295,
                 height: 578,
-                borderRadius: 25,
+                borderRadius: 15
               }}
-              source={Action} 
+              source={Symptom}
             />
           </View>
-        </View>
-      </View>
       <TutorialNavBar
         left={() => navigation.pop()}
         right={() => {
-          
-          navigation.navigate("EndingTut");
+          navigation.navigate("RoutineTut");
         }}
       />
     </SafeView>
@@ -44,22 +39,26 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     flex: 1,
-  },
-  child: {
-    flex: 10,
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   },
   greeting: {
-    flex: 1,
-    marginTop: 65,
-    marginLeft: 5,
-    marginRight: 15,
     fontSize: 26,
     fontWeight: "600",
-    paddingLeft: 30,
+    marginLeft: 5,
+    marginRight: 15,
+    marginBottom: 10,
+    textAlign: "center"
+  },
+  img : {
+    borderRadius: 25,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 9,
   },
   list: {
     margin: 0,
@@ -68,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeTut;
+export default HomeTut;

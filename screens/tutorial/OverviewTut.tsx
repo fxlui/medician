@@ -8,35 +8,29 @@ import TutorialNavBar from "../../components/TutorialNavBar";
 import { Overview } from "../../assets/images/Overview";
 
 import { StackScreenProps } from "@react-navigation/stack";
-import CustomHaptics from "../../utils/CustomHaptics";
 
-type ScreenProps = StackScreenProps<TutorialParamList, "SymptomTut">;
+type ScreenProps = StackScreenProps<TutorialParamList>;
 
-const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
+const HomeTut: React.FC<ScreenProps> = ({ navigation }) => {
 
   return (
     <SafeView style={styles.container} disableTop>
-      <View>
         <Text style={styles.greeting}>You can view all the details
 about your symptoms here </Text>
-        <View style={styles.child}>
-          <View style={{}}>
+          <View style={styles.img}>
             <Image 
-              style={{   
+              style={{
                 width: 295,
                 height: 578,
-                borderRadius: 25,
+                borderRadius: 15
               }}
-              source={Overview} 
+              source={Overview}
             />
           </View>
-        </View>
-      </View>
       <TutorialNavBar
         left={() => navigation.pop()}
         right={() => {
-          
-          navigation.navigate("SymptomTut");
+          navigation.navigate("EndingTut");
         }}
       />
     </SafeView>
@@ -45,22 +39,26 @@ about your symptoms here </Text>
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     flex: 1,
-  },
-  child: {
-    flex: 10,
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   },
   greeting: {
-    flex: 1,
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 65,
     marginLeft: 5,
     marginRight: 15,
-    paddingLeft: 30,
+    marginBottom: 10,
+    textAlign: "center"
+  },
+  img : {
+    borderRadius: 25,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 9,
   },
   list: {
     margin: 0,
@@ -69,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeTut;
+export default HomeTut;

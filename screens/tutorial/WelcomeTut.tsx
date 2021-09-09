@@ -71,6 +71,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
         right={() => {
           navigation.navigate("HomeTut");
         }}
+        hideLeft={true}
       />
     </SafeView>
   );

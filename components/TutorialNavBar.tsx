@@ -8,13 +8,14 @@ import { View } from "./Themed";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const AddFlowNavBar: React.FC<{
+const TutorialNavBar: React.FC<{
   left: () => void;
   right: () => void;
   last?: boolean;
   preventLeftDefault?: boolean;
   preventRightDefault?: boolean;
   preventRightHaptics?: boolean;
+  hideLeft?: boolean;
 }> = ({
   left,
   right,
@@ -22,6 +23,7 @@ const AddFlowNavBar: React.FC<{
   preventLeftDefault = false,
   preventRightDefault = false,
   preventRightHaptics = false,
+  hideLeft = false,
 }) => {
   const funcWithHaptics = (func: () => void) => {
     CustomHaptics("light");
@@ -64,27 +66,33 @@ const AddFlowNavBar: React.FC<{
             backgroundColor: "rgba(255,255,255,0)",
           }}
         >
-          <PressableBase
-            extraProps={{
-              style: {
-                padding: 32.5,
-                paddingLeft: 80,
-                paddingRight: 55,
-              },
-              accessibilityLabel: "Navigate to previous screen",
-            }}
-            onPress={() => {
-              if (!preventLeftDefault) {
-              }
-              funcWithHaptics(left);
-            }}
-          >
-            <Entypo
-              name="chevron-left"
-              size={28}
-              color={colorScheme === "light" ? "#333" : "#fff"}
-            />
-          </PressableBase>
+          { hideLeft ? 
+            // <View style={{width: "28p"}}/>  
+            null
+          :
+            <PressableBase
+              extraProps={{
+                style: {
+                  padding: 32.5,
+                  paddingLeft: 80,
+                  paddingRight: 55,
+                },
+                accessibilityLabel: "Navigate to previous screen",
+              }}
+              onPress={() => {
+                if (!preventLeftDefault) {
+                }
+                funcWithHaptics(left);
+              }}
+            >
+              <Entypo
+                name="chevron-left"
+                size={28}
+                color={colorScheme === "light" ? "#333" : "#fff"}
+              />
+            </PressableBase>
+          }
+
           <PressableBase
             extraProps={{
               style: {
@@ -124,4 +132,4 @@ const AddFlowNavBar: React.FC<{
   );
 };
 
-export default AddFlowNavBar;
+export default TutorialNavBar;
