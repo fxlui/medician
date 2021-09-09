@@ -21,7 +21,7 @@ import {
   appointmentGradient,
 } from "../constants/Colors";
 import Icon from "../components/Icon";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import SafeView from "../components/SafeView";
 import { PressableBase } from "../components/PressableBase";
 import { RootStackParamList, HomeTileTypes } from "../types";
@@ -34,7 +34,8 @@ import {
 } from "../database/db.types";
 import CustomHaptics from "../utils/CustomHaptics";
 import moment from "moment";
-import { ScrollView } from "react-native-gesture-handler";
+
+import * as Notifications from "expo-notifications";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Notification">;
 
@@ -69,6 +70,9 @@ const NotificationScreen = ({
       if (!alert) return;
       //console.log(alert);
       setCurrentAlert(alert);
+      if (clear) {
+        Notifications.dismissNotificationAsync(alert.systemId);
+      }
       setCurrentAlertTime(new Date(alert.time));
       setCurrentEventTime(new Date(alert.eventTime));
       setCurrentCompleted(alert.completed === 1);

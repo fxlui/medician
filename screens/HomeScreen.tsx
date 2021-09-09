@@ -103,14 +103,14 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
           const checkStatus = async () => {
             const status = await SecureStore.getItemAsync("last_alert_id");
             console.log(status);
-            if (status === `${notification.request.content.data.id}`) {
+            if (status === `${notification.request.identifier}`) {
               // handled before
               return;
             } else {
               console.log("Now checkpoint 2");
               await SecureStore.setItemAsync(
                 "last_alert_id",
-                `${notification.request.content.data.id}`
+                `${notification.request.identifier}`
               );
               navigation.navigate("Notification", {
                 id: notification.request.content.data.id as number,
