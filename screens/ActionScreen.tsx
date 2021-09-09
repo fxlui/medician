@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/core";
 
@@ -32,15 +32,47 @@ const greetingTextFromTime = () => {
 };
 
 export default function ActionScreen({ navigation }: ScreenProps) {
+  const { height, width } = useWindowDimensions();
   const { addFlowStore, progressStore } = useStores();
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingLeft: 25,
+      paddingRight: 25,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    greeting: {
+      fontSize: 26,
+      fontWeight: "600",
+      marginTop: 65,
+      marginLeft: 30,
+    },
+    tiles: {
+      marginTop: 50,
+      flex: 7,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    addTiles: {
+      flexDirection: "row",
+      justifyContent: "center",
+    },
+    cancelButton: {
+      flex: 2,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
 
   return (
     <SafeView>
+      <Text style={styles.greeting}>
+        {greetingTextFromTime()}
+        {"\n"}How are you feeling?
+      </Text>
       <View style={styles.container}>
-        <Text style={styles.greeting}>
-          {greetingTextFromTime()}
-          {"\n"}How are you feeling?
-        </Text>
         <View style={styles.tiles}>
           <EntryTile
             title={"I feel..."}
@@ -72,7 +104,7 @@ export default function ActionScreen({ navigation }: ScreenProps) {
             <AddTile
               title={"Add"}
               subtitle={"Appointment"}
-              style={{ marginRight: 30 }}
+              style={{ marginRight: width <= 345 ? 15 : 30 }}
               onPress={() => {
                 progressStore.resetProgress();
                 addFlowStore.resetAppointment();
@@ -116,34 +148,3 @@ export default function ActionScreen({ navigation }: ScreenProps) {
     </SafeView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingLeft: 25,
-    paddingRight: 25,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  greeting: {
-    fontSize: 26,
-    fontWeight: "600",
-    marginTop: 65,
-    marginLeft: -100,
-  },
-  tiles: {
-    marginTop: 50,
-    flex: 7,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  addTiles: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  cancelButton: {
-    flex: 2,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

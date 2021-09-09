@@ -29,6 +29,7 @@ import { Asset } from "expo-asset";
 import { Animated, ImageURISource, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
+import { initDatabase } from "./database/dbAPI";
 
 // Instruct SplashScreen not to hide yet, we want to do this manually
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -149,6 +150,7 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
+      await initDatabase();
       const store = await setupRootStore();
       setRootStore(store);
     })();

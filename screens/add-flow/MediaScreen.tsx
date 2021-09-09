@@ -126,6 +126,10 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
   const [currentMedia, setCurrentMedia] = React.useState<Media>();
   const [modalVisible, setModalVisible] = React.useState(false);
 
+  React.useEffect(() => {
+    ensureDirExists();
+  }, []);
+
   const pickImage = async () => {
     const hasPermission = await checkLibraryPermission();
     if (!hasPermission) return;

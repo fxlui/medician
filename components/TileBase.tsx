@@ -4,6 +4,7 @@ import {
   Pressable,
   StyleProp,
   StyleSheet,
+  useWindowDimensions,
   ViewStyle,
 } from "react-native";
 import CustomHaptics from "../utils/CustomHaptics";
@@ -36,6 +37,7 @@ const TileBase: React.FC<BaseChildren> = ({
   gradient = ["white", "white"],
   textBox = false,
 }) => {
+  const { height, width } = useWindowDimensions();
   const animatedValue = React.useRef(new Animated.Value(1)).current;
   const animatedStyle = {
     transform: [{ scale: animatedValue }],
@@ -65,6 +67,40 @@ const TileBase: React.FC<BaseChildren> = ({
     CustomHaptics("medium");
     onClick();
   };
+
+  const styles = StyleSheet.create({
+    container: {
+      borderRadius: 16,
+      padding: 18,
+      overflow: "hidden",
+    },
+    shadow: {
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 9,
+      elevation: 5,
+    },
+    default: {
+      width: 155,
+      height: 155,
+    },
+    large: {
+      width: width <= 302 ? width - 20 : 302,
+      height: 145,
+    },
+    long: {
+      height: 58,
+    },
+    extraLong: {
+      width: width <= 345 ? width - 20 : 345,
+      height: 140,
+    },
+    actionAdd: {
+      width: width <= 345 ? (width - 45) / 2 : 157.5,
+      height: width <= 345 ? (width - 45) / 2 : 157.5,
+    },
+  });
 
   return (
     <Pressable
@@ -98,38 +134,4 @@ const TileBase: React.FC<BaseChildren> = ({
   );
 };
 //#24AC29
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 16,
-    padding: 18,
-    overflow: "hidden",
-  },
-  shadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 9,
-    elevation: 5,
-  },
-  default: {
-    width: 155,
-    height: 155,
-  },
-  large: {
-    width: 302,
-    height: 145,
-  },
-  long: {
-    height: 58,
-  },
-  extraLong: {
-    width: 345,
-    height: 140,
-  },
-  actionAdd: {
-    width: 157.5,
-    height: 157.5,
-  },
-});
-
 export default TileBase;
