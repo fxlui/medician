@@ -28,7 +28,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/fxlui/medician">
-    <img src="assets/images/icon.png" alt="Logo" width="100" height="100">
+    <img src="assets/images/medician.png" alt="Logo" width="150" height="150" style="border: 1px, border-radius: 16">
   </a>
 
   <h3 align="center">Medician</h3>
