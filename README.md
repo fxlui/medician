@@ -36,7 +36,6 @@
   <p align="center" style="display: flex; flex-direction: column">
     Symptom Tracking App
     <br />
-    <br />
     <!-- App Store -->
     <div align="center">
   <a href="">
@@ -46,6 +45,7 @@
     <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Badge" width="206" height="61" style="border: 1px, border-radius: 16">
   </a>
     </div>
+    <br />
     <p align="center">
         <a href="https://github.com/fxlui/medician/issues">Report Bug</a>
         ·
