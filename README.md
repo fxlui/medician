@@ -40,7 +40,7 @@
     <!-- App Store -->
     <div align="center">
   <a href="">
-    <img src="github_assets/APK.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
+    <img src="/Users/macbook/medician/github_assets/APK.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
   </a>
     <a href="https://apps.apple.com/au/app/medician/id1584595040">
     <img src="https://miro.medium.com/max/600/1*xqT83bMEz92IBYxS9UQNow.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
@@ -92,7 +92,7 @@ Planning to start a fitness routine? Want to be reminded of your appointments? M
 
 Medician is a health tracking app that is intuitive and easy to use. You will be able to record details about your symptoms and set notifications for your medical + fitness routines. Whether you just want a simple tracker to store your gym routine, be reminded for your next appointment, or somewhere to keep the cycle of your medication, our app can do all of that and more!
 
-### Features:
+#### Features:
 
 - Medication / Supplements Reminders
 - Exercise Reminders
@@ -113,7 +113,7 @@ Everything you save in the app is stored locally. With the ability to secure you
 When adding symptoms, the app will ask you a set of targeted questions - just like your family doctor would. These questions come from all the most commonly asked clinical questions.
 By using our app, you’ll be recording all the relevant details about your situation. During your consultation, you can open up Medician to aid you in describing the details about your symptoms to your health professional.
 
-#### Built With
+### Built With
 
 - [Expo]()
 - [TypeScript]()
@@ -150,6 +150,20 @@ To get a local copy up and running follow these simple steps.
    ```sh
    expo start
    ```
+
+## Design Problem
+
+Medician provides a solution to the common clinical problem of effectively tracking PROs (Patient Reported Outcomes). Users are able to document different aspects regarding their
+Symptoms, treatment cycles, exercises and appointments all in one place.
+
+The design implementation was based upon research conducted on two medical doctors and their clinical experience. First was a senior cancer specialist working in Westmead Hospital and the second a general practitioner working at a private clinic located in Strathfield.
+
+Each physician was asked questions regarding:
+
+- Their clinical interaction with patients
+- How their work can be simplified
+- Current method of patients tracking their health
+- What they hope to see in an app
 
 ## Tech Stack
 
