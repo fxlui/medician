@@ -58,7 +58,6 @@ export const TopTile: React.FC<topTileDetails> = ({
   });
 
   React.useEffect(() => {
-    console.log(title, selected);
     Animated.spring(animatedValue, {
       toValue: selected ? 1 : 0,
       useNativeDriver: false,

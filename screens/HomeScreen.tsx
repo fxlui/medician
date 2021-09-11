@@ -198,6 +198,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                 <Text style={styles.name}>Medication</Text>
                 <FillerTile
                   onPress={() => {
+                    CustomHaptics("light");
                     navigation.navigate("AddFlow", {
                       screen: "MedicationScreen",
                     });
@@ -247,11 +248,12 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                 <Text style={styles.name}>Exercise</Text>
                 <FillerTile
                   onPress={() => {
+                    CustomHaptics("light");
                     navigation.navigate("AddFlow", {
-                      screen: "MedicationScreen",
+                      screen: "ExerciseScreen",
                     });
                     progressStore.setProgressBarLength(3);
-                    addFlowStore.currentNewRoutine.setRoutineType(0);
+                    addFlowStore.currentNewRoutine.setRoutineType(1);
                   }}
                 />
               </>
@@ -294,11 +296,13 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                 <Text style={styles.name}>Appointment</Text>
                 <FillerTile
                   onPress={() => {
+                    CustomHaptics("light");
+                    progressStore.resetProgress();
+                    addFlowStore.resetAppointment();
+                    progressStore.setProgressBarLength(2);
                     navigation.navigate("AddFlow", {
-                      screen: "MedicationScreen",
+                      screen: "AppointmentTimeScreen",
                     });
-                    progressStore.setProgressBarLength(3);
-                    addFlowStore.currentNewRoutine.setRoutineType(0);
                   }}
                 />
               </>
@@ -337,7 +341,7 @@ const styles = StyleSheet.create({
   overflowView: {
     overflow: "visible",
     paddingLeft: 25,
-    paddingBottom: 125,
+    paddingBottom: 150,
   },
   header: {
     marginTop: 65,
