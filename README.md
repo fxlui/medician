@@ -26,14 +26,15 @@
 
 <!-- PROJECT LOGO -->
 <br />
+<br />
 <p align="center">
   <a href="https://github.com/fxlui/medician">
     <img src="assets/images/medician.png" alt="Logo" width="150" height="150" style="border: 1px, border-radius: 16">
   </a>
 
-  <h3 align="center">Medician</h3>
+  <h2 align="center">Medician</h2>
 
-  <p align="center" style="display: flex; flex-direction: column">
+  <p align="center">
     Symptom Tracking App
     <br />
     <br />
