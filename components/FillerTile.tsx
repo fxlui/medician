@@ -1,11 +1,15 @@
-import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React, { FC } from "react";
+import { StyleSheet, View, Text, Pressable } from "react-native";
 import { useWindowDimensions } from "react-native";
 
-const TileBase = () => {
+interface FillerTileProps {
+  onPress: () => void
+}
+
+const FillerTile:FC<FillerTileProps> = ({ onPress }) => {
   const { height, width } = useWindowDimensions();
   return (
-    <View
+    <Pressable
       style={{
         borderColor: "grey",
         justifyContent: "center",
@@ -16,6 +20,7 @@ const TileBase = () => {
         height: 155,
         width: width - 50,
       }}
+      onPress={onPress}
     >
       <View
         style={{
@@ -26,10 +31,10 @@ const TileBase = () => {
       >
         <Text style={{ color: "grey" }}>Click "+" to add</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({});
 
-export default TileBase;
+export default FillerTile;

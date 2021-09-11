@@ -53,7 +53,7 @@ type ScreenProps = CompositeScreenProps<
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
-  const { homeScreenStore } = useStores();
+  const { homeScreenStore, addFlowStore, progressStore } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const routineType = (dbType: number) =>
@@ -193,7 +193,13 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
           </View>
           <Text style={styles.name}>Medication</Text>
           {homeScreenStore.getRecentMedications().length === 0 ? (
-            <FillerTile />
+            <FillerTile
+              onPress={() => {
+                navigation.navigate("AddFlow", { screen: "MedicationScreen" });
+                progressStore.setProgressBarLength(3);
+                addFlowStore.currentNewRoutine.setRoutineType(0);
+              }}
+            />
           ) : (
             <>
               <Text
@@ -228,7 +234,13 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
 
           <Text style={styles.name}>Exercise</Text>
           {homeScreenStore.getRecentExercises().length === 0 ? (
-            <FillerTile />
+            <FillerTile
+            onPress={() => {
+              navigation.navigate("AddFlow", { screen: "ExerciseScreen" });
+              progressStore.setProgressBarLength(3);
+              addFlowStore.currentNewRoutine.setRoutineType(1);
+            }}
+            />
           ) : (
             <>
               <Text
@@ -262,7 +274,16 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
 
           <Text style={styles.name}>Appointment</Text>
           {homeScreenStore.getRecentAppointments().length === 0 ? (
-            <FillerTile />
+            <FillerTile
+              onPress={() => {
+                progressStore.resetProgress();
+                addFlowStore.resetAppointment();
+                progressStore.setProgressBarLength(2);
+                navigation.navigate("AddFlow", {
+                  screen: "AppointmentTimeScreen",
+                });
+              }}
+            />
           ) : (
             <Carousel
               data={homeScreenStore.getRecentAppointments()}
