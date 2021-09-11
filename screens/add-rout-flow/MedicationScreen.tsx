@@ -371,7 +371,9 @@ export default function RoutineDetailsScreen({
                   }}
                   style={{
                     flex: 1,
+                    color: textColor,
                   }}
+                  dropdownIconColor={textColor}
                 >
                   {Array.from({ length: 20 }, (_, i) => i + 1).map((item) => (
                     <Picker.Item
@@ -400,7 +402,9 @@ export default function RoutineDetailsScreen({
                   }}
                   style={{
                     flex: 1,
+                    color: textColor,
                   }}
+                  dropdownIconColor={textColor}
                 >
                   <Picker.Item label="Tablet" value="tablet" />
                   <Picker.Item label="Packet" value="packet" />
@@ -454,10 +458,12 @@ export default function RoutineDetailsScreen({
                   width: "100%",
                   marginBottom: Platform.OS === "android" ? 0 : 60,
                   padding: Platform.OS === "android" ? 30 : 0,
+                  color: textColor,
                 }}
                 itemStyle={{
                   color: textColor,
                 }}
+                dropdownIconColor={textColor}
               >
                 <Picker.Item label="No notifications" value={-1} />
                 <Picker.Item label={`At time of medication`} value={0} />

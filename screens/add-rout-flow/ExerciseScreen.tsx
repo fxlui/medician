@@ -411,7 +411,9 @@ export default function RoutineDetailsScreen({
                   width: "100%",
                   marginBottom: Platform.OS === "android" ? 0 : 60,
                   padding: Platform.OS === "android" ? 30 : 0,
+                  color: textColor,
                 }}
+                dropdownIconColor={textColor}
                 itemStyle={{
                   color: textColor,
                 }}
