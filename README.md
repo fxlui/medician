@@ -36,6 +36,7 @@
   <p align="center" style="display: flex; flex-direction: column">
     Symptom Tracking App
     <br />
+    <br />
     <!-- App Store -->
     <div align="center">
   <a href="">
