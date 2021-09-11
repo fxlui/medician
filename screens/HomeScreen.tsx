@@ -191,11 +191,17 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
               <Feather name="more-horizontal" size={24} color={textColor} />
             </PressableBase>
           </View>
-          <Text style={styles.name}>Medication</Text>
           {homeScreenStore.getRecentMedications().length === 0 ? (
-            <FillerTile />
+            homeScreenStore.getRecentExercises().length === 0 &&
+            homeScreenStore.getRecentAppointments().length === 0 ? (
+              <>
+                <Text style={styles.name}>Medication</Text>
+                <FillerTile />
+              </>
+            ) : null
           ) : (
             <>
+              <Text style={styles.name}>Medication</Text>
               <Text
                 style={{
                   marginLeft: 5,
@@ -226,11 +232,17 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             </>
           )}
 
-          <Text style={styles.name}>Exercise</Text>
           {homeScreenStore.getRecentExercises().length === 0 ? (
-            <FillerTile />
+            homeScreenStore.getRecentMedications().length === 0 &&
+            homeScreenStore.getRecentAppointments().length === 0 ? (
+              <>
+                <Text style={styles.name}>Exercise</Text>
+                <FillerTile />
+              </>
+            ) : null
           ) : (
             <>
+              <Text style={styles.name}>Exercise</Text>
               <Text
                 style={{
                   marginLeft: 5,
@@ -259,27 +271,34 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
               />
             </>
           )}
-
-          <Text style={styles.name}>Appointment</Text>
           {homeScreenStore.getRecentAppointments().length === 0 ? (
-            <FillerTile />
+            homeScreenStore.getRecentExercises().length === 0 &&
+            homeScreenStore.getRecentMedications().length === 0 ? (
+              <>
+                <Text style={styles.name}>Appointment</Text>
+                <FillerTile />
+              </>
+            ) : null
           ) : (
-            <Carousel
-              data={homeScreenStore.getRecentAppointments()}
-              renderItem={renderAppointmentTile}
-              vertical={false}
-              sliderWidth={width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={170}
-              inactiveSlideOpacity={1}
-              inactiveSlideScale={0.975}
-              onScrollIndexChanged={() => {
-                CustomHaptics("light");
-              }}
-            />
+            <>
+              <Text style={styles.name}>Appointment</Text>
+              <Carousel
+                data={homeScreenStore.getRecentAppointments()}
+                renderItem={renderAppointmentTile}
+                vertical={false}
+                sliderWidth={width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={170}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={0.975}
+                onScrollIndexChanged={() => {
+                  CustomHaptics("light");
+                }}
+              />
+            </>
           )}
         </View>
       </ScrollView>
