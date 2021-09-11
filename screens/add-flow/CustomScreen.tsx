@@ -7,6 +7,7 @@ import {
   Animated,
   Alert,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -118,11 +119,15 @@ const CustomScreen = observer(({ navigation, route }: ScreenProps) => {
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.1,
               shadowRadius: 9,
-              elevation: 5,
+              elevation: 1,
               flexDirection: "row",
               justifyContent: "center",
               alignSelf: "center",
-              marginBottom: inputFocused ? 160 : 85,
+              marginBottom: inputFocused
+                ? Platform.OS === "android"
+                  ? -50
+                  : 160
+                : 95,
             }}
           >
             <AnimatedTextInput
@@ -133,7 +138,7 @@ const CustomScreen = observer(({ navigation, route }: ScreenProps) => {
                 padding: 20,
                 flex: 8,
                 fontSize: 16,
-                marginTop: 20,
+                marginTop: Platform.OS === "android" ? 0 : 20,
                 maxHeight: 125,
                 color: textColor,
               }}
