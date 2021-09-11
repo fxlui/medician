@@ -75,7 +75,7 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
-<img src="assets/images/Home.png" alt="Home Page" width="295" height="580" style="border: 1px, border-radius: 16">
+<img src="assets/images/Home.png" alt="Home Page" width="295" height="580" style="border: 1px, border-radius: 16, border-style: solid , border-color: grey">
 
 Planning to start a fitness routine? Want to be reminded of your appointments? Medician is here to help.
 
