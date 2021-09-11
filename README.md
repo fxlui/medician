@@ -33,15 +33,20 @@
 
   <h3 align="center">Medician</h3>
 
-  <p align="center">
+  <p align="center"style="display: flex; flex-direction: column">
     project_description
     <br />
     <br />
     <!-- App Store -->
-    <a href="https://github.com/fxlui/medician/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/fxlui/medician/issues">Request Feature</a>
-  </p>
+  <a href="https://apps.apple.com/au/app/medician/id1584595040">
+    <img src="https://miro.medium.com/max/600/1*xqT83bMEz92IBYxS9UQNow.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
+    <p align="center>
+        <a href="https://github.com/fxlui/medician/issues">Report Bug</a>
+        ·
+        <a href="https://github.com/fxlui/medician/issues">Request Feature</a>
+    </p>
+  </a>
+    </p>
 </p>
 
 <!-- TABLE OF CONTENTS -->
@@ -74,8 +79,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-<img src="assets/images/Home.png" alt="Home Page" width="295" height="580" style="border: 1px, border-radius: 16, border-style: solid , border-color: grey">
+<img src="assets/images/Home.png" alt="Home" width="295" height="580" style="border: 1px, border-radius: 16">
 
 Planning to start a fitness routine? Want to be reminded of your appointments? Medician is here to help.
 
