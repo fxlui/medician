@@ -34,7 +34,7 @@
   <h3 align="center">Medician</h3>
 
   <p align="center" style="display: flex; flex-direction: column">
-    Health Tracking App
+    Symptom Tracking App
     <br />
     <br />
     <!-- App Store -->
@@ -174,7 +174,7 @@ It is evident from the findings above that there is a need for a standardised wa
 
 ### Solution
 
-Medician provide users with the ability to document different aspects of the symptoms they experience. Depending on which symptom they choose within the app, a specific question flow will be selected that will ask targeted questions about the situation. This feature aims to help physicians better understand how a patient’s health evolves over the course of their treatment. The app provides a standardised way for patients to record their outcomes, achieved through the requirement of quantitative answers. Users are also able to set up a routine to remind them to take medicine, exercises and appointments.
+Medician provide users with the ability to document different aspects of the symptoms they experience. Depending on which symptom they choose within the app, a specific question flow will be selected that will ask targeted questions about the situation. This feature aims to help physicians better understand how a patient’s health evolves over the course of their treatment. The app provides a standardised way for patients to record their outcomes, achieved through the requirement of quantitative answers. Users are also able to set up a routine to remind them to take medicine, exercises and appointments. During the consultation, the patient is able to show the doctor an overview page that provides a summary of everything the user entered regarding a certain symptom.
 
 ## Tech Stack
 
