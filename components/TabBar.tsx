@@ -13,18 +13,20 @@ export const TabBarButton = (props: BottomTabBarButtonProps) => {
 
 export const tabBarStyles = StyleSheet.create({
   tabBar: {
-    position: 'absolute',
+    position: "absolute",
     height: 100,
     borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
-    paddingBottom: 20,
     paddingLeft: 60,
     paddingRight: 60,
+    elevation: 2,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
+    marginLeft: 20,
+    marginRight: 20,
   },
 });

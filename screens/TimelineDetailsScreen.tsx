@@ -339,6 +339,7 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
+                flexWrap: "wrap",
                 marginBottom: 20,
               }}
             >
@@ -357,6 +358,7 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
                     justifyContent: "center",
                     alignItems: "center",
                     padding: 0,
+                    marginBottom: 20,
                   }}
                   onClick={() => {
                     setCurrentMedia(item.uri);

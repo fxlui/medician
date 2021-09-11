@@ -73,13 +73,14 @@ const TileBase: React.FC<BaseChildren> = ({
       borderRadius: 16,
       padding: 18,
       overflow: "hidden",
+      elevation: 1,
     },
     shadow: {
       shadowColor: "#000",
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.1,
       shadowRadius: 9,
-      elevation: 5,
+      borderRadius: 16,
     },
     default: {
       width: 155,

@@ -194,16 +194,16 @@ export default function RoutineDetailsScreen({
       }
       if (alertMinutesBefore !== -1) {
         RegisterNotification();
-        const getStatus = async () => {
-          const status = await allowsNotificationsAsync();
-          if (!status) {
-            Alert.alert(
-              "Missing Permissions",
-              "To receive notifications, please enable notifications in your settings."
-            );
-          }
-        };
-        getStatus();
+        // const getStatus = async () => {
+        //   const status = await allowsNotificationsAsync();
+        //   if (!status) {
+        //     Alert.alert(
+        //       "Missing Permissions",
+        //       "To receive notifications, please enable notifications in your settings."
+        //     );
+        //   }
+        // };
+        // getStatus();
       }
       progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(

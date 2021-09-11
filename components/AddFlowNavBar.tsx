@@ -8,6 +8,7 @@ import { View } from "./Themed";
 import { Entypo } from "@expo/vector-icons";
 import { useStores } from "../models/root-store-provider";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AddFlowNavBar: React.FC<{
   left: () => void;
@@ -30,20 +31,21 @@ const AddFlowNavBar: React.FC<{
   };
   const colorScheme = useColorScheme();
   const { progressStore } = useStores();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
       <LinearGradient
         colors={[
-          colorScheme === "light" ? "rgba(249,249,249,0)" : "transparent",
-          colorScheme === "light" ? "#F9F9F9" : "#000",
+          colorScheme === "light" ? "rgba(249,249,249,0.8)" : "transparent",
+          colorScheme === "light" ? "rgba(249,249,249,0.95)" : "#000",
         ]}
         style={{
           position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          height: 80,
+          height: 90,
         }}
         locations={[0, 0.5]}
       />
@@ -51,7 +53,7 @@ const AddFlowNavBar: React.FC<{
         style={{
           position: "absolute",
           bottom: 0,
-          paddingBottom: 15,
+          paddingBottom: insets.bottom === 0 ? 0 : 15,
           alignSelf: "center",
           alignItems: "center",
           width: "100%",

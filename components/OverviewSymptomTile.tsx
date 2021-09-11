@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import {
+  Animated,
+  Platform,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 
 import { Text, View } from "./Themed";
 
@@ -62,14 +68,26 @@ const OverviewSymptomTile: React.FC<topTileDetails> = ({
       onClick={updater}
     >
       <View style={styles.content}>
-        <Icon
-          name={iconName}
-          props={{
-            width: 42,
-            height: 42,
-            animatedValue: animatedTextColor,
-          }}
-        />
+        {Platform.OS === "android" ? (
+          <Icon
+            name={iconName}
+            props={{
+              width: 42,
+              height: 42,
+              fill: selected ? "#fff" : textColor,
+            }}
+          />
+        ) : (
+          <Icon
+            name={iconName}
+            props={{
+              width: 42,
+              height: 42,
+              animatedValue: animatedTextColor,
+            }}
+          />
+        )}
+
         <Animated.Text
           style={{
             fontSize: 16,
@@ -87,7 +105,7 @@ const OverviewSymptomTile: React.FC<topTileDetails> = ({
           position: "absolute",
           width: 155,
           height: 155,
-          zIndex: -50,
+          zIndex: 20,
         }}
       />
     </TileBase>
@@ -102,5 +120,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
+    zIndex: 50,
   },
 });

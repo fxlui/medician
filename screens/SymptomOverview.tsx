@@ -214,11 +214,6 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           containerCustomStyle={{
             overflow: "visible",
           }}
-          contentContainerCustomStyle={{
-            justifyContent: "center",
-            alignItems: "flex-start",
-            overflow: "visible",
-          }}
           itemWidth={165}
           inactiveSlideOpacity={0.8}
           onScrollIndexChanged={async (index) => {

@@ -7,6 +7,7 @@ import {
   Animated,
   Alert,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -159,16 +160,16 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
       }
       if (alertMinutesBefore !== -1) {
         RegisterNotification();
-        const getStatus = async () => {
-          const status = await allowsNotificationsAsync();
-          if (!status) {
-            Alert.alert(
-              "Missing Permissions",
-              "To receive notifications, please enable notifications in your settings."
-            );
-          }
-        };
-        getStatus();
+        // const getStatus = async () => {
+        //   const status = await allowsNotificationsAsync();
+        //   if (!status) {
+        //     Alert.alert(
+        //       "Missing Permissions",
+        //       "To receive notifications, please enable notifications in your settings."
+        //     );
+        //   }
+        // };
+        // getStatus();
       }
       Toast.show(<TickToast message={`Appointment Added`} />, {
         duration: Toast.durations.SHORT,
@@ -327,11 +328,15 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.1,
               shadowRadius: 9,
-              elevation: 5,
+              elevation: 1,
               flexDirection: "row",
               justifyContent: "center",
               alignSelf: "center",
-              marginBottom: inputFocused ? 160 : 85,
+              marginBottom: inputFocused
+                ? Platform.OS === "android"
+                  ? -50
+                  : 160
+                : 95,
             }}
           >
             {currentQuestion === 0 || currentQuestion === 3 ? (
@@ -344,7 +349,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                     padding: 20,
                     flex: 8,
                     fontSize: 16,
-                    marginTop: 20,
+                    marginTop: Platform.OS === "android" ? 0 : 20,
                     maxHeight: 125,
                     color: textColor,
                   }}
@@ -419,9 +424,10 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   setAlertMinutesBefore(itemValue)
                 }
                 style={{
-                  height: 150,
+                  height: Platform.OS === "android" ? 25 : 150,
                   width: "100%",
-                  marginBottom: 60,
+                  marginBottom: Platform.OS === "android" ? 0 : 60,
+                  padding: Platform.OS === "android" ? 30 : 0,
                 }}
                 itemStyle={{
                   color: textColor,
@@ -516,7 +522,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   question: {
-    fontWeight: "500",
+    fontWeight: Platform.OS === "android" ? "700" : "500",
     fontSize: 18,
     marginBottom: 10,
   },

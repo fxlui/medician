@@ -355,11 +355,12 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            bottom: 50,
+            bottom: 75,
             width: "90%",
             borderRadius: 10,
             padding: 20,
             backgroundColor: "transparent",
+            zIndex: 50,
           }}
         >
           <TileBase
