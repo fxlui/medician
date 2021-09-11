@@ -5,8 +5,17 @@ import { types, SnapshotOut, Instance } from "mobx-state-tree";
  */
 export const UserModel = types
   .model("User", {
-    id: types.identifierNumber
-  });
+    id: types.identifierNumber,
+    firstTime: types.maybe(types.boolean)
+  })
+  .actions(self => ({
+    finishTutorial: () => {
+      self.firstTime = false;
+    },
+    startTutorial: () => {
+      self.firstTime = true;
+    }
+  }))
 
 type UserType = Instance<typeof UserModel>;
 export interface User extends UserType {};

@@ -261,14 +261,14 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
-  const { isNewUser } = useStores();
+  const { user } = useStores();
 
   const finish = () => {
     CustomHaptics("light");
     const setNewUser = async () => {
       await initDatabase();
       await AsyncStorage.setItem("@tutorialPassed", "true");
-      isNewUser.finishTutorial();
+      user.finishTutorial();
       navigation.navigate("Root", { screen: "HomeScreen"});
     };
     setNewUser();
