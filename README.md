@@ -40,7 +40,7 @@
     <!-- App Store -->
     <div align="center">
   <a href="">
-    <img src="github_assets/APK.png" alt="Android Badge" width="206" height="61" style="border: 1px, border-radius: 16">
+    <img src="github_assets/android.svg" alt="Android Badge" width="206" height="61" style="border: 1px, border-radius: 16">
   </a>
     <a href="https://apps.apple.com/au/app/medician/id1584595040">
     <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Badge" width="206" height="61" style="border: 1px, border-radius: 16">
