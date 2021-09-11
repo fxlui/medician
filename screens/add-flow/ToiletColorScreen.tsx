@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
 import SafeView from "../../components/SafeView";
 import { TopTile } from "../../components/AreaTile";
@@ -70,6 +70,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
           title={item.title}
           style={{
             marginRight: 15,
+            marginLeft: 5,
           }}
           index={index}
           selected={selected === index}
@@ -109,13 +110,8 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
               paddingVertical: 150,
               overflow: "visible",
             }}
-            contentContainerCustomStyle={{
-              justifyContent: "center",
-              alignItems: "flex-start",
-              overflow: "visible",
-            }}
-            itemWidth={150}
-            inactiveSlideOpacity={0.8}
+            itemWidth={160}
+            inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
             onLayout={() => {
               tileRef.current?.snapToItem(selected, false, false);
             }}

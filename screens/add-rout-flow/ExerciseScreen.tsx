@@ -384,7 +384,7 @@ export default function RoutineDetailsScreen({
                     overflow: "visible",
                   }}
                   itemWidth={160}
-                  inactiveSlideOpacity={0.8}
+                  inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);

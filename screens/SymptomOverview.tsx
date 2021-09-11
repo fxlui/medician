@@ -4,6 +4,7 @@ import {
   ScrollView,
   Alert,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
@@ -215,7 +216,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
             overflow: "visible",
           }}
           itemWidth={165}
-          inactiveSlideOpacity={0.8}
+          inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
           onScrollIndexChanged={async (index) => {
             CustomHaptics("light");
             setSymptomSelected(index);
