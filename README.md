@@ -34,18 +34,23 @@
   <h3 align="center">Medician</h3>
 
   <p align="center" style="display: flex; flex-direction: column">
-    project_description
+    Health Tracking App
     <br />
     <br />
     <!-- App Store -->
-  <a href="https://apps.apple.com/au/app/medician/id1584595040">
+    <div align="center">
+  <a href="">
+    <img src="/Users/macbook/medician/github_assets/APK.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
+  </a>
+    <a href="https://apps.apple.com/au/app/medician/id1584595040">
     <img src="https://miro.medium.com/max/600/1*xqT83bMEz92IBYxS9UQNow.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
+  </a>
+    </div>
     <p align="center">
         <a href="https://github.com/fxlui/medician/issues">Report Bug</a>
         ·
         <a href="https://github.com/fxlui/medician/issues">Request Feature</a>
     </p>
-  </a>
     </p>
 </p>
 
