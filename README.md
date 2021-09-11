@@ -75,17 +75,21 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img src="assets/images/Home.png" alt="Logo" width="150" height="150" style="border: 1px, border-radius: 16">
 
 Planning to start a fitness routine? Want to be reminded of your appointments? Medician is here to help.
 
+### Overview
+
 Medician is a health tracking app that is intuitive and easy to use. You will be able to record details about your symptoms and set notifications for your medical + fitness routines. Whether you just want a simple tracker to store your gym routine, be reminded for your next appointment, or somewhere to keep the cycle of your medication, our app can do all of that and more!
 
-Features:
-Medication / Supplements Reminders
-Exercise Reminders
-Appointment Reminders
-Symptom Tracking
-Symptom Overview
+### Features:
+
+- Medication / Supplements Reminders
+- Exercise Reminders
+- Appointment Reminders
+- Symptom Tracking
+- Symptom Overview
 
 ### Minimalistic Design.
 
@@ -100,9 +104,10 @@ Everything you save in the app is stored locally. With the ability to secure you
 When adding symptoms, the app will ask you a set of targeted questions - just like your family doctor would. These questions come from all the most commonly asked clinical questions.
 By using our app, you’ll be recording all the relevant details about your situation. During your consultation, you can open up Medician to aid you in describing the details about your symptoms to your health professional.
 
-### Built With
+#### Built With
 
 - [Expo]()
+- [TypeScript]()
 - [React Native]()
 - [MobX State Tree]()
 
