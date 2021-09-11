@@ -151,19 +151,30 @@ To get a local copy up and running follow these simple steps.
    expo start
    ```
 
-## Design Problem
+## Design Considerations
 
-Medician provides a solution to the common clinical problem of effectively tracking PROs (Patient Reported Outcomes). Users are able to document different aspects regarding their
-Symptoms, treatment cycles, exercises and appointments all in one place.
+### Clinical Research
 
-The design implementation was based upon research conducted on two medical doctors and their clinical experience. First was a senior cancer specialist working in Westmead Hospital and the second a general practitioner working at a private clinic located in Strathfield.
+Medician provides a solution to the common clinical problem of effectively tracking PROs (Patient Reported Outcomes). The design implementation was based upon interviews conducted on two medical doctors of their clinical experience. First was a senior cancer specialist working at Westmead Hospital and the second a general practitioner working in a private clinic located in Strathfield.
 
-Each physician was asked questions regarding:
+Each physician were asked questions regarding:
 
 - Their clinical interaction with patients
-- How their work can be simplified
-- Current method of patients tracking their health
-- What they hope to see in an app
+- The important details to monitor for patients
+- How patients currently keep track of their health
+- How can an app help the doctor and patient
+
+### Research Findings
+
+The research findings show that patients often forget details about their symptoms and treatments. Patients with chronic diseases such as cancer and diabetes patients would be encouraged to keep a physical diary to record PROs such as pain, medicine taken, and more. The diary records will then be used to gauge a treatment’s toxicity and effectiveness. When a patient enters the consultation with their diaries, the doctors find that they are often disorganised, cluttered and missing certain critical information. Furthermore, there is no standardised way of bookkeeping, some patients give a qualitative description of their symptoms while others would have a quantitative description. In the past paper forms used to be handed out to patients, however this has been phased out in many clinics now.
+
+### Conclusion
+
+It is evident from the findings above that there is a need for a standardised way to track PROs. With a shift in how people document, there arises a need for an effective digital solution that patients can use to document their experience of a treatment.
+
+### Solution
+
+Medician provide users with the ability to document different aspects of the symptoms they experience. Depending on which symptom they choose within the app, a specific question flow will be selected that will ask targeted questions about the situation. This feature aims to help physicians better understand how a patient’s health evolves over the course of their treatment. The app provides a standardised way for patients to record their outcomes, achieved through the requirement of quantitative answers. Users are also able to set up a routine to remind them to take medicine, exercises and appointments.
 
 ## Tech Stack
 
