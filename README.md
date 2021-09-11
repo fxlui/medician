@@ -33,14 +33,14 @@
 
   <h3 align="center">Medician</h3>
 
-  <p align="center"style="display: flex; flex-direction: column">
+  <p align="center" style="display: flex; flex-direction: column">
     project_description
     <br />
     <br />
     <!-- App Store -->
   <a href="https://apps.apple.com/au/app/medician/id1584595040">
     <img src="https://miro.medium.com/max/600/1*xqT83bMEz92IBYxS9UQNow.png" alt="Logo" width="206" height="61" style="border: 1px, border-radius: 16">
-    <p align="center>
+    <p align="center">
         <a href="https://github.com/fxlui/medician/issues">Report Bug</a>
         ·
         <a href="https://github.com/fxlui/medician/issues">Request Feature</a>
