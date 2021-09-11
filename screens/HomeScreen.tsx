@@ -203,6 +203,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                       screen: "MedicationScreen",
                     });
                     progressStore.setProgressBarLength(3);
+                    progressStore.resetProgress();
                     addFlowStore.currentNewRoutine.setRoutineType(0);
                   }}
                 />
@@ -253,6 +254,7 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
                       screen: "ExerciseScreen",
                     });
                     progressStore.setProgressBarLength(3);
+                    progressStore.resetProgress();
                     addFlowStore.currentNewRoutine.setRoutineType(1);
                   }}
                 />

@@ -75,7 +75,6 @@ const TemperatureSelectionScreen = observer(
               }
               progressStore.goForward();
               progressStore.goForward();
-              progressStore.goForward();
               navigation.navigate("SeverityScreen", route.params);
             }
           }}

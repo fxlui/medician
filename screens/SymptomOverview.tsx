@@ -74,7 +74,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
   const { height, width } = useWindowDimensions();
   const [symptomSelected, setSymptomSelected] = useState(0);
 
-  const topRef = React.createRef<Carousel<{ title: string; type: string }>>();
+  const topRef = React.useRef<Carousel<{ title: string; type: string }>>(null);
   const topBackground = colorScheme === "light" ? "white" : "#121212";
   const [displaySymptoms, setDisplaySymptoms] = useState<SymptomItem[]>([]);
   const { overviewStore } = useStores();
@@ -100,6 +100,11 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       );
       setDisplaySymptoms(fetchedCollections);
       if (fetchedCollections.length === 0) return;
+      if (topRef.current) {
+        overviewStore.setSelectedCollection(
+          fetchedCollections[topRef.current.currentIndex].type
+        )
+      }
       await overviewStore.fetchCollectionDataAsync();
     });
     return unsubscribe;
@@ -210,7 +215,6 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
           data={displaySymptoms}
           renderItem={renderSymptomTile}
           vertical={false}
-          firstItem={0}
           sliderWidth={width}
           containerCustomStyle={{
             overflow: "visible",

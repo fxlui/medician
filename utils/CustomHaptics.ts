@@ -6,7 +6,7 @@ export default function Vibrate(
 ) {
   const fetchHaptics = async () => {
     const hapticsResult = await AsyncStorage.getItem("@enable_haptics");
-    if (hapticsResult !== "true") {
+    if (hapticsResult && hapticsResult === "false") {
       return;
     } else {
       switch (style) {
