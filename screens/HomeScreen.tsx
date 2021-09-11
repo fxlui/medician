@@ -53,7 +53,7 @@ type ScreenProps = CompositeScreenProps<
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
-  const { homeScreenStore } = useStores();
+  const { homeScreenStore, addFlowStore, progressStore } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const routineType = (dbType: number) =>
@@ -196,7 +196,15 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             homeScreenStore.getRecentAppointments().length === 0 ? (
               <>
                 <Text style={styles.name}>Medication</Text>
-                <FillerTile />
+                <FillerTile
+                  onPress={() => {
+                    navigation.navigate("AddFlow", {
+                      screen: "MedicationScreen",
+                    });
+                    progressStore.setProgressBarLength(3);
+                    addFlowStore.currentNewRoutine.setRoutineType(0);
+                  }}
+                />
               </>
             ) : null
           ) : (
@@ -237,7 +245,15 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             homeScreenStore.getRecentAppointments().length === 0 ? (
               <>
                 <Text style={styles.name}>Exercise</Text>
-                <FillerTile />
+                <FillerTile
+                  onPress={() => {
+                    navigation.navigate("AddFlow", {
+                      screen: "MedicationScreen",
+                    });
+                    progressStore.setProgressBarLength(3);
+                    addFlowStore.currentNewRoutine.setRoutineType(0);
+                  }}
+                />
               </>
             ) : null
           ) : (
@@ -276,7 +292,15 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             homeScreenStore.getRecentMedications().length === 0 ? (
               <>
                 <Text style={styles.name}>Appointment</Text>
-                <FillerTile />
+                <FillerTile
+                  onPress={() => {
+                    navigation.navigate("AddFlow", {
+                      screen: "MedicationScreen",
+                    });
+                    progressStore.setProgressBarLength(3);
+                    addFlowStore.currentNewRoutine.setRoutineType(0);
+                  }}
+                />
               </>
             ) : null
           ) : (
