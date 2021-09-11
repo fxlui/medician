@@ -41,7 +41,6 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
   const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
 
   const [inputFocused, setInputFocused] = React.useState(false);
-  const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const emptyTexts = {
     better: "",
@@ -57,6 +56,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       : emptyTexts;
 
   const [currentAnswers, setCurrentAnswers] = React.useState(defaultTexts);
+  const [currentText, setCurrentText] = React.useState(defaultTexts.better);
 
   const inputRef = React.useRef<TextInput>(null);
 

@@ -202,7 +202,11 @@ export default function RoutineDetailsScreen({
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
-          topRef.current?.snapToItem(index);
+          if (selectedTop === index) {
+            handleNavigation();
+          } else {
+            topRef.current?.snapToItem(index);
+          }
         }}
       />
     );

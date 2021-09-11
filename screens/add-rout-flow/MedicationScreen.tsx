@@ -7,6 +7,7 @@ import {
   Animated,
   Alert,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -229,7 +230,11 @@ export default function RoutineDetailsScreen({
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
-          topRef.current?.snapToItem(index);
+          if (selectedTop === index) {
+            handleNavigation();
+          } else {
+            topRef.current?.snapToItem(index);
+          }
         }}
       />
     );
@@ -335,17 +340,21 @@ export default function RoutineDetailsScreen({
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.1,
               shadowRadius: 9,
-              elevation: 5,
+              elevation: currentQuestion === 2 ? 0 : 1,
               flexDirection: "row",
               justifyContent: "center",
               alignSelf: "center",
-              marginBottom: inputFocused ? 160 : 85,
+              marginBottom: inputFocused
+                ? Platform.OS === "android"
+                  ? -50
+                  : 160
+                : 95,
             }}
           >
             {currentQuestion === 1 ? (
               <View
                 style={{
-                  height: 210,
+                  height: Platform.OS === "android" ? 80 : 210,
                   width: "100%",
                   borderRadius: 16,
                   flexDirection: "row",
@@ -417,11 +426,6 @@ export default function RoutineDetailsScreen({
                   containerCustomStyle={{
                     overflow: "visible",
                   }}
-                  contentContainerCustomStyle={{
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    overflow: "visible",
-                  }}
                   itemWidth={160}
                   inactiveSlideOpacity={0.8}
                   onLayout={() => {
@@ -446,9 +450,10 @@ export default function RoutineDetailsScreen({
                   setAlertMinutesBefore(itemValue)
                 }
                 style={{
-                  height: 150,
+                  height: Platform.OS === "android" ? 25 : 150,
                   width: "100%",
-                  marginBottom: 60,
+                  marginBottom: Platform.OS === "android" ? 0 : 60,
+                  padding: Platform.OS === "android" ? 30 : 0,
                 }}
                 itemStyle={{
                   color: textColor,
@@ -473,7 +478,7 @@ export default function RoutineDetailsScreen({
                     padding: 20,
                     flex: 8,
                     fontSize: 16,
-                    marginTop: 20,
+                    marginTop: Platform.OS === "android" ? 0 : 20,
                     maxHeight: 125,
                     color: textColor,
                   }}
@@ -596,7 +601,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   question: {
-    fontWeight: "500",
+    fontWeight: Platform.OS === "android" ? "700" : "500",
     fontSize: 18,
     marginBottom: 10,
   },

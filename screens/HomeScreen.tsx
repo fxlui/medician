@@ -28,10 +28,10 @@ import {
 import { themeTextColor } from "../constants/Colors";
 
 import * as Notifications from "expo-notifications";
-import * as SecureStore from "expo-secure-store";
 
 import FillerTile from "../components/FillerTile";
 import { useWindowDimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface appointmentTileProps {
   index: number;
@@ -88,14 +88,14 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         const idNum = parseInt(`${notification.request.content.data.id}`);
         if (notification.request.content.data.id && !isNaN(idNum)) {
           const checkStatus = async () => {
-            const status = await SecureStore.getItemAsync("last_alert_id");
+            const status = await AsyncStorage.getItem("@last_alert_id");
             console.log(status);
             if (status === `${notification.request.identifier}`) {
               // handled before
               return;
             } else {
-              await SecureStore.setItemAsync(
-                "last_alert_id",
+              await AsyncStorage.setItem(
+                "@last_alert_id",
                 `${notification.request.identifier}`
               );
               navigation.navigate("Notification", {

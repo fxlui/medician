@@ -1,9 +1,7 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import AppLoading from "expo-app-loading";
-import * as SecureStore from "expo-secure-store";
 import * as LocalAuthentication from "expo-local-authentication";
-import * as SplashScreen from "expo-splash-screen";
 import * as ScreenOrientation from "expo-screen-orientation";
 
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
@@ -25,11 +23,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import TileBase from "./components/TileBase";
 
 import { themeTextColor, themeTileColor } from "./constants/Colors";
-import { Asset } from "expo-asset";
-import { Animated, ImageURISource, StyleSheet } from "react-native";
-import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { initDatabase } from "./database/dbAPI";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
@@ -54,7 +50,7 @@ export default function App() {
       );
     };
     const getBioLock = async () => {
-      const result = await SecureStore.getItemAsync("enable_bio");
+      const result = await AsyncStorage.getItem("@enable_bio");
       if (result === "true") {
         setLock(true);
         const bio = await LocalAuthentication.authenticateAsync({
