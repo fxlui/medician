@@ -69,7 +69,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#design-consideration">Design Considerations</a></li>
+    <li><a href="#design-considerations">Design Considerations</a></li>
     <li><a href="#tech-stack">Tech Stack</a></li>
     <li><a href="#design">Design</a></li>
     <li><a href="#usage">Usage</a></li>
@@ -113,11 +113,11 @@ By using our app, you’ll be recording all the relevant details about your situ
 
 ### Built With
 
-- <img src="github_assets/sqlite.png" style="height: 20px; width: 20px;"/> [SQLite]()
-- <img src="github_assets/expo.svg" style="height: 20px; width: 20px;"/> [Expo]()
-- <img src="github_assets/react.svg" style="height: 20px; width: 20px;"/> [React Native]()
-- <img src="github_assets/ts.svg" style="height: 20px; width: 20px;"/> [TypeScript]()
-- <img src="github_assets/mst.svg" style="height: 20px; width: 20px;"/> [MobX State Tree]()
+- <img src="github_assets/sqlite.png" style="height: 20px; width: 20px;"/> [SQLite](https://www.sqlite.org/)
+- <img src="github_assets/expo.svg" style="height: 20px; width: 20px;"/> [Expo](https://docs.expo.io/versions/latest/sdk/getting-started/)
+- <img src="github_assets/react.svg" style="height: 20px; width: 20px;"/> [React Native](https://reactnative.dev/)
+- <img src="github_assets/ts.svg" style="height: 20px; width: 20px;"/> [TypeScript](https://www.typescriptlang.org/)
+- <img src="github_assets/mst.svg" style="height: 20px; width: 20px;"/> [MobX State Tree](https://mobx-state-tree.js.org/intro/welcome)
 
 <!-- GETTING STARTED -->
 
@@ -125,8 +125,8 @@ By using our app, you’ll be recording all the relevant details about your situ
 
 There are three ways you can install Medician.
 
-- Through the [Apple App Store](https://apps.apple.com/au/app/medician/id1584595040) (For iOS users)
-- Through downloading the [Android APK](https://github.com/fxlui/medician/blob/readme/github_assets/medician-106-signed.apk?raw=true) (For Android users)
+- Through the [Apple App Store](https://apps.apple.com/au/app/medician/id1584595040) (for iOS users)
+- Through downloading the [Android APK](https://github.com/fxlui/medician/blob/readme/github_assets/medician-106-signed.apk?raw=true) (for Android users)
 - Using Expo Go on your phone while the source code is running on your local machine (outlined below)
 
 ### Prerequisites
@@ -141,7 +141,7 @@ There are three ways you can install Medician.
   - Follow the instructions [here](https://docs.expo.dev/get-started/installation/) to install expo.
 
 - Expo Go
-  - Follow the instructions [here](https://expo.dev/client) to install Expo Go on your phone.
+  - Follow the instructions [here](https://expo.dev/client) to install Expo Go on your mobile device.
 
 ### Installation
 
@@ -157,7 +157,7 @@ There are three ways you can install Medician.
    ```sh
    expo start
    ```
-4. Go to localhost:19000
+4. Go to localhost:19000 on your browser
 5. Scan the QR code with your camera app (iOS) or scan the QR code with Expo Go (Android)
 
 ## Design Considerations
@@ -204,7 +204,7 @@ Designs for the App were completed in Figma.
 
 <img src="github_assets/figma.png" style="">
 
-All the targeted questions are mapped using MindMeister.
+The symptom question flows are mapped using MindMeister.
 
 <img src="github_assets/question-flow.png" style="">
 
