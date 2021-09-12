@@ -183,8 +183,10 @@ Medician provide users with the ability to document different aspects of the sym
   - Expo is a framework and a platform for universal React applications, providing a set of tools and services built around React Native. Expo avoids the need for us to write native code for each platforms, and provides a single codebase for both iOS and Android.
 - [React Native](https://reactnative.dev/)
   - React Native is a framework for building native apps with React. It uses the same design as React, and is used by Facebook, Instagram, and other large companies. It is open source and maintained by a large community of developers, and can be used with any modern JavaScript framework, such as [React](https://reactjs.org/).
-- [MobX State Tree](https://mobx.js.org/)
-  - MobX is a state management library for React...
+- [SQLite](https://www.sqlite.org/)
+  - We currently use SQLite to store user’s data. To provide users with full control over their data, we store everything locally on device. SQLite is used as it is the most supported relational database system for the current Expo SDK. However, due to its limitation, we plan to switch to RealmDB/other NoSQL solutions after the next Expo SDK release, as mentioned in #1.
+- [MobX-state-tree](https://mobx-state-tree.js.org/intro/welcome)
+  - Managing state is arguably the hardest part of our application. Since Medician has a large navigation tree that includes several stacks of screens, there is a lot of data that needs to be stored, mutated, and shared across screens. MobX-state-tree (MST) was our solution for state management. MST provides a centralized place to store and process all of our data outside the component tree, allowing us to connect the SQLite database and the subscribed UI elements. With MobX-state-tree, we are able to isolate most of our logic from UI components and deliver a more robust and scalable solution.
 - [TypeScript](https://www.typescriptlang.org/)
   - TypeScript is a typed superset of JavaScript that compiles to plain JavaScript...
 
