@@ -222,15 +222,15 @@ Project Link: [https://github.com/fxlui/medician](https://github.com/fxlui/medic
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/fxlui/repo.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/fxlui/medician.svg?style=for-the-badge
 [contributors-url]: https://github.com/fxlui/medician/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/fxlui/repo.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/fxlui/medician.svg?style=for-the-badge
 [forks-url]: https://github.com/fxlui/medician/network/members
-[stars-shield]: https://img.shields.io/github/stars/fxlui/repo.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/fxlui/medician.svg?style=for-the-badge
 [stars-url]: https://github.com/fxlui/medician/stargazers
-[issues-shield]: https://img.shields.io/github/issues/fxlui/repo.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/fxlui/medician.svg?style=for-the-badge
 [issues-url]: https://github.com/fxlui/medician/issues
-[license-shield]: https://img.shields.io/github/license/fxlui/repo.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/fxlui/medician.svg?style=for-the-badge
 [license-url]: https://github.com/fxlui/medician/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/fxlui
