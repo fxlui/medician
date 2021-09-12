@@ -206,7 +206,9 @@ Designs for the App were completed in Figma.
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The following is a basic outlines of how to use the features of the app.
+
+<img src="github_assets/medician-all.png" style="">
 
 ## Future Features
 
