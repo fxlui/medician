@@ -111,7 +111,7 @@ Everything you save in the app is stored locally. With the ability to secure you
 When adding symptoms, the app will ask you a set of targeted questions - just like your family doctor would. These questions come from all the most commonly asked clinical questions.
 By using our app, you’ll be recording all the relevant details about your situation. During your consultation, you can open up Medician to aid you in describing the details about your symptoms to your health professional.
 
-### Built With
+### Built With:
 
 - <img src="github_assets/sqlite.png" style="height: 20px; width: 20px;"/> [SQLite](https://www.sqlite.org/)
 - <img src="github_assets/expo.svg" style="height: 20px; width: 20px;"/> [Expo](https://docs.expo.dev/#quick-start)
@@ -157,7 +157,7 @@ There are three ways you can install Medician.
    ```sh
    expo start
    ```
-4. Go to http//localhost:19000 on your browser
+4. Go to http://localhost:19000 on your browser
 5. Scan the QR code with your camera app (iOS) or scan the QR code with Expo Go (Android)
 
 ## Design Considerations
@@ -210,7 +210,7 @@ The symptom question flows are mapped using MindMeister.
 
 ## Usage
 
-The following is a basic outlines of how to use the features of the app.
+The following is a basic outline of how to use the features of the app.
 
 <img src="github_assets/tutorial.png" style="">
 
@@ -227,8 +227,8 @@ The following is a basic outlines of how to use the features of the app.
 
 Special thanks to:
 
-- Dr. Mark Wong,
-- Dr. Joseph Lee,
+- Dr. Mark Wong
+- Dr. Joseph Lee
 
 for agreeing to be interviewed and providing us with their medical expertise.
 
