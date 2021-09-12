@@ -204,6 +204,10 @@ Designs for the App were completed in Figma.
 
 <img src="github_assets/figma.png" style="">
 
+All the targeted questions are mapped using MindMeister.
+
+<img src="github_assets/question-flow.png" style="">
+
 ## Usage
 
 The following is a basic outlines of how to use the features of the app.
