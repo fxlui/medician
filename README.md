@@ -85,7 +85,7 @@
 
 ## About The Project
 
-<img src="assets/images/Home.png" alt="Home" width="295" height="580" style="border: 1px, border-radius: 16">
+<img src="github_assets/medician-all.png" style="">
 
 Need help tracking your symptoms? Planning to start a fitness routine? Want to be reminded of your appointments? Medician is here to help.
 
@@ -183,7 +183,9 @@ Something about tech stack here
 
 ## Design
 
-Figma screenshots
+Designs for the App were completed in Figma.
+
+<img src="github_assets/figma.png" style="">
 
 <!-- USAGE EXAMPLES
 
