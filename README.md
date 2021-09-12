@@ -116,8 +116,8 @@ By using our app, you’ll be recording all the relevant details about your situ
 
 ### Built With
 
-- <img src="github_assets/expo.svg" style="height: 20px; width: 20px;"/> [Expo]()
 - <img src="github_assets/ts.svg" style="height: 20px; width: 20px;"/> [TypeScript]()
+- <img src="github_assets/expo.svg" style="height: 20px; width: 20px;"/> [Expo]()
 - <img src="github_assets/react.svg" style="height: 20px; width: 20px;"/> [React Native]()
 - <img src="github_assets/mst.svg" style="height: 20px; width: 20px;"/> [MobX State Tree]()
 
@@ -179,7 +179,14 @@ Medician provide users with the ability to document different aspects of the sym
 
 ## Tech Stack
 
-Something about tech stack here
+- [Expo](https://docs.expo.io/versions/latest/sdk/getting-started/)
+  - Expo is a framework and a platform for universal React applications, providing a set of tools and services built around React Native. Expo avoids the need for us to write native code for each platforms, and provides a single codebase for both iOS and Android.
+- [React Native](https://reactnative.dev/)
+  - React Native is a framework for building native apps with React. It uses the same design as React, and is used by Facebook, Instagram, and other large companies. It is open source and maintained by a large community of developers, and can be used with any modern JavaScript framework, such as [React](https://reactjs.org/).
+- [MobX State Tree](https://mobx.js.org/)
+  - MobX is a state management library for React...
+- [TypeScript](https://www.typescriptlang.org/)
+  - TypeScript is a typed superset of JavaScript that compiles to plain JavaScript...
 
 ## Design
 
@@ -187,39 +194,27 @@ Designs for the App were completed in Figma.
 
 <img src="github_assets/figma.png" style="">
 
-<!-- USAGE EXAMPLES
-
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_-->
+_For more examples, please refer to the [Documentation](https://example.com)_
 
-<!-- ROADMAP
+## Future Features
 
-## Roadmap
-
-See the [open issues](https://github.com/fxlui/medician/issues) for a list of proposed features (and known issues). -->
-
-<!-- LICENSE
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.-->
-
-<!-- CONTACT -->
-
-## Contact
-
-Project Link: [https://github.com/fxlui/medician](https://github.com/fxlui/medician)
-
-<!-- ACKNOWLEDGEMENTS
+- [ ] Switch to NoSQL database
+- [ ] Graphs and analysis
+- [ ] Usability improvements for Add Flow
+- [ ] More specific options for exercises
+- [ ] Ability to select date period for reminders
+- [ ] Unit tests
 
 ## Acknowledgements
 
-- []()
-- []()
-- []() -->
+Thanks...
+
+- Dr. Mark Wong,
+- Dr. Joseph Lee,
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
