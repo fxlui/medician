@@ -88,7 +88,7 @@
 
 <img src="assets/images/Home.png" alt="Home" width="295" height="580" style="border: 1px, border-radius: 16">
 
-Planning to start a fitness routine? Want to be reminded of your appointments? Medician is here to help.
+Need help tracking your symptoms? Planning to start a fitness routine? Want to be reminded of your appointments? Medician is here to help.
 
 ### Overview
 
@@ -157,7 +157,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Clinical Research
 
-Medician provides a solution to the common clinical problem of effectively tracking PROs (Patient Reported Outcomes). The design implementation was based upon interviews conducted on two medical doctors of their clinical experience. First was a senior cancer specialist working at Westmead Hospital and the second a general practitioner working in a private clinic located in Strathfield.
+Medician provides a solution to the common clinical problem of effectively tracking PROs (Patient Reported Outcomes). The design implementation was based upon interviews conducted on two medical doctors about their clinical experience. First was a senior cancer specialist working at Westmead Hospital and the second a general practitioner working in a private clinic located in Strathfield.
 
 Each physician were asked questions regarding:
 
@@ -168,7 +168,7 @@ Each physician were asked questions regarding:
 
 ### Research Findings
 
-The research findings show that patients often forget details about their symptoms and treatments. Patients with chronic diseases such as cancer and diabetes patients would be encouraged to keep a physical diary to record PROs such as pain, medicine taken, and more. The diary records will then be used to gauge a treatment’s toxicity and effectiveness. When a patient enters the consultation with their diaries, the doctors find that they are often disorganised, cluttered and missing certain critical information. Furthermore, there is no standardised way of bookkeeping, some patients give a qualitative description of their symptoms while others would have a quantitative description. In the past paper forms used to be handed out to patients, however this has been phased out in many clinics now.
+The research findings show that patients often forget details about their symptoms and treatments. Patients with chronic diseases such as cancer and diabetes would be encouraged to keep a physical diary to record PROs such as pain, medicine taken, and more. The diary records will then be used to gauge a treatment’s toxicity and effectiveness. When a patient enters the consultation with their diaries, the doctors find that it is are often disorganised, cluttered and missing certain critical information. Furthermore, there is no standardised way of bookkeeping, some patients give a qualitative description of their symptoms while others would have a quantitative description. In the past paper forms used to be handed out to patients, however this has now been phased out in many clinics.
 
 ### Conclusion
 
