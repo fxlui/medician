@@ -135,7 +135,7 @@ To get a local copy up and running follow these simple steps.
   - During development we have used [yarn](https://yarnpkg.com/lang/en/docs/install/), but you can use npm as well.
 
 - Expo and React Native
-  - Follow the instructions [here](https://docs.expo.io/versions/latest/) to install expo.
+  - Follow the instructions [here](https://docs.expo.dev/get-started/installation/) to install expo.
 
 ### Installation
 
