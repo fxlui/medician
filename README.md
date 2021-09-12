@@ -32,8 +32,7 @@
     <img src="assets/images/medician.png" alt="Logo" width="150" height="150" style="border: 1px, border-radius: 16">
   </a>
 
-  <h2 align="center">Medician</h2>
-
+  <h3 align="center">Medician</h3>
   <p align="center">
     Symptom Tracking App
     <br />
@@ -41,10 +40,10 @@
     <!-- App Store -->
     <div align="center">
     <a href="https://apps.apple.com/au/app/medician/id1584595040">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Badge" width="206" height="61" style="border: 1px, border-radius: 16">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Badge" width="206" height="61">
   </a>
-  <a href="">
-    <img src="github_assets/android.svg" alt="Android Badge" width="206" height="61" style="border: 1px, border-radius: 16">
+  <a href="github_assets/medician-106-signed.apk">
+    <img src="github_assets/android.svg" alt="Android Badge" width="206" height="61">
   </a>
     </div>
     <br />
