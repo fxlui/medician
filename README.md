@@ -208,7 +208,7 @@ Designs for the App were completed in Figma.
 
 The following is a basic outlines of how to use the features of the app.
 
-<img src="github_assets/medician-all.png" style="">
+<img src="github_assets/tutorial.png" style="">
 
 ## Future Features
 
