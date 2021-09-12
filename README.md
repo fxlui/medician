@@ -157,7 +157,7 @@ There are three ways you can install Medician.
    ```sh
    expo start
    ```
-4. Go to http://localhost:19000 on your browser
+4. Navigate to pop-up tab created by Expo in your browser
 5. Scan the QR code with your camera app (iOS) or scan the QR code with Expo Go (Android)
 
 ## Design Considerations
