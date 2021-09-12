@@ -42,7 +42,7 @@
     <a href="https://apps.apple.com/au/app/medician/id1584595040">
     <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Apple Badge" width="206" height="61">
   </a>
-  <a href="github_assets/medician-106-signed.apk">
+  <a href="https://github.com/fxlui/medician/blob/readme/github_assets/medician-106-signed.apk?raw=true">
     <img src="github_assets/android.svg" alt="Android Badge" width="206" height="61">
   </a>
     </div>
