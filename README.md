@@ -117,10 +117,10 @@ By using our app, you’ll be recording all the relevant details about your situ
 
 ### Built With
 
-- <img src="github_assets/mst.svg" style="height: 50px; width: 50x;"/> [Expo]()
+- [Expo]()
 - [TypeScript]()
 - [React Native]()
-- [MobX State Tree]()
+- <img src="github_assets/mst.svg" style="height: 25px; width: 25x;"/> [MobX State Tree]()
 
 <!-- GETTING STARTED -->
 
