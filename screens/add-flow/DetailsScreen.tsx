@@ -7,6 +7,7 @@ import {
   Animated,
   Alert,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import { StackScreenProps } from "@react-navigation/stack";
@@ -40,7 +41,6 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
   const animatedOpacityQ4 = React.useRef(new Animated.Value(0.5)).current;
 
   const [inputFocused, setInputFocused] = React.useState(false);
-  const [currentText, setCurrentText] = React.useState("");
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const emptyTexts = {
     better: "",
@@ -56,6 +56,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
       : emptyTexts;
 
   const [currentAnswers, setCurrentAnswers] = React.useState(defaultTexts);
+  const [currentText, setCurrentText] = React.useState(defaultTexts.better);
 
   const inputRef = React.useRef<TextInput>(null);
 
@@ -260,11 +261,15 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.1,
               shadowRadius: 9,
-              elevation: 5,
+              elevation: 1,
               flexDirection: "row",
               justifyContent: "center",
               alignSelf: "center",
-              marginBottom: inputFocused ? 160 : 85,
+              marginBottom: inputFocused
+                ? Platform.OS === "android"
+                  ? -50
+                  : 160
+                : 95,
             }}
           >
             <AnimatedTextInput
@@ -275,7 +280,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
                 padding: 20,
                 flex: 8,
                 fontSize: 16,
-                marginTop: 20,
+                marginTop: Platform.OS === "android" ? 0 : 20,
                 maxHeight: 125,
                 color: textColor,
               }}
@@ -410,7 +415,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   question: {
-    fontWeight: "500",
+    fontWeight: Platform.OS === "android" ? "700" : "500",
     fontSize: 18,
     marginBottom: 10,
   },

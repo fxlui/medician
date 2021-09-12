@@ -2,7 +2,7 @@
   "expo": {
     "name": "Medician",
     "slug": "medician",
-    "version": "1.0.4",
+    "version": "1.0.6",
     "owner": "logicpop",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -36,7 +36,17 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["assets/**/*"],
+    "assetBundlePatterns": [
+      "assets/**/*",
+      "assets/icons/*",
+      "assets/images/*",
+      "assets/*",
+      "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Entypo.ttf",
+      "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf",
+      "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf",
+      "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf",
+      "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.ttf"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -46,14 +56,16 @@
         "NSTouchIDUsageDescription": "This app uses Touch ID to allow users to lock their app with Face ID authentication."
       },
       "bundleIdentifier": "com.logicpop.medician",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.1",
+      "userInterfaceStyle": "automatic"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.logicpop.medician"
+      "package": "com.logicpop.medician",
+      "userInterfaceStyle": "automatic"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

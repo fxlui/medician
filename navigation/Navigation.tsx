@@ -53,22 +53,27 @@ const RootNavigator = observer(() => {
   const colorScheme = useColorScheme();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
-  const { isNewUser } = useStores();
+  const { user } = useStores();
 
   React.useEffect(() => {
     const checkNewUser = async () => {
       const newUser = await AsyncStorage.getItem("@tutorialPassed");
-      console.log(newUser);
       if (newUser) {
-        isNewUser.finishTutorial();
+        user.finishTutorial();
+      } else{
+        user.startTutorial();
       }
     };
     checkNewUser();
   }, []);
 
+  if (user.firstTime === undefined) {
+    return <AppLoading />;
+  }
+
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      {isNewUser.isNewUser ? (
+      {user.firstTime ? (
         <RootStack.Screen name="Tutorial" component={WelcomeTut} />
       ) : (
         <>

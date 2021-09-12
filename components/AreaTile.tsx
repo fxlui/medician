@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Animated, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import {
+  Animated,
+  Platform,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 
 import { Text, View } from "./Themed";
 
@@ -32,19 +38,23 @@ export const TopTile: React.FC<topTileDetails> = ({
   colorTile = false,
 }) => {
   const colorScheme = useColorScheme();
-  const animatedValue = React.useRef(new Animated.Value(0)).current;
+  const animatedValue = React.useRef(new Animated.Value(0.0)).current;
 
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+
+  const highlightTileColor = "#FF7272";
+  const highlightTextColor = "#fff";
+
   const animatedTileColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [tileColor, "#FF7272"],
+    outputRange: [tileColor, highlightTileColor],
   });
   const animatedTextColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [textColor, "#fff"],
+    outputRange: [textColor, highlightTextColor],
   });
 
   React.useEffect(() => {
@@ -84,10 +94,10 @@ export const TopTile: React.FC<topTileDetails> = ({
             position: "absolute",
             width: 155,
             height: 155,
-            zIndex: -50,
             borderWidth: 2,
             borderRadius: 16,
             borderColor: animatedTileColor,
+            zIndex: 20,
           }}
         />
       ) : (
@@ -98,7 +108,7 @@ export const TopTile: React.FC<topTileDetails> = ({
             position: "absolute",
             width: 155,
             height: 155,
-            zIndex: -50,
+            zIndex: 20,
           }}
         />
       )}
@@ -121,9 +131,10 @@ export const BottomTile: React.FC<TileDetails> = ({
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
+  const highlightTileColor = "#FF7272";
   const animatedTileColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [tileColor, "#FF7272"],
+    outputRange: [tileColor, highlightTileColor],
   });
 
   React.useEffect(() => {
@@ -156,10 +167,10 @@ export const BottomTile: React.FC<TileDetails> = ({
           position: "absolute",
           width: 155,
           height: 155,
-          zIndex: -50,
           borderWidth: 2,
           borderRadius: 16,
           borderColor: animatedTileColor,
+          zIndex: 20,
         }}
       />
     </TileBase>
@@ -173,6 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
+    zIndex: 50,
   },
   textContent: {
     backgroundColor: "transparent",

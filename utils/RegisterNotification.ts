@@ -1,10 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
-import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 
 const registerForPushNotificationsAsync = async () => {
-  const orgStatus = await SecureStore.getItemAsync("push_token");
+  const orgStatus = await AsyncStorage.getItem("@push_token");
   if (orgStatus) {
     return;
   }
@@ -21,7 +21,7 @@ const registerForPushNotificationsAsync = async () => {
       return;
     }
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    await SecureStore.setItemAsync("push_token", token);
+    await AsyncStorage.setItem("@push_token", token);
   }
   if (Platform.OS === "android") {
     Notifications.setNotificationChannelAsync("default", {

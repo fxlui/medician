@@ -29,11 +29,15 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
   const { addFlowStore, editFlowStore } = useStores();
 
-  const defaultTemperature = route.params.method === "add" ? 37.0 :
-    !editFlowStore.currentEditingRecord ? 36.5 :
-    editFlowStore.currentEditingRecord.temperature === 0 ? 37.0 :
-    editFlowStore.currentEditingRecord.temperature
-    
+  const defaultTemperature =
+    route.params.method === "add"
+      ? 37.0
+      : !editFlowStore.currentEditingRecord
+      ? 36.5
+      : editFlowStore.currentEditingRecord.temperature === 0
+      ? 37.0
+      : editFlowStore.currentEditingRecord.temperature;
+
   // !! important, data from store could be null so need to have fallback default value
   const [temperature, setTemperature] = useState(defaultTemperature);
   const [unit, setUnit] = useState("C");
@@ -48,8 +52,11 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
         >
           {route.params.method === "edit" ? (
             <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-              Editing record for{' '}
-              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
+              Editing record for{" "}
+              {getEditDescription(
+                editFlowStore.currentSymptomType,
+                editFlowStore.currentEditingRecord?.subArea
+              )}
             </Text>
           ) : null}
           <Text style={styles.greeting}>What was your temperature?</Text>
@@ -129,10 +136,24 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
         left={() => navigation.pop()}
         right={() => {
           if (route.params.method === "add") {
-            addFlowStore.currentNewRecord.setRecordTemperature(temperature);
+            if (unit === "F") {
+              addFlowStore.currentNewRecord.setRecordTemperature(
+                ((temperature - 32) * 5) / 9
+              );
+            } else {
+              addFlowStore.currentNewRecord.setRecordTemperature(temperature);
+            }
             navigation.navigate("AreaSelectScreen");
           } else {
-            editFlowStore.currentEditingRecord?.updateRecordTemperature(temperature);
+            if (unit === "F") {
+              editFlowStore.currentEditingRecord?.updateRecordTemperature(
+                ((temperature - 32) * 5) / 9
+              );
+            } else {
+              editFlowStore.currentEditingRecord?.updateRecordTemperature(
+                temperature
+              );
+            }
             navigation.navigate("SeverityScreen", route.params);
           }
         }}

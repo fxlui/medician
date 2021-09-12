@@ -32,6 +32,25 @@ export const getDateText = (date: Date) => {
   }
 };
 
+export const getDateTextFull = (date: Date) => {
+  const now = new Date();
+  const momentNow = moment(now);
+  const momentDate = moment(date);
+  if (date.getDate() === now.getDate()) {
+    return `Today ${momentDate.format("HH:mm")}`;
+  } else if (date.getDate() === now.getDate() - 1) {
+    return `Yesterday ${momentDate.format("HH:mm")}`;
+  } else if (date.getDate() === now.getDate() + 1) {
+    return `Tomorrow ${momentDate.format("HH:mm")}`;
+  } else if (momentNow.isoWeek() === momentDate.isoWeek()) {
+    return momentDate.format("dddd HH:mm");
+  } else if (momentNow.isoWeek() + 1 === momentDate.isoWeek()) {
+    return `Next ${momentDate.format("dddd HH:mm")}`;
+  } else {
+    return momentDate.format("MMM Do YYYY HH:mm");
+  }
+};
+
 export const getMedicationDoseText = (medicationDose: string) => {
   const split = medicationDose.split(" × ");
   if (split.length === 1) {

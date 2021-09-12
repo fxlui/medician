@@ -230,7 +230,11 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
           <View style={sectionStyle.section}>
             <Text style={styles.sectionTitle}>Temperature</Text>
             <Text style={styles.sectionText}>
-              {currentEditingRecord?.temperature}
+              {Math.round(currentEditingRecord?.temperature! * 10) / 10}°C /{" "}
+              {Math.round(
+                ((currentEditingRecord?.temperature! * 9) / 5 + 32) * 10
+              ) / 10}
+              °F
             </Text>
           </View>
         )}
@@ -339,6 +343,7 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
+                flexWrap: "wrap",
                 marginBottom: 20,
               }}
             >
@@ -357,6 +362,7 @@ const TimelineDetailsScreen = observer(({ navigation, route }: ScreenProps) => {
                     justifyContent: "center",
                     alignItems: "center",
                     padding: 0,
+                    marginBottom: 20,
                   }}
                   onClick={() => {
                     setCurrentMedia(item.uri);

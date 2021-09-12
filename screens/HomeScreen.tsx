@@ -28,10 +28,10 @@ import {
 import { themeTextColor } from "../constants/Colors";
 
 import * as Notifications from "expo-notifications";
-import * as SecureStore from "expo-secure-store";
 
 import FillerTile from "../components/FillerTile";
 import { useWindowDimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface appointmentTileProps {
   index: number;
@@ -53,7 +53,7 @@ type ScreenProps = CompositeScreenProps<
 const HomeScreen = observer(({ navigation }: ScreenProps) => {
   const { height, width } = useWindowDimensions();
   const colorScheme = useColorScheme();
-  const { homeScreenStore } = useStores();
+  const { homeScreenStore, addFlowStore, progressStore } = useStores();
   const textColor =
     colorScheme === "light" ? themeTextColor.light : themeTextColor.dark;
   const routineType = (dbType: number) =>
@@ -88,14 +88,14 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
         const idNum = parseInt(`${notification.request.content.data.id}`);
         if (notification.request.content.data.id && !isNaN(idNum)) {
           const checkStatus = async () => {
-            const status = await SecureStore.getItemAsync("last_alert_id");
+            const status = await AsyncStorage.getItem("@last_alert_id");
             console.log(status);
             if (status === `${notification.request.identifier}`) {
               // handled before
               return;
             } else {
-              await SecureStore.setItemAsync(
-                "last_alert_id",
+              await AsyncStorage.setItem(
+                "@last_alert_id",
                 `${notification.request.identifier}`
               );
               navigation.navigate("Notification", {
@@ -191,11 +191,27 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
               <Feather name="more-horizontal" size={24} color={textColor} />
             </PressableBase>
           </View>
-          <Text style={styles.name}>Medication</Text>
           {homeScreenStore.getRecentMedications().length === 0 ? (
-            <FillerTile />
+            homeScreenStore.getRecentExercises().length === 0 &&
+            homeScreenStore.getRecentAppointments().length === 0 ? (
+              <>
+                <Text style={styles.name}>Medication</Text>
+                <FillerTile
+                  onPress={() => {
+                    CustomHaptics("light");
+                    navigation.navigate("AddFlow", {
+                      screen: "MedicationScreen",
+                    });
+                    progressStore.setProgressBarLength(3);
+                    progressStore.resetProgress();
+                    addFlowStore.currentNewRoutine.setRoutineType(0);
+                  }}
+                />
+              </>
+            ) : null
           ) : (
             <>
+              <Text style={styles.name}>Medication</Text>
               <Text
                 style={{
                   marginLeft: 5,
@@ -226,11 +242,27 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
             </>
           )}
 
-          <Text style={styles.name}>Exercise</Text>
           {homeScreenStore.getRecentExercises().length === 0 ? (
-            <FillerTile />
+            homeScreenStore.getRecentMedications().length === 0 &&
+            homeScreenStore.getRecentAppointments().length === 0 ? (
+              <>
+                <Text style={styles.name}>Exercise</Text>
+                <FillerTile
+                  onPress={() => {
+                    CustomHaptics("light");
+                    navigation.navigate("AddFlow", {
+                      screen: "ExerciseScreen",
+                    });
+                    progressStore.setProgressBarLength(3);
+                    progressStore.resetProgress();
+                    addFlowStore.currentNewRoutine.setRoutineType(1);
+                  }}
+                />
+              </>
+            ) : null
           ) : (
             <>
+              <Text style={styles.name}>Exercise</Text>
               <Text
                 style={{
                   marginLeft: 5,
@@ -259,27 +291,44 @@ const HomeScreen = observer(({ navigation }: ScreenProps) => {
               />
             </>
           )}
-
-          <Text style={styles.name}>Appointment</Text>
           {homeScreenStore.getRecentAppointments().length === 0 ? (
-            <FillerTile />
+            homeScreenStore.getRecentExercises().length === 0 &&
+            homeScreenStore.getRecentMedications().length === 0 ? (
+              <>
+                <Text style={styles.name}>Appointment</Text>
+                <FillerTile
+                  onPress={() => {
+                    CustomHaptics("light");
+                    progressStore.resetProgress();
+                    addFlowStore.resetAppointment();
+                    progressStore.setProgressBarLength(2);
+                    navigation.navigate("AddFlow", {
+                      screen: "AppointmentTimeScreen",
+                    });
+                  }}
+                />
+              </>
+            ) : null
           ) : (
-            <Carousel
-              data={homeScreenStore.getRecentAppointments()}
-              renderItem={renderAppointmentTile}
-              vertical={false}
-              sliderWidth={width}
-              activeSlideAlignment={"start"}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              itemWidth={170}
-              inactiveSlideOpacity={1}
-              inactiveSlideScale={0.975}
-              onScrollIndexChanged={() => {
-                CustomHaptics("light");
-              }}
-            />
+            <>
+              <Text style={styles.name}>Appointment</Text>
+              <Carousel
+                data={homeScreenStore.getRecentAppointments()}
+                renderItem={renderAppointmentTile}
+                vertical={false}
+                sliderWidth={width}
+                activeSlideAlignment={"start"}
+                containerCustomStyle={{
+                  overflow: "visible",
+                }}
+                itemWidth={170}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={0.975}
+                onScrollIndexChanged={() => {
+                  CustomHaptics("light");
+                }}
+              />
+            </>
           )}
         </View>
       </ScrollView>
@@ -294,7 +343,7 @@ const styles = StyleSheet.create({
   overflowView: {
     overflow: "visible",
     paddingLeft: 25,
-    paddingBottom: 125,
+    paddingBottom: 150,
   },
   header: {
     marginTop: 65,

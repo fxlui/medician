@@ -7,6 +7,7 @@ import {
   Animated,
   Alert,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import SafeView from "../../components/SafeView";
@@ -166,16 +167,16 @@ export default function RoutineDetailsScreen({
       }
       if (alertMinutesBefore !== -1) {
         RegisterNotification();
-        const getStatus = async () => {
-          const status = await allowsNotificationsAsync();
-          if (!status) {
-            Alert.alert(
-              "Missing Permissions",
-              "To receive notifications, please enable notifications in your settings."
-            );
-          }
-        };
-        getStatus();
+        // const getStatus = async () => {
+        //   const status = await allowsNotificationsAsync();
+        //   if (!status) {
+        //     Alert.alert(
+        //       "Missing Permissions",
+        //       "To receive notifications, please enable notifications in your settings."
+        //     );
+        //   }
+        // };
+        // getStatus();
       }
       progressStore.goForward();
       addFlowStore.currentNewRoutine.setRoutineDetails(
@@ -201,7 +202,11 @@ export default function RoutineDetailsScreen({
         iconName={item.type}
         selected={selectedTop === index}
         updater={() => {
-          topRef.current?.snapToItem(index);
+          if (selectedTop === index) {
+            handleNavigation();
+          } else {
+            topRef.current?.snapToItem(index);
+          }
         }}
       />
     );
@@ -299,6 +304,7 @@ export default function RoutineDetailsScreen({
           behavior="position"
           style={{
             paddingRight: 30,
+            backgroundColor: "transparent",
           }}
         >
           <View
@@ -310,11 +316,15 @@ export default function RoutineDetailsScreen({
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.1,
               shadowRadius: 9,
-              elevation: 5,
+              elevation: currentQuestion === 2 ? 0 : 1,
               flexDirection: "row",
               justifyContent: "center",
               alignSelf: "center",
-              marginBottom: inputFocused ? 160 : 85,
+              marginBottom: inputFocused
+                ? Platform.OS === "android"
+                  ? -50
+                  : 160
+                : 95,
             }}
           >
             {currentQuestion === 1 || currentQuestion === 0 ? (
@@ -327,7 +337,7 @@ export default function RoutineDetailsScreen({
                     padding: 20,
                     flex: 8,
                     fontSize: 16,
-                    marginTop: 20,
+                    marginTop: Platform.OS === "android" ? 0 : 20,
                     maxHeight: 125,
                     color: textColor,
                   }}
@@ -373,13 +383,8 @@ export default function RoutineDetailsScreen({
                   containerCustomStyle={{
                     overflow: "visible",
                   }}
-                  contentContainerCustomStyle={{
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    overflow: "visible",
-                  }}
                   itemWidth={160}
-                  inactiveSlideOpacity={0.8}
+                  inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
                   onLayout={() => {
                     topRef.current?.snapToItem(selectedTop, false, false);
                     setSelectedSymptom(symptomArr[selectedTop].title);
@@ -402,10 +407,13 @@ export default function RoutineDetailsScreen({
                   setAlertMinutesBefore(itemValue)
                 }
                 style={{
-                  height: 150,
+                  height: Platform.OS === "android" ? 25 : 150,
                   width: "100%",
-                  marginBottom: 60,
+                  marginBottom: Platform.OS === "android" ? 0 : 60,
+                  padding: Platform.OS === "android" ? 30 : 0,
+                  color: textColor,
                 }}
+                dropdownIconColor={textColor}
                 itemStyle={{
                   color: textColor,
                 }}
@@ -499,7 +507,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   question: {
-    fontWeight: "500",
+    fontWeight: Platform.OS === "android" ? "700" : "500",
     fontSize: 18,
     marginBottom: 10,
   },

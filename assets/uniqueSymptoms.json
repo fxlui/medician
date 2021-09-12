@@ -4,7 +4,7 @@
     "type": "pain"
   },
   {
-    "title": "Itchy",
+    "title": "Itch",
     "type": "itchy"
   },
   {
@@ -50,10 +50,6 @@
   {
     "title": "Walking Difficulties",
     "type": "walk"
-  },
-  {
-    "title": "Smelling Difficulties",
-    "type": "smell"
   },
   {
     "title": "Smelling Difficulties",

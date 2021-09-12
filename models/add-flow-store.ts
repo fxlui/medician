@@ -15,7 +15,6 @@ import { RoutineModel } from "./routine";
 import { RecordModel } from "./record";
 
 import * as Notifications from "expo-notifications";
-import * as SecureStore from "expo-secure-store";
 import moment from "moment";
 import { HomeTileTypes } from "../types";
 
@@ -146,8 +145,6 @@ export const AddFlowStoreModel = types
           );
           await updateAlertSystemID(alertID, systemIds[index]);
         });
-
-        await SecureStore.setItemAsync("new_user", "false");
       } catch (error) {
         console.warn(error);
       }
@@ -223,7 +220,6 @@ export const AddFlowStoreModel = types
           );
           await updateAlertSystemID(alertID, systemIds[index]);
         });
-        await SecureStore.setItemAsync("new_user", "false");
       } catch (error) {
         console.warn(error);
       }

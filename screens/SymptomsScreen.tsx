@@ -53,7 +53,10 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
   return (
     <SafeView disableBottom>
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{}}
+        >
           <View style={{ overflow: "visible", paddingBottom: 100 }}>
             <Text style={styles.greeting}>
               I {route.params.type === "cant" ? "can't" : "feel"}...
@@ -110,6 +113,8 @@ const styles = StyleSheet.create({
     overflow: "visible",
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingLeft: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingLeft: 20,
   },
 });

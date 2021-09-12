@@ -48,7 +48,6 @@ SET severity = ?,
     sleep = ?,
     description = ?
 WHERE entry.id = ?
-LIMIT 1
 `;
 
 export const insertAppointment = `

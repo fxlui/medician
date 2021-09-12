@@ -11,11 +11,13 @@ import { View, Text } from "../components/Themed";
 import Icon from "../components/Icon";
 
 import { BottomTabParamList } from "../types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 const AddFlowPlaceholder = () => <View />;
 
 export const BottomTabNavigator = () => {
+  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
 
   return (
@@ -25,7 +27,13 @@ export const BottomTabNavigator = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: Colors[colorScheme].tint,
-        tabBarStyle: tabBarStyles.tabBar,
+        tabBarStyle: [
+          tabBarStyles.tabBar,
+          {
+            paddingTop: insets.bottom,
+            marginBottom: insets.bottom === 0 ? 15 : insets.bottom,
+          },
+        ],
         tabBarButton: TabBarButton,
       }}
     >

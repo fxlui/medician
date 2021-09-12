@@ -13,7 +13,6 @@ import {
 import * as WebBrowser from "expo-web-browser";
 import { StackScreenProps } from "@react-navigation/stack";
 import Constants from "expo-constants";
-import * as SecureStore from "expo-secure-store";
 import * as Notifications from "expo-notifications";
 
 import SafeView from "../components/SafeView";
@@ -30,6 +29,7 @@ import {
   themeBorderColor,
   themeTileColor,
 } from "../constants/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ScreenProps = StackScreenProps<RootStackParamList, "Settings">;
 
@@ -56,12 +56,12 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
           settings.ios?.status ===
             Notifications.IosAuthorizationStatus.PROVISIONAL
       );
-      const result = await SecureStore.getItemAsync("enable_bio");
+      const result = await AsyncStorage.getItem("@enable_bio");
       if (result === "true") {
         setLockApp(true);
         setShowBioSettings(true);
       }
-      const hapticsResult = await SecureStore.getItemAsync("enable_haptics");
+      const hapticsResult = await AsyncStorage.getItem("@enable_haptics");
       if (hapticsResult === "false") {
         setUseHaptics(false);
       } else if (hapticsResult === "true") {
@@ -134,7 +134,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
                 onValueChange={(value) => {
                   const getBio = async () => {
                     if (!value) {
-                      await SecureStore.setItemAsync("enable_bio", "false");
+                      await AsyncStorage.setItem("@enable_bio", "false");
                       setLockApp(false);
                       return;
                     }
@@ -142,7 +142,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
                       promptMessage: `Authenticate to enable biometric authentication`,
                     });
                     if (bio.success) {
-                      await SecureStore.setItemAsync("enable_bio", "true");
+                      await AsyncStorage.setItem("@enable_bio", "true");
                       setLockApp(true);
                     } else {
                       setLockApp(false);
@@ -170,9 +170,9 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
               onValueChange={(value) => {
                 const setHaptics = async () => {
                   if (!value) {
-                    await SecureStore.setItemAsync("enable_haptics", "false");
+                    await AsyncStorage.setItem("@enable_haptics", "false");
                   } else {
-                    await SecureStore.setItemAsync("enable_haptics", "true");
+                    await AsyncStorage.setItem("@enable_haptics", "true");
                   }
                 };
                 setHaptics();

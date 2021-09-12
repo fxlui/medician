@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { AddFlowParamList } from "../../types";
 import SafeView from "../../components/SafeView";
@@ -81,63 +81,60 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
   return (
     <SafeView style={styles.container} disableTop>
       <View>
-        <Text style={styles.greeting}>Where is the area affected?</Text>
+        <View>
+          <Text style={styles.greeting}>Where is the area affected?</Text>
+        </View>
         <View style={styles.child}>
-          <View style={{}}>
-            <Carousel
-              data={bodyAreaArr.map((item) => ({
-                id: item.id,
-                emoji: item.emoji,
-                text: item.text,
-              }))}
-              renderItem={renderTopTile}
-              vertical={false}
-              sliderWidth={width}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              contentContainerCustomStyle={{
-                justifyContent: "center",
-                alignItems: "flex-end",
-                overflow: "visible",
-              }}
-              itemWidth={160}
-              inactiveSlideOpacity={0.8}
-              onScrollIndexChanged={(index) => {
-                setSelectedTop(index);
-                setSelectedBottom(0);
-                bottomRef.current?.snapToItem(0);
-                CustomHaptics("light");
-              }}
-              ref={topRef}
-            />
-            <Carousel
-              data={bodyAreaArr[selectedTop].parts.map((item, index) => ({
-                id: index,
-                text: item,
-              }))}
-              renderItem={renderBottomTile}
-              vertical={false}
-              sliderWidth={width}
-              containerCustomStyle={{
-                overflow: "visible",
-              }}
-              contentContainerCustomStyle={{
-                justifyContent: "center",
-                alignItems: "flex-start",
-                overflow: "visible",
-                marginTop: 50,
-                marginBottom: 60,
-              }}
-              itemWidth={160}
-              inactiveSlideOpacity={0.8}
-              onScrollIndexChanged={(index) => {
-                setSelectedBottom(index);
-                CustomHaptics("light");
-              }}
-              ref={bottomRef}
-            />
-          </View>
+          <Carousel
+            data={bodyAreaArr.map((item) => ({
+              id: item.id,
+              emoji: item.emoji,
+              text: item.text,
+            }))}
+            renderItem={renderTopTile}
+            vertical={false}
+            sliderWidth={width}
+            containerCustomStyle={{
+              overflow: "visible",
+              flexGrow: 0,
+            }}
+            contentContainerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={160}
+            inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
+            onScrollIndexChanged={(index) => {
+              setSelectedTop(index);
+              setSelectedBottom(0);
+              bottomRef.current?.snapToItem(0);
+              CustomHaptics("light");
+            }}
+            ref={topRef}
+          />
+          <Carousel
+            data={bodyAreaArr[selectedTop].parts.map((item, index) => ({
+              id: index,
+              text: item,
+            }))}
+            renderItem={renderBottomTile}
+            vertical={false}
+            sliderWidth={width}
+            containerCustomStyle={{
+              overflow: "visible",
+              flexGrow: 0,
+              marginTop: 50,
+            }}
+            contentContainerCustomStyle={{
+              overflow: "visible",
+            }}
+            itemWidth={160}
+            inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
+            onScrollIndexChanged={(index) => {
+              setSelectedBottom(index);
+              CustomHaptics("light");
+            }}
+            ref={bottomRef}
+          />
         </View>
       </View>
       <AddFlowNavBar
@@ -160,12 +157,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   child: {
-    flex: 10,
+    flex: 9,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 30,
   },
   greeting: {
-    flex: 1,
     fontSize: 26,
     fontWeight: "600",
     marginTop: 15,

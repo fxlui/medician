@@ -261,14 +261,14 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
   const tileColor =
     colorScheme === "light" ? themeTileColor.light : themeTileColor.dark;
 
-  const { isNewUser } = useStores();
+  const { user } = useStores();
 
   const finish = () => {
     CustomHaptics("light");
     const setNewUser = async () => {
       await initDatabase();
       await AsyncStorage.setItem("@tutorialPassed", "true");
-      isNewUser.finishTutorial();
+      user.finishTutorial();
       navigation.navigate("Root", { screen: "HomeScreen"});
     };
     setNewUser();
@@ -283,7 +283,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
       key={0}
     >
       <View style={styles.header}>
-        <Text style={styles.greeting}>Congrats 🎉🎉🎉</Text>
+        <Text style={styles.greeting}>🎉 Congrats!</Text>
         <Text
           style={[
             styles.greeting,
@@ -292,7 +292,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
             },
           ]}
         >
-          You should be good to go!
+          You should be good to go.
         </Text>
       </View>
 
@@ -313,7 +313,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
           }}
           onClick={finish}
         >
-          <Text style={{ fontSize: 16, fontWeight: "500" }}>Finish</Text>
+          <Text style={{ fontSize: 16, fontWeight: "500" }}>Let's Start</Text>
         </TileBase>
       </View>
     </View>

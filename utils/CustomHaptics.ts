@@ -1,12 +1,12 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
-import * as SecureStore from "expo-secure-store";
 
 export default function Vibrate(
   style: "extralight" | "light" | "medium" | "heavy" | "done"
 ) {
   const fetchHaptics = async () => {
-    const hapticsResult = await SecureStore.getItemAsync("enable_haptics");
-    if (hapticsResult !== "true") {
+    const hapticsResult = await AsyncStorage.getItem("@enable_haptics");
+    if (hapticsResult && hapticsResult === "false") {
       return;
     } else {
       switch (style) {

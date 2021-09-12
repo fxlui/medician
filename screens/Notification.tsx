@@ -35,6 +35,7 @@ import {
 import CustomHaptics from "../utils/CustomHaptics";
 import moment from "moment";
 
+import { getDateTextFull } from "../utils/NaturalTexts";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Notifications from "expo-notifications";
 
@@ -522,12 +523,12 @@ const NotificationScreen = ({
               </ScrollView>
             </View>
             <Text style={styles.time}>
-              {moment(currentEventTime).format("lll")}
+              {currentEventTime ? getDateTextFull(currentEventTime) : ""}
             </Text>
             <Text style={[styles.time, { opacity: 0.7 }]}>
               {!currentAlertTime || currentAlertTime!.getTime() <= 1
                 ? "No Alert set"
-                : moment(currentAlertTime).format("[Alert at ]lll")}
+                : `Alert at ${getDateTextFull(currentAlertTime)}`}
             </Text>
           </>
         )}
