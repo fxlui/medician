@@ -125,7 +125,11 @@ By using our app, you’ll be recording all the relevant details about your situ
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+There are three ways you can install Medician.
+
+- Through the [Apple App Store](https://apps.apple.com/au/app/medician/id1584595040) (For iPhone users)
+- Through downloading the [Android APK](https://github.com/fxlui/medician/blob/readme/github_assets/medician-106-signed.apk?raw=true) (For Android users)
+- Using Expo Go on your phone while the source code is running on your local machine (outlined below)
 
 ### Prerequisites
 
@@ -135,7 +139,11 @@ To get a local copy up and running follow these simple steps.
   - During development we have used [yarn](https://yarnpkg.com/lang/en/docs/install/), but you can use npm as well.
 
 - Expo and React Native
+
   - Follow the instructions [here](https://docs.expo.dev/get-started/installation/) to install expo.
+
+- Expo Go
+  - Follow the instructions [here](https://expo.dev/client) to install Expo Go on your phone.
 
 ### Installation
 
@@ -151,6 +159,8 @@ To get a local copy up and running follow these simple steps.
    ```sh
    expo start
    ```
+4. Go to localhost:19000
+5. Scan the QR code with your camera app (iPhone) or scan the QR code with Expo Go (Android)
 
 ## Design Considerations
 
