@@ -113,7 +113,7 @@ By using our app, you’ll be recording all the relevant details about your situ
 
 ### Built With
 
-- <img src="github_assets/sqlite.png" style="height: 20px; width: 20px;"/> [SQlite]()
+- <img src="github_assets/sqlite.png" style="height: 20px; width: 20px;"/> [SQLite]()
 - <img src="github_assets/expo.svg" style="height: 20px; width: 20px;"/> [Expo]()
 - <img src="github_assets/react.svg" style="height: 20px; width: 20px;"/> [React Native]()
 - <img src="github_assets/ts.svg" style="height: 20px; width: 20px;"/> [TypeScript]()
