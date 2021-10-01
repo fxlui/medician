@@ -27,6 +27,9 @@ import * as Notifications from "expo-notifications";
 import { initDatabase } from "./database/dbAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import * as Localization from "expo-localization";
+import i18n from "i18n-js";
+
 export default function App() {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
   const isLoadingComplete = useCachedResources();
@@ -44,12 +47,10 @@ export default function App() {
       const store = await setupRootStore();
       setRootStore(store);
     })();
-    const lockOrientation = async () => {
+    const lockOrientationAndSetBio = async () => {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
-    };
-    const getBioLock = async () => {
       const result = await AsyncStorage.getItem("@enable_bio");
       if (result === "true") {
         setLock(true);
@@ -68,8 +69,7 @@ export default function App() {
         shouldSetBadge: false,
       }),
     });
-    getBioLock();
-    lockOrientation();
+    lockOrientationAndSetBio();
   }, []);
 
   if (!isLoadingComplete || !rootStore) {
