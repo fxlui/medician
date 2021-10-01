@@ -430,7 +430,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                 }}
               >
                 <Picker.Item label="No notifications" value={-1} />
-                <Picker.Item label="At time of appointment" value={0} />
+                <Picker.Item label="At time of appointments" value={0} />
                 <Picker.Item label="5 minutes before" value={5} />
                 <Picker.Item label="15 minutes before" value={15} />
                 <Picker.Item label="1 hour before" value={60} />
