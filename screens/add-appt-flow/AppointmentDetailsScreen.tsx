@@ -394,11 +394,7 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
                   sliderWidth={width}
                   containerCustomStyle={{
                     overflow: "visible",
-                  }}
-                  contentContainerCustomStyle={{
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    overflow: "visible",
+                    flexGrow: 0,
                   }}
                   itemWidth={160}
                   inactiveSlideOpacity={Platform.OS === "android" ? 1 : 0.8}
