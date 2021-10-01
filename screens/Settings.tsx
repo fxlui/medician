@@ -80,7 +80,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
             )
           ) {
             if (Platform.OS === "android") {
-              setBioText("Facial Recognition");
+              setBioText("Facial Lock");
             } else {
               setBioText("Face ID");
             }
@@ -88,7 +88,7 @@ const SettingsScreen = ({ navigation }: ScreenProps) => {
             methods.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)
           ) {
             if (Platform.OS === "android") {
-              setBioText("Fingerprint Recognition");
+              setBioText("Fingerprint Lock");
             } else {
               setBioText("Touch ID");
             }
