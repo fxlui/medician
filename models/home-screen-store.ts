@@ -120,6 +120,7 @@ export const HomeScreenStoreModel = types
       alertTime: Date
     ) {
       try {
+        // change this to realm
         const result: SQLAlertReturnType = yield fetchAlert(alertID);
         const appointmentId = result.appointmentId;
         const routineId = result.routineId;
