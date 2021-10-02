@@ -97,7 +97,7 @@ Medician is a health tracking app that is intuitive and easy to use. You will be
 - Appointment Reminders
 - Symptom Tracking
 - Symptom Overview
-- Remote Consultation (Work In Progress)
+- Remote Consultation (Work.In.Progress)
 
 ### Minimalistic Design.
 
