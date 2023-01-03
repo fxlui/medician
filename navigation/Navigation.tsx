@@ -24,10 +24,9 @@ import TimelineDetailsScreen from "../screens/TimelineDetailsScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 import { Feather, Ionicons } from "@expo/vector-icons";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { PressableBase } from "../components/PressableBase";
 import { themeTextColor } from "../constants/Colors";
-import AppLoading from "expo-app-loading";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../models/root-store-provider";
 import WelcomeTut from "../screens/tutorial/WelcomeTut";
@@ -60,7 +59,7 @@ const RootNavigator = observer(() => {
       const newUser = await AsyncStorage.getItem("@tutorialPassed");
       if (newUser) {
         user.finishTutorial();
-      } else{
+      } else {
         user.startTutorial();
       }
     };
@@ -68,7 +67,7 @@ const RootNavigator = observer(() => {
   }, []);
 
   if (user.firstTime === undefined) {
-    return <AppLoading />;
+    return null;
   }
 
   return (

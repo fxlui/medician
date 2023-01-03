@@ -7,7 +7,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 
 import Timeline from "react-native-timeline-flatlist";
 import { observer } from "mobx-react-lite";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import TileBase, { TileSize } from "../components/TileBase";
 import moment from "moment";
 import { useStores } from "../models/root-store-provider";

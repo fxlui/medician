@@ -3,7 +3,7 @@ import { StyleSheet, StyleProp, ViewStyle, View } from "react-native";
 
 import { Icon } from "./Icon";
 import { Text } from "./Themed";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import TileBase, { TileSize } from "./TileBase";
 
 interface TileDetails {
@@ -35,7 +35,7 @@ const SymptomTile: React.FC<TileDetails> = ({
 
   return (
     <TileBase
-      size={TileSize.Default}
+      size={TileSize.HalfHeight}
       gradient={[tileColor, tileColor]}
       onClick={onPress}
       style={extraStyles}
@@ -44,16 +44,18 @@ const SymptomTile: React.FC<TileDetails> = ({
         <Icon
           name={iconName}
           props={{
-            width: 42,
-            height: 42,
+            width: 35,
+            height: 35,
             fill: contentColor,
           }}
         />
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: "500",
             color: contentColor,
+            maxWidth: 80,
+            textAlign: "right",
           }}
         >
           {title}
@@ -66,8 +68,10 @@ const SymptomTile: React.FC<TileDetails> = ({
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    alignItems: "stretch",
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 

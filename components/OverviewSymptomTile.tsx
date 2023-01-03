@@ -9,7 +9,7 @@ import {
 
 import { Text, View } from "./Themed";
 
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 
 import TileBase, { TileSize } from "./TileBase";
 import Icon from "./Icon";

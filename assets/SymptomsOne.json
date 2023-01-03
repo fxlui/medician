@@ -31,42 +31,42 @@
   },
   {
     "id": 7,
-    "name": "Sleeping is difficult",
+    "name": "Trouble sleeping",
     "type": "sleep"
   },
   {
     "id": 8,
-    "name": "Going to toilet is difficult",
+    "name": "Trouble going to the toilet",
     "type": "toilet"
   },
   {
     "id": 9,
-    "name": "Breathing is difficult",
+    "name": "Trouble breathing",
     "type": "breathe"
   },
   {
     "id": 10,
-    "name": "Hearing is difficult",
+    "name": "Trouble hearing",
     "type": "hear"
   },
   {
     "id": 11,
-    "name": "Seeing is difficult",
+    "name": "Trouble seeing",
     "type": "see"
   },
   {
     "id": 12,
-    "name": "Speaking is difficult",
+    "name": "Trouble speaking",
     "type": "speak"
   },
   {
     "id": 13,
-    "name": "Walking is difficult",
+    "name": "Trouble walking",
     "type": "walk"
   },
   {
     "id": 24,
-    "name": "Not on list",
+    "name": "Something else",
     "type": "more"
   }
 ]

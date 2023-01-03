@@ -10,7 +10,7 @@ import { Text, View } from "../../components/Themed";
 import TileBase, { TileSize } from "../../components/TileBase";
 import { PressableBase } from "../../components/PressableBase";
 import { useStores } from "../../models/root-store-provider";
-import useColorScheme from "../../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { themeTileColor } from "../../constants/Colors";
 
 type ScreenProps = CompositeScreenProps<

@@ -13,7 +13,7 @@ import { HomeTileTypes } from "../types";
 import { BottomTabParamList, RootStackParamList } from "../types";
 
 import { Feather } from "@expo/vector-icons";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { observer } from "mobx-react-lite";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";

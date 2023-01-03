@@ -3,7 +3,7 @@ import { View, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text } from "./Themed";
 import TileBase, { TileSize } from "./TileBase";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { themeTileColor } from "../constants/Colors";
 
 interface TileDetails {

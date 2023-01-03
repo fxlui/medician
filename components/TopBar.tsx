@@ -1,5 +1,5 @@
 import React from "react";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomHaptics from "../utils/CustomHaptics";
 import { Text, View } from "../components/Themed";

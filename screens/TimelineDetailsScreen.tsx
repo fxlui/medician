@@ -14,7 +14,7 @@ import { RootStackParamList, AddFlowParamList } from "../types";
 
 import { observer } from "mobx-react-lite";
 import { useStores } from "../models/root-store-provider";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import moment from "moment";
 import uniqueSymptoms from "../assets/uniqueSymptoms.json";
 import toiletSymptoms from "../assets/ToiletSymptoms.json";

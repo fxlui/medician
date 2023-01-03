@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import Icon from "./Icon";
 import { Text } from "./Themed";
 import TileBase, { TileSize } from "./TileBase";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { themeTileColor } from "../constants/Colors";
 
 interface TileDetails {

@@ -69,7 +69,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
                     key={symptom.id}
                     iconName={symptom.type}
                     title={symptom.name}
-                    extraStyles={{ marginRight: 25, marginBottom: 25 }}
+                    extraStyles={{ marginRight: 25, marginBottom: 20 }}
                     onPress={() => {
                       setSelectedId(symptom.id);
                       setSelectedName(symptom.type);
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 26,
     fontWeight: "600",
-    marginTop: 75,
+    marginTop: -75,
     marginBottom: 40,
     paddingLeft: 30,
   },

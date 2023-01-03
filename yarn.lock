@@ -4956,6 +4956,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-asset@npm:~8.6.3":
+  version: 8.6.3
+  resolution: "expo-asset@npm:8.6.3"
+  dependencies:
+    blueimp-md5: ^2.10.0
+    expo-constants: ~13.2.2
+    expo-file-system: ~14.1.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    path-browserify: ^1.0.0
+    url-parse: ^1.5.9
+  checksum: 23ef5bb48d59fdabad2554583729b2913c0822e726bd8fbd55507721f2c196967d6c2b7a4ee389100261e9b9a8a1c9cfcfef5a63c676b391798ecb369c59f5b8
+  languageName: node
+  linkType: hard
+
 "expo-constants@npm:~13.2.0, expo-constants@npm:~13.2.2, expo-constants@npm:~13.2.4":
   version: 13.2.4
   resolution: "expo-constants@npm:13.2.4"
@@ -5049,16 +5064,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-linking@npm:~3.2.2":
-  version: 3.2.2
-  resolution: "expo-linking@npm:3.2.2"
+"expo-linking@npm:~3.2.4":
+  version: 3.2.4
+  resolution: "expo-linking@npm:3.2.4"
   dependencies:
     "@types/qs": ^6.5.3
     expo-constants: ~13.2.0
     invariant: ^2.2.4
     qs: ^6.9.1
     url-parse: ^1.5.9
-  checksum: 406b427e68ab6cbd7fe0d47350ca67a68ebd7ad776b5c7eb160b58948b9d91294bd3d507657071a7119bd3f3c79ed05f4e41480e1732a51028c8aee27cb050dd
+  checksum: 7053609979f5bce5ca17267ff7a614b224c3d1176e4b73bd3a4a66229ff1ed9e995e7a5b074bb49840550661d617ff19b7460936a2a302534675f7c995b4a624
   languageName: node
   linkType: hard
 
@@ -10002,13 +10017,13 @@ __metadata:
     "@types/react-native-calendars": ^1.1264.2
     expo: ^46.0.0
     expo-app-loading: ~2.1.0
-    expo-asset: ~8.6.1
+    expo-asset: ~8.6.3
     expo-constants: ~13.2.4
     expo-font: ~10.2.0
     expo-haptics: ~11.3.0
     expo-image-picker: ~13.3.1
     expo-linear-gradient: ~11.4.0
-    expo-linking: ~3.2.2
+    expo-linking: ~3.2.4
     expo-local-authentication: ~12.3.0
     expo-notifications: ~0.16.1
     expo-screen-orientation: ~4.3.0
@@ -11209,11 +11224,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.3#~builtin<compat/typescript>":
   version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=f456af"
+  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 563a0ef47abae6df27a9a3ab38f75fc681f633ccf1a3502b1108e252e187787893de689220f4544aaf95a371a4eb3141e4a337deb9895de5ac3c1ca76430e5f0
+  checksum: 301459fc3eb3b1a38fe91bf96d98eb55da88a9cb17b4ef80b4d105d620f4d547ba776cc27b44cc2ef58b66eda23fe0a74142feb5e79a6fb99f54fc018a696afa
   languageName: node
   linkType: hard
 

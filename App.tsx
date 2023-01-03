@@ -1,11 +1,11 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import AppLoading from "expo-app-loading";
 import * as LocalAuthentication from "expo-local-authentication";
 import * as ScreenOrientation from "expo-screen-orientation";
+import * as SplashScreen from "expo-splash-screen";
 
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { RootSiblingParent } from "react-native-root-siblings";
 
@@ -15,7 +15,7 @@ import {
 } from "./models/root-store-provider";
 import { RootStore } from "./models/root-store";
 import useCachedResources from "./hooks/useCachedResources";
-import useColorScheme from "./hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import Navigation from "./navigation/Navigation";
 
 import { Text, View } from "./components/Themed";
@@ -27,8 +27,11 @@ import * as Notifications from "expo-notifications";
 import { initDatabase } from "./database/dbAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
+  const [rootStore, setRootStore] = useState<RootStore>();
+  const [appIsReady, setAppIsReady] = useState(false);
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
   const textColor =
@@ -70,11 +73,25 @@ export default function App() {
     });
     getBioLock();
     lockOrientation();
+    setAppIsReady(true);
   }, []);
 
-  if (!isLoadingComplete || !rootStore) {
-    return <AppLoading />;
-  } else if (lock) {
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+  if (lock) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Ionicons name="ios-lock-closed" size={40} color={textColor} />
@@ -110,7 +127,7 @@ export default function App() {
       </View>
     );
   } else {
-    return (
+    return rootStore ? (
       <ActionSheetProvider>
         <RootSiblingParent>
           <RootStoreProvider value={rootStore}>
@@ -121,6 +138,6 @@ export default function App() {
           </RootStoreProvider>
         </RootSiblingParent>
       </ActionSheetProvider>
-    );
+    ) : null;
   }
 }

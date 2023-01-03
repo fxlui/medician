@@ -25,7 +25,7 @@ import { observer } from "mobx-react-lite";
 import { SimpleRecordSnapshot } from "../models/overview-store";
 import { SavedAppointmentSnapshot } from "../models/appointment";
 import { SavedRoutineSnapshot } from "../models/routine";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import uniqueBodyAreas from "../assets/uniqueSubAreas.json";
 import { getDateText, getMedicationDoseText } from "../utils/NaturalTexts";
 import CustomHaptics from "../utils/CustomHaptics";
@@ -103,7 +103,7 @@ const SymptomOverview: React.FC<ScreenProps> = observer(({ navigation }) => {
       if (topRef.current) {
         overviewStore.setSelectedCollection(
           fetchedCollections[topRef.current.currentIndex].type
-        )
+        );
       }
       await overviewStore.fetchCollectionDataAsync();
     });

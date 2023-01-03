@@ -12,7 +12,7 @@ import BodyAreas from "../../assets/BodyAreas.json";
 import { useStores } from "../../models/root-store-provider";
 import CustomHaptics from "../../utils/CustomHaptics";
 
-type ScreenProps = StackScreenProps<AddFlowParamList, "SeverityScreen">;
+type ScreenProps = StackScreenProps<AddFlowParamList, "AreaSelectScreen">;
 
 interface topBaseData {
   index: number;
@@ -33,7 +33,7 @@ interface bottomBaseData {
   };
 }
 
-const AreaSelect: React.FC<ScreenProps> = ({ navigation }) => {
+const AreaSelect: React.FC<ScreenProps> = ({ navigation, route }) => {
   const { height, width } = useWindowDimensions();
   const [selectedTop, setSelectedTop] = useState(0);
   const [selectedBottom, setSelectedBottom] = useState(0);

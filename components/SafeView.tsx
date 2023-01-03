@@ -9,7 +9,7 @@ import {
 
 import { SafeAreaView, Edge } from "react-native-safe-area-context";
 
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 interface ViewChildrenProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;

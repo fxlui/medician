@@ -18,7 +18,7 @@ import { CompositeScreenProps } from "@react-navigation/core";
 import { AddFlowParamList, RootStackParamList } from "../../types";
 import SafeView from "../../components/SafeView";
 import { Text, View } from "../../components/Themed";
-import useColorScheme from "../../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { useStores } from "../../models/root-store-provider";
@@ -233,8 +233,11 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
     <SafeView style={styles.container} disableTop>
       {route.params.method === "edit" ? (
         <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-          Editing record for{' '}
-          {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
+          Editing record for{" "}
+          {getEditDescription(
+            editFlowStore.currentSymptomType,
+            editFlowStore.currentEditingRecord?.subArea
+          )}
         </Text>
       ) : null}
       <Text

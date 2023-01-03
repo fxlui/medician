@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Animated, View } from "react-native";
 import Svg, { SvgProps, Path } from "react-native-svg";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { Text } from "./Themed";
 import CustomHaptics from "../utils/CustomHaptics";
 import { themeTextColor, themeTileColor } from "../constants/Colors";

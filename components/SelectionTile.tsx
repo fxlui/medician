@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, StyleProp, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import TileBase, { TileSize } from "./TileBase";
 
 interface TileDetails {

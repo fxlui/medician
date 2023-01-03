@@ -12,7 +12,7 @@ import {
 
 import SafeView from "../../components/SafeView";
 import { Text, View } from "../../components/Themed";
-import useColorScheme from "../../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 
 import AddFlowNavBar from "../../components/AddFlowNavBar";
 import { PressableBase } from "../../components/PressableBase";

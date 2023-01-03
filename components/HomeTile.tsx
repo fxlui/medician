@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import Icon from "./Icon";
 import { Ionicons } from "@expo/vector-icons";
 

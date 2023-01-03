@@ -1,5 +1,5 @@
 import React from "react";
-import useColorScheme from "../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomHaptics from "../utils/CustomHaptics";
 
@@ -66,15 +66,16 @@ const TutorialNavBar: React.FC<{
             backgroundColor: "rgba(255,255,255,0)",
           }}
         >
-          { hideLeft ? 
-            <View style={{
-              width: 28,
-              padding: 32.5,
-              paddingLeft: 80,
-              paddingRight: 55,
-            }}/>  
-            
-          :
+          {hideLeft ? (
+            <View
+              style={{
+                width: 28,
+                padding: 32.5,
+                paddingLeft: 80,
+                paddingRight: 55,
+              }}
+            />
+          ) : (
             <PressableBase
               extraProps={{
                 style: {
@@ -96,7 +97,7 @@ const TutorialNavBar: React.FC<{
                 color={colorScheme === "light" ? "#333" : "#fff"}
               />
             </PressableBase>
-          }
+          )}
 
           <PressableBase
             extraProps={{

@@ -18,6 +18,7 @@ export enum TileSize {
   XL = "XL",
   ActionAdd = "ActionAdd",
   Long = "long",
+  HalfHeight = "halfHeight",
 }
 
 interface BaseChildren {
@@ -86,6 +87,10 @@ const TileBase: React.FC<BaseChildren> = ({
       width: 155,
       height: 155,
     },
+    halfHeight: {
+      width: 155,
+      height: 95,
+    },
     large: {
       width: width <= 302 ? width - 20 : 302,
       height: 145,
@@ -123,6 +128,7 @@ const TileBase: React.FC<BaseChildren> = ({
             size == TileSize.Long && styles.long,
             size == TileSize.XL && styles.extraLong,
             size == TileSize.ActionAdd && styles.actionAdd,
+            size == TileSize.HalfHeight && styles.halfHeight,
             animatedStyle,
             style,
             textBox || size == TileSize.Long ? { padding: 0 } : {},

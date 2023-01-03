@@ -3,7 +3,7 @@ import { StyleSheet, Image } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { TutorialParamList, RootStackParamList } from "../../types";
 import TileBase from "../../components/TileBase";
-import useColorScheme from "../../hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import PagerView from "react-native-pager-view";
 
 import { StackScreenProps } from "@react-navigation/stack";
@@ -269,7 +269,7 @@ const WelcomeTut: React.FC<ScreenProps> = ({ navigation }) => {
       await initDatabase();
       await AsyncStorage.setItem("@tutorialPassed", "true");
       user.finishTutorial();
-      navigation.navigate("Root", { screen: "HomeScreen"});
+      navigation.navigate("Root", { screen: "HomeScreen" });
     };
     setNewUser();
   };
