@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { AddFlowParamList } from "../types";
+import AddFlowHeader from "../components/AddFlowHeader";
 import ProgressBar from "../components/ProgressBar";
 import SymptomsScreen from "../screens/SymptomsScreen";
 
@@ -45,7 +46,7 @@ const AddFlowNavigator = () => {
     <AddFlowStack.Navigator
       initialRouteName="SymptomsScreen"
       screenOptions={{
-        header: () => <ProgressBar />,
+        header: () => <AddFlowHeader title={"I feel..."} />,
         headerMode: "float",
         cardShadowEnabled: true,
       }}
