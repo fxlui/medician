@@ -6,8 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll",
-    "postinstall": "patch-package"
+    "test": "jest --watchAll"
   },
   "jest": {
     "preset": "jest-expo"
@@ -61,7 +60,8 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-svg": "13.4.0",
     "react-native-timeline-flatlist": "^0.7.6",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "expo-dev-client": "~2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
