@@ -18,6 +18,7 @@
         "backgroundColor": "#000000"
       }
     },
+    "jsEngine": "hermes",
     "plugins": [
       [
         "expo-splash-screen",
