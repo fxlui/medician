@@ -81,9 +81,6 @@ const AreaSelect: React.FC<ScreenProps> = ({ navigation, route }) => {
   return (
     <SafeView style={styles.container} disableTop>
       <View>
-        <View>
-          <Text style={styles.greeting}>Where is the area affected?</Text>
-        </View>
         <View style={styles.child}>
           <Carousel
             data={bodyAreaArr.map((item) => ({

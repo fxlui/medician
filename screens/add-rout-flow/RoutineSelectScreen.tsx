@@ -39,7 +39,6 @@ export default function RoutineSelectScreen({ navigation }: ScreenProps) {
   return (
     <SafeView disableTop>
       <View style={styles.container}>
-        <Text style={styles.greeting}>Choose the type of routine...</Text>
         <View style={styles.tiles}>
           <TileBase
             size={TileSize.ActionAdd}

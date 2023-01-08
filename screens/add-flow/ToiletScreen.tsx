@@ -50,7 +50,6 @@ const ToiletScreen = observer(({ navigation, route }: ScreenProps) => {
             )}
           </Text>
         ) : null}
-        <Text style={styles.greeting}>Please select all that applies.</Text>
         <View style={styles.child}>
           <SelectionTile
             title="Urination"

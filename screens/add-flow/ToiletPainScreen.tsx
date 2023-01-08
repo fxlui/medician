@@ -37,7 +37,6 @@ const ToiletPainScreen = observer(({ navigation, route }: ScreenProps) => {
             )}
           </Text>
         ) : null}
-        <Text style={styles.greeting}>Does it hurt?</Text>
         <View style={styles.child}>
           <SelectionTile
             title="Yes"

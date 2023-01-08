@@ -192,6 +192,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
     <SafeView style={styles.container} disableTop>
       <View
         style={{
+          paddingTop: 30,
           paddingLeft: 30,
           flex: 1,
         }}
@@ -205,16 +206,6 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
             )}
           </Text>
         ) : null}
-        <Text
-          style={[
-            styles.greeting,
-            {
-              maxWidth: width - 100,
-            },
-          ]}
-        >
-          Please describe what you observe.
-        </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

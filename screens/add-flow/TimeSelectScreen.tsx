@@ -101,10 +101,6 @@ export default function TimeSelectScreen({ navigation }: ScreenProps) {
           paddingBottom: 125,
         }}
       >
-        <Text style={styles.greeting}>When did it occur?</Text>
-        <Text style={styles.greetingSub}>
-          You can select multiple dates and times by tapping on the dates.
-        </Text>
         <View
           style={{
             justifyContent: "center",

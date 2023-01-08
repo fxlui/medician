@@ -52,6 +52,12 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
     }
   }
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerTitle: route.params.type === "feel" ? "I feel..." : "I can't...",
+    });
+  }, []);
+
   return (
     <>
       <View style={styles.container}>

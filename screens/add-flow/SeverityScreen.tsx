@@ -62,7 +62,6 @@ const Severity = observer(({ navigation, route }: ScreenProps) => {
             )}
           </Text>
         ) : null}
-        <Text style={styles.greeting}>How severe is it?</Text>
         <View style={styles.child}>
           <Text style={styles.emoji}>{getDiscomfortEmoji(severity)}</Text>
           <Text style={styles.desc}>{getDiscomfortText(severity)}</Text>

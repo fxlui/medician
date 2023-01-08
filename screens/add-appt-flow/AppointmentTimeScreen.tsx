@@ -90,10 +90,6 @@ export default function AppointmentTimeScreen({ navigation }: ScreenProps) {
           paddingBottom: 125,
         }}
       >
-        <Text style={styles.greeting}>When is your appointment?</Text>
-        <Text style={styles.greetingSub}>
-          Select the dates you have booked.
-        </Text>
         <View
           style={{
             justifyContent: "center",

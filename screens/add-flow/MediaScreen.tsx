@@ -240,16 +240,6 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
           )}
         </Text>
       ) : null}
-      <Text
-        style={[
-          styles.greeting,
-          {
-            maxWidth: width - 100,
-          },
-        ]}
-      >
-        Attach any photos{/* or videos*/} here.
-      </Text>
       <View
         style={{
           flex: 1,

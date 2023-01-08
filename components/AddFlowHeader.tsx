@@ -1,5 +1,6 @@
 import { View, Text } from "./Themed";
 import {
+  Dimensions,
   Text as DefaultText,
   useColorScheme,
   View as DefaultView,
@@ -28,6 +29,9 @@ const AddFlowHeader = ({
 }) => {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+  const headerTitle = screenProps.options.headerTitle
+    ? screenProps.options.headerTitle.toString()
+    : title;
 
   return (
     <SafeAreaView
@@ -39,7 +43,7 @@ const AddFlowHeader = ({
         paddingBottom: Math.max(insets.bottom, 20),
       }}
     >
-      {subtitle ? (
+      {subtitle || title.length > 17 ? (
         <DefaultView>
           <DefaultView
             style={{
@@ -94,12 +98,27 @@ const AddFlowHeader = ({
               flexDirection: "column",
             }}
           >
-            <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 20 }}>
-              {title}
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: subtitle ? "bold" : "600",
+                marginTop: 20,
+              }}
+            >
+              {headerTitle}
             </Text>
-            <Text style={{ fontSize: 18, fontWeight: "500", marginTop: 10 }}>
-              {subtitle}
-            </Text>
+            {subtitle && (
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "500",
+                  marginTop: 10,
+                  maxWidth: Dimensions.get("window").width - 80,
+                }}
+              >
+                {subtitle}
+              </Text>
+            )}
           </DefaultView>
         </DefaultView>
       ) : (
@@ -149,7 +168,9 @@ const AddFlowHeader = ({
                 />
               </PressableBase>
               {moreAction ? (
-                <Text style={{ fontSize: 20, fontWeight: "500" }}>{title}</Text>
+                <Text style={{ fontSize: 20, fontWeight: "500" }}>
+                  {headerTitle}
+                </Text>
               ) : null}
             </DefaultView>
             {moreAction ? (
@@ -171,7 +192,9 @@ const AddFlowHeader = ({
             ) : null}
           </DefaultView>
           {!moreAction ? (
-            <Text style={{ fontSize: 20, fontWeight: "500" }}>{title}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "500" }}>
+              {headerTitle}
+            </Text>
           ) : null}
         </DefaultView>
       )}

@@ -59,10 +59,6 @@ const TemperatureScreen = ({ navigation, route }: ScreenProps) => {
               )}
             </Text>
           ) : null}
-          <Text style={styles.greeting}>What was your temperature?</Text>
-          <Text style={styles.greetingSub}>
-            Tap on the number to change the unit.
-          </Text>
         </View>
         <View style={styles.child}>
           <PressableBase

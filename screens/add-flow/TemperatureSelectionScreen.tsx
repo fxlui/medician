@@ -18,27 +18,30 @@ type ScreenProps = CompositeScreenProps<
 >;
 
 const TemperatureSelectionScreen = observer(
-
   ({ navigation, route }: ScreenProps) => {
     const { editFlowStore, progressStore } = useStores();
-    const defaultSelection = 
-      route.params.method === "add" ? null :
-      editFlowStore.currentEditingRecord === undefined ? null :
-      editFlowStore.currentEditingRecord.temperature === 0 ? false : true; // TODO get from store
+    const defaultSelection =
+      route.params.method === "add"
+        ? null
+        : editFlowStore.currentEditingRecord === undefined
+        ? null
+        : editFlowStore.currentEditingRecord.temperature === 0
+        ? false
+        : true; // TODO get from store
     const [measured, setMeasured] = useState<boolean | null>(defaultSelection);
-  
+
     return (
       <SafeView style={styles.container} disableTop>
         <View style={{ flex: 1 }}>
           {route.params.method === "edit" ? (
             <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
-              Editing record for{' '}
-              {getEditDescription(editFlowStore.currentSymptomType, editFlowStore.currentEditingRecord?.subArea)}
+              Editing record for{" "}
+              {getEditDescription(
+                editFlowStore.currentSymptomType,
+                editFlowStore.currentEditingRecord?.subArea
+              )}
             </Text>
           ) : null}
-          <Text style={styles.greeting}>
-            Were you able to take your temperature?
-          </Text>
           <View style={styles.child}>
             <SelectionTile
               title="Yes"
@@ -60,7 +63,10 @@ const TemperatureSelectionScreen = observer(
           left={() => navigation.pop()}
           right={() => {
             if (measured === null) {
-              Alert.alert("No Selection", "You need to select an option first.");
+              Alert.alert(
+                "No Selection",
+                "You need to select an option first."
+              );
             } else if (measured === true) {
               if (route.params.method === "add") {
                 progressStore.goForward();

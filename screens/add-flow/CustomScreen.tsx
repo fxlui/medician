@@ -84,16 +84,6 @@ const CustomScreen = observer(({ navigation, route }: ScreenProps) => {
             )}
           </Text>
         ) : null}
-        <Text
-          style={[
-            styles.greeting,
-            {
-              maxWidth: width - 100,
-            },
-          ]}
-        >
-          Please describe what you observe.
-        </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

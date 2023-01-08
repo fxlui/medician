@@ -93,7 +93,7 @@ const ToiletColorScreen: React.FC<ScreenProps> = observer(
             )}
           </Text>
         ) : null}
-        <Text style={styles.greeting}>What colour is it?</Text>
+        <Text style={styles.greeting}></Text>
         <View
           style={{
             justifyContent: "center",

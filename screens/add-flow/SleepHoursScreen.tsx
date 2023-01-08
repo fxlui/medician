@@ -52,10 +52,6 @@ const SleepHoursScreen = observer(({ navigation, route }: ScreenProps) => {
               )}
             </Text>
           ) : null}
-          <Text style={styles.greeting}>How long did you sleep?</Text>
-          <Text style={styles.greetingSub}>
-            Put in an estimate if you're not sure.
-          </Text>
         </View>
         <View style={styles.child}>
           <Text

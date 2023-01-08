@@ -265,20 +265,11 @@ export default function AppointmentDetailsScreen({ navigation }: ScreenProps) {
     <SafeView style={styles.container} disableTop>
       <View
         style={{
+          paddingTop: 30,
           paddingLeft: 30,
           flex: 1,
         }}
       >
-        <Text
-          style={[
-            styles.greeting,
-            {
-              maxWidth: width - 120,
-            },
-          ]}
-        >
-          Please tell me more about your appointment.
-        </Text>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

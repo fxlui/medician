@@ -45,85 +45,253 @@ const AddFlowNavigator = () => {
   return (
     <AddFlowStack.Navigator
       initialRouteName="SymptomsScreen"
-      screenOptions={{
-        header: (navigation) => (
-          <AddFlowHeader screenProps={navigation} title={"I feel..."} />
-        ),
-        headerMode: "float",
-        cardShadowEnabled: true,
-      }}
       screenListeners={() => ({
         gestureEnd: () => {
           progressStore.goBack();
         },
       })}
     >
-      <AddFlowStack.Screen name="SymptomsScreen" component={SymptomsScreen} />
-      <AddFlowStack.Screen name="AreaSelectScreen" component={AreaSelect} />
-      <AddFlowStack.Screen name="SeverityScreen" component={SeverityScreen} />
+      <AddFlowStack.Screen
+        name="SymptomsScreen"
+        component={SymptomsScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader screenProps={navigation} title={"I feel..."} />
+          ),
+        }}
+      />
+      <AddFlowStack.Screen
+        name="AreaSelectScreen"
+        component={AreaSelect}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Where is the area affected?"}
+            />
+          ),
+        }}
+      />
+      <AddFlowStack.Screen
+        name="SeverityScreen"
+        component={SeverityScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"How severe is it?"}
+            />
+          ),
+        }}
+      />
       <AddFlowStack.Screen
         name="TimeSelectScreen"
         component={TimeSelectScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"When did it occur?"}
+              subtitle={
+                "You can select multiple dates and times by tapping on the dates."
+              }
+            />
+          ),
+        }}
       />
-      <AddFlowStack.Screen name="DetailsScreen" component={DetailsScreen} />
-      <AddFlowStack.Screen name="MediaScreen" component={MediaScreen} />
+      <AddFlowStack.Screen
+        name="DetailsScreen"
+        component={DetailsScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Please describe what you observe."}
+            />
+          ),
+        }}
+      />
+      <AddFlowStack.Screen
+        name="MediaScreen"
+        component={MediaScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={" Attach any photos or videos here."}
+            />
+          ),
+        }}
+      />
       <AddFlowStack.Screen
         name="TemperatureSelectionScreen"
         component={TemperatureSelectionScreen}
-        options={{ headerMode: "screen" }}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Were you able to take your temperature?"}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="TemperatureScreen"
         component={TemperatureScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"What was your temperature?"}
+              subtitle="Tap on the number to change the unit."
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="ToiletScreen"
         component={ToiletScreen}
-        options={{ headerMode: "screen" }}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Please select all that applies."}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="ToiletPainScreen"
         component={ToiletPainScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader screenProps={navigation} title={"Does it hurt?"} />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="ToiletColorScreen"
         component={ToiletColorScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"What colour is it?"}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="DizzyScreen"
         component={DizzyScreen}
-        options={{ headerMode: "screen" }}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Is your head spinning or the room spinning?"}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="SleepHoursScreen"
         component={SleepHoursScreen}
-        options={{ headerMode: "screen" }}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"How long did you sleep?"}
+              subtitle="Put in an estimate if you're not sure."
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="CustomScreen"
         component={CustomScreen}
-        options={{ headerMode: "screen" }}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Please describe what you observe."}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="AppointmentTimeScreen"
         component={AppointmentTimeScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"When is your appointment?"}
+              subtitle="Select the dates you have booked."
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="AppointmentDetailsScreen"
         component={AppointmentDetailsScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Please tell me more about your appointment."}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="RoutineSelectScreen"
         component={RoutineSelectScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Choose the type of routine"}
+            />
+          ),
+        }}
       />
       <AddFlowStack.Screen
         name="MedicationScreen"
         component={MedicationScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Please tell me more about your medication."}
+            />
+          ),
+        }}
       />
-      <AddFlowStack.Screen name="ExerciseScreen" component={ExerciseScreen} />
+      <AddFlowStack.Screen
+        name="ExerciseScreen"
+        component={ExerciseScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Please tell me more about your exercise."}
+            />
+          ),
+        }}
+      />
       <AddFlowStack.Screen
         name="RoutineTimeScreen"
         component={RoutineTimeScreen}
+        options={{
+          header: (navigation) => (
+            <AddFlowHeader
+              screenProps={navigation}
+              title={"Choose the times for your routine."}
+              subtitle="Check with your doctor or pharmacist before starting any medication or
+          supplements."
+            />
+          ),
+        }}
       />
     </AddFlowStack.Navigator>
   );
