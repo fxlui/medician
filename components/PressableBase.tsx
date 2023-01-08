@@ -3,6 +3,7 @@ import { Pressable, Animated, PressableProps } from "react-native";
 import CustomHaptics from "../utils/CustomHaptics";
 
 export const PressableBase: FC<{
+  children: React.ReactNode;
   onPress?: () => void;
   extraProps?: PressableProps;
   tabBar?: boolean;

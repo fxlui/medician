@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text, View } from "../components/Themed";
 import SafeView from "../components/SafeView";
@@ -16,6 +17,7 @@ type ScreenProps = StackScreenProps<AddFlowParamList, "SymptomsScreen">;
 type screenType = [keyof AddFlowParamList, number];
 
 export default function SymptomsScreen({ navigation, route }: ScreenProps) {
+  const insets = useSafeAreaInsets();
   const { addFlowStore, progressStore } = useStores();
   const symptomArray = route.params.type === "feel" ? SymptomsOne : SymptomsTwo;
 
@@ -57,7 +59,13 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{}}
         >
-          <View style={{ overflow: "visible", paddingBottom: 100 }}>
+          <View
+            style={{
+              overflow: "visible",
+              paddingTop: Math.max(insets.bottom, 20),
+              paddingBottom: 100,
+            }}
+          >
             <View style={styles.list}>
               {symptomArray.map((symptom) => {
                 return (

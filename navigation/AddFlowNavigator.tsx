@@ -46,7 +46,9 @@ const AddFlowNavigator = () => {
     <AddFlowStack.Navigator
       initialRouteName="SymptomsScreen"
       screenOptions={{
-        header: () => <AddFlowHeader title={"I feel..."} />,
+        header: (navigation) => (
+          <AddFlowHeader screenProps={navigation} title={"I feel..."} />
+        ),
         headerMode: "float",
         cardShadowEnabled: true,
       }}
