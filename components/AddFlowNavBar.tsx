@@ -1,14 +1,16 @@
 import React from "react";
-import { useColorScheme } from "react-native";
+import { Dimensions, useColorScheme, View as DefaultView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomHaptics from "../utils/CustomHaptics";
 
 import { PressableBase } from "./PressableBase";
-import { View } from "./Themed";
+import { View, Text } from "./Themed";
 import { Entypo } from "@expo/vector-icons";
 import { useStores } from "../models/root-store-provider";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CircularProgress from "react-native-circular-progress-indicator";
+import { BlurView } from "expo-blur";
 
 const AddFlowNavBar: React.FC<{
   left: () => void;
@@ -17,6 +19,8 @@ const AddFlowNavBar: React.FC<{
   preventLeftDefault?: boolean;
   preventRightDefault?: boolean;
   preventRightHaptics?: boolean;
+  showProgress?: boolean;
+  showBackdrop?: boolean;
 }> = ({
   left,
   right,
@@ -24,6 +28,8 @@ const AddFlowNavBar: React.FC<{
   preventLeftDefault = false,
   preventRightDefault = false,
   preventRightHaptics = false,
+  showProgress = true,
+  showBackdrop = true,
 }) => {
   const funcWithHaptics = (func: () => void) => {
     CustomHaptics("light");
@@ -32,99 +38,122 @@ const AddFlowNavBar: React.FC<{
   const colorScheme = useColorScheme();
   const { progressStore } = useStores();
   const insets = useSafeAreaInsets();
+  const [barHeight, setBarHeight] = React.useState(90);
 
   return (
     <>
-      <LinearGradient
-        colors={[
-          colorScheme === "light" ? "rgba(249,249,249,0.8)" : "transparent",
-          colorScheme === "light" ? "rgba(249,249,249,0.95)" : "#000",
-        ]}
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 90,
-        }}
-        locations={[0, 0.5]}
-      />
+      {showBackdrop && (
+        <LinearGradient
+          colors={[
+            colorScheme === "light" ? "rgba(249,249,249,0.8)" : "transparent",
+            colorScheme === "light" ? "rgba(249,249,249,0.95)" : "#000",
+          ]}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: showProgress ? barHeight + 30 : barHeight,
+          }}
+          locations={[0, 0.5]}
+          pointerEvents="none"
+        />
+      )}
+
       <View
         style={{
           position: "absolute",
           bottom: 0,
-          paddingBottom: insets.bottom === 0 ? 0 : 15,
+          paddingBottom: insets.bottom === 0 ? 0 : insets.bottom,
           alignSelf: "center",
           alignItems: "center",
           width: "100%",
-          backgroundColor: "rgba(255,255,255,0)",
+          backgroundColor: "transparent",
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(255,255,255,0)",
+        <PressableBase
+          extraProps={{
+            accessibilityLabel: "Navigate to next screen",
+          }}
+          onPress={() => {
+            if (!preventRightDefault) {
+              progressStore.goForward();
+            }
+            if (preventRightHaptics) {
+              right();
+            } else {
+              funcWithHaptics(right);
+            }
           }}
         >
-          <PressableBase
-            extraProps={{
-              style: {
-                padding: 32.5,
-                paddingLeft: 80,
-                paddingRight: 55,
-              },
-              accessibilityLabel: "Navigate to previous screen",
+          <View
+            onLayout={(event) => {
+              setBarHeight(event.nativeEvent.layout.height);
             }}
-            onPress={() => {
-              if (!preventLeftDefault) {
-                progressStore.goBack();
-              }
-              funcWithHaptics(left);
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: Dimensions.get("window").width - 50,
+              backgroundColor: colorScheme === "light" ? "#fff" : "#252525",
+              borderRadius: showProgress ? 25 : 15,
+              padding: 15,
+              paddingHorizontal: 18,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 10,
+              },
+              shadowOpacity: 0.12,
+              shadowRadius: 10.65,
+              elevation: 6,
             }}
           >
-            <Entypo
-              name="chevron-left"
-              size={28}
-              color={colorScheme === "light" ? "#333" : "#fff"}
-            />
-          </PressableBase>
-          <PressableBase
-            extraProps={{
-              style: {
-                padding: 32.5,
-                paddingLeft: 55,
-                paddingRight: 80,
-              },
-              accessibilityLabel: "Navigate to next screen",
-            }}
-            onPress={() => {
-              if (!preventRightDefault) {
-                progressStore.goForward();
-              }
-              if (preventRightHaptics) {
-                right();
-              } else {
-                funcWithHaptics(right);
-              }
-            }}
-          >
-            {last ? (
-              <MaterialIcons
-                name="done"
-                size={28}
-                color={colorScheme === "light" ? "#333" : "#fff"}
+            {showProgress ? (
+              <CircularProgress
+                value={
+                  (progressStore.currentProgress /
+                    progressStore.progressLength) *
+                  100
+                }
+                radius={30}
+                inActiveStrokeColor={
+                  colorScheme === "light" ? "#DFDFDF" : "#rgba(0,0,0,0.3)"
+                }
+                progressValueStyle={{
+                  fontSize: 16,
+                }}
+                valueSuffix={"%"}
               />
             ) : (
-              <Entypo
-                name="chevron-right"
-                size={28}
-                color={colorScheme === "light" ? "#333" : "#fff"}
-              />
+              <DefaultView />
             )}
-          </PressableBase>
-        </View>
+            <DefaultView
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontSize: 20, marginRight: 5 }}>
+                {last ? "Finish" : "Next"}
+              </Text>
+              {last ? (
+                <MaterialIcons
+                  name="done"
+                  size={28}
+                  color={colorScheme === "light" ? "#333" : "#fff"}
+                />
+              ) : (
+                <Entypo
+                  name="chevron-right"
+                  size={28}
+                  color={colorScheme === "light" ? "#333" : "#fff"}
+                />
+              )}
+            </DefaultView>
+          </View>
+        </PressableBase>
       </View>
     </>
   );

@@ -29,7 +29,7 @@ const ToiletPainScreen = observer(({ navigation, route }: ScreenProps) => {
     <SafeView style={styles.container} disableTop>
       <View style={{ flex: 1 }}>
         {route.params.method === "edit" ? (
-          <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+          <Text style={{ paddingLeft: 30, opacity: 0.7, paddingTop: 20 }}>
             Editing record for{" "}
             {getEditDescription(
               editFlowStore.currentSymptomType,

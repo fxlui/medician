@@ -198,7 +198,7 @@ export default function TimeSelectScreen({ navigation, route }: ScreenProps) {
         }}
       >
         {route.params.method === "edit" ? (
-          <Text style={{ opacity: 0.7 }}>
+          <Text style={{ opacity: 0.7, paddingTop: 20, paddingBottom: 30 }}>
             Editing record for{" "}
             {getEditDescription(
               editFlowStore.currentSymptomType,

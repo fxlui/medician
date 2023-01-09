@@ -232,7 +232,7 @@ const MediaScreen = observer(({ navigation, route }: ScreenProps) => {
   return (
     <SafeView style={styles.container} disableTop>
       {route.params.method === "edit" ? (
-        <Text style={{ paddingLeft: 30, opacity: 0.7 }}>
+        <Text style={{ paddingLeft: 30, opacity: 0.7, paddingTop: 20 }}>
           Editing record for{" "}
           {getEditDescription(
             editFlowStore.currentSymptomType,

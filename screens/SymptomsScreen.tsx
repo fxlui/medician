@@ -104,6 +104,7 @@ export default function SymptomsScreen({ navigation, route }: ScreenProps) {
           progressStore.setProgressBarLength(progressLength);
           navigation.navigate(screenName, { method: "add" });
         }}
+        showProgress={false}
       />
     </>
   );
